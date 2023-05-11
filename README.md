@@ -12,7 +12,7 @@
 
 ----
 ```    
-    src
+   +src     // 主程式目錄
     ├─assets
     ├─components
     ├─plugins
