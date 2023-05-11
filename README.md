@@ -9,3 +9,15 @@
 
 ----
 ## Node 18.15.0
+
+----
+```    
+    src
+    ├─assets
+    ├─components
+    ├─plugins
+    ├─router
+    ├─stores
+    │  └─modules
+    └─views
+```
