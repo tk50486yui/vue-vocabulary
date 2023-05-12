@@ -17,13 +17,13 @@
 ```    
   + public  // index
   + src     // 主程式目錄
-    ├─api           // 定義api 
+    ├─api           // 定義 api
     ├─assets        // 素材
     ├─components    // Vue 組件 (.vue)
     ├─plugins       // plugin
     ├─repositories  // 管理取得之資料 (.js)
     ├─router        // Vue 路由控制
-    ├─stores        // 處理repository的資料並輸出 (vuex)
+    ├─stores        // 處理 repository 的資料並輸出 (vuex)
     │  └─modules
     ├─views         // 顯示頁面 (.vue)
     ├─App.vue       // 主頁面 (.vue)
