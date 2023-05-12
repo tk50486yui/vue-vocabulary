@@ -11,6 +11,17 @@
 ----
 ## Node 18.15.0
 
+``` 
+    vue
+    vue-router
+    vuex
+    axios
+    ant-design-vue
+    bootstrap
+    jquery
+
+``` 
+
 
 ----
 ## 目錄架構
