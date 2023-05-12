@@ -5,7 +5,6 @@
       <p style="margin: 0">
         <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
       </p>
-      <a-divider />
       <p style="margin: 0">
         {{ record.ws_description }}
       </p>
