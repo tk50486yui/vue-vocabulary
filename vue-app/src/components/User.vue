@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1>User: {{ myid }} - {{ userInfo?.name }}</h1>
-    <div>username: @{{ userInfo.username }}</div>
-    <div>email: {{ userInfo.email }}</div>
-    <div>phone: {{ userInfo.phone }}</div>
+    <h1>id: {{ id }} - {{ word.id }}</h1>
+    <div>單字名稱: {{ word.ws_name }}</div>
+    <div>中文定義: {{ word.ws_definition }}</div>
+    <div>發音 / 假名: {{ word.ws_pronunciation }}</div>
     <hr />
 
     Show
-    <router-link :to="{ name: 'postsChild', params: { id: myid } }">
-      /users/{{ myid }}/posts
+    <router-link :to="{ name: 'postsChild', params: { id: id } }">
+      /users/{{ id }}/posts
     </router-link>
 
     <hr />
@@ -18,32 +18,32 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'UserView',
-  data () {
-    return {
-      userInfo: {}
-    }
-  },
   computed: {
-    myid () {
+    id () {
       return this.$route.params.id
-    }
+    },
+    ...mapGetters('WordsStore', ['word'])
   },
   watch: {
-    myid: async function (val) {
-      this.userInfo = await this.fetchID(val)
+    id: async function (val) {
+      await this.fetchById(val)
     }
   },
   methods: {
-    async fetchID (id) {
-      return await fetch('https://jsonplaceholder.typicode.com/users/' + id)
-        .then((response) => response.json())
-        .then((json) => json)
-    }
+    dataArray () {
+      return Object.keys(this.word).map(key => ({
+        key,
+        ...this.word[key] // ...是展開物件並為所有key存入新的物件
+      }))
+    },
+    ...mapActions('WordsStore', ['fetchById'])
   },
   async created () {
-    this.userInfo = await this.fetchID(this.myid)
+    await this.fetchById(this.id)
   }
 }
 </script>

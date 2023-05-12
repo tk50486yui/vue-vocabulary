@@ -15,12 +15,17 @@
 ----
 ## 目錄架構
 ```    
+  + public  // index
   + src     // 主程式目錄
-    ├─assets
-    ├─components
-    ├─plugins
-    ├─router
-    ├─stores
+    ├─api           // 定義api 
+    ├─assets        // 素材
+    ├─components    // Vue 組件 (.vue)
+    ├─plugins       // plugin
+    ├─repositories  // 管理取得之資料 (.js)
+    ├─router        // Vue 路由控制
+    ├─stores        // 處理repository的資料並輸出 (.js)
     │  └─modules
-    └─views
+    ├─views         // 顯示頁面 (.vue)
+    ├─App.vue       // 主頁面 (.vue)
+    └─main.js       // 主程式
 ```

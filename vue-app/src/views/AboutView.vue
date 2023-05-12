@@ -1,7 +1,5 @@
 <template>
-  <div class="about">
-    <h5>This is aa test page</h5>
-    <div id="QQ" @click="this.submit()">click</div>
+  <div>
    <a-table :dataSource="this.dataArray()" :columns="columns" />
   </div>
 
@@ -14,22 +12,19 @@ export default {
   name: 'AboutView',
   methods: {
     dataArray () {
-      console.log(this.getWords)
-      return Object.keys(this.getWords).map(key => ({
+      console.log(this.getAll)
+      return Object.keys(this.getAll).map(key => ({
         key,
-        ...this.getWords[key] // ...是展開物件並為所有key存入新的物件
+        ...this.getAll[key] // ...是展開物件並為所有key存入新的物件
       }))
     },
-    submit () {
-      console.log(JSON.stringify(this.dataArray()))
-    },
-    ...mapActions('WordsStore', ['fetchWords'])
+    ...mapActions('WordsStore', ['fetch'])
   },
   computed: {
-    ...mapGetters('WordsStore', ['getWords'])
+    ...mapGetters('WordsStore', ['getAll'])
   },
   async created () {
-    await this.fetchWords()
+    await this.fetch()
   },
   setup () {
     return {
