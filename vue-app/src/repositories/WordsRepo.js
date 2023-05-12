@@ -11,13 +11,13 @@ export default {
     return response.data
   },
 
-  async add (word) {
-    const response = await api.post('/words', word)
+  async add (data) {
+    const response = await api.post('/words', data)
     return response.data
   },
 
-  async update (id, word) {
-    const response = await api.put(`/words/${id}`, word)
+  async update (id, data) {
+    const response = await api.put(`/words/${id}`, data)
     return response.data
   }
 }

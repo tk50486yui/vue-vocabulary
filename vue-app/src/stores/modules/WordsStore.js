@@ -1,31 +1,37 @@
-import WordsRepository from '@/repositories/WordsRepository.js'
+import WordsRepo from '@/repositories/WordsRepo.js'
 
 const state = {
-  words: [],
-  word: {}
+  words: [], // All
+  word: {} // One
 }
 
 const getters = {
-  getAll: (state) => state.words,
-  word: (state) => state.word
+  words: (state) => state.words,
+  word: (state) => state.word,
+  wordsArray: (state) => {
+    return Object.keys(state.words).map(key => ({
+      key,
+      ...state.words[key]
+    }))
+  }
 }
 
 const actions = {
   async fetch ({ commit }) {
-    const words = await WordsRepository.get()
-    commit('set', words)
+    const data = await WordsRepo.get()
+    commit('set', data)
   },
 
   async fetchById ({ commit }, id) {
-    const word = await WordsRepository.getById(id)
-    commit('setByID', word)
+    const data = await WordsRepo.getById(id)
+    commit('setByID', data)
   },
-  async add ({ commit }, word) {
-    await WordsRepository.add(word)
+  async add ({ commit }, data) {
+    await WordsRepo.add(data)
   },
 
-  async update ({ commit }, { id, word }) {
-    await WordsRepository.update(id, word)
+  async update ({ commit }, { id, data }) {
+    await WordsRepo.update(id, data)
   }
 }
 
@@ -41,8 +47,3 @@ export default {
   actions,
   mutations
 }
-
-/** this.$store.commit('WordsStore/setWords', words);
-this.$store.commit('WordsStore/addWord', newWord);
-this.$store.commit('WordsStore/updateWord', updatedWord);
-this.$store.commit('WordsStore/deleteWord', id); */

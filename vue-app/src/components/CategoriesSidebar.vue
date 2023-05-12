@@ -7,7 +7,7 @@
             <!--  類別最頂層  begin -->
             <div class="categories__accordion" id="accordionExample">
                 <!--  第一層  for顯示區域 開始  -->
-                <div class="accordion" v-for="data in getCategories" :key="data.id">
+                <div class="accordion" v-for="data in categories" :key="data.id">
                     <div class="card">
                         <div class="card-heading">
                             <a data-toggle="collapse" :data-target="'#collapse' + data.id">{{ data.cate_name }}</a>
@@ -36,13 +36,13 @@ export default {
     TreeCategories
   },
   computed: {
-    ...mapGetters('CategoriesStore', ['getCategories'])
+    ...mapGetters('CategoriesStore', ['categories'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetchCategories'])
+    ...mapActions('CategoriesStore', ['fetch'])
   },
   async created () {
-    await this.fetchCategories()
+    await this.fetch()
   }
 }
 </script>

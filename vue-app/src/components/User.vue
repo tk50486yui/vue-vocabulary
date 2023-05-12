@@ -34,12 +34,6 @@ export default {
     }
   },
   methods: {
-    dataArray () {
-      return Object.keys(this.word).map(key => ({
-        key,
-        ...this.word[key] // ...是展開物件並為所有key存入新的物件
-      }))
-    },
     ...mapActions('WordsStore', ['fetchById'])
   },
   async created () {

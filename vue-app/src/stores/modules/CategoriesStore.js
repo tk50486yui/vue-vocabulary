@@ -1,20 +1,36 @@
+import CategoriesRepo from '@/repositories/CategoriesRepo.js'
+
 const state = {
-  categories: []
+  categories: [],
+  category: {}
 }
 
 const getters = {
-  getCategories: (state) => state.categories
+  categories: (state) => state.categories
 }
 
 const actions = {
-  async fetchCategories ({ commit }) {
-    const response = await this.$axios.get(this.$api + '/categories')
-    commit('set', response.data)
+  async fetch ({ commit }) {
+    const data = await CategoriesRepo.get()
+    commit('set', data)
+  },
+
+  async fetchById ({ commit }, id) {
+    const data = await CategoriesRepo.getById(id)
+    commit('setByID', data)
+  },
+  async add ({ commit }, data) {
+    await CategoriesRepo.add(data)
+  },
+
+  async update ({ commit }, { id, data }) {
+    await CategoriesRepo.update(id, data)
   }
 }
 
 const mutations = {
-  set: (state, data) => (state.categories = data)
+  set: (state, data) => (state.categories = data),
+  setByID: (state, data) => (state.category = data)
 }
 
 export default {

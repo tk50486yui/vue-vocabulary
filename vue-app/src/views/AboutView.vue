@@ -1,6 +1,16 @@
 <template>
   <div>
-   <a-table :dataSource="this.dataArray()" :columns="columns" />
+   <a-table :dataSource="this.wordsArray" :columns="columns"  :scroll="{ y: 400 }">
+    <template #expandedRowRender="{ record }">
+      <p style="margin: 0">
+        <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
+      </p>
+      <a-divider />
+      <p style="margin: 0">
+        {{ record.ws_description }}
+      </p>
+    </template>
+  </a-table>
   </div>
 
 </template>
@@ -8,43 +18,39 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
+const columns = [
+  {
+    title: '單字名稱',
+    dataIndex: 'ws_name',
+    key: 'id',
+    fixed: true
+  },
+  {
+    title: '發音 / 假名',
+    dataIndex: 'ws_pronunciation',
+    key: 'id'
+  },
+  {
+    title: '中文定義',
+    dataIndex: 'ws_definition',
+    key: 'id'
+  }
+]
+
 export default {
   name: 'AboutView',
   methods: {
-    dataArray () {
-      console.log(this.getAll)
-      return Object.keys(this.getAll).map(key => ({
-        key,
-        ...this.getAll[key] // ...是展開物件並為所有key存入新的物件
-      }))
-    },
     ...mapActions('WordsStore', ['fetch'])
   },
   computed: {
-    ...mapGetters('WordsStore', ['getAll'])
+    ...mapGetters('WordsStore', ['wordsArray'])
   },
   async created () {
     await this.fetch()
   },
   setup () {
     return {
-      columns: [
-        {
-          title: '單字名稱',
-          dataIndex: 'ws_name',
-          key: 'id'
-        },
-        {
-          title: '中文定義',
-          dataIndex: 'ws_definition',
-          key: 'id'
-        },
-        {
-          title: '發音 / 假名',
-          dataIndex: 'ws_pronunciation',
-          key: 'id'
-        }
-      ]
+      columns
     }
   }
 
