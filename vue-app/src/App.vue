@@ -9,7 +9,10 @@
           </div>
           <div class="col-lg-9 col-md-9">
             <nav>
-              <router-link :to="{ name: 'about' }">About</router-link>
+              <router-link :to="{ name: 'words' }">Words</router-link>
+            </nav>
+            <nav>
+              <router-link :to="{ name: 'home' }">Words Add</router-link>
             </nav>
             <ul>
               <li v-for="i in 2" :key="i">
@@ -17,6 +20,7 @@
               </li>
             </ul>
             <router-view />
+            <router-view name="home"></router-view>
           </div>
         </div>
       </div>

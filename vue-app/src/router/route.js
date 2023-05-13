@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import AboutView from '@/views/AboutView.vue'
+import WordsView from '@/views/WordsView.vue'
 import UserView from '@/components/User.vue'
 import Postiew from '@/components/PostUser.vue'
 
@@ -9,11 +9,20 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
+    /* components: {
+      default: HomeView,
+      home: HomeView
+    } */
   },
   {
-    path: '/about2',
-    name: 'about',
-    component: AboutView
+    path: '/words',
+    name: 'words',
+    component: WordsView
+  },
+  {
+    path: '/words/category/:cateID',
+    name: 'wordsByCateID',
+    component: WordsView
   },
   {
     path: '/users/:id',

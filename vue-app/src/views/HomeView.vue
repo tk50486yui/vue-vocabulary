@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <HelloWorld msg="Welcome  App WWW"/>
+  <div>
+    <p> Add Page</p>
   </div>
 </template>
 
