@@ -26,6 +26,7 @@ const actions = {
     const data = await WordsRepo.getById(id)
     commit('setByID', data)
   },
+
   async add ({ commit }, data) {
     await WordsRepo.add(data)
   },
