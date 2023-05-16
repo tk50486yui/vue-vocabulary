@@ -73,9 +73,9 @@ export default {
     ...mapActions('WordsStore', {
       addWord: 'add'
     }),
-    onFinish (values) {
-      this.addWord(values.word)
-      console.log('Submit:', values.word.ws_name)
+    async onFinish (values) {
+      await this.addWord(values.word)
+      console.log('finish')
     }
   },
   setup () {

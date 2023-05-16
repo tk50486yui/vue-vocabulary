@@ -14,13 +14,15 @@
             <nav>
               <router-link :to="{ name: 'home' }">Words Add</router-link>
             </nav>
+            <nav>
+              <router-link :to="{ name: 'error' }">Error Page</router-link>
+            </nav>
             <ul>
               <li v-for="i in 2" :key="i">
                 <router-link :to="{ name: 'users', params: { id: i } }">User {{ i }}</router-link>
               </li>
             </ul>
             <router-view />
-            <router-view name="home"></router-view>
           </div>
         </div>
       </div>
