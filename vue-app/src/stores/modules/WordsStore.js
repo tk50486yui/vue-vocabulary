@@ -18,21 +18,29 @@ const getters = {
 
 const actions = {
   async fetch ({ commit }) {
-    const data = await WordsRepo.get()
-    commit('set', data)
+    try {
+      const data = await WordsRepo.get()
+      commit('set', data)
+    } catch (error) {}
   },
 
   async fetchById ({ commit }, id) {
-    const data = await WordsRepo.getById(id)
-    commit('setByID', data)
+    try {
+      const data = await WordsRepo.getById(id)
+      commit('setByID', data)
+    } catch (error) {}
   },
 
   async add ({ commit }, data) {
-    await WordsRepo.add(data)
+    try {
+      await WordsRepo.add(data)
+    } catch (error) {}
   },
 
   async update ({ commit }, { id, data }) {
-    await WordsRepo.update(id, data)
+    try {
+      await WordsRepo.update(id, data)
+    } catch (error) {}
   }
 }
 

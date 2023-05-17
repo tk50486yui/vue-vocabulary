@@ -23,13 +23,9 @@ const routes = [
         }
       }
     ]
-    /* components: {
-      default: HomeView,
-      home: HomeView
-    } */
   },
   {
-    path: '/error2',
+    path: '/error',
     name: 'error',
     component: ErrorView
   },

@@ -18,7 +18,7 @@
               <router-link :to="{ name: 'success' }">Success Page</router-link>
             </nav>
             <nav>
-              <router-link :to="{ name: 'home-error' }">Error Page</router-link>
+              <router-link :to="{ name: 'error' }">Error Page</router-link>
             </nav>
             <ul>
               <li v-for="i in 2" :key="i">

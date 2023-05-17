@@ -31,7 +31,7 @@ const columns = [
     fixed: true
   },
   {
-    title: '發音 / 假名',
+    title: '假名 / 外來語',
     dataIndex: 'ws_pronunciation',
     key: 'id'
   },
