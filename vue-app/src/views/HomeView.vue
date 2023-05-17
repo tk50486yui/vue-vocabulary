@@ -31,6 +31,8 @@
           <a-button type="primary" html-type="submit">Submit</a-button>
         </a-form-item>
       </a-form>
+
+      <router-view name="home-error"></router-view>
     </div>
 </template>
 
@@ -75,7 +77,6 @@ export default {
     }),
     async onFinish (values) {
       await this.addWord(values.word)
-      console.log('finish')
     }
   },
   setup () {
