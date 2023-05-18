@@ -11,28 +11,19 @@ const getters = {
 
 const actions = {
   async fetch ({ commit }) {
-    try {
-      const data = await CategoriesRepo.get()
-      commit('set', data)
-    } catch (error) {}
+    const data = await CategoriesRepo.get()
+    commit('set', data)
   },
-
   async fetchById ({ commit }, id) {
-    try {
-      const data = await CategoriesRepo.getById(id)
-      commit('setByID', data)
-    } catch (error) {}
+    const data = await CategoriesRepo.getById(id)
+    commit('setByID', data)
   },
   async add ({ commit }, data) {
-    try {
-      await CategoriesRepo.add(data)
-    } catch (error) {}
+    await CategoriesRepo.add(data)
   },
 
   async update ({ commit }, { id, data }) {
-    try {
-      await CategoriesRepo.update(id, data)
-    } catch (error) {}
+    await CategoriesRepo.update(id, data)
   }
 }
 

@@ -31,7 +31,7 @@
           <a-button type="primary" html-type="submit">Submit</a-button>
         </a-form-item>
       </a-form>
-
+      <a-button @click="openNotificationWithIcon()">R-push</a-button>
       <router-view name="home-error"></router-view>
     </div>
 </template>
@@ -39,6 +39,7 @@
 <script>
 import { reactive } from 'vue'
 import { mapActions } from 'vuex'
+import router from '@/router/route'
 
 const formState = reactive({
   word: {
@@ -69,6 +70,11 @@ const layout = {
   }
 }
 
+function openNotificationWithIcon () {
+  console.log('123')
+  router.go(0)
+}
+
 export default {
   name: 'HomeView',
   methods: {
@@ -76,14 +82,20 @@ export default {
       addWord: 'add'
     }),
     async onFinish (values) {
-      await this.addWord(values.word)
+      try {
+        await this.addWord(values.word)
+        console.log('success')
+      } catch (error) {
+        console.log(error.response.status)
+      }
     }
   },
   setup () {
     return {
       formState,
       validateMsg,
-      layout
+      layout,
+      openNotificationWithIcon
     }
   }
 }

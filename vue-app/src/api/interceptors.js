@@ -1,6 +1,5 @@
 import api from '@/api/api.js'
-import router from '@/router/route.js'
-import errorUtils from '@/api/errorUtils.js'
+import openNotification from '@/components/notification/openNotification.js'
 
 // 請求攔截
 api.interceptors.request.use(
@@ -17,16 +16,15 @@ api.interceptors.response.use(
   (response) => {
     if (response.status === 200) {
       if (response.config.method === 'post') {
-        router.push({ name: 'success' })
-      } else if (response.config.method === 'get') {
-        console.log('GET')
+        openNotification(response.status)
       }
     }
 
     return response
   },
   (error) => {
-    return errorUtils.handleErrorResponse(error)
+    openNotification(error.response.status)
+    return Promise.reject(error)
   }
 )
 
