@@ -44,14 +44,18 @@ const columns = [
 
 export default {
   name: 'WordsView',
-  methods: {
-    ...mapActions('WordsStore', ['fetch'])
-  },
   computed: {
     cateID () {
       return this.$route.params.cateID
     },
     ...mapGetters('WordsStore', ['wordsArray'])
+  },
+  methods: {
+    ...mapActions('WordsStore', ['fetch'])
+  },
+  async created () {
+    console.log(this.cateID)
+    await this.fetch()
   },
   watch: {
     '$route' (to, from) {
@@ -68,10 +72,6 @@ export default {
       },
       immediate: true // 在組件創建時立即執行一次
     }
-  },
-  async created () {
-    console.log(this.cateID)
-    await this.fetch()
   },
   setup () {
     return {

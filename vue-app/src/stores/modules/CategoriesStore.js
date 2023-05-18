@@ -1,4 +1,5 @@
 import CategoriesRepo from '@/repositories/CategoriesRepo.js'
+import { addValueKey } from '@/libs/dataHelpers.js'
 
 const state = {
   categories: [],
@@ -6,7 +7,10 @@ const state = {
 }
 
 const getters = {
-  categories: (state) => state.categories
+  categories: (state) => state.categories,
+  categoriesTransformed: (state) => {
+    return addValueKey(state.categories)
+  }
 }
 
 const actions = {
