@@ -45,7 +45,7 @@
 ## 版面樣式
 
 基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板
-並透過bootstrap分割元件與頁面。
+並透過 bootstrap 分割元件與頁面。
 
 ----
 ## 版面元件
