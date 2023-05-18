@@ -7,7 +7,7 @@
 ----
 ## Vue 3.2.3
 
-專案是透過 vue-cli 快速建立的，並搭配 vue-router 4.0.3 及 vuex 4.0.2 進行開發，開發環境中有使用 eslint 檢查格式並自動格式化。
+專案是透過 vue-cli 建立的，並搭配 vue-router (4.0.3) 及 vuex (4.0.2)，開發環境中有使用 eslint 檢查 code 格式。
 
 
 ----
@@ -28,7 +28,7 @@
 ```    
   + public  // index
   + src     // 主程式目錄
-    ├─api           // 宣告api 攔截器
+    ├─api           // 宣告 api 與攔截器
     ├─assets        // 素材
     ├─components    // 定義各式組件 (.vue) (.js)
     ├─plugins       // plugin
@@ -37,7 +37,7 @@
     ├─stores        // 處理 repository 的資料並輸出 (vuex)
     │  └─modules
     ├─views         // 顯示頁面 (.vue)
-    ├─App.vue       // 主頁面 (.vue)
+    ├─App.vue       // 主頁面
     └─main.js       // 主程式
 ```
 
