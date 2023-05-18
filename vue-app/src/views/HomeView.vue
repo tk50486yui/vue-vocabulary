@@ -31,8 +31,6 @@
           <a-button type="primary" html-type="submit">Submit</a-button>
         </a-form-item>
       </a-form>
-      <a-button @click="openNotificationWithIcon()">R-push</a-button>
-      <router-view name="home-error"></router-view>
     </div>
 </template>
 
@@ -70,11 +68,6 @@ const layout = {
   }
 }
 
-function openNotificationWithIcon () {
-  console.log('123')
-  router.go(0)
-}
-
 export default {
   name: 'HomeView',
   methods: {
@@ -84,7 +77,7 @@ export default {
     async onFinish (values) {
       try {
         await this.addWord(values.word)
-        console.log('success')
+        router.go(0)
       } catch (error) {
         console.log(error.response.status)
       }
@@ -94,8 +87,7 @@ export default {
     return {
       formState,
       validateMsg,
-      layout,
-      openNotificationWithIcon
+      layout
     }
   }
 }

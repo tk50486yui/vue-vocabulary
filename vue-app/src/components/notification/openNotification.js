@@ -1,7 +1,7 @@
 import { notification } from 'ant-design-vue'
 
 function openNotification (status) {
-  let type = 'info'
+  let type = 'info' // success info warning error
   let title = ''
   let description = ''
 

@@ -1,11 +1,13 @@
 # VueProject
 
-使用 Vue 進行頁面設計
+使用 Vue 進行頁面設計。
 
 搭配後端：[SlimPoject](https://github.com/tk50486yui/SlimProject.git)
 
 ----
 ## Vue 3.2.3
+
+專案是透過 vue-cli 快速建立的，並搭配 vue-router 4.0.3 及 vuex 4.0.2 進行開發，開發環境中有使用 eslint 檢查格式並自動格式化。
 
 
 ----
@@ -38,3 +40,14 @@
     ├─App.vue       // 主頁面 (.vue)
     └─main.js       // 主程式
 ```
+
+----
+## 版面樣式
+
+基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板
+並透過bootstrap分割元件與頁面。
+
+----
+## 版面元件
+
+使用非常多的 [ant-design-vue](https://www.antdv.com/docs/vue/introduce-cn) 元件。

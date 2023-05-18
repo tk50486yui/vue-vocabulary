@@ -10,19 +10,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
-    children: [
-      {
-        path: 'error',
-        name: 'home-error',
-        components: {
-          'home-error': ErrorView
-        },
-        meta: {
-          code: 409
-        }
-      }
-    ]
+    component: HomeView
   },
   {
     path: '/error',
