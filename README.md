@@ -26,11 +26,11 @@
 ```    
   + public  // index
   + src     // 主程式目錄
-    ├─api           // 定義 api
+    ├─api           // 宣告api 攔截器
     ├─assets        // 素材
-    ├─components    // Vue 組件 (.vue)
+    ├─components    // 定義各式組件 (.vue) (.js)
     ├─plugins       // plugin
-    ├─repositories  // 管理取得之資料 (.js)
+    ├─repositories  // 取得資料 (.js)
     ├─router        // Vue 路由控制
     ├─stores        // 處理 repository 的資料並輸出 (vuex)
     │  └─modules
