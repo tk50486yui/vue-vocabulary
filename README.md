@@ -7,7 +7,7 @@
 ----
 ## Vue 3.2.3
 
-專案是透過 vue-cli 建立的，並搭配 vue-router (4.0.3) 及 vuex (4.0.2)，開發環境中有使用 eslint 檢查 code 格式。
+專案是透過 vue-cli 建立的，並搭配 vue-router 4.0.3 及 vuex 4.0.2，開發環境中有使用 eslint 檢查 code 格式。
 
 
 ----
