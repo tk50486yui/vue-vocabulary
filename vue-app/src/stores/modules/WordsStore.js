@@ -27,12 +27,17 @@ const actions = {
     commit('setByID', data)
   },
 
-  async add ({ commit }, data) {
+  async add ({ commit, dispatch }, data) {
     await WordsRepo.add(data)
+    await dispatch('reload')
   },
 
   async update ({ commit }, { id, data }) {
     await WordsRepo.update(id, data)
+  },
+
+  async reload ({ commit, dispatch }) {
+    await dispatch('fetch')
   }
 }
 

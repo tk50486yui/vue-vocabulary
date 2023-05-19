@@ -1,14 +1,14 @@
 <template>
     <a-tree-select
-      v-model:value="watchV"
+      v-model:value="selectedValue"
       v-model:searchValue="searchValue"
       show-search
       :dropdown-style="{ maxHeight: '800px', overflow: 'auto' }"
-      placeholder="類別"
+      placeholder="選擇類別"
       :tree-line="treeLine && { showLeafIcon }"
       allow-clear
       size="large"
-      :tree-data="treeData"
+      :tree-data="treeData.value"
       :field-names="{
         children: 'children',
         label: 'cate_name',
@@ -43,9 +43,10 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   emits: ['update:modelValue'],
-  data () {
-    return {
-      treeData: []
+  props: {
+    modelValue: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -56,11 +57,12 @@ export default {
   },
   async created () {
     await this.fetch()
-    this.treeData = ref(this.categoriesTransformed)
+    this.treeData.value = this.categoriesTransformed
   },
   setup (props, context) {
-    const selectedValue = ref(props.modelValue)
-    const watchV = ref()
+    const treeData = ref([])
+    const searchValue = ref('')
+    const selectedValue = ref()
     const treeLine = ref(true)
     const showLeafIcon = ref(false)
 
@@ -68,15 +70,19 @@ export default {
       selectedValue.value = value
       context.emit('update:modelValue', value)
     }
-
-    const searchValue = ref('')
+    function handleClear () {
+      selectedValue.value = null
+      context.emit('update:modelValue')
+    }
 
     return {
+      treeData,
       searchValue,
-      watchV,
+      selectedValue,
       treeLine,
       showLeafIcon,
-      handleChange
+      handleChange,
+      handleClear
     }
   }
 }

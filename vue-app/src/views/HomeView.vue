@@ -1,13 +1,15 @@
 <template>
     <div>
+      <a-back-top />
       <a-form
+        ref="formRef"
         :model="formState"
         v-bind="layout"
         :validate-messages="validateMsg"
         name="wordform"
         @finish="onFinish">
         <a-form-item :name="['word', 'cate_id']">
-          <CategoriesTreeSelect v-model="formState.word.cate_id" @update:modelValue="handleTreeSelectChange"/>
+          <CategoriesTreeSelect v-model="formState.word.cate_id" ref="treeSelect" @update:modelValue="handleTreeSelectChange"/>
         </a-form-item>
         <p></p>
         <a-form-item :name="['word', 'ws_name']" :rules="[{ required: true }]">
@@ -31,6 +33,7 @@
         </a-form-item>
         <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
           <a-button type="primary" html-type="submit">Submit</a-button>
+          <a-button style="margin-left: 10px" @click="resetFrom">Clear</a-button>
         </a-form-item>
 
       </a-form>
@@ -38,9 +41,8 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { mapActions } from 'vuex'
-// import router from '@/router/route'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
@@ -61,7 +63,6 @@ const formState = reactive({
 
 const validateMsg = {
   required: 'required'
-
 }
 
 const layout = {
@@ -84,21 +85,32 @@ export default {
     }),
     async onFinish (values) {
       try {
-        message.loading({ content: 'Loading..', duration: 1 })
         console.log(values.word)
-        /* await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addWord(values.word) */
-        // router.go(0)
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.addWord(values.word)
+        this.resetFrom()
+        window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {
         console.log(error.response.status)
       }
     },
     handleTreeSelectChange (value) {
-      this.formState.word.cate_id = value
+      this.formState.word.cate_id = typeof value !== 'undefined' ? value : ''
+      console.log(this.formState.word.cate_id + ' TreeValueChange')
+    },
+    clearChildComponent () {
+      this.$refs.treeSelect.handleClear()
+    },
+    resetFrom () {
+      this.clearChildComponent()
+      this.formRef.resetFields()
     }
   },
   setup () {
+    const formRef = ref()
     return {
+      formRef,
       formState,
       validateMsg,
       layout
