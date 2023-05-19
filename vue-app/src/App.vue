@@ -1,4 +1,8 @@
 <template>
+
+  <teleport to="#ShowWords">
+    <router-link :to="{ name: 'words' }">單字表</router-link>
+  </teleport>
   <div>
     <!-- Section Begin -->
     <section class="shop spad">

@@ -10,11 +10,16 @@
               </a>
               <!-- if end -->
               <!-- else -->
-              <a v-else><router-link :to="{ name: 'wordsByCateID', params: { cateID: item.id }}">{{ item.cate_name }}</router-link></a>
+              <a v-else>
+                <router-link :to="{ name: 'wordsByCateID', params: { cateID: item.id }}">
+                  {{ item.cate_name }}
+                </router-link>
+              </a>
               <!-- else end -->
               <!-- if -->
-              <div v-if="item.children && item.children.length" :id="'collapse' + item.id" class="collapse" :data-parent="'#collapse' + data.id">
-                      <TreeCategories :data="item" :parent-id="data.id"></TreeCategories>
+              <div v-if="item.children && item.children.length"
+                :id="'collapse' + item.id" class="collapse" :data-parent="'#collapse' + data.id">
+                  <TreeCategories :data="item" :parent-id="data.id"></TreeCategories>
               </div>
               <!-- if end -->
             </li>
