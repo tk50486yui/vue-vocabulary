@@ -5,10 +5,10 @@
               <h4>詞組類別</h4>
               <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3 button-container"
                 @click="refresh">
-                <ReloadOutlined />
+                <SyncOutlined :spin="SyncOutlinedSpin"/>
               </button>
         </div>
-      <!--  主摺疊  -->
+        <!--  主摺疊  -->
         <a-collapse v-model:activeKey="activeKey">
           <!--  子摺疊區塊  -->
           <a-collapse-panel key="1">
@@ -56,13 +56,13 @@
 import { mapActions, mapGetters } from 'vuex'
 import { ref } from 'vue'
 import TreeCategories from '@/components/TreeCategories.vue'
-import { ReloadOutlined } from '@ant-design/icons-vue'
+import { SyncOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'CategoriesSidebar',
   components: {
     TreeCategories,
-    ReloadOutlined
+    SyncOutlined
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categories'])
@@ -71,9 +71,11 @@ export default {
     ...mapActions('CategoriesStore', ['fetch']),
     async refresh () {
       try {
+        this.SyncOutlinedSpin = true
         this.spinning = true
         await new Promise(resolve => setTimeout(resolve, 1500))
         await this.fetch()
+        this.SyncOutlinedSpin = false
         this.spinning = false
       } catch (error) {}
     }
@@ -84,9 +86,11 @@ export default {
   setup () {
     const activeKey = ref(['1'])
     const spinning = ref(false)
+    const SyncOutlinedSpin = ref(false)
     return {
       activeKey,
-      spinning
+      spinning,
+      SyncOutlinedSpin
     }
   }
 }

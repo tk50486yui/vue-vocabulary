@@ -7,7 +7,7 @@
 ----
 ## Vue 3.2.3
 
-專案是透過 vue-cli 建立的，並搭配 vue-router 4.0.3 及 vuex 4.0.2，開發環境中有使用 eslint 檢查 code 格式。
+專案是透過 vue-cli 建立的，並搭配 vue-router 4.0.3 及 vuex 4.0.2 進行開發，開發環境中有使用 eslint 檢查 code 規範。
 
 
 ----
@@ -44,8 +44,7 @@
 ----
 ## 版面樣式
 
-基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板
-並透過 bootstrap 分割元件與頁面。
+基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板，並透過 bootstrap 分割頁面。
 
 ----
 ## 版面元件

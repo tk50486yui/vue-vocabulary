@@ -2,7 +2,7 @@
   <div>
     <button type="button" class="btn btn-primary btn-outline-light btn-sm float-end me-md-3 button-container"
       @click="handleTableLoading">
-      <ReloadOutlined />
+      <SyncOutlined :spin="SyncOutlinedSpin"/>
     </button>
     <a-table :dataSource="this.wordsArray" :columns="columns"
       :scroll="{ y: 400 }" :loading="isTableLoading">
@@ -22,7 +22,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { ref } from 'vue'
-import { ReloadOutlined } from '@ant-design/icons-vue'
+import { SyncOutlined } from '@ant-design/icons-vue'
 
 const columns = [
   {
@@ -52,7 +52,7 @@ const columns = [
 export default {
   name: 'WordsView',
   components: {
-    ReloadOutlined
+    SyncOutlined
   },
   computed: {
     cateID () {
@@ -64,9 +64,11 @@ export default {
     ...mapActions('WordsStore', ['fetch']),
     async handleTableLoading () {
       try {
+        this.SyncOutlinedSpin = true
         this.isTableLoading = true
         await new Promise(resolve => setTimeout(resolve, 1500))
         await this.fetch()
+        this.SyncOutlinedSpin = false
         this.isTableLoading = false
       } catch (error) {}
     }
@@ -93,8 +95,10 @@ export default {
   },
   setup () {
     const isTableLoading = ref(false)
+    const SyncOutlinedSpin = ref(false)
     return {
       isTableLoading,
+      SyncOutlinedSpin,
       columns
     }
   }
