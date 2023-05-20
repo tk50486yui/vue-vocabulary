@@ -1,68 +1,110 @@
 <template>
   <div class="shop__sidebar">
       <div class="sidebar__categories">
-          <div class="section-title">
+        <div class="section-title">
               <h4>詞組類別</h4>
-          </div>
-          <div ddata-bs-spy="scroll" data-bs-offset="0" class="scrollspy-example" tabindex="0">
-            <!--  類別最頂層  begin -->
-            <div class="categories__accordion" id="accordionExample">
-                <!--  第一層  for顯示區域 開始  -->
-                <div class="accordion" v-for="data in categories" :key="data.id">
-                    <div class="card">
-                        <template v-if="data.children && data.children.length">
-                          <div class="card-heading">
-                              <router-link class="text-dark" data-toggle="collapse"
-                              :data-target="'#collapse' + data.id"
-                              :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
-                                {{ data.cate_name }}
-                              </router-link>
-                          </div>
-                          <!--  第二層以後區域 begin -->
-                          <div :id="'collapse' + data.id" class="collapse" data-parent="#accordionExample">
-                              <TreeCategories :data="data"></TreeCategories>
-                          </div>
-                          <!--  第二層以後區域 end   -->
-                        </template>
-                        <template v-else>
-                          <router-link class="text-secondary" :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
-                            {{ data.cate_name }}
-                          </router-link>
-                        </template>
-                        <hr>
-                    </div>
-                </div>
-                <!--  第一層  for顯示區域 結束  -->
-            </div>
-            <!-- 類別最頂層  end  -->
+              <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3 button-container"
+                @click="refresh">
+                <ReloadOutlined />
+              </button>
         </div>
+      <!--  主摺疊  -->
+        <a-collapse v-model:activeKey="activeKey">
+          <!--  子摺疊區塊  -->
+          <a-collapse-panel key="1">
+          <!--  重整區塊  -->
+          <a-spin :spinning="spinning">
+            <div ddata-bs-spy="scroll" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+              <!--  類別最頂層  begin -->
+              <div class="categories__accordion" id="accordionExample">
+                  <!--  第一層  for顯示區域 開始  -->
+                  <div class="accordion" v-for="data in categories" :key="data.id">
+                      <div class="card">
+                          <template v-if="data.children && data.children.length">
+                            <div class="card-heading">
+                                <router-link class="text-dark" data-toggle="collapse"
+                                :data-target="'#collapse' + data.id"
+                                :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
+                                  {{ data.cate_name }}
+                                </router-link>
+                            </div>
+                            <!--  第二層以後區域 begin -->
+                            <div :id="'collapse' + data.id" class="collapse" data-parent="#accordionExample">
+                                <TreeCategories :data="data"></TreeCategories>
+                            </div>
+                            <!--  第二層以後區域 end   -->
+                          </template>
+                          <template v-else>
+                            <router-link class="text-secondary" :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
+                              {{ data.cate_name }}
+                            </router-link>
+                          </template>
+                          <hr>
+                      </div>
+                  </div>
+                  <!--  第一層  for顯示區域 結束  -->
+              </div>
+              <!-- 類別最頂層  end  -->
+            </div>
+          </a-spin>
+          </a-collapse-panel>
+        </a-collapse>
       </div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { ref } from 'vue'
 import TreeCategories from '@/components/TreeCategories.vue'
+import { ReloadOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'CategoriesSidebar',
   components: {
-    TreeCategories
+    TreeCategories,
+    ReloadOutlined
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categories'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetch'])
+    ...mapActions('CategoriesStore', ['fetch']),
+    async refresh () {
+      try {
+        this.spinning = true
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        await this.fetch()
+        this.spinning = false
+      } catch (error) {}
+    }
   },
   async created () {
     await this.fetch()
+  },
+  setup () {
+    const activeKey = ref(['1'])
+    const spinning = ref(false)
+    return {
+      activeKey,
+      spinning
+    }
   }
 }
 </script>
+
 <style scoped>
 .scrollspy-example {
     position: relative;
     height: 350px;
     overflow: auto;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-title {
+  margin-bottom: 8px !important;
 }
 </style>
