@@ -3,9 +3,13 @@
       <div class="sidebar__categories">
         <div class="section-title">
               <h4>詞組類別</h4>
-              <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3 button-container"
+              <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1 button-container"
                 @click="refresh">
                 <SyncOutlined :spin="SyncOutlinedSpin"/>
+              </button>
+              <button type="button" class="btn btn-dark btn-outline-light btn-sm float-end me-md-1 button-container"
+                @click="showModal">
+                <PlusCircleFilled/>
               </button>
         </div>
         <!--  主摺疊  -->
@@ -51,18 +55,27 @@
         </a-collapse>
       </div>
   </div>
+  <a-modal
+      v-model:visible="visible"
+      title="Title"
+      :confirm-loading="confirmLoading"
+      @ok="handleOk"
+    >
+      <p>{{ modalText }}</p>
+    </a-modal>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { ref } from 'vue'
 import TreeCategories from '@/components/TreeCategories.vue'
-import { SyncOutlined } from '@ant-design/icons-vue'
+import { SyncOutlined, PlusCircleFilled } from '@ant-design/icons-vue'
 
 export default {
   name: 'CategoriesSidebar',
   components: {
     TreeCategories,
-    SyncOutlined
+    SyncOutlined,
+    PlusCircleFilled
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categories'])
@@ -87,10 +100,29 @@ export default {
     const activeKey = ref(['1'])
     const spinning = ref(false)
     const SyncOutlinedSpin = ref(false)
+    const modalText = ref('Content of the modal')
+    const visible = ref(false)
+    const confirmLoading = ref(false)
+    const showModal = () => {
+      visible.value = true
+    }
+    const handleOk = () => {
+      modalText.value = 'The modal will be closed after two seconds'
+      confirmLoading.value = true
+      setTimeout(() => {
+        visible.value = false
+        confirmLoading.value = false
+      }, 2000)
+    }
     return {
       activeKey,
       spinning,
-      SyncOutlinedSpin
+      SyncOutlinedSpin,
+      modalText,
+      visible,
+      confirmLoading,
+      showModal,
+      handleOk
     }
   }
 }
@@ -111,4 +143,5 @@ export default {
 .section-title {
   margin-bottom: 8px !important;
 }
+
 </style>
