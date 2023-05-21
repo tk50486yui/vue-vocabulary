@@ -4,7 +4,7 @@
       v-model:searchValue="searchValue"
       show-search
       :dropdown-style="{ maxHeight: '800px', overflow: 'auto' }"
-      placeholder="選擇類別"
+      placeholder="選擇分類層級"
       :tree-line="treeLine && { showLeafIcon }"
       allow-clear
       size="large"

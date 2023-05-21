@@ -5,7 +5,12 @@
               <!-- if -->
               <a v-if="item.children && item.children.length">
                 <div class="card-heading">
-                  <a data-toggle="collapse" :data-target="'#collapse' + item.id">{{ item.cate_name }}</a>
+                  <div data-toggle="collapse" :data-target="'#collapse' + item.id">
+                    <router-link class="text-primary card-router-link"
+                      :to="{ name: 'wordsByCateID', params: { cateID: item.id }}">
+                      {{ item.cate_name }}
+                    </router-link>
+                  </div>
                 </div>
               </a>
               <!-- if end -->
@@ -40,3 +45,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.card-router-link {
+  display: inline !important;
+}
+</style>

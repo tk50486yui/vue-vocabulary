@@ -8,7 +8,7 @@
                 <SyncOutlined :spin="SyncOutlinedSpin"/>
               </button>
               <button type="button" class="btn btn-dark btn-outline-light btn-sm float-end me-md-1 button-container"
-                @click="showModal">
+                @click="visible=true">
                 <PlusCircleFilled/>
               </button>
         </div>
@@ -26,11 +26,12 @@
                       <div class="card">
                           <template v-if="data.children && data.children.length">
                             <div class="card-heading">
-                                <router-link class="text-dark" data-toggle="collapse"
-                                :data-target="'#collapse' + data.id"
-                                :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
-                                  {{ data.cate_name }}
-                                </router-link>
+                                <div :data-target="'#collapse' + data.id" data-toggle="collapse">
+                                 <router-link class="text-primary card-router-link"
+                                    :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
+                                    {{ data.cate_name }}
+                                  </router-link>
+                                </div>
                             </div>
                             <!--  第二層以後區域 begin -->
                             <div :id="'collapse' + data.id" class="collapse" data-parent="#accordionExample">
@@ -39,9 +40,12 @@
                             <!--  第二層以後區域 end   -->
                           </template>
                           <template v-else>
-                            <router-link class="text-secondary" :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
-                              {{ data.cate_name }}
-                            </router-link>
+                            <div>
+                              <router-link class="text-dark"
+                                :to="{ name: 'wordsByCateID', params: { cateID: data.id }}">
+                                {{ data.cate_name }}
+                              </router-link>
+                            </div>
                           </template>
                           <hr>
                       </div>
@@ -55,36 +59,35 @@
         </a-collapse>
       </div>
   </div>
-  <a-modal
-      v-model:visible="visible"
-      title="新增分類"
-      :footer="null"
-    >
+  <a-modal v-model:visible="visible" title="新增分類" :footer="null">
+    <p></p>
+    <a-form
+      ref="formRef"
+      :model="formState"
+      :validate-messages="validateMsg"
+      @finish="onFinish">
+      <a-form-item :name="['category', 'cate_name']" :rules="[{ required: true }]">
+        <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名稱" :auto-size="{ minRows: 3}" allow-clear />
+      </a-form-item>
       <p></p>
-      <a-form
-        ref="formRef"
-        :model="formState"
-        :validate-messages="validateMsg"
-        @finish="onFinish">
-        <a-form-item :name="['category', 'cate_parent_id']">
-          <CategoriesTreeSelect v-model="formState.category.cate_parent_id" ref="treeSelect" @update:modelValue="handleTreeSelectChange"/>
-        </a-form-item>
-        <p></p>
-        <a-form-item :name="['category', 'cate_name']" :rules="[{ required: true }]">
-          <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名稱" :auto-size="{ minRows: 3}" allow-clear />
-        </a-form-item>
-        <a-form-item>
-          <div class="modal-button-container">
-            <div class="modal-clear-button">
-              <a-button @click="resetForm">Clear</a-button>
-            </div>
-            <div>
-              <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
-            </div>
+      <a-form-item :name="['category', 'cate_parent_id']">
+        <CategoriesTreeSelect v-model="formState.category.cate_parent_id" ref="treeSelect" @update:modelValue="handleTreeSelectChange"/>
+      </a-form-item>
+      <a-form-item>
+        <div class="modal-button-container">
+          <div class="modal-clear-button">
+              <a-button @click="resetForm" danger>Clear</a-button>
           </div>
-        </a-form-item>
-      </a-form>
-    </a-modal>
+          <div class="modal-cancel-button">
+              <a-button @click="visible=false">Cancel</a-button>
+          </div>
+          <div class="modal-submit-button">
+            <a-button class="" type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
+          </div>
+        </div>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -155,11 +158,13 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.spinning = false
-      } catch (error) {}
+      } catch (error) {
+        this.SyncOutlinedSpin = false
+        this.spinning = false
+      }
     },
     handleTreeSelectChange (value) {
       this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : ''
-      console.log(this.formState.category.cate_parent_id + ' TreeValueChange')
     },
     resetForm () {
       this.$refs.treeSelect.handleClear()
@@ -183,15 +188,11 @@ export default {
       validateMsg
     }
 
-    const showModal = () => {
-      modal.visible.value = true
-    }
     return {
       activeKey,
       spinning,
       SyncOutlinedSpin,
-      ...modal,
-      showModal
+      ...modal
     }
   }
 }
@@ -213,6 +214,11 @@ export default {
   margin-bottom: 8px !important;
 }
 
+.card-router-link {
+  display: inline !important;
+  text-decoration: none;
+}
+
 .modal-button-container {
   display: flex;
   justify-content: flex-end;
@@ -221,7 +227,14 @@ export default {
 }
 
 .modal-clear-button {
+  margin-right: auto;
+}
+
+.modal-cancel-button {
   margin-right: 10px;
 }
 
+.modal-submit-button {
+  margin-left: 10px;
+}
 </style>

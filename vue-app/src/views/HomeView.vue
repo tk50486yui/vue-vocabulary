@@ -29,7 +29,7 @@
         </a-form-item>
         <a-form-item>
           <a-button type="primary" html-type="submit">Submit</a-button>
-          <a-button style="margin-left: 10px" @click="resetForm">Clear</a-button>
+          <a-button style="margin-left: 10px" @click="resetForm" danger>Clear</a-button>
         </a-form-item>
 
       </a-form>
