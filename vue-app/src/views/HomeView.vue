@@ -15,15 +15,11 @@
         <a-form-item :name="['word', 'ws_name']" :rules="[{ required: true }]">
           <a-textarea  v-model:value="formState.word.ws_name"  placeholder="輸入單字" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
-
         <p></p>
-
         <a-form-item :name="['word', 'ws_pronunciation']" >
           <a-textarea v-model:value="formState.word.ws_pronunciation" placeholder="假名 / 發音" :auto-size="{ minRows: 2}" allow-clear />
         </a-form-item>
-
         <p></p>
-
         <a-form-item :name="['word', 'ws_definition']">
           <a-textarea v-model:value="formState.word.ws_definition" placeholder="中文定義" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
@@ -31,9 +27,9 @@
         <a-form-item :name="['word', 'ws_description']">
           <a-textarea v-model:value="formState.word.ws_description" placeholder="註解說明.." :auto-size="{ minRows: 4}" allow-clear />
         </a-form-item>
-        <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
+        <a-form-item>
           <a-button type="primary" html-type="submit">Submit</a-button>
-          <a-button style="margin-left: 10px" @click="resetFrom">Clear</a-button>
+          <a-button style="margin-left: 10px" @click="resetForm">Clear</a-button>
         </a-form-item>
 
       </a-form>
@@ -89,7 +85,7 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.addWord(values.word)
-        this.resetFrom()
+        this.resetForm()
         window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {
         console.log(error.response.status)
@@ -99,11 +95,8 @@ export default {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : ''
       console.log(this.formState.word.cate_id + ' TreeValueChange')
     },
-    clearChildComponent () {
+    resetForm () {
       this.$refs.treeSelect.handleClear()
-    },
-    resetFrom () {
-      this.clearChildComponent()
       this.formRef.resetFields()
     }
   },

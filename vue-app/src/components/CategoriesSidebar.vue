@@ -57,31 +57,96 @@
   </div>
   <a-modal
       v-model:visible="visible"
-      title="Title"
-      :confirm-loading="confirmLoading"
-      @ok="handleOk"
+      title="新增分類"
+      :footer="null"
     >
-      <p>{{ modalText }}</p>
+      <p></p>
+      <a-form
+        ref="formRef"
+        :model="formState"
+        :validate-messages="validateMsg"
+        @finish="onFinish">
+        <a-form-item :name="['category', 'cate_parent_id']">
+          <CategoriesTreeSelect v-model="formState.category.cate_parent_id" ref="treeSelect" @update:modelValue="handleTreeSelectChange"/>
+        </a-form-item>
+        <p></p>
+        <a-form-item :name="['category', 'cate_name']" :rules="[{ required: true }]">
+          <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名稱" :auto-size="{ minRows: 3}" allow-clear />
+        </a-form-item>
+        <a-form-item>
+          <div class="modal-button-container">
+            <div class="modal-clear-button">
+              <a-button @click="resetForm">Clear</a-button>
+            </div>
+            <div>
+              <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
+            </div>
+          </div>
+        </a-form-item>
+      </a-form>
     </a-modal>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import TreeCategories from '@/components/TreeCategories.vue'
 import { SyncOutlined, PlusCircleFilled } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
+import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+
+const formState = reactive({
+  category: {
+    cate_name: '',
+    cate_parent_id: '',
+    cate_level: '',
+    cate_sort_order: ''
+  }
+})
+
+const layout = {
+  labelCol: {
+    span: 8
+  },
+  wrapperCol: {
+    span: 16
+  }
+}
+
+const validateMsg = {
+  required: 'required'
+}
 
 export default {
   name: 'CategoriesSidebar',
   components: {
     TreeCategories,
     SyncOutlined,
-    PlusCircleFilled
+    PlusCircleFilled,
+    CategoriesTreeSelect
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categories'])
   },
   methods: {
     ...mapActions('CategoriesStore', ['fetch']),
+    ...mapActions('CategoriesStore', {
+      addCategory: 'add'
+    }),
+    async onFinish (values) {
+      try {
+        this.confirmLoading = true
+        console.log(values.category)
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.addCategory(values.category)
+        this.resetForm()
+        this.confirmLoading = false
+        this.visible = false
+        this.refresh()
+      } catch (error) {
+        this.confirmLoading = false
+      }
+    },
     async refresh () {
       try {
         this.SyncOutlinedSpin = true
@@ -91,6 +156,14 @@ export default {
         this.SyncOutlinedSpin = false
         this.spinning = false
       } catch (error) {}
+    },
+    handleTreeSelectChange (value) {
+      this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : ''
+      console.log(this.formState.category.cate_parent_id + ' TreeValueChange')
+    },
+    resetForm () {
+      this.$refs.treeSelect.handleClear()
+      this.formRef.resetFields()
     }
   },
   async created () {
@@ -100,29 +173,25 @@ export default {
     const activeKey = ref(['1'])
     const spinning = ref(false)
     const SyncOutlinedSpin = ref(false)
-    const modalText = ref('Content of the modal')
-    const visible = ref(false)
-    const confirmLoading = ref(false)
-    const showModal = () => {
-      visible.value = true
+
+    const modal = {
+      visible: ref(false),
+      confirmLoading: ref(false),
+      formRef: ref(),
+      formState,
+      layout,
+      validateMsg
     }
-    const handleOk = () => {
-      modalText.value = 'The modal will be closed after two seconds'
-      confirmLoading.value = true
-      setTimeout(() => {
-        visible.value = false
-        confirmLoading.value = false
-      }, 2000)
+
+    const showModal = () => {
+      modal.visible.value = true
     }
     return {
       activeKey,
       spinning,
       SyncOutlinedSpin,
-      modalText,
-      visible,
-      confirmLoading,
-      showModal,
-      handleOk
+      ...modal,
+      showModal
     }
   }
 }
@@ -142,6 +211,17 @@ export default {
 
 .section-title {
   margin-bottom: 8px !important;
+}
+
+.modal-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.modal-clear-button {
+  margin-right: 10px;
 }
 
 </style>

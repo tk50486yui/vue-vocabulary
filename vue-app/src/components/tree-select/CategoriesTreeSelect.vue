@@ -8,7 +8,7 @@
       :tree-line="treeLine && { showLeafIcon }"
       allow-clear
       size="large"
-      :tree-data="treeData.value"
+      :tree-data="this.categoriesTransformed"
       :field-names="{
         children: 'children',
         label: 'cate_name',
@@ -57,10 +57,8 @@ export default {
   },
   async created () {
     await this.fetch()
-    this.treeData.value = this.categoriesTransformed
   },
   setup (props, context) {
-    const treeData = ref([])
     const searchValue = ref('')
     const selectedValue = ref()
     const treeLine = ref(true)
@@ -76,7 +74,6 @@ export default {
     }
 
     return {
-      treeData,
       searchValue,
       selectedValue,
       treeLine,

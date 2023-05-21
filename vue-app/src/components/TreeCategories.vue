@@ -33,7 +33,7 @@ export default {
   name: 'TreeCategories',
   props: {
     data: Object,
-    parentId: Number
+    parentId: String
   },
   components: {
     TreeCategories
