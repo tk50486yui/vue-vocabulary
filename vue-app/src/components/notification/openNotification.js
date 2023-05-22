@@ -1,15 +1,19 @@
 import { notification } from 'ant-design-vue'
 
-function openNotification (status) {
+function openNotification (response) {
   let type = 'info' // success info warning error
   let title = ''
   let description = ''
-
-  switch (status) {
+  switch (response.status) {
     case 200:
       type = 'success'
       title = 'Success'
       description = 'Successfully'
+      break
+    case 400:
+      type = 'error'
+      title = 'Faild'
+      description = 'Invalid data'
       break
     case 403:
       type = 'error'
@@ -25,11 +29,6 @@ function openNotification (status) {
       type = 'error'
       title = 'Duplicate'
       description = 'Data duplicate.'
-      break
-    case 500:
-      type = 'error'
-      title = 'Error'
-      description = 'Internal server error.'
       break
     default:
       type = 'error'

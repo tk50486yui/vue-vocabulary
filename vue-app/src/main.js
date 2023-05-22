@@ -10,7 +10,7 @@ store.$axios = axios
 store.$api = 'http://localhost/git/SlimProject/api/public'
 
 const app = createApp(App)
-
+app.config.devtools = true
 app.use(Antd)
 app.use(router)
 app.use(store)

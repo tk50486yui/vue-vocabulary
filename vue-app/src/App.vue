@@ -29,7 +29,9 @@
                 <router-link :to="{ name: 'users', params: { id: i } }">User {{ i }}</router-link>
               </li>
             </ul>
-            <router-view />
+
+            <router-view></router-view>
+
           </div>
         </div>
       </div>

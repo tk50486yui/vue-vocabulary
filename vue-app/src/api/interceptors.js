@@ -18,14 +18,13 @@ api.interceptors.response.use(
       if (response.config.method === 'post' ||
           response.config.method === 'put' ||
           response.config.method === 'patch') {
-        openNotification(response.status)
+        openNotification(response)
       }
     }
-
     return response
   },
   (error) => {
-    openNotification(error.response.status)
+    openNotification(error.response)
     return Promise.reject(error)
   }
 )
