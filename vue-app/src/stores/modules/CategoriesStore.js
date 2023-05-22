@@ -18,22 +18,20 @@ const actions = {
     const data = await CategoriesRepo.get()
     commit('set', data)
   },
+
   async fetchById ({ commit }, id) {
     const data = await CategoriesRepo.getById(id)
     commit('setByID', data)
   },
+
   async add ({ commit, dispatch }, data) {
     await CategoriesRepo.add(data)
-    await dispatch('reload')
   },
 
   async update ({ commit }, { id, data }) {
     await CategoriesRepo.update(id, data)
-  },
-
-  async reload ({ commit, dispatch }) {
-    await dispatch('fetch')
   }
+
 }
 
 const mutations = {

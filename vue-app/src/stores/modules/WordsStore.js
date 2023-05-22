@@ -29,15 +29,10 @@ const actions = {
 
   async add ({ commit, dispatch }, data) {
     await WordsRepo.add(data)
-    await dispatch('reload')
   },
 
-  async update ({ commit }, { id, data }) {
+  async update ({ commit, dispatch }, { id, data }) {
     await WordsRepo.update(id, data)
-  },
-
-  async reload ({ commit, dispatch }) {
-    await dispatch('fetch')
   }
 }
 

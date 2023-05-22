@@ -154,7 +154,7 @@ export default {
       try {
         this.SyncOutlinedSpin = true
         this.spinning = true
-        await new Promise(resolve => setTimeout(resolve, 1500))
+        await new Promise(resolve => setTimeout(resolve, 1000))
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.spinning = false
@@ -172,7 +172,7 @@ export default {
     }
   },
   async created () {
-    await this.fetch()
+    await this.refresh()
   },
   setup () {
     const activeKey = ref(['1'])

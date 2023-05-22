@@ -87,9 +87,7 @@ export default {
         await this.addWord(values.word)
         this.resetForm()
         window.scrollTo({ top: 100, behavior: 'smooth' })
-      } catch (error) {
-        console.log(error.response.status)
-      }
+      } catch (error) {}
     },
     handleTreeSelectChange (value) {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : ''

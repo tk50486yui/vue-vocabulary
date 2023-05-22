@@ -1,7 +1,7 @@
 <template>
   <div>
     <button type="button" class="btn btn-primary btn-outline-light btn-sm float-end me-md-3 button-container"
-      @click="handleTableLoading">
+      @click="refreshTable">
       <SyncOutlined :spin="SyncOutlinedSpin"/>
     </button>
     <a-table :dataSource="this.wordsArray" :columns="columns"
@@ -14,6 +14,32 @@
           {{ record.ws_description }}
         </p>
       </template>
+      <template #bodyCell="{ column, text, record }">
+        <template v-if="['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(column.dataIndex)">
+          <div>
+            <template v-if="editableData[record.key]">
+              <a-input v-model:value="editableData[record.key][column.dataIndex]"
+                style="margin: -5px 0"/>
+            </template>
+            <template v-else>
+              {{ text }}
+            </template>
+          </div>
+        </template>
+        <template v-else-if="column.dataIndex === 'operation'">
+          <div>
+            <span v-if="editableData[record.key]">
+              <a-typography-link @click="onEditFinish(record)">Save</a-typography-link>
+              <a-popconfirm title="Sure to cancel?" @confirm="cancel(record)">
+                <a>Cancel</a>
+              </a-popconfirm>
+            </span>
+            <span v-else>
+              <a @click="edit(record)">Edit</a>
+            </span>
+          </div>
+        </template>
+      </template>
     </a-table>
   </div>
 
@@ -21,31 +47,38 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import { message } from 'ant-design-vue'
 import { SyncOutlined } from '@ant-design/icons-vue'
+import { cloneDeep } from 'lodash-es'
 
 const columns = [
   {
     title: '類別',
     dataIndex: 'cate_name',
-    key: 'cate_id',
-    fixed: true
+    fixed: true,
+    width: '20%'
   },
   {
     title: '單字名稱',
     dataIndex: 'ws_name',
-    key: 'id',
-    fixed: true
+    fixed: true,
+    width: '30%'
   },
   {
     title: '假名 / 外來語',
     dataIndex: 'ws_pronunciation',
-    key: 'id'
+    width: '25%'
   },
   {
     title: '中文定義',
     dataIndex: 'ws_definition',
-    key: 'id'
+    width: '20%'
+  },
+  {
+    title: 'operation',
+    dataIndex: 'operation',
+    width: '15%'
   }
 ]
 
@@ -62,44 +95,69 @@ export default {
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
-    async handleTableLoading () {
+    ...mapActions('WordsStore', {
+      updateWord: 'update'
+    }),
+    async refreshTable () {
       try {
         this.SyncOutlinedSpin = true
         this.isTableLoading = true
-        await new Promise(resolve => setTimeout(resolve, 1500))
+        await new Promise(resolve => setTimeout(resolve, 1000))
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.isTableLoading = false
+        this.dataSource = this.wordsArray
       } catch (error) {}
+    },
+    async onEditFinish (record) {
+      try {
+        const editData = await this.save(record)
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.updateWord({ id: editData.id, data: editData })
+        this.cancel(record)
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   async created () {
     console.log(this.cateID)
-    await this.fetch()
+    await this.refreshTable()
   },
   watch: {
     '$route' (to, from) {
       console.log(this.cateID)
-    },
-    '$route.name': {
-      handler (newVal, oldVal) {
-        console.log(`路由名 ${oldVal} => ${newVal}`)
-        if (newVal === 'wordsByCateID') {
-          console.log('wordsByCateID')
-        } else if (newVal === 'otherRouteName') {
-          console.log('wordsB')
-        }
-      },
-      immediate: true // 在組件創建時立即執行一次
     }
   },
   setup () {
+    const dataSource = ref()
     const isTableLoading = ref(false)
     const SyncOutlinedSpin = ref(false)
+    const editableData = reactive({})
+
+    const edit = record => {
+      editableData[record.key] = cloneDeep(dataSource.value.filter(item => record.key === item.key)[0])
+    }
+
+    const cancel = record => {
+      delete editableData[record.key]
+    }
+
+    async function save (record) {
+      Object.assign(dataSource.value.filter(item => record.key === item.key)[0], editableData[record.key])
+      return editableData[record.key]
+    }
+
     return {
       isTableLoading,
       SyncOutlinedSpin,
-      columns
+      columns,
+      dataSource,
+      editableData,
+      edit,
+      save,
+      cancel
     }
   }
 
