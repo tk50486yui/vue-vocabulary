@@ -1,0 +1,295 @@
+<template>
+<div>
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div class="header__logo">
+                        <a href="./shop.html"><img src="templates/img/wordlogo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-7">
+                    <nav class="header__menu">
+                        <ul>
+                            <li><a href="./index.html">Home</a></li>
+                            <li id="ShowWords" class="active"> <router-link :to="{ name: 'words' }">單字表</router-link></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="./product-details.html">Product Details</a></li>
+                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="./blog.html">Blog</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__right">
+                        <ul class="header__right__widget">
+                            <li><span class="icon_search search-switch"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+</div>
+</template>
+<script>
+
+export default {
+  name: 'HeaderView'
+}
+</script>
+
+<style scoped>
+/*---------------------
+    Header
+-----------------------*/
+.header {
+    background: #ffffff;
+    -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
+    box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
+}
+.canvas__open {
+    display: none;
+}
+
+/* header__logo */
+.header__logo {
+    padding: 26px 0;
+}
+
+.header__logo a {
+    display: inline-block;
+}
+
+/* header__menu */
+.header__menu {
+    padding: 30px 0 27px;
+}
+
+.header__menu ul li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 40px;
+    position: relative;
+}
+
+.header__menu ul li.active a:after {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+.header__menu ul li:hover a:after {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+.header__menu ul li:hover .dropdown {
+    top: 27px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.header__menu ul li:last-child {
+    margin-right: 0;
+}
+
+.header__menu ul li .dropdown {
+    position: absolute;
+    left: 0;
+    top: 56px;
+    width: 150px;
+    background: #111111;
+    text-align: left;
+    padding: 2px 0;
+    z-index: 9;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all, 0.3s;
+    -o-transition: all, 0.3s;
+    transition: all, 0.3s;
+}
+
+.header__menu ul li .dropdown li {
+    display: block;
+    margin-right: 0;
+}
+
+.header__menu ul li .dropdown li a {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 400;
+    padding: 8px 20px;
+    text-transform: capitalize;
+}
+
+.header__menu ul li .dropdown li a:after {
+    display: none;
+}
+
+.header__menu ul li a {
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #111111;
+    font-weight: 500;
+    display: block;
+    padding: 2px 0;
+    position: relative;
+}
+
+.header__menu ul li a:after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #ca1515;
+    content: "";
+    -webkit-transition: all, 0.5s;
+    -o-transition: all, 0.5s;
+    transition: all, 0.5s;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+}
+
+/* header__right */
+.header__right {
+    text-align: right;
+    padding: 30px 0 27px;
+}
+.header__right__widget {
+    display: inline-block;
+}
+
+.header__right__widget li {
+    list-style: none;
+    display: inline-block;
+    font-size: 18px;
+    color: #111111;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.header__right__widget li:last-child {
+    margin-right: 0;
+}
+
+.header__right__widget li a {
+    font-size: 18px;
+    color: #111111;
+    position: relative;
+}
+
+.header__right__widget li a .tip {
+    position: absolute;
+    right: -12px;
+    top: -11px;
+    height: 18px;
+    width: 18px;
+    background: #111111;
+    font-size: 10px;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+/*-------------@media----------------*/
+@media only screen and (min-width: 1600px) and (max-width: 1900px) {
+    .header {
+        padding: 0 85px;
+    }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1599px) {
+    .header__menu ul li {
+        margin-right: 20px;
+    }
+    .header {
+        padding: 0 30px;
+    }
+}
+
+/* Medium Device = 1200px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .header__menu ul li {
+        margin-right: 20px;
+    }
+    .header__right__auth {
+        margin-right: 5px;
+    }
+    .sidebar__filter a {
+        padding: 5px 15px 5px 15px;
+    }
+    .nav::before {
+        width: 240px;
+    }
+    .nav::after {
+        width: 240px;
+    }
+}
+
+/* Tablet Device = 768px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .canvas__open {
+        display: block;
+        font-size: 22px;
+        color: #222;
+        height: 35px;
+        width: 35px;
+        line-height: 35px;
+        text-align: center;
+        border: 1px solid #323232;
+        border-radius: 2px;
+        cursor: pointer;
+        position: absolute;
+        right: 15px;
+        top: 24px;
+    }
+    .nav::before {
+        width: 125px;
+    }
+    .nav::after {
+        width: 125px;
+    }
+    .header__menu {
+        display: none;
+    }
+    .header__right {
+        display: none;
+    }
+}
+/* Wide Mobile = 480px */
+@media only screen and (max-width: 767px) {
+    .canvas__open {
+        display: block;
+        font-size: 22px;
+        color: #222;
+        height: 35px;
+        width: 35px;
+        line-height: 35px;
+        text-align: center;
+        border: 1px solid #323232;
+        border-radius: 2px;
+        cursor: pointer;
+        position: absolute;
+        right: 15px;
+        top: 24px;
+    }
+    .header__menu {
+        display: none;
+    }
+    .header__right {
+        display: none;
+    }
+}
+</style>

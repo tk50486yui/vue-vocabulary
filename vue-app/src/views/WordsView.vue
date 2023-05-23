@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <template v-if="Ready">
     <button type="button" class="btn btn-primary btn-outline-light btn-sm float-end me-md-3 button-container"
       @click="refreshTable">
       <SyncOutlined :spin="SyncOutlinedSpin"/>
     </button>
     <a-table :dataSource="this.wordsArray"
       :columns="columns"
-      :scroll="{x:800, y: 500 }"
+      :scroll="{ y: 600, x: 850 }"
       :loading="TableLoading"
     >
       <template #expandedRowRender="{ record }">
@@ -48,8 +48,7 @@
         </template>
       </template>
     </a-table>
-  </div>
-
+  </template>
 </template>
 
 <script>
@@ -106,8 +105,11 @@ export default {
     }
   },
   async created () {
-    console.log('home')
-    await this.fetch()
+    try {
+      await this.fetch()
+      this.editDataSource = this.wordsArray
+      this.Ready = true
+    } catch (error) {}
   },
   watch: {
     '$route' (to, from) {
@@ -115,6 +117,7 @@ export default {
     }
   },
   setup () {
+    const Ready = ref(false)
     const TableLoading = ref(false)
     const SyncOutlinedSpin = ref(false)
     const editDataSource = ref()
@@ -134,6 +137,12 @@ export default {
 
     const columns = [
       {
+        title: 'edit',
+        dataIndex: 'operation',
+        width: '10%',
+        fixed: true
+      },
+      {
         title: '類別',
         dataIndex: 'cate_name',
         width: '20%'
@@ -146,21 +155,17 @@ export default {
       {
         title: '假名 / 外來語',
         dataIndex: 'ws_pronunciation',
-        width: '25%'
+        width: '20%'
       },
       {
         title: '中文定義',
         dataIndex: 'ws_definition',
         width: '20%'
-      },
-      {
-        title: 'edit',
-        dataIndex: 'operation',
-        width: '10%'
       }
     ]
 
     return {
+      Ready,
       TableLoading,
       SyncOutlinedSpin,
       columns,
@@ -176,6 +181,7 @@ export default {
 </script>
 
 <style scoped>
+
 .highlight {
   background-color: rgb(255, 192, 105);
   padding: 0px;
