@@ -2,26 +2,27 @@
   <div>
     <HeaderView />
     <!-- Breadcrumb Begin -->
-    <div class="breadcrumb-option">
+    <div class="breadcrumb-option" :class="[this.$theme]">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="breadcrumb__links">
+                    <div class="breadcrumb__links" :class="[this.$theme]">
                         <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                         <span :class="[theme]">單字表</span>
+                         <span class="btn1" :class="[this.$theme]">單字表</span>
                         <a-switch
-                          :checked="theme === 'dark'"
-                          checked-children="Dark"
-                          un-checked-children="Light"
+                          :checked="this.$theme === 'dark'"
+                          checked-children="暗黑模式"
+                          un-checked-children="明亮模式"
                           @change="changeTheme"
                         />
+                        <button type="button" class="btn btn-outline-light btn-sm btn1" :class="[this.$theme]">測試</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Section Begin -->
-    <section class="spad">
+    <section class="spad" :class="[this.$theme]">
       <div class="container">
         <div class="row">
           <div class="col-lg-3 col-md-3">
@@ -53,42 +54,32 @@
       </div>
     </section>
     <!-- Section End -->
-    <!-- Footer Section Begin -->
-    <footer class="footer">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-12">
-                  <div class="footer__copyright__text">
-                      <p>Copyright &copy; 2023 All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </footer>
-  <!-- Footer Section End -->
+
+    <FooterView />
+
   </div>
 </template>
 <script>
 import CategoriesMenuView from '@/views/CategoriesMenuView.vue'
 import HeaderView from '@/views/HeaderView.vue'
-import { reactive, toRefs } from 'vue'
+import FooterView from '@/views/FooterView.vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     HeaderView,
-    CategoriesMenuView
+    CategoriesMenuView,
+    FooterView
   },
-  setup () {
-    const MainState = reactive({
-      theme: 'light'
-    })
-    const changeTheme = checked => {
-      MainState.theme = checked ? 'dark' : 'light'
-    }
-    return {
-      ...toRefs(MainState),
-      changeTheme
+  computed: {
+    ...mapState('Theme', ['$theme'])
+  },
+  methods: {
+    ...mapActions('Theme', ['updateTheme']),
+    changeTheme (checked) {
+      const theme = checked ? 'dark' : 'light'
+      this.updateTheme(theme)
     }
   }
 }
@@ -97,30 +88,15 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 
-.dark{
-  color: var(--primary-color) !important;
-}
-
-.light {
-  color: var(--primary-color) !important;
-}
-
 @media only screen and (min-width: 1200px) {
   .container {
     max-width: 1170px;
   }
 }
-.spad {
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
+
 /*---------------------
   Breadcrumb
 -----------------------*/
-
-.breadcrumb-option {
-  padding-top: 35px;
-}
 
 .breadcrumb__links a {
   font-size: 15px;
@@ -149,29 +125,5 @@ export default {
   color: #888888;
   display: inline-block;
 }
-/*---------------------
-  Footer
------------------------*/
-.footer__copyright__text {
-  border-top: 1px solid #e1e1e1;
-  padding: 18px 0 25px;
-  text-align: center;
-  margin-top: 35px;
-}
 
-.footer__copyright__text p {
-  margin-bottom: 0;
-}
-
-.footer__copyright__text a {
-  color: #5C5C5C;
-}
-
-.footer__copyright__text i {
-  color: #ca1515;
-}
-
-.footer__copyright__text a:hover {
-  color: #ca1515;
-}
 </style>

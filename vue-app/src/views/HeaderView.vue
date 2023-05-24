@@ -1,6 +1,6 @@
 <template>
 <div>
-    <header class="header">
+    <header class="header" :class="[this.$theme]">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
@@ -9,8 +9,8 @@
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-7">
-                    <nav class="header__menu">
-                        <ul>
+                    <nav class="header__menu" >
+                        <ul class="nav-menu" :class="[this.$theme]">
                             <li><a href="./index.html">Home</a></li>
                             <li id="ShowWords" class="active"> <router-link :to="{ name: 'words' }">單字表</router-link></li>
                             <li><a href="#">Pages</a>
@@ -39,26 +39,28 @@
 </div>
 </template>
 <script>
-
+import { mapState } from 'vuex'
 export default {
-  name: 'HeaderView'
+  name: 'HeaderView',
+  computed: {
+    ...mapState('Theme', ['$theme'])
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/main.scss';
 /*---------------------
     Header
 -----------------------*/
-.header {
-    background: #ffffff;
-    -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
-    box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
-}
+
 .canvas__open {
     display: none;
 }
 
-/* header__logo */
+/*---------------------
+    Header Logo
+-----------------------*/
 .header__logo {
     padding: 26px 0;
 }
@@ -67,7 +69,9 @@ export default {
     display: inline-block;
 }
 
-/* header__menu */
+/*---------------------
+    Header Menu
+-----------------------*/
 .header__menu {
     padding: 30px 0 27px;
 }
@@ -134,16 +138,6 @@ export default {
     display: none;
 }
 
-.header__menu ul li a {
-    font-size: 15px;
-    text-transform: uppercase;
-    color: #111111;
-    font-weight: 500;
-    display: block;
-    padding: 2px 0;
-    position: relative;
-}
-
 .header__menu ul li a:after {
     position: absolute;
     left: 0;
@@ -160,7 +154,9 @@ export default {
     transform: scale(0);
 }
 
-/* header__right */
+/*---------------------
+    Header Right
+-----------------------*/
 .header__right {
     text-align: right;
     padding: 30px 0 27px;
@@ -203,7 +199,9 @@ export default {
     border-radius: 50%;
 }
 
-/*-------------@media----------------*/
+/*---------------------
+    @media
+-----------------------*/
 @media only screen and (min-width: 1600px) and (max-width: 1900px) {
     .header {
         padding: 0 85px;
@@ -224,18 +222,6 @@ export default {
     .header__menu ul li {
         margin-right: 20px;
     }
-    .header__right__auth {
-        margin-right: 5px;
-    }
-    .sidebar__filter a {
-        padding: 5px 15px 5px 15px;
-    }
-    .nav::before {
-        width: 240px;
-    }
-    .nav::after {
-        width: 240px;
-    }
 }
 
 /* Tablet Device = 768px */
@@ -254,12 +240,6 @@ export default {
         position: absolute;
         right: 15px;
         top: 24px;
-    }
-    .nav::before {
-        width: 125px;
-    }
-    .nav::after {
-        width: 125px;
     }
     .header__menu {
         display: none;

@@ -12,33 +12,35 @@
                   <PlusCircleFilled/>
                 </button>
           </div>
-          <!--  主摺疊  -->
-          <a-collapse v-model:activeKey="activeKey">
-            <!--  子摺疊區塊  -->
-            <a-collapse-panel key="1">
+          <div>
             <!--  重整區塊  -->
             <a-spin :spinning="spinning">
-                <div class="menu-scroll">
-                    <!--  類別最頂層 -->
-                    <a-menu mode="inline" theme="light">
-                        <!--  第一層  for 顯示  -->
-                        <template v-for="data in categories" :key="data.id">
-                            <template v-if="data.children && data.children.length">
-                                <a-sub-menu :key="data.id" :title="data.cate_name">
-                                    <TreeCategoriesMenu :data="data" />
-                                </a-sub-menu>
+              <!--  主摺疊  -->
+              <a-collapse v-model:activeKey="activeKey">
+                <!--  子摺疊區塊  -->
+                <a-collapse-panel key="1" :style="`background-color:${this.collapseColor}`">
+                    <div class="menu-scroll">
+                        <!--  類別最頂層 -->
+                        <a-menu mode="inline" :theme="this.$theme">
+                            <!--  第一層  for 顯示  -->
+                            <template v-for="data in categories" :key="data.id">
+                                <template v-if="data.children && data.children.length">
+                                    <a-sub-menu :key="data.id" :title="data.cate_name">
+                                        <TreeCategoriesMenu :data="data" />
+                                    </a-sub-menu>
+                                </template>
+                                <template v-else>
+                                    <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
+                                </template>
                             </template>
-                            <template v-else>
-                                <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
-                            </template>
-                        </template>
-                        <!--  第一層  for 結束  -->
-                    </a-menu>
-                    <!-- 類別最頂層  end  -->
-                </div>
+                            <!--  第一層  for 結束  -->
+                        </a-menu>
+                        <!-- 類別最頂層  end  -->
+                    </div>
+                </a-collapse-panel>
+              </a-collapse>
             </a-spin>
-            </a-collapse-panel>
-          </a-collapse>
+          </div>
         </div>
     </div>
     <a-modal v-model:visible="visible" title="新增分類" :footer="null">
@@ -72,8 +74,8 @@
     </a-modal>
   </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { ref, reactive, toRefs } from 'vue'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { ref, reactive } from 'vue'
 import { SyncOutlined, PlusCircleFilled } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
@@ -110,7 +112,8 @@ export default {
     CategoriesTreeSelect
   },
   computed: {
-    ...mapGetters('CategoriesStore', ['categories'])
+    ...mapGetters('CategoriesStore', ['categories']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('CategoriesStore', ['fetch']),
@@ -150,15 +153,34 @@ export default {
     resetForm () {
       this.$refs.treeSelect.handleClear()
       this.formRef.resetFields()
+    },
+    handleCollapseTheme () {
+      const antDiv = document.querySelector('.ant-collapse-content')
+      if (antDiv) {
+        const color = this.$theme === 'dark' ? '#001529' : '#FFFFFF'
+        antDiv.style.backgroundColor = color
+      }
     }
   },
   async created () {
     await this.refresh()
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.handleCollapseTheme()
+    })
+  },
+  watch: {
+    $theme: function () {
+      this.handleCollapseTheme()
+      this.collapseColor = this.$theme === 'dark' ? '#56646f' : '#eee9ee'
+    }
+  },
   setup () {
     const activeKey = ref(['1'])
     const spinning = ref(false)
     const SyncOutlinedSpin = ref(false)
+    const collapseColor = ref('#56646f')
 
     const modal = {
       visible: ref(false),
@@ -169,28 +191,23 @@ export default {
       validateMsg
     }
 
-    const state = reactive({
-      theme: 'dark',
-      selectedKeys: ['1'],
-      openKeys: ['sub1']
-    })
-    const changeTheme = checked => {
-      state.theme = checked ? 'dark' : 'light'
-    }
-
     return {
       activeKey,
       spinning,
       SyncOutlinedSpin,
       ...modal,
-      ...toRefs(state),
-      changeTheme
+      collapseColor
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/main.scss';
+
+.collapse-background {
+    background: #56646f !important;
+}
 
 .menu-scroll {
     position: relative;
