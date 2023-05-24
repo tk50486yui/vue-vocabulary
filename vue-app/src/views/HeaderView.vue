@@ -5,21 +5,27 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <a href="./shop.html"><img src="templates/img/wordlogo.png" alt=""></a>
+                        <router-link :to="{ name: 'words' }">
+                            <img :src="require('@/assets/logo.png')" />
+                        </router-link>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu" >
                         <ul class="nav-menu" :class="[this.$theme]">
-                            <li><a href="./index.html">Home</a></li>
-                            <li id="ShowWords" class="active"> <router-link :to="{ name: 'words' }">單字表</router-link></li>
-                            <li><a href="#">Pages</a>
+                            <li>
+                                <router-link :to="{ name: 'words' }">Home</router-link>
+                            </li>
+                            <li id="ShowWords" class="active">
+                                <router-link :to="{ name: 'words' }">單字表</router-link>
+                            </li>
+                            <li><router-link :to="{ name: 'words' }">Page</router-link>
                                 <ul class="dropdown">
-                                    <li><a href="./product-details.html">Product Details</a></li>
-                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
+                                    <li><router-link :to="{ name: 'words' }">Detail</router-link></li>
+                                    <li><router-link :to="{ name: 'words' }">Detail-2</router-link></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
+                            <li><router-link :to="{ name: 'words' }">Blog</router-link></li>
                         </ul>
                     </nav>
                 </div>
@@ -62,7 +68,7 @@ export default {
     Header Logo
 -----------------------*/
 .header__logo {
-    padding: 26px 0;
+    padding: 32px 0;
 }
 
 .header__logo a {
