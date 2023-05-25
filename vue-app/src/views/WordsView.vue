@@ -4,55 +4,57 @@
       @click="refreshTable">
       <SyncOutlined :spin="SyncOutlinedSpin"/>
     </button>
-    <a-table :dataSource="this.wordsArray"
-      :columns="columns"
-      :scroll="{ y: 600, x: 850 }"
-      :loading="TableLoading"
-    >
-      <template #expandedRowRender="{ record }">
-        <p style="margin: 0">
-          <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
-        </p>
-        <p style="margin: 0">
-          {{ record.ws_description }}
-        </p>
-      </template>
-      <template #bodyCell="{ column, text, record }">
-        <template v-if="['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(column.dataIndex)">
-          <div>
-            <template v-if="editableData[record.key] && column.dataIndex === 'cate_name'">
-              <CategoriesTreeSelect size="small" placeholder="選擇"
-                :dropdownMatchSelectWidth="false" style="width: 100%"
-                v-model="editableData[record.key]['cate_id']"
-                :defaultValue="editableData[record.key]['cate_id']"/>
-            </template>
-            <template v-else-if="editableData[record.key]">
-              <a-input v-model:value="editableData[record.key][column.dataIndex]"
-                style="margin: -5px 0"/>
-            </template>
-            <template v-else>{{ text }}</template>
-          </div>
+    <div class="table-theme" :class="this.$theme">
+      <a-table :dataSource="this.wordsArray"
+        :columns="columns"
+        :scroll="{ y: 600, x: 850 }"
+        :loading="TableLoading"
+      >
+        <template #expandedRowRender="{ record }">
+          <p style="margin: 0">
+            <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
+          </p>
+          <p style="margin: 0">
+            {{ record.ws_description }}
+          </p>
         </template>
-        <template v-else-if="column.dataIndex === 'operation'">
-          <div>
-            <template v-if="editableData[record.key]">
-              <div class="button-edit-container">
-                <CheckOutlined class="button-edit-check" @click="onEditFinish(record)"/>
-                <CloseOutlined class="button-edit-close" @click="cancel(record)"/>
-              </div>
-            </template>
-            <template v-else>
-              <EditOutlined class="button-edit" @click="edit(record)" />
-            </template>
-          </div>
+        <template #bodyCell="{ column, text, record }">
+          <template v-if="['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(column.dataIndex)">
+            <div>
+              <template v-if="editableData[record.key] && column.dataIndex === 'cate_name'">
+                <CategoriesTreeSelect size="small" placeholder="選擇"
+                  :dropdownMatchSelectWidth="false" style="width: 100%"
+                  v-model="editableData[record.key]['cate_id']"
+                  :defaultValue="editableData[record.key]['cate_id']"/>
+              </template>
+              <template v-else-if="editableData[record.key]">
+                <a-input v-model:value="editableData[record.key][column.dataIndex]"
+                  style="margin: -5px 0"/>
+              </template>
+              <template v-else>{{ text }}</template>
+            </div>
+          </template>
+          <template v-else-if="column.dataIndex === 'operation'">
+            <div>
+              <template v-if="editableData[record.key]">
+                <div class="button-edit-container">
+                  <CheckOutlined class="button-edit-check" @click="onEditFinish(record)"/>
+                  <CloseOutlined class="button-edit-close" @click="cancel(record)"/>
+                </div>
+              </template>
+              <template v-else>
+                <EditOutlined class="button-edit" @click="edit(record)" />
+              </template>
+            </div>
+          </template>
         </template>
-      </template>
-    </a-table>
+      </a-table>
+    </div>
   </template>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
 import { SyncOutlined, EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
@@ -72,7 +74,8 @@ export default {
     cateID () {
       return this.$route.params.cateID
     },
-    ...mapGetters('WordsStore', ['wordsArray'])
+    ...mapGetters('WordsStore', ['wordsArray']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
@@ -180,7 +183,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/main.scss';
 
 .highlight {
   background-color: rgb(255, 192, 105);

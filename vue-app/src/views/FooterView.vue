@@ -29,10 +29,6 @@ export default {
     margin-bottom: 0;
 }
 
-.footer__copyright__text a {
-    color: #5C5C5C;
-}
-
 .footer__copyright__text i {
     color: #ca1515;
 }

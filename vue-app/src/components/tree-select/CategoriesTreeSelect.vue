@@ -1,7 +1,9 @@
 <template>
+  <div class="select-theme" :class="this.$theme" ref="selectMod">
     <a-tree-select
       v-model:value="selectedValue"
       v-model:searchValue="searchValue"
+      :getPopupContainer="()=>this.$refs.selectMod"
       show-search
       placeholder="選擇分類層級"
       :tree-line="treeLine && { showLeafIcon }"
@@ -35,10 +37,11 @@
         </template>
       </template>
     </a-tree-select>
-  </template>
+  </div>
+</template>
 <script>
 import { ref } from 'vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   emits: ['update:modelValue'],
@@ -49,7 +52,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('CategoriesStore', ['categoriesTransformed'])
+    ...mapGetters('CategoriesStore', ['categoriesTransformed']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('CategoriesStore', ['fetch'])
@@ -83,3 +87,8 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '@/assets/scss/main.scss';
+
+</style>

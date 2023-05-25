@@ -1,56 +1,61 @@
 <template>
-    <div>
-        <div class="sidebar__categories">
-          <div class="section-title">
-                <h4>詞組類別</h4>
-                <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1 button-container"
-                  @click="refresh">
-                  <SyncOutlined :spin="SyncOutlinedSpin"/>
-                </button>
-                <button type="button" class="btn btn-dark btn-outline-light btn-sm float-end me-md-1 button-container"
-                  @click="visible=true">
-                  <PlusCircleFilled/>
-                </button>
-          </div>
-          <div>
-            <!--  重整區塊  -->
-            <a-spin :spinning="spinning">
-              <!--  主摺疊  -->
-              <a-collapse v-model:activeKey="activeKey">
-                <!--  子摺疊區塊  -->
-                <a-collapse-panel key="1" :style="`background-color:${this.collapseColor}`">
-                    <div class="menu-scroll">
-                        <!--  類別最頂層 -->
-                        <a-menu mode="inline" :theme="this.$theme">
-                            <!--  第一層  for 顯示  -->
-                            <template v-for="data in categories" :key="data.id">
-                                <template v-if="data.children && data.children.length">
-                                    <a-sub-menu :key="data.id" :title="data.cate_name">
-                                        <TreeCategoriesMenu :data="data" />
-                                    </a-sub-menu>
-                                </template>
-                                <template v-else>
-                                    <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
-                                </template>
+  <div>
+    <div class="sidebar__categories">
+      <div class="section-title" :class="this.$theme">
+        <h4>詞組類別</h4>
+        <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1 button-container"
+          @click="refresh">
+          <SyncOutlined :spin="SyncOutlinedSpin"/>
+        </button>
+        <button type="button" class="btn btn-dark btn-outline-light btn-sm float-end me-md-1 button-container"
+          @click="visible=true">
+          <PlusCircleFilled/>
+        </button>
+      </div>
+      <div class="collapse-theme" :class="this.$theme">
+        <!--  重整區塊  -->
+        <a-spin :spinning="spinning">
+          <!--  主摺疊  -->
+          <a-collapse v-model:activeKey="activeKey">
+            <!--  子摺疊區塊  -->
+            <a-collapse-panel key="1">
+                <div class="menu-scroll">
+                    <!--  類別最頂層 -->
+                    <a-menu mode="inline" :theme="this.$theme">
+                        <!--  第一層  for 顯示  -->
+                        <template v-for="data in categories" :key="data.id">
+                            <template v-if="data.children && data.children.length">
+                                <a-sub-menu :key="data.id" :title="data.cate_name">
+                                    <TreeCategoriesMenu :data="data" />
+                                </a-sub-menu>
                             </template>
-                            <!--  第一層  for 結束  -->
-                        </a-menu>
-                        <!-- 類別最頂層  end  -->
-                    </div>
-                </a-collapse-panel>
-              </a-collapse>
-            </a-spin>
-          </div>
-        </div>
+                            <template v-else>
+                                <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
+                            </template>
+                        </template>
+                        <!--  第一層  for 結束  -->
+                    </a-menu>
+                    <!-- 類別最頂層  end  -->
+                </div>
+            </a-collapse-panel>
+          </a-collapse>
+        </a-spin>
+      </div>
     </div>
-    <a-modal v-model:visible="visible" title="新增分類" :footer="null">
+  </div>
+  <!-- Modal  -->
+  <div class="cate-menu-modal" ref="cateMod" :class="this.$theme">
+    <a-modal v-model:visible="visible" :footer="null" :getContainer = '()=>$refs.cateMod'>
+      <template #title >
+      <div class="modal-head-text" :class="this.$theme">新增分類</div>
+      </template>
       <p></p>
       <a-form
         ref="formRef"
         :model="formState"
         :validate-messages="validateMsg"
         @finish="onFinish">
-        <a-form-item :name="['category', 'cate_name']" :rules="[{ required: true }]">
+        <a-form-item class="input-theme" :class="this.$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
           <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名稱" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <p></p>
@@ -72,7 +77,8 @@
         </a-form-item>
       </a-form>
     </a-modal>
-  </template>
+  </div>
+</template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
@@ -153,34 +159,15 @@ export default {
     resetForm () {
       this.$refs.treeSelect.handleClear()
       this.formRef.resetFields()
-    },
-    handleCollapseTheme () {
-      const antDiv = document.querySelector('.ant-collapse-content')
-      if (antDiv) {
-        const color = this.$theme === 'dark' ? '#001529' : '#FFFFFF'
-        antDiv.style.backgroundColor = color
-      }
     }
   },
   async created () {
     await this.refresh()
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.handleCollapseTheme()
-    })
-  },
-  watch: {
-    $theme: function () {
-      this.handleCollapseTheme()
-      this.collapseColor = this.$theme === 'dark' ? '#56646f' : '#eee9ee'
-    }
-  },
   setup () {
     const activeKey = ref(['1'])
     const spinning = ref(false)
     const SyncOutlinedSpin = ref(false)
-    const collapseColor = ref('#56646f')
 
     const modal = {
       visible: ref(false),
@@ -195,8 +182,7 @@ export default {
       activeKey,
       spinning,
       SyncOutlinedSpin,
-      ...modal,
-      collapseColor
+      ...modal
     }
   }
 }
@@ -205,14 +191,10 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 
-.collapse-background {
-    background: #56646f !important;
-}
-
 .menu-scroll {
-    position: relative;
-    height: 350px;
-    overflow: scroll
+  position: relative;
+  height: 350px;
+  overflow: scroll
 }
 .button-container {
   display: flex;
@@ -222,14 +204,6 @@ export default {
 
 .section-title {
   margin-bottom: 8px !important;
-}
-
-.section-title h4 {
-  color: #111111;
-  font-weight: 600;
-  text-transform: uppercase;
-  position: relative;
-  display: inline-block;
 }
 
 .section-title h4:after {
@@ -242,9 +216,36 @@ export default {
   content: "";
 }
 
-.card-router-link {
-  display: inline !important;
-  text-decoration: none;
+.cate-menu-modal {
+  /* modal head */
+  &.dark :deep(.ant-modal-header){
+    background:var(--head-background);
+    color:var(--head-text);
+  }
+
+  &.light :deep(.ant-modal-header){
+    background:var(--head-background);
+    color:var(--head-text);
+  }
+
+  /* modal body */
+  &.dark :deep(.ant-modal-content){
+    background:var(--body-background);
+  }
+
+  &.light :deep(.ant-modal-content){
+    background:var(--body-background);
+  }
+
+}
+.modal-head-text  {
+  &.dark{
+    color:var(--head-text);
+  }
+
+  &.light{
+    color:var(--head-text);
+  }
 }
 
 .modal-button-container {
@@ -266,7 +267,4 @@ export default {
   margin-left: 10px;
 }
 
-.expanded {
-  display: block;
-}
 </style>

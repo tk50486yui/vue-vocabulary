@@ -7,15 +7,18 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links" :class="[this.$theme]">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                         <span class="btn1" :class="[this.$theme]">單字表</span>
+                      <router-link :to="{ name: 'words' }">
+                        <i class="fa fa-home"></i> Home
+                      </router-link>
+                      <span>單字表</span>
+                      <div class="breadcrumb__switch">
                         <a-switch
                           :checked="this.$theme === 'dark'"
                           checked-children="暗黑模式"
                           un-checked-children="明亮模式"
                           @change="changeTheme"
                         />
-                        <button type="button" class="btn btn-outline-light btn-sm btn1" :class="[this.$theme]">測試</button>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -98,15 +101,6 @@ export default {
   Breadcrumb
 -----------------------*/
 
-.breadcrumb__links a {
-  font-size: 15px;
-  font-weight: 500;
-  color: #111111;
-  margin-right: 18px;
-  display: inline-block;
-  position: relative;
-}
-
 .breadcrumb__links a:after {
   position: absolute;
   right: -14px;
@@ -119,11 +113,8 @@ export default {
   margin-right: 5px;
 }
 
-.breadcrumb__links span {
-  font-size: 15px;
-  font-weight: 500;
-  color: #888888;
-  display: inline-block;
+.breadcrumb__switch {
+  margin-left: auto;
 }
 
 </style>
