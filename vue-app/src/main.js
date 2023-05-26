@@ -30,6 +30,8 @@ window.addEventListener('error', function onError (e) {
   }
 })
 
+document.body.style.background = '#111111'
+
 app.use(Antd)
 app.use(router)
 app.use(store)

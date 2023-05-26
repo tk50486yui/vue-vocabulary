@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-body" :class="this.$theme">
     <HeaderView />
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option" :class="[this.$theme]">
@@ -83,6 +83,18 @@ export default {
     changeTheme (checked) {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
+    }
+  },
+  created () {
+    const isFirefox = typeof InstallTrigger !== 'undefined'
+    const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
+
+    if (isFirefox) {
+      document.body.classList.add('firefox')
+    } else if (isChrome) {
+      document.body.classList.add('chrome')
+    } else {
+      document.body.classList.add('default-browser')
     }
   }
 }

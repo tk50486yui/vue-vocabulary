@@ -1,15 +1,22 @@
-$main-color: #5ebed2;
+$main-color: #111111;
 
 .test-color {
   background: #56646f !important;
 }
 
+.main-body {  
+  &.dark {
+    background: var(--body-background);   
+  }
+  &.light {
+    background: var(--body-background);  
+  } 
+}
 
 /*---------------------
       --Dark Theme--
 -----------------------*/
-.dark  {   
-    --background-color: #000000;
+.dark  {  
 
     --input-background: #131120;
     --select-background:#111111;
@@ -41,8 +48,6 @@ $main-color: #5ebed2;
       --Light Theme--
 -----------------------*/
 .light  {  
-    --background-color: #ffffff;
-   
     --input-background: #fffefe;
 
     --select-background:#fffefe;
@@ -336,7 +341,9 @@ $main-color: #5ebed2;
 /*---------------------
     footer
 -----------------------*/
-.footer {
+.footer {   
+  margin-top: 360px;  
+ 
   &.dark {
     background: var(--body-background); 
   }
@@ -348,8 +355,7 @@ $main-color: #5ebed2;
 .footer__copyright__text {  
   border-top: 1px solid #e1e1e1;
   padding: 18px 0 25px;
-  text-align: center;
-  margin-top: 35px;
+  text-align: center;  
   
   &.dark {
     background: var(--body-background); 
