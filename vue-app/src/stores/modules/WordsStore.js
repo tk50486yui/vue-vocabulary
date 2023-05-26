@@ -1,13 +1,26 @@
 import WordsRepo from '@/repositories/WordsRepo.js'
 
 const state = {
-  words: [], // All
-  word: {} // One
+  words: [],
+  word: {},
+  wordForm: {
+    ws_name: '',
+    ws_definition: '',
+    ws_pronunciation: '',
+    ws_description: '',
+    ws_slogan: '',
+    ws_is_important: '',
+    ws_is_common: '',
+    ws_forget_count: '',
+    ws_order: '',
+    cate_id: ''
+  }
 }
 
 const getters = {
   words: (state) => state.words,
   word: (state) => state.word,
+  wordForm: (state) => state.wordForm,
   wordsArray: (state) => {
     return Object.keys(state.words).map(key => ({
       key,

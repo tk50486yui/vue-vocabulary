@@ -3,11 +3,18 @@ import { addValueKey } from '@/libs/dataHelpers.js'
 
 const state = {
   categories: [],
-  category: {}
+  category: {},
+  categoryForm: {
+    cate_name: '',
+    cate_parent_id: '',
+    cate_level: '',
+    cate_order: ''
+  }
 }
 
 const getters = {
   categories: (state) => state.categories,
+  categoryForm: (state) => state.categoryForm,
   categoriesTransformed: (state) => {
     return addValueKey(state.categories)
   }

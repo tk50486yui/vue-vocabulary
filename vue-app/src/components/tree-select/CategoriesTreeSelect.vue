@@ -1,14 +1,13 @@
 <template>
   <div class="select-theme" :class="this.$theme" ref="selectMod">
     <a-tree-select
+      :getPopupContainer="()=>this.$refs.selectMod"
+      v-bind="$attrs"
       v-model:value="selectedValue"
       v-model:searchValue="searchValue"
-      :getPopupContainer="()=>this.$refs.selectMod"
       show-search
-      placeholder="選擇分類層級"
-      :tree-line="treeLine && { showLeafIcon }"
       allow-clear
-      size="large"
+      :tree-line="treeLine && { showLeafIcon }"
       :tree-data="this.categoriesTransformed"
       :field-names="{
         children: 'children',
@@ -38,6 +37,7 @@
       </template>
     </a-tree-select>
   </div>
+
 </template>
 <script>
 import { ref } from 'vue'

@@ -9,7 +9,9 @@
         name="wordform"
         @finish="onFinish">
         <a-form-item :name="['word', 'cate_id']">
-          <CategoriesTreeSelect v-model="formState.word.cate_id" ref="treeSelect" @update:modelValue="handleTreeSelectChange"/>
+          <CategoriesTreeSelect  placeholder="詞語主題分類" size="large" ref="treeSelect"
+            v-model="formState.word.cate_id"
+            @update:modelValue="handleTreeSelectChange"/>
         </a-form-item>
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['word', 'ws_name']" :rules="[{ required: true }]">
@@ -37,38 +39,10 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { reactive, ref, onMounted } from 'vue'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
-
-const formState = reactive({
-  word: {
-    ws_name: '',
-    ws_definition: '',
-    ws_pronunciation: '',
-    ws_description: '',
-    ws_slogan: '',
-    ws_is_important: '',
-    ws_is_common: '',
-    ws_forget_count: '',
-    ws_display_order: '',
-    cate_id: ''
-  }
-})
-
-const validateMsg = {
-  required: 'required'
-}
-
-const layout = {
-  labelCol: {
-    span: 8
-  },
-  wrapperCol: {
-    span: 16
-  }
-}
 
 export default {
   name: 'HomeView',
@@ -103,6 +77,28 @@ export default {
   },
   setup () {
     const formRef = ref()
+    const formState = reactive({
+      word: {}
+    })
+    const { wordForm } = mapGetters('WordsStore', ['wordForm'])
+
+    onMounted(() => {
+      formState.word = { ...wordForm }
+    })
+
+    const validateMsg = {
+      required: 'required'
+    }
+
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 16
+      }
+    }
+
     return {
       formRef,
       formState,

@@ -60,7 +60,9 @@
         </a-form-item>
         <p></p>
         <a-form-item :name="['category', 'cate_parent_id']">
-          <CategoriesTreeSelect v-model="formState.category.cate_parent_id" ref="treeSelect" @update:modelValue="handleTreeSelectChange"/>
+          <CategoriesTreeSelect  placeholder="選擇分類層級" size="large" ref="treeSelect"
+            v-model="formState.category.cate_parent_id"
+            @update:modelValue="handleTreeSelectChange"/>
         </a-form-item>
         <a-form-item>
           <div class="modal-button-container">
@@ -81,33 +83,11 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { SyncOutlined, PlusCircleFilled } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
-
-const formState = reactive({
-  category: {
-    cate_name: '',
-    cate_parent_id: '',
-    cate_level: '',
-    cate_sort_order: ''
-  }
-})
-
-const layout = {
-  labelCol: {
-    span: 8
-  },
-  wrapperCol: {
-    span: 16
-  }
-}
-
-const validateMsg = {
-  required: 'required'
-}
 
 export default {
   name: 'CategoriesMenuView',
@@ -168,6 +148,29 @@ export default {
     const activeKey = ref(['1'])
     const spinning = ref(false)
     const SyncOutlinedSpin = ref(false)
+
+    const formState = reactive({
+      category: {}
+    })
+
+    const { categoryForm } = mapGetters('CategoriesStore', ['categoryForm'])
+
+    onMounted(() => {
+      formState.category = { ...categoryForm }
+    })
+
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 16
+      }
+    }
+
+    const validateMsg = {
+      required: 'required'
+    }
 
     const modal = {
       visible: ref(false),
