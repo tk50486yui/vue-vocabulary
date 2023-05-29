@@ -31,9 +31,13 @@ $main-color: #111111;
     --table-expand-icon:#26140e;
     --table-scrollbar:#454a4d #202324;
     --table-scrollbar-shadow:0 1px 0 1px #202324;
-
-    --collapse-background:#001529;
+    
     --collapse-head-background:#122929;
+    --collapse-background:#081521;
+    --collapse-sub-background:rgba(27, 29, 30, 0.4);
+
+    --menu-text-hover:#08fead;
+    --menu-text-selected:#0852c9;
 
     --head-text:#fefefe;
 
@@ -58,9 +62,13 @@ $main-color: #111111;
 
     --table-background:rgb(250, 251, 251);
     --table-text:rgb(1, 6, 10);
-
-    --collapse-background:#FFFFFF;
+   
     --collapse-head-background:#eee9ee;
+    --collapse-background:#FFFFFF;
+    --collapse-sub-background:#ebebeb;
+
+    --menu-text-hover:#08fead;
+    --menu-text-selected:#843e0b;
 
     --head-text:#111111;
 
@@ -160,27 +168,33 @@ $main-color: #111111;
 
   /** Dropdown 下拉樣式 **/
   &.dark :deep(.ant-select-tree) {
-    background: var(--select-background)!important;
+    background: var(--select-background);
     color: var(--select-text)
   }
   &.light :deep(.ant-select-tree) {
-    background: var(--select-background)!important;
+    background: var(--select-background);
     color: var(--select-text)
   }
 
   &.dark :deep(.ant-select-dropdown) {
-    background: var(--select-background)!important;  
+    background: var(--select-background);  
   }
   &.light :deep(.ant-select-dropdown) {
-    background: var(--select-background)!important;  
+    background: var(--select-background);  
   }
 
   &.dark :deep(.ant-select-tree-switcher){
-    background: var(--select-background)!important;  
+    background: var(--select-background);  
   }
   &.light :deep(.ant-select-tree-switcher){
-    background: var(--select-background)!important;  
+    background: var(--select-background);  
   } 
+
+  // 選中時顏色
+  &.dark :deep(.ant-select-tree-node-selected){
+    background: var(--head-text);  
+  } 
+  
 }
 
 /*---------------------
@@ -311,9 +325,10 @@ $main-color: #111111;
 /*---------------------
     Collapse
 -----------------------*/
+// 部分只設定dark light預設
 .collapse-theme {
 
-  /* head */
+  // head 
   &.dark :deep(.ant-collapse){
     background : var(--table-background);
     color: var(--head-text)
@@ -322,19 +337,68 @@ $main-color: #111111;
     background : var(--collapse-head-background);
     color: var(--head-text)
   } 
-  /* content */
+  // 外圍顏色 
   &.dark :deep(.ant-collapse-content){
     background : var(--collapse-background);
   }
   &.light :deep(.ant-collapse-content){
     background : var(--collapse-background);
   }   
-  /* arrow */
+  // 主顏色 
+  &.dark :deep(.ant-menu){
+    background : var(--collapse-background);
+    color : var(--head-text)
+  }
+  &.light :deep(.ant-menu){
+    background : var(--collapse-background);
+    color : var(--head-text)
+  }  
+  // 子層級顏色
+  &.dark :deep(.ant-menu .ant-menu-sub){
+    background : var(--collapse-sub-background);  
+  }
+  &.light :deep(.ant-menu .ant-menu-sub){
+    background : var(--collapse-sub-background);
+  } 
+  
+  // title hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu-title:hover){   
+    color : var(--menu-text-hover)
+  }
+ 
+  // item hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-item:hover){   
+    color : var(--menu-text-hover)
+  }
+ 
+  // 展開時title的顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu-open){   
+    color : var(--menu-text-hover)
+  } 
+
+  &.dark :deep(.ant-menu .ant-menu-submenu-open:hover){   
+    color : var(--menu-text-hover)
+  } 
+  
+  // 選中時的顏色
+  &.dark :deep(.ant-menu .ant-menu-item-selected){   
+    color : var(--menu-text-selected);
+    background: var(--head-text)
+  } 
+
+  // 主箭頭
   &.dark :deep(.ant-collapse-arrow){
     color: var(--head-text)
   }
-  &.light :deep(.ant-collapse-arrow){   
+ 
+  // 子箭頭
+  &.dark :deep(.ant-menu-submenu-arrow){
     color: var(--head-text)
+  }
+  
+  // 子箭頭 hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu:hover .ant-menu-submenu-title .ant-menu-submenu-arrow){   
+    color : var(--menu-text-hover)
   }
 
 }

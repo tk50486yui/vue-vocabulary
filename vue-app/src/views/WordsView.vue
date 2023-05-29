@@ -25,7 +25,9 @@
                 <CategoriesTreeSelect size="small" placeholder="選擇"
                   :dropdownMatchSelectWidth="false" style="width: 100%"
                   v-model="editableData[record.key]['cate_id']"
-                  :defaultValue="editableData[record.key]['cate_id']"/>
+                  :defaultValue="editableData[record.key]['cate_id']"
+                  :treeDefaultExpandedKeys="[editableData[record.key]['cate_id']]"
+                 />
               </template>
               <template v-else-if="editableData[record.key]">
                 <a-input v-model:value="editableData[record.key][column.dataIndex]"

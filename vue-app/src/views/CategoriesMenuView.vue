@@ -21,7 +21,7 @@
             <a-collapse-panel key="1">
                 <div class="menu-scroll">
                     <!--  類別最頂層 -->
-                    <a-menu mode="inline" :theme="this.$theme">
+                    <a-menu mode="inline">
                         <!--  第一層  for 顯示  -->
                         <template v-for="data in categories" :key="data.id">
                             <template v-if="data.children && data.children.length">
