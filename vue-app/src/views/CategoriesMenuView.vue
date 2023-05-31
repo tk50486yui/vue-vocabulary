@@ -3,14 +3,8 @@
     <div class="sidebar__categories">
       <div class="section-title" :class="this.$theme">
         <h4>詞組類別</h4>
-        <button type="button" class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1 button-container"
-          @click="refresh">
-          <SyncOutlined :spin="SyncOutlinedSpin"/>
-        </button>
-        <button type="button" class="btn btn-dark btn-outline-light btn-sm float-end me-md-1 button-container"
-          @click="visible=true">
-          <PlusCircleFilled/>
-        </button>
+        <RefreshBtn class="button-container btn-secondary" :spin="SyncOutlinedSpin" @click="refresh"/>
+        <PlusBtn class="button-container" @click="visible=true"/>
       </div>
       <div class="collapse-theme" :class="this.$theme">
         <!--  重整區塊  -->
@@ -84,8 +78,9 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive, onMounted } from 'vue'
-import { SyncOutlined, PlusCircleFilled } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
+import RefreshBtn from '@/components/button/RefreshBtn.vue'
+import PlusBtn from '@/components/button/PlusBtn.vue'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
@@ -93,8 +88,8 @@ export default {
   name: 'CategoriesMenuView',
   components: {
     TreeCategoriesMenu,
-    SyncOutlined,
-    PlusCircleFilled,
+    RefreshBtn,
+    PlusBtn,
     CategoriesTreeSelect
   },
   computed: {

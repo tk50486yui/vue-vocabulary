@@ -1,9 +1,6 @@
 <template>
   <template v-if="Ready">
-    <button type="button" class="btn btn-primary btn-outline-light btn-sm float-end me-md-3 button-container"
-      @click="refreshTable">
-      <SyncOutlined :spin="SyncOutlinedSpin"/>
-    </button>
+    <RefreshBtn class="button-container" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
     <div class="table-theme" :class="this.$theme">
       <a-table :dataSource="this.wordsArray"
         :columns="columns"
@@ -59,17 +56,18 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
-import { SyncOutlined, EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
+import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
   name: 'WordsView',
   components: {
-    SyncOutlined,
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
+    RefreshBtn,
     CategoriesTreeSelect
   },
   computed: {

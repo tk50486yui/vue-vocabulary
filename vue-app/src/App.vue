@@ -39,7 +39,7 @@
               <router-link :to="{ name: 'home' }">Words Add</router-link>
             </nav>
             <nav>
-              <router-link :to="{ name: 'success' }">Success Page</router-link>
+              <router-link :to="{ name: 'tags' }">Tags</router-link>
             </nav>
             <nav>
               <router-link :to="{ name: 'error' }">Error Page</router-link>
