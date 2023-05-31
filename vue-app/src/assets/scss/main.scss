@@ -36,6 +36,11 @@ $main-color: #111111;
     --collapse-background:#081521;
     --collapse-sub-background:rgba(27, 29, 30, 0.4);
 
+    --tab-background:#22373c; 
+    --tab-text:#fcfdfd;
+    --tab-background-active:#0a0e0f; 
+    --tab-text-active:#f0db9d;
+
     --menu-text-hover:#08fead;
     --menu-text-selected:#0852c9;
 
@@ -276,7 +281,6 @@ $main-color: #111111;
   } 
 }
 
-
 .breadcrumb__links {
   span {
     font-size: 15px;
@@ -304,6 +308,27 @@ $main-color: #111111;
     background: var(--body-background);
   } 
 }
+/*---------------------
+    Tab
+-----------------------*/
+.tab-theme {  
+
+  &.dark :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active){    
+    background: var(--tab-background-active);   
+  }
+
+  &.dark :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn){
+    color: var(--tab-text-active);
+  }
+
+  
+  &.dark :deep(.ant-tabs-tab){
+    background: var(--tab-background);
+    color: var(--tab-text);
+  } 
+ 
+}
+
 /*---------------------
     SideMenu
 -----------------------*/

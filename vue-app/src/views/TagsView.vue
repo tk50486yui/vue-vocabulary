@@ -1,77 +1,79 @@
 <template>
     <template v-if="Ready">
-      <a-tabs v-model:activeKey="activeTab" type="card">
-        <!-- tab 1 -->
-        <a-tab-pane key="1" tab="所有標籤">
-          <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
-          <div class="table-theme" :class="this.$theme">
-            <a-table :dataSource="this.tagsArray"
-              :columns="columns"
-              :scroll="{ y: 600, x: 300 }"
-              :maxWidth="200"
-              :loading="TableLoading[0]"
-              :indentSize="12"
-            >
-              <template #bodyCell="{ column, text, record }">
-                <template v-if="['ts_name'].includes(column.dataIndex)">
-                  <div>
-                    <template v-if="column.dataIndex === 'ts_name' && record.children.length > 0">
-                    {{ text }} （{{ record.children.length }}）
-                    </template>
-                    <template v-else>
-                    {{ record.ts_name }}
-                    <button v-if="record.children.length > 0" type="button" class="ant-table-row-expand-icon ant-table-row-expand-icon-collapsed" aria-label="Expand row"></button>
-                    </template>
-                  </div>
+      <div class="tab-theme" :class="this.$theme">
+        <a-tabs v-model:activeKey="activeTab" type="card">
+          <!-- tab 1 -->
+          <a-tab-pane key="1" tab="所有標籤">
+            <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
+            <div class="table-theme" :class="this.$theme">
+              <a-table :dataSource="this.tagsArray"
+                :columns="columns"
+                :scroll="{ y: 600, x: 300 }"
+                :maxWidth="200"
+                :loading="TableLoading[0]"
+                :indentSize="12"
+              >
+                <template #bodyCell="{ column, text, record }">
+                  <template v-if="['ts_name'].includes(column.dataIndex)">
+                    <div>
+                      <template v-if="column.dataIndex === 'ts_name' && record.children.length > 0">
+                      {{ text }} （{{ record.children.length }}）
+                      </template>
+                      <template v-else>
+                      {{ record.ts_name }}
+                      <button v-if="record.children.length > 0" type="button" class="ant-table-row-expand-icon ant-table-row-expand-icon-collapsed" aria-label="Expand row"></button>
+                      </template>
+                    </div>
+                  </template>
                 </template>
-              </template>
-            </a-table>
-          </div>
-        </a-tab-pane>
-        <!-- tab 2 -->
-        <a-tab-pane key="2" tab="近期新增">
-          <RefreshBtn class="button-container btn-warning" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
-          <div class="table-theme" :class="this.$theme">
-            <a-table :dataSource="this.recentTagsArray"
-              :columns="columns"
-              :scroll="{ y: 600, x: 300 }"
-              :maxWidth="200"
-              :loading="TableLoading[1]"
-            >
-            </a-table>
-          </div>
-        </a-tab-pane>
-        <!-- tab 3 -->
-        <a-tab-pane key="3" tab="常用">Content of Tab Pane 3</a-tab-pane>
-        <!-- tab 4 -->
-        <a-tab-pane key="4" tab="＋添加新標籤">
-          <a-form
-            ref="formRef"
-            :model="formState"
-            :validate-messages="validateMsg"
-            @finish="onFinish">
-            <p></p>
-            <TagsTreeSelect placeholder="選擇標籤層級" size="large" ref="treeSelect"
-                  v-model="formState.tag.ts_parent_id"
-                  @update:modelValue="handleTreeSelectChange"
-                  style="width: 300px"/>
-            <p></p>
-            <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
-              <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
-            </a-form-item>
-            <a-form-item>
-              <div class="add-button-container">
-                <div class="add-clear-button">
-                    <a-button @click="resetForm" danger>Clear</a-button>
+              </a-table>
+            </div>
+          </a-tab-pane>
+          <!-- tab 2 -->
+          <a-tab-pane key="2" tab="近期新增">
+            <RefreshBtn class="button-container btn-warning" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
+            <div class="table-theme" :class="this.$theme">
+              <a-table :dataSource="this.recentTagsArray"
+                :columns="columns"
+                :scroll="{ y: 600, x: 300 }"
+                :maxWidth="200"
+                :loading="TableLoading[1]"
+              >
+              </a-table>
+            </div>
+          </a-tab-pane>
+          <!-- tab 3 -->
+          <a-tab-pane key="3" tab="常用">Content of Tab Pane 3</a-tab-pane>
+          <!-- tab 4 -->
+          <a-tab-pane key="4" tab="＋添加新標籤">
+            <a-form
+              ref="formRef"
+              :model="formState"
+              :validate-messages="validateMsg"
+              @finish="onFinish">
+              <p></p>
+              <TagsTreeSelect placeholder="選擇標籤層級" size="large" ref="treeSelect"
+                    v-model="formState.tag.ts_parent_id"
+                    @update:modelValue="handleTreeSelectChange"
+                    style="width: 300px"/>
+              <p></p>
+              <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
+                <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
+              </a-form-item>
+              <a-form-item>
+                <div class="add-button-container">
+                  <div class="add-clear-button">
+                      <a-button @click="resetForm" danger>Clear</a-button>
+                  </div>
+                  <div class="add-submit-button">
+                    <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
+                  </div>
                 </div>
-                <div class="add-submit-button">
-                  <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
-                </div>
-              </div>
-            </a-form-item>
-          </a-form>
-        </a-tab-pane>
-      </a-tabs>
+              </a-form-item>
+            </a-form>
+          </a-tab-pane>
+        </a-tabs>
+      </div>
   </template>
 </template>
 
