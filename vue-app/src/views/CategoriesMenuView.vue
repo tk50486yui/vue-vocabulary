@@ -67,7 +67,7 @@
                 <a-button @click="visible=false">Cancel</a-button>
             </div>
             <div class="modal-submit-button">
-              <a-button class="" type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
+              <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
             </div>
           </div>
         </a-form-item>

@@ -19,7 +19,7 @@ const getters = {
   tags: (state) => state.tags,
   tagForm: (state) => state.tagForm,
   tagsTransformed: (state) => {
-    return addValueKey(state.tags)
+    return addValueKey(state.tags, 'ts_name')
   },
   tagsArray: (state) => {
     return Object.keys(state.tags).map(key => ({

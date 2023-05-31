@@ -16,7 +16,7 @@ const getters = {
   categories: (state) => state.categories,
   categoryForm: (state) => state.categoryForm,
   categoriesTransformed: (state) => {
-    return addValueKey(state.categories)
+    return addValueKey(state.categories, 'cate_name')
   }
 }
 
