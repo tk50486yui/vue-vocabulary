@@ -32,6 +32,29 @@ const getters = {
       key,
       ...state.recentTags[key]
     }))
+  },
+  tagsEditArray: (state) => {
+    const flattenArray = []
+
+    function flattenData (data) {
+      data.forEach((item) => {
+        const newItem = { ...item }
+        if (newItem.children && newItem.children.length > 0) {
+          flattenArray.push(newItem)
+          flattenData(newItem.children)
+          newItem.children = []
+        } else {
+          flattenArray.push(newItem)
+        }
+      })
+    }
+
+    flattenData(Object.values(state.tags))
+
+    return flattenArray.map((item, index) => ({
+      key: index,
+      ...item
+    }))
   }
 }
 

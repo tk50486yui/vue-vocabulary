@@ -18,16 +18,16 @@
         <template #bodyCell="{ column, text, record }">
           <template v-if="['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(column.dataIndex)">
             <div>
-              <template v-if="editableData[record.key] && column.dataIndex === 'cate_name'">
+              <template v-if="editTableData[record.key] && column.dataIndex === 'cate_name'">
                 <CategoriesTreeSelect size="small" placeholder="選擇"
                   :dropdownMatchSelectWidth="false" style="width: 100%"
-                  v-model="editableData[record.key]['cate_id']"
-                  :defaultValue="editableData[record.key]['cate_id']"
-                  :treeDefaultExpandedKeys="[editableData[record.key]['cate_id']]"
+                  v-model="editTableData[record.key]['cate_id']"
+                  :defaultValue="editTableData[record.key]['cate_id']"
+                  :treeDefaultExpandedKeys="[editTableData[record.key]['cate_id']]"
                  />
               </template>
-              <template v-else-if="editableData[record.key]">
-                <a-input v-model:value="editableData[record.key][column.dataIndex]"
+              <template v-else-if="editTableData[record.key]">
+                <a-input v-model:value="editTableData[record.key][column.dataIndex]"
                   style="margin: -5px 0"/>
               </template>
               <template v-else>{{ text }}</template>
@@ -35,7 +35,7 @@
           </template>
           <template v-else-if="column.dataIndex === 'operation'">
             <div>
-              <template v-if="editableData[record.key]">
+              <template v-if="editTableData[record.key]">
                 <div class="button-edit-container">
                   <CheckOutlined class="button-edit-check" @click="onEditFinish(record)"/>
                   <CloseOutlined class="button-edit-close" @click="cancel(record)"/>
@@ -124,18 +124,18 @@ export default {
     const TableLoading = ref(false)
     const SyncOutlinedSpin = ref(false)
     const editDataSource = ref()
-    const editableData = reactive({})
+    const editTableData = reactive({})
 
     const edit = record => {
-      editableData[record.key] = cloneDeep(editDataSource.value.filter(item => record.key === item.key)[0])
+      editTableData[record.key] = cloneDeep(editDataSource.value.filter(item => record.key === item.key)[0])
     }
 
     const cancel = record => {
-      delete editableData[record.key]
+      delete editTableData[record.key]
     }
 
     const save = async record => {
-      return editableData[record.key]
+      return editTableData[record.key]
     }
 
     const columns = [
@@ -173,7 +173,7 @@ export default {
       SyncOutlinedSpin,
       columns,
       editDataSource,
-      editableData,
+      editTableData,
       edit,
       save,
       cancel
