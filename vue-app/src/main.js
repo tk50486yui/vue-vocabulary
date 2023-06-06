@@ -5,6 +5,8 @@ import { store } from '@/stores/store.js'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import installFontAwesomeIcon from '@/plugins/fontawesome/fontawesome-icon.js'
 
 store.$axios = axios
 store.$api = 'http://localhost/git/SlimProject/api/public'
@@ -35,5 +37,7 @@ document.body.style.background = '#111111'
 app.use(Antd)
 app.use(router)
 app.use(store)
+
+installFontAwesomeIcon(app)
 
 app.mount('#app')

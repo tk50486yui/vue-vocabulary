@@ -8,8 +8,9 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb__links" :class="[this.$theme]">
                       <router-link :to="{ name: 'words' }">
-                        <i class="fa fa-home"></i> Home
+                        <font-awesome-icon :icon="['fas', 'house']" /> Home
                       </router-link>
+                      <span class="breadcrumb-separator"><font-awesome-icon :icon="['fas', 'chevron-right']" size="xs"/></span>
                       <span>單字表</span>
                       <div class="breadcrumb__switch">
                         <a-switch
@@ -101,12 +102,17 @@ export default {
   Breadcrumb
 -----------------------*/
 
-.breadcrumb__links a:after {
+.breadcrumb-separator {
+  margin-right: 10px;
+  margin-left: -5px;
+  position: relative;
+  display: inline-block;
+}
+.breadcrumb-separator font-awesome-icon {
   position: absolute;
-  right: -14px;
-  top: 0;
-  content: "";
-  font-family: "FontAwesome";
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .breadcrumb__links a i {

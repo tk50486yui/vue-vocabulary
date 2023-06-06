@@ -32,13 +32,13 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <ul class="header__right__widget">
-                            <li><span class="icon_search search-switch"></span></li>
+                            <li><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="canvas__open">
-                <i class="fa fa-bars"></i>
+                <font-awesome-icon :icon="['fas', 'bars']" />
             </div>
         </div>
     </header>

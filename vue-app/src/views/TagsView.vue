@@ -14,28 +14,11 @@
               >
                 <template #bodyCell="{ column, text, record }">
                   <template v-if="['ts_name'].includes(column.dataIndex)">
-                    <div>
-                      <template v-if="editTableData[record.key]">
-                        <a-input v-model:value="editTableData[record.key][column.dataIndex]"
-                          style="margin: -5px 0"/>
-                      </template>
-                      <template v-else-if="column.dataIndex === 'ts_name' && record.children.length > 0">
-                      {{ text }} （{{ record.children.length }}）
-                      </template>
-                      <template v-else>
-                      {{ record.ts_name }}
-                      </template>
-                    </div>
-                  </template>
-                  <template v-else-if="column.dataIndex === 'operation'">
-                    <template v-if="editTableData[record.key]">
-                      <div class="button-edit-container">
-                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record)"/>
-                        <CloseOutlined class="button-edit-close" @click="cancel(record)"/>
-                      </div>
+                    <template v-if="column.dataIndex === 'ts_name' && record.children.length > 0">
+                    {{ text }} （{{ record.children.length }}）
                     </template>
                     <template v-else>
-                      <EditOutlined class="button-edit" @click="edit(record)" />
+                    {{ text }}
                     </template>
                   </template>
                 </template>
@@ -51,6 +34,30 @@
                 :scroll="{ y: 600 }"
                 :loading="TableLoading[1]"
               >
+                <template #bodyCell="{ column, text, record }">
+                  <template v-if="['ts_name'].includes(column.dataIndex)">
+                    <div>
+                      <template v-if="editTableData[record.key]">
+                        <a-input v-model:value="editTableData[record.key][column.dataIndex]"
+                          style="margin: -5px 0"/>
+                      </template>
+                      <template v-else>
+                      {{ text }}
+                      </template>
+                    </div>
+                  </template>
+                  <template v-else-if="column.dataIndex === 'operation'">
+                    <template v-if="editTableData[record.key]">
+                      <div class="button-edit-container">
+                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record)"/>
+                        <CloseOutlined class="button-edit-close" @click="cancel(record)"/>
+                      </div>
+                    </template>
+                    <template v-else>
+                      <EditOutlined class="button-edit" @click="edit(record)" />
+                    </template>
+                  </template>
+                </template>
               </a-table>
             </div>
           </a-tab-pane>
@@ -102,7 +109,7 @@ export default {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (index === 0) {
           await this.fetch()
-          this.editDataSource = this.tagsEditArray
+          this.editDataSource = this.recentTagsArray
         } else if (index === 1) {
           await this.fetchRecent()
         }
@@ -117,7 +124,8 @@ export default {
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.updateTag({ id: editData.id, data: editData })
         await this.fetch()
-        this.editDataSource = this.tagsEditArray
+        await this.fetchRecent()
+        this.editDataSource = this.recentTagsArray
         this.cancel(record)
       } catch (error) {}
     }
@@ -126,8 +134,7 @@ export default {
     try {
       await this.fetch()
       await this.fetchRecent()
-      this.editDataSource = this.tagsArray
-      console.log(this.editDataSource)
+      this.editDataSource = this.recentTagsArray
       this.Ready = true
     } catch (error) {}
   },

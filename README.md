@@ -20,7 +20,6 @@
     axios
     ant-design-vue
     bootstrap
-    jquery
 ``` 
 
 ----
