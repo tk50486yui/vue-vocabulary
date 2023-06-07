@@ -43,7 +43,7 @@
               <router-link :to="{ name: 'tags' }">Tags</router-link>
             </nav>
             <nav>
-              <router-link :to="{ name: 'error' }">Error Page</router-link>
+              <router-link :to="{ name: 'articles' }">Articles</router-link>
             </nav>
             <ul>
               <li v-for="i in 2" :key="i">
