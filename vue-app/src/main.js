@@ -7,6 +7,7 @@ import 'ant-design-vue/dist/antd.css'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import installFontAwesomeIcon from '@/plugins/fontawesome/fontawesome-icon.js'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 
 store.$axios = axios
 store.$api = 'http://localhost/git/SlimProject/api/public'
@@ -37,6 +38,7 @@ document.body.style.background = '#111111'
 app.use(Antd)
 app.use(router)
 app.use(store)
+app.use(CKEditor)
 
 installFontAwesomeIcon(app)
 

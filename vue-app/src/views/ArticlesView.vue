@@ -20,7 +20,11 @@
         <!-- tab 3 -->
         <a-tab-pane key="3" tab="常用">Content of Tab Pane 3</a-tab-pane>
         <!-- tab 4 -->
-        <a-tab-pane key="4" tab="＋添加文章"></a-tab-pane>
+        <a-tab-pane key="4" tab="＋添加文章">
+          <div class="article-editor" :class="this.$theme">
+          <ckeditor v-model="articleEditor.description" :editor="editor" :config="articleEditor.Config" />
+          </div>
+        </a-tab-pane>
       </a-tabs>
     </div>
 </template>
@@ -28,14 +32,14 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
   name: 'ArticlesView',
   components: {
     RefreshBtn
-
   },
   computed: {
     ...mapGetters('ArticlesStore', ['articlesArray']),
@@ -67,6 +71,13 @@ export default {
     const TableLoading = ref([false, false, false])
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
+    const articleEditor = reactive({
+      description: '',
+      Config: {
+        autoGrow: true,
+        placeholder: '請輸入文章...'
+      }
+    })
 
     const columns = [
       {
@@ -91,7 +102,9 @@ export default {
       TableLoading,
       SyncOutlinedSpin,
       columns,
-      activeTab
+      activeTab,
+      articleEditor,
+      editor: ClassicEditor
     }
   }
 }
@@ -144,18 +157,5 @@ color:#00DB00;
 margin-left: auto;
 color:#EA0000;
 }
-</style>
 
-<style lang="scss" scoped>
-@import '@/assets/scss/main.scss';
-
-.hl-title {
-  &.dark {
-    color: var(--h1-color) !important;
-  }
-
-  &.light {
-    color: var(--h1-color) !important;
-  }
-}
 </style>

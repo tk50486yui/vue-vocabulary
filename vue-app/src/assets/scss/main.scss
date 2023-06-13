@@ -41,6 +41,9 @@ $main-color: #111111;
     --tab-background-active:#0a0e0f; 
     --tab-text-active:#f0db9d;
 
+    --editor-background:#353232;
+    --editor-text:#faf6f6;
+  
     --menu-text-hover:#08fead;
     --menu-text-selected:#0852c9;
 
@@ -327,6 +330,19 @@ $main-color: #111111;
     color: var(--tab-text);
   } 
  
+}
+
+/*---------------------
+    CKEditor
+-----------------------*/
+.article-editor {  
+  :deep(.ck.ck-editor__main .ck-editor__editable){ 
+    min-height: 350px;
+  }  
+  &.dark :deep(.ck.ck-editor__main .ck-editor__editable){    
+    background: var(--editor-background);   
+    color:var(--editor-text)
+  }
 }
 
 /*---------------------
