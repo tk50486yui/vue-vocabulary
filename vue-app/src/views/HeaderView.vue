@@ -14,18 +14,24 @@
                     <nav class="header__menu" >
                         <ul class="nav-menu" :class="[this.$theme]">
                             <li>
-                                <router-link :to="{ name: 'words' }">Home</router-link>
+                                <router-link :to="{ name: 'home' }">Home</router-link>
                             </li>
                             <li id="ShowWords" class="active">
                                 <router-link :to="{ name: 'words' }">單字表</router-link>
                             </li>
-                            <li><router-link :to="{ name: 'words' }">Page</router-link>
+                            <li><router-link :to="{ name: 'tags' }">Tags</router-link></li>
+                            <li><router-link :to="{ name: 'articles' }">文章</router-link></li>
+                            <li><router-link :to="{ name: 'words' }">User</router-link>
                                 <ul class="dropdown">
-                                    <li><router-link :to="{ name: 'words' }">Detail</router-link></li>
-                                    <li><router-link :to="{ name: 'words' }">Detail-2</router-link></li>
+                                    <template v-for="i in 2" :key="i">
+                                        <li>
+                                            <router-link :to="{ name: 'users', params: { id: i } } ">
+                                                User {{ i }}
+                                            </router-link>
+                                        </li>
+                                    </template>
                                 </ul>
                             </li>
-                            <li><router-link :to="{ name: 'words' }">Blog</router-link></li>
                         </ul>
                     </nav>
                 </div>

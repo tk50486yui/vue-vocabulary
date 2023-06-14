@@ -7,9 +7,20 @@ $main-color: #111111;
 .main-body {  
   &.dark {
     background: var(--body-background);   
+    color: var(--head-text); 
   }
   &.light {
     background: var(--body-background);  
+    color: var(--head-text);
+  } 
+}
+
+.show-block {  
+  &.dark {   
+    color: var(--head-text); 
+  }
+  &.light { 
+    color: var(--head-text);
   } 
 }
 
@@ -150,6 +161,16 @@ $main-color: #111111;
     background: var(--input-background);
     color: var(--head-text)
   }
+
+  &.dark :deep(.ant-input-affix-wrapper){
+    background: var(--input-background)!important;
+    color: var(--head-text)
+  }
+
+  &.light :deep(.ant-input-affix-wrapper){
+    background: var(--input-background);
+    color: var(--head-text)
+  }  
 
   /** 驗證器 **/
   &.dark :deep(.ant-form-item-explain-error){   

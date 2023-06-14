@@ -25,34 +25,17 @@
             </div>
         </div>
     </div>
-    <!-- Section Begin -->
+    <!-- 主頁面 -->
     <section class="spad" :class="[this.$theme]">
       <div class="container">
         <div class="row">
+          <!-- 左側 Left -->
           <div class="col-lg-3 col-md-3">
             <CategoriesMenuView />
           </div>
+          <!-- 右側 Right -->
           <div class="col-lg-9 col-md-9">
-            <nav>
-              <router-link :to="{ name: 'words' }">Words</router-link>
-            </nav>
-            <nav>
-              <router-link :to="{ name: 'home' }">Words Add</router-link>
-            </nav>
-            <nav>
-              <router-link :to="{ name: 'tags' }">Tags</router-link>
-            </nav>
-            <nav>
-              <router-link :to="{ name: 'articles' }">Articles</router-link>
-            </nav>
-            <ul>
-              <li v-for="i in 2" :key="i">
-                <router-link :to="{ name: 'users', params: { id: i } }">User {{ i }}</router-link>
-              </li>
-            </ul>
-
             <router-view></router-view>
-
           </div>
         </div>
       </div>

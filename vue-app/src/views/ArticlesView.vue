@@ -12,17 +12,54 @@
               :loading="TableLoading[0]"
               :indentSize="12"
             >
+              <template #bodyCell="{ column, text, record }">
+                <template v-if="['arti_title'].includes(column.dataIndex)">
+                  <template v-if="column.dataIndex === 'arti_title'">
+                    <a @click="showContent(record.arti_content)">{{ text }}</a> {{ record.id }}
+                  </template>
+                  <template v-else>
+                  {{ text }}
+                  </template>
+                </template>
+              </template>
             </a-table>
           </div>
         </a-tab-pane>
         <!-- tab 2 -->
         <a-tab-pane key="2" tab="近期">123</a-tab-pane>
         <!-- tab 3 -->
-        <a-tab-pane key="3" tab="常用">Content of Tab Pane 3</a-tab-pane>
-        <!-- tab 4 -->
-        <a-tab-pane key="4" tab="＋添加文章">
+        <a-tab-pane key="3" tab="編輯">
           <div class="article-editor" :class="this.$theme">
           <ckeditor v-model="articleEditor.description" :editor="editor" :config="articleEditor.Config" />
+          </div>
+        </a-tab-pane>
+        <!-- tab 4 -->
+        <a-tab-pane key="4" tab="＋添加文章">
+          <a-form
+            ref="formRef"
+            :model="formState"
+            :validate-messages="validateMsg"
+            name="articlesform"
+            @finish="onFinish">
+            <a-form-item class="input-theme" :class="this.$theme" :name="['article', 'arti_title']" :rules="[{ required: true }]">
+              <a-input  v-model:value="formState.article.arti_title"  placeholder="輸入標題" allow-clear />
+            </a-form-item>
+            <p></p>
+            <a-form-item :name="['article', 'arti_content']">
+              <div class="article-editor" :class="this.$theme">
+                <ckeditor v-model="formState.article.arti_content" :editor="editor" :config="articleEditor.Config" />
+              </div>
+            </a-form-item>
+            <p></p>
+            <a-form-item>
+              <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
+            </a-form-item>
+          </a-form>
+        </a-tab-pane>
+        <!-- tab 5 -->
+        <a-tab-pane key="5" tab="顯示">
+          <div class="show-block" :class="this.$theme">
+            <div v-html="articleEditor.description"></div>
           </div>
         </a-tab-pane>
       </a-tabs>
@@ -32,7 +69,8 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { message } from 'ant-design-vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
@@ -47,6 +85,9 @@ export default {
   },
   methods: {
     ...mapActions('ArticlesStore', ['fetch']),
+    ...mapActions('ArticlesStore', {
+      addArticle: 'add'
+    }),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -58,6 +99,18 @@ export default {
         this.SyncOutlinedSpin[index] = false
         this.TableLoading[index] = false
       } catch (error) {}
+    },
+    async onFinish (values) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.addArticle(values.article)
+        // this.formRef.resetFields()
+        window.scrollTo({ top: 100, behavior: 'smooth' })
+      } catch (error) {}
+    },
+    showContent (content) {
+      this.articleEditor.description = content
     }
   },
   async created () {
@@ -71,6 +124,11 @@ export default {
     const TableLoading = ref([false, false, false])
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
+    const formRef = ref()
+    const formState = reactive({
+      article: {}
+    })
+    const { articleForm } = mapGetters('ArticlesStore', ['articleForm'])
     const articleEditor = reactive({
       description: '',
       Config: {
@@ -79,21 +137,24 @@ export default {
       }
     })
 
+    onMounted(() => {
+      formState.article = { ...articleForm }
+    })
+
+    const validateMsg = {
+      required: ''
+    }
+
     const columns = [
       {
-        title: '文章標題',
+        title: '文章列表',
         dataIndex: 'arti_title',
-        width: '40%'
+        width: '60%'
       },
       {
-        title: '文章內容',
-        dataIndex: 'arti_content',
+        title: '建立時間',
+        dataIndex: 'created_at',
         width: '40%'
-      },
-      {
-        title: '分類',
-        dataIndex: 'cate_id',
-        width: '20%'
       }
     ]
 
@@ -103,6 +164,10 @@ export default {
       SyncOutlinedSpin,
       columns,
       activeTab,
+      formRef,
+      formState,
+      articleForm,
+      validateMsg,
       articleEditor,
       editor: ClassicEditor
     }
