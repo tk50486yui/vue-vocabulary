@@ -1,21 +1,21 @@
 <template>
   <template v-if="Ready">
     <div class="tab-theme" :class="this.$theme">
-      <a-tabs v-model:activeKey="activeTab" type="card">
+      <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="所有文章">
           <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
           <div class="table-theme" :class="this.$theme">
             <a-table :dataSource="this.articlesArray"
               :columns="columns"
-              :scroll="{ y: 600 }"
+              :scroll="{ y: 600, x: 450 }"
               :loading="TableLoading[0]"
               :indentSize="12"
             >
               <template #bodyCell="{ column, text, record }">
                 <template v-if="['arti_title'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'arti_title'">
-                    <a @click="showContent(record.arti_content)">{{ text }}</a> {{ record.id }}
+                    <a @click="showContent(record)">{{ text }}</a>
                   </template>
                   <template v-else>
                   {{ text }}
@@ -29,10 +29,15 @@
         <a-tab-pane key="2" tab="近期">123</a-tab-pane>
         <!-- tab 3 -->
         <a-tab-pane key="3" tab="編輯">
+          <a-form-item class="input-theme" :class="this.$theme">
+            <a-input  v-model:value="articleEditor.arti_title"  placeholder="輸入標題" allow-clear />
+          </a-form-item>
+          <p></p>
           <div class="article-editor" :class="this.$theme">
-          <ckeditor v-model="articleEditor.description" :editor="editor" :config="articleEditor.Config" />
+          <ckeditor v-model="articleEditor.arti_content" :editor="editor" :config="articleEditor.Config" />
           </div>
-        </a-tab-pane>
+          <p></p>
+          <button class="btn btn-info btn-outline-light btn-sm" @click="onEdit(articleEditor)">儲存</button>        </a-tab-pane>
         <!-- tab 4 -->
         <a-tab-pane key="4" tab="＋添加文章">
           <a-form
@@ -59,7 +64,7 @@
         <!-- tab 5 -->
         <a-tab-pane key="5" tab="顯示">
           <div class="show-block" :class="this.$theme">
-            <div v-html="articleEditor.description"></div>
+            <div v-html="articleEditor.arti_content"></div>
           </div>
         </a-tab-pane>
       </a-tabs>
@@ -69,7 +74,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watchEffect } from 'vue'
 import { message } from 'ant-design-vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -88,6 +93,9 @@ export default {
     ...mapActions('ArticlesStore', {
       addArticle: 'add'
     }),
+    ...mapActions('ArticlesStore', {
+      updateArticle: 'update'
+    }),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -105,12 +113,23 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.addArticle(values.article)
-        // this.formRef.resetFields()
+        await this.fetch()
+        this.formRef.resetFields()
         window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {}
     },
-    showContent (content) {
-      this.articleEditor.description = content
+    async onEdit (values) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.updateArticle({ id: values.id, data: values })
+        await this.fetch()
+      } catch (error) {}
+    },
+    showContent (record) {
+      this.articleEditor.id = record.id
+      this.articleEditor.arti_title = record.arti_title
+      this.articleEditor.arti_content = record.arti_content
     }
   },
   async created () {
@@ -124,21 +143,39 @@ export default {
     const TableLoading = ref([false, false, false])
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
+    const tabPosition = ref('top')
+    const isScreenSmall = ref(false)
+    const mediaQuery = window.matchMedia('(max-width: 576px)')
     const formRef = ref()
     const formState = reactive({
       article: {}
     })
     const { articleForm } = mapGetters('ArticlesStore', ['articleForm'])
     const articleEditor = reactive({
-      description: '',
+      id: '',
+      arti_title: '',
+      arti_content: '',
       Config: {
         autoGrow: true,
         placeholder: '請輸入文章...'
       }
     })
+    const handleMediaQueryChange = () => {
+      isScreenSmall.value = mediaQuery.matches
+    }
 
     onMounted(() => {
+      isScreenSmall.value = mediaQuery.matches
+      mediaQuery.addEventListener('change', handleMediaQueryChange)
       formState.article = { ...articleForm }
+    })
+
+    watchEffect(() => {
+      if (isScreenSmall.value) {
+        tabPosition.value = 'left'
+      } else {
+        tabPosition.value = 'top'
+      }
     })
 
     const validateMsg = {
@@ -164,6 +201,8 @@ export default {
       SyncOutlinedSpin,
       columns,
       activeTab,
+      tabPosition,
+      isScreenSmall,
       formRef,
       formState,
       articleForm,
@@ -183,44 +222,6 @@ display: flex;
 justify-content: center;
 align-items: center;
 margin-bottom: 8px
-}
-
-.add-button-container {
-display: flex;
-justify-content: flex-end;
-align-items: center;
-margin-top: 10px;
-}
-
-.add-clear-button {
-margin-right: auto;
-}
-
-.add-cancel-button {
-margin-right: 10px;
-}
-
-.add-submit-button {
-margin-left: 10px;
-}
-
-.button-edit-container {
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-.button-edit{
-display: flex;
-justify-content: center;
-color:#6A6AFF;
-}
-.button-edit-check{
-margin-right: 10px;
-color:#00DB00;
-}
-.button-edit-close{
-margin-left: auto;
-color:#EA0000;
 }
 
 </style>

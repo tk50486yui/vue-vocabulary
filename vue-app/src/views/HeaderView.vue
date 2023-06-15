@@ -21,6 +21,7 @@
                             </li>
                             <li><router-link :to="{ name: 'tags' }">Tags</router-link></li>
                             <li><router-link :to="{ name: 'articles' }">文章</router-link></li>
+                            <li><router-link :to="{ name: 'wordsgroups' }">群組</router-link></li>
                             <li><router-link :to="{ name: 'words' }">User</router-link>
                                 <ul class="dropdown">
                                     <template v-for="i in 2" :key="i">

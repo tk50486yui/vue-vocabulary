@@ -1,42 +1,41 @@
 <template>
-  <div>
-    <div class="sidebar__categories">
-      <div class="section-title" :class="this.$theme">
-        <h4>詞組類別</h4>
-        <RefreshBtn class="button-container btn-secondary" :spin="SyncOutlinedSpin" @click="refresh"/>
-        <PlusBtn class="button-container" @click="visible=true"/>
-      </div>
-      <div class="collapse-theme" :class="this.$theme">
-        <!--  重整區塊  -->
-        <a-spin :spinning="spinning">
-          <!--  主摺疊  -->
-          <a-collapse v-model:activeKey="activeKey">
-            <!--  子摺疊區塊  -->
-            <a-collapse-panel key="1">
-                <div class="menu-scroll">
-                    <!--  類別最頂層 -->
-                    <a-menu mode="inline">
-                        <!--  第一層  for 顯示  -->
-                        <template v-for="data in categories" :key="data.id">
-                            <template v-if="data.children && data.children.length">
-                                <a-sub-menu :key="data.id" :title="data.cate_name">
-                                    <TreeCategoriesMenu :data="data" />
-                                </a-sub-menu>
-                            </template>
-                            <template v-else>
-                                <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
-                            </template>
-                        </template>
-                        <!--  第一層  for 結束  -->
-                    </a-menu>
-                    <!-- 類別最頂層  end  -->
-                </div>
-            </a-collapse-panel>
-          </a-collapse>
-        </a-spin>
-      </div>
+  <div class="sidebar__categories">
+    <div class="section-title" :class="this.$theme">
+      <h4>詞組類別</h4>
+      <RefreshBtn class="button-container btn-secondary" :spin="SyncOutlinedSpin" @click="refresh"/>
+      <PlusBtn class="button-container" @click="visible=true"/>
+    </div>
+    <div class="collapse-theme" :class="this.$theme">
+      <!--  重整區塊  -->
+      <a-spin :spinning="spinning">
+        <!--  主摺疊  -->
+        <a-collapse v-model:activeKey="activeKey">
+          <!--  子摺疊區塊  -->
+          <a-collapse-panel key="1">
+              <div class="menu-scroll">
+                  <!--  類別最頂層 -->
+                  <a-menu mode="inline">
+                      <!--  第一層  for 顯示  -->
+                      <template v-for="data in categories" :key="data.id">
+                          <template v-if="data.children && data.children.length">
+                              <a-sub-menu :key="data.id" :title="data.cate_name">
+                                  <TreeCategoriesMenu :data="data" />
+                              </a-sub-menu>
+                          </template>
+                          <template v-else>
+                              <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
+                          </template>
+                      </template>
+                      <!--  第一層  for 結束  -->
+                  </a-menu>
+                  <!-- 類別最頂層  end  -->
+              </div>
+          </a-collapse-panel>
+        </a-collapse>
+      </a-spin>
     </div>
   </div>
+  <p></p>
   <!-- Modal  -->
   <div class="cate-menu-modal" ref="cateMod" :class="this.$theme">
     <a-modal v-model:visible="visible" :footer="null" :getContainer = '()=>$refs.cateMod'>

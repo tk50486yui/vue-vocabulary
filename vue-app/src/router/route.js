@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import WordsView from '@/views/WordsView.vue'
 import ArticlesView from '@/views/ArticlesView.vue'
+import WordsGroupsView from '@/views/WordsGroupsView.vue'
 import TagsView from '@/views/TagsView'
 import UserView from '@/components/User.vue'
 import Postiew from '@/components/PostUser.vue'
@@ -21,6 +22,11 @@ const routes = [
     path: '/tags',
     name: 'tags',
     component: TagsView
+  },
+  {
+    path: '/wordsgroups',
+    name: 'wordsgroups',
+    component: WordsGroupsView
   },
   {
     path: '/words',

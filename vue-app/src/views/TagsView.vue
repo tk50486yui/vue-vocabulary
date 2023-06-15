@@ -1,14 +1,14 @@
 <template>
     <template v-if="Ready">
       <div class="tab-theme" :class="this.$theme">
-        <a-tabs v-model:activeKey="activeTab" type="card">
+        <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
           <!-- tab 1 -->
           <a-tab-pane key="1" tab="所有標籤">
             <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
             <div class="table-theme" :class="this.$theme">
               <a-table :dataSource="this.tagsArray"
                 :columns="columns"
-                :scroll="{ y: 600 }"
+                :scroll="{ y: 600, x: 400 }"
                 :loading="TableLoading[0]"
                 :indentSize="12"
               >
@@ -74,7 +74,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, watchEffect } from 'vue'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
@@ -143,8 +143,28 @@ export default {
     const TableLoading = ref([false, false, false])
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
+    const tabPosition = ref('top')
+    const isScreenSmall = ref(false)
+    const mediaQuery = window.matchMedia('(max-width: 576px)')
     const editDataSource = ref()
     const editTableData = reactive({})
+
+    const handleMediaQueryChange = () => {
+      isScreenSmall.value = mediaQuery.matches
+    }
+
+    onMounted(() => {
+      isScreenSmall.value = mediaQuery.matches
+      mediaQuery.addEventListener('change', handleMediaQueryChange)
+    })
+
+    watchEffect(() => {
+      if (isScreenSmall.value) {
+        tabPosition.value = 'left'
+      } else {
+        tabPosition.value = 'top'
+      }
+    })
 
     const edit = record => {
       console.log(record.key)
@@ -177,6 +197,8 @@ export default {
       SyncOutlinedSpin,
       columns,
       activeTab,
+      tabPosition,
+      isScreenSmall,
       editDataSource,
       editTableData,
       edit,
