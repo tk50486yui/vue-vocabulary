@@ -148,7 +148,18 @@ export default {
       {
         title: '類別',
         dataIndex: 'cate_name',
-        width: '20%'
+        width: '20%',
+        filters: [
+          {
+            text: '動物',
+            value: '動物'
+          },
+          {
+            text: '昆蟲',
+            value: '昆蟲'
+          }
+        ],
+        onFilter: (value, record) => record.cate_name != null && record.cate_name.indexOf(value) === 0
       },
       {
         title: '單字名稱',
