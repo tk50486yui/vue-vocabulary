@@ -50,6 +50,7 @@
 import CategoriesMenuView from '@/views/CategoriesMenuView.vue'
 import HeaderView from '@/views/HeaderView.vue'
 import FooterView from '@/views/FooterView.vue'
+import { ref, onMounted } from 'vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -60,13 +61,44 @@ export default {
     FooterView
   },
   computed: {
-    ...mapState('Theme', ['$theme'])
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$mobile'])
+  },
+  watch: {
+    isScreenSmall: function (val) {
+      if (val) {
+        this.updateMobile(true)
+      } else {
+        this.updateMobile(false)
+      }
+    }
   },
   methods: {
     ...mapActions('Theme', ['updateTheme']),
+    ...mapActions('Screen', ['updateMobile']),
     changeTheme (checked) {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
+    },
+    changeScreen (screen) {
+      console.log(screen)
+    }
+  },
+  setup () {
+    const isScreenSmall = ref(false)
+    const mediaQuery = window.matchMedia('(max-width: 576px)')
+
+    const handleMediaQueryChange = () => {
+      isScreenSmall.value = mediaQuery.matches
+    }
+
+    onMounted(() => {
+      isScreenSmall.value = mediaQuery.matches
+      mediaQuery.addEventListener('change', handleMediaQueryChange)
+    })
+
+    return {
+      isScreenSmall
     }
   }
 }

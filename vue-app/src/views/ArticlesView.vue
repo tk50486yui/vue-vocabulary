@@ -74,7 +74,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive, onMounted, watchEffect } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -86,7 +86,13 @@ export default {
   },
   computed: {
     ...mapGetters('ArticlesStore', ['articlesArray']),
-    ...mapState('Theme', ['$theme'])
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$mobile'])
+  },
+  watch: {
+    $mobile: function (val) {
+      this.changeTabPosition(val)
+    }
   },
   methods: {
     ...mapActions('ArticlesStore', ['fetch']),
@@ -130,10 +136,18 @@ export default {
       this.articleEditor.id = record.id
       this.articleEditor.arti_title = record.arti_title
       this.articleEditor.arti_content = record.arti_content
+    },
+    changeTabPosition (isScreenSmall) {
+      if (isScreenSmall) {
+        this.tabPosition = 'left'
+      } else {
+        this.tabPosition = 'top'
+      }
     }
   },
   async created () {
     try {
+      this.changeTabPosition(this.$mobile)
       await this.fetch()
       this.Ready = true
     } catch (error) {}
@@ -144,8 +158,6 @@ export default {
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
     const tabPosition = ref('top')
-    const isScreenSmall = ref(false)
-    const mediaQuery = window.matchMedia('(max-width: 576px)')
     const formRef = ref()
     const formState = reactive({
       article: {}
@@ -160,22 +172,9 @@ export default {
         placeholder: '請輸入文章...'
       }
     })
-    const handleMediaQueryChange = () => {
-      isScreenSmall.value = mediaQuery.matches
-    }
 
     onMounted(() => {
-      isScreenSmall.value = mediaQuery.matches
-      mediaQuery.addEventListener('change', handleMediaQueryChange)
       formState.article = { ...articleForm }
-    })
-
-    watchEffect(() => {
-      if (isScreenSmall.value) {
-        tabPosition.value = 'left'
-      } else {
-        tabPosition.value = 'top'
-      }
     })
 
     const validateMsg = {
@@ -202,7 +201,6 @@ export default {
       columns,
       activeTab,
       tabPosition,
-      isScreenSmall,
       formRef,
       formState,
       articleForm,

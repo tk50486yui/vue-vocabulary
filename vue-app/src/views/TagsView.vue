@@ -74,7 +74,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive, onMounted, watchEffect } from 'vue'
+import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
@@ -94,7 +94,13 @@ export default {
     ...mapGetters('TagsStore', ['tagsArray']),
     ...mapGetters('TagsStore', ['recentTagsArray']),
     ...mapGetters('TagsStore', ['tagsEditArray']),
-    ...mapState('Theme', ['$theme'])
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$mobile'])
+  },
+  watch: {
+    $mobile: function (val) {
+      this.changeTabPosition(val)
+    }
   },
   methods: {
     ...mapActions('TagsStore', ['fetch']),
@@ -128,10 +134,18 @@ export default {
         this.editDataSource = this.recentTagsArray
         this.cancel(record)
       } catch (error) {}
+    },
+    changeTabPosition (isScreenSmall) {
+      if (isScreenSmall) {
+        this.tabPosition = 'left'
+      } else {
+        this.tabPosition = 'top'
+      }
     }
   },
   async created () {
     try {
+      this.changeTabPosition(this.$mobile)
       await this.fetch()
       await this.fetchRecent()
       this.editDataSource = this.recentTagsArray
@@ -144,27 +158,8 @@ export default {
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
     const tabPosition = ref('top')
-    const isScreenSmall = ref(false)
-    const mediaQuery = window.matchMedia('(max-width: 576px)')
     const editDataSource = ref()
     const editTableData = reactive({})
-
-    const handleMediaQueryChange = () => {
-      isScreenSmall.value = mediaQuery.matches
-    }
-
-    onMounted(() => {
-      isScreenSmall.value = mediaQuery.matches
-      mediaQuery.addEventListener('change', handleMediaQueryChange)
-    })
-
-    watchEffect(() => {
-      if (isScreenSmall.value) {
-        tabPosition.value = 'left'
-      } else {
-        tabPosition.value = 'top'
-      }
-    })
 
     const edit = record => {
       console.log(record.key)
@@ -198,7 +193,6 @@ export default {
       columns,
       activeTab,
       tabPosition,
-      isScreenSmall,
       editDataSource,
       editTableData,
       edit,
