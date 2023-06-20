@@ -37,7 +37,8 @@
           <ckeditor v-model="articleEditor.arti_content" :editor="editor" :config="articleEditor.Config" />
           </div>
           <p></p>
-          <button class="btn btn-info btn-outline-light btn-sm" @click="onEdit(articleEditor)">儲存</button>        </a-tab-pane>
+          <button class="btn btn-info btn-outline-light btn-sm" @click="onEdit(articleEditor)">儲存</button>
+        </a-tab-pane>
         <!-- tab 4 -->
         <a-tab-pane key="4" tab="＋添加文章">
           <a-form

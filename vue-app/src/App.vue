@@ -25,9 +25,22 @@
             </div>
         </div>
     </div>
+
     <!-- 主頁面 -->
-    <section class="spad" :class="[this.$theme]">
+    <div class="spad" :class="[this.$theme]">
       <div class="container">
+        <div class="d-flex justify-content-center">
+          <div class="input-theme input-search" :class="this.$theme">
+              <a-input-search
+                  v-model:value="searchValue"
+                  placeholder="搜尋"
+                  @search="onSearch"
+                  size="large"
+              />
+          </div>
+        </div>
+        <p></p>
+        <a-divider class="divider-theme" />
         <div class="row">
           <!-- 左側 Left -->
           <div class="col-lg-3 col-md-3">
@@ -39,8 +52,7 @@
           </div>
         </div>
       </div>
-    </section>
-    <!-- Section End -->
+    </div>
 
     <FooterView />
 
@@ -76,17 +88,23 @@ export default {
   methods: {
     ...mapActions('Theme', ['updateTheme']),
     ...mapActions('Screen', ['updateMobile']),
+    ...mapActions('Search', ['updateKeyword']),
     changeTheme (checked) {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
     },
     changeScreen (screen) {
       console.log(screen)
+    },
+    onSearch () {
+      this.updateKeyword(this.searchValue)
+      this.$router.push({ name: 'wordsGrid' })
     }
   },
   setup () {
     const isScreenSmall = ref(false)
     const mediaQuery = window.matchMedia('(max-width: 576px)')
+    const searchValue = ref('')
 
     const handleMediaQueryChange = () => {
       isScreenSmall.value = mediaQuery.matches
@@ -98,7 +116,8 @@ export default {
     })
 
     return {
-      isScreenSmall
+      isScreenSmall,
+      searchValue
     }
   }
 }
@@ -136,6 +155,20 @@ export default {
 
 .breadcrumb__switch {
   margin-left: auto;
+}
+
+.input-search{
+  width: 450px;
+}
+@media only screen and (max-width: 480px) {
+  .input-search{
+    width: 240px;
+  }
+}
+
+.divider-theme {
+  height: 2px;
+  background: #515959
 }
 
 </style>

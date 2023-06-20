@@ -26,6 +26,21 @@ const getters = {
       key,
       ...state.words[key]
     }))
+  },
+  filterWords: (state) => (keyword) => {
+    if (keyword) {
+      return Object.keys(state.words)
+        .filter(key => state.words[key].ws_name.includes(keyword))
+        .map(key => ({
+          key,
+          ...state.words[key]
+        }))
+    } else {
+      return Object.keys(state.words).map(key => ({
+        key,
+        ...state.words[key]
+      }))
+    }
   }
 }
 
