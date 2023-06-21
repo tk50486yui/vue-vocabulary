@@ -29,17 +29,40 @@
     <!-- 主頁面 -->
     <div class="spad" :class="[this.$theme]">
       <div class="container">
-        <div class="d-flex justify-content-center">
-          <div class="input-theme input-search" :class="this.$theme">
+        <div class="row">
+          <div class="col-lg-4 col-md-12 d-flex
+              justify-content-lg-end justify-content-md-start align-items-center">
+              <a-radio-group v-model:value="searchRadio" @change="onSearchRadio()">
+                <a-radio-button value="word">單字</a-radio-button>
+                <a-radio-button value="article">文章</a-radio-button>
+              </a-radio-group>
+          </div>
+          <div class="col-lg-8 col-md-12 d-flex justify-content-start">
+            <div class="input-theme input-search" :class="this.$theme">
               <a-input-search
                   v-model:value="searchValue"
                   placeholder="搜尋"
                   @search="onSearch"
                   size="large"
+                  allow-clear
               />
+            </div>
           </div>
         </div>
-        <p></p>
+        <div class="row">
+          <div class="col d-flex justify-content-center align-items-center">
+            <template v-if="this.searchRadio == 'word'">
+              <div class="checkbox-theme checkbox-group" :class="this.$theme">
+                <a-checkbox-group v-model:value="wordCheckbox" :options="wordOptions" @change="onWordChecked()"/>
+              </div>
+            </template>
+            <template v-else>
+              <div class="checkbox-theme checkbox-group" :class="this.$theme">
+                <a-checkbox-group v-model:value="articleCheckbox" :options="articleOptions" @change="onArticleChecked()"/>
+              </div>
+            </template>
+          </div>
+        </div>
         <a-divider class="divider-theme" />
         <div class="row">
           <!-- 左側 Left -->
@@ -99,12 +122,52 @@ export default {
     onSearch () {
       this.updateKeyword(this.searchValue)
       this.$router.push({ name: 'wordsGrid' })
+    },
+    onSearchRadio () {
+      console.log(this.searchRadio)
+    },
+    onWordChecked () {
+      console.log(this.wordCheckbox)
+    },
+    onArticleChecked () {
+      console.log(this.articleCheckbox)
     }
   },
   setup () {
     const isScreenSmall = ref(false)
     const mediaQuery = window.matchMedia('(max-width: 576px)')
     const searchValue = ref('')
+    const searchRadio = ref('word')
+    const wordCheckbox = ref([])
+    const articleCheckbox = ref([])
+    const wordOptions = [
+      {
+        label: '詞名',
+        value: 'ws_name'
+      },
+      {
+        label: '假名',
+        value: 'ws_pronunciation'
+      },
+      {
+        label: '中文',
+        value: 'ws_definition'
+      },
+      {
+        label: '類別',
+        value: 'cate_name'
+      }
+    ]
+    const articleOptions = [
+      {
+        label: '標題',
+        value: 'arti_title'
+      },
+      {
+        label: '日期',
+        value: 'created_at'
+      }
+    ]
 
     const handleMediaQueryChange = () => {
       isScreenSmall.value = mediaQuery.matches
@@ -117,7 +180,12 @@ export default {
 
     return {
       isScreenSmall,
-      searchValue
+      searchValue,
+      searchRadio,
+      wordCheckbox,
+      articleCheckbox,
+      wordOptions,
+      articleOptions
     }
   }
 }
@@ -157,18 +225,68 @@ export default {
   margin-left: auto;
 }
 
+/** Search **/
 .input-search{
-  width: 450px;
+  width: 500px;
+
+}
+
+@media only screen and (max-width: 1400px) {
+  .input-search{
+    width: 560px;
+    padding-left: 2px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .input-search{
+    width: 500px;
+    padding-left: 2px;
+    padding-top: 8px;
+  }
+}
+@media only screen and (max-width: 720px) {
+  .input-search{
+    width: 450px;
+    padding-left: 2px;
+    padding-top: 8px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .input-search{
-    width: 240px;
+    width: 280px;
+    padding-left: 2px;
+    padding-top: 8px;
   }
+}
+
+.checkbox-group{
+  padding-top: 8px;
 }
 
 .divider-theme {
   height: 2px;
   background: #515959
+}
+
+.ant-radio-button-wrapper{
+  background:#152231;
+  color:#fff;
+}
+.ant-radio-button-wrapper:hover{
+  color:#d1def9;
+  background:#f16728;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+  color: #fff;
+  background:#f16728;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
+  color:#d1def9;
+  background:#f16728;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child{
+  border-color: #d4b7a2;
 }
 
 </style>

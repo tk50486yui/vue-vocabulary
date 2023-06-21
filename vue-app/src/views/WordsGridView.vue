@@ -1,6 +1,5 @@
 <template>
     <template v-if="Ready">
-
         <div class="select-theme" :class="this.$theme">
             每頁顯示：
             <a-select
@@ -17,10 +16,20 @@
             <span style="padding-left: 20px;">
                 <template v-if="this.$keyword != ''">
                     <span style="padding-right: 10px;">
-                    " {{ this.$keyword }} "
+                    ` {{ this.$keyword }} `
+                    </span>
+                </template>
+                <template v-else>
+                    <span style="padding-right: 10px;">
+                        全部
                     </span>
                 </template>
              共  {{ this.filterWords(this.$keyword).length }}  筆
+            </span>
+            <span style="padding-left: 20px;">
+                <template v-if="this.$keyword != ''">
+                   <a class="btn btn-sm btn-danger btn-outline-light" @click="onResetSearch()">清除搜尋</a>
+                </template>
             </span>
         </div>
         <p></p>
@@ -76,10 +85,13 @@ export default {
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
+    ...mapActions('Search', ['updateKeyword']),
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
+    },
+    onResetSearch () {
+      this.updateKeyword('')
     }
-
   },
   async created () {
     try {

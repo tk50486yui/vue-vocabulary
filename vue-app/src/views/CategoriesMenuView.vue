@@ -1,9 +1,11 @@
 <template>
   <div class="sidebar__categories">
-    <div class="section-title" :class="this.$theme">
+    <div class="section-title d-flex justify-content-between align-items-center" :class="this.$theme">
       <h4>詞組類別</h4>
-      <RefreshBtn class="button-container btn-secondary" :spin="SyncOutlinedSpin" @click="refresh"/>
-      <PlusBtn class="button-container" @click="visible=true"/>
+      <div class="button-container">
+        <PlusBtn class="button-container" @click="visible=true"/>
+        <RefreshBtn class="button-container btn-secondary" :spin="SyncOutlinedSpin" @click="refresh"/>
+      </div>
     </div>
     <div class="collapse-theme" :class="this.$theme">
       <!--  重整區塊  -->

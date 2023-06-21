@@ -33,6 +33,8 @@ $keyword-color:#ff7866;
     --input-background: #131120;
     --select-background:#111111;
     --select-text:#51ee0d;
+    --input-clear-icon:rgb(243, 239, 239);
+    --input-validate:#d46958;
 
     --head-background:#14080e;
     --body-background:#111111;
@@ -73,6 +75,7 @@ $keyword-color:#ff7866;
 -----------------------*/
 .light  {  
     --input-background: #fffefe;
+    --input-validate:#eb2507;
 
     --select-background:#fffefe;
     --select-text:#111111;
@@ -179,17 +182,19 @@ $keyword-color:#ff7866;
   }
   &.dark :deep(.ant-input-search .ant-input-group .ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary)){
     color: var(--head-text)
-  }
-  
-  
+  } 
 
   /** 驗證器 **/
   &.dark :deep(.ant-form-item-explain-error){   
-    color: #d46958;
+    color: var(--input-validate);
   }
   &.light :deep( .ant-form-item-explain-error){ 
-    color: #eb2507;
+    color: var(--input-validate);
   }  
+  /** clear icon **/
+  &.dark :deep(.anticon.ant-input-clear-icon){
+    color: var(--input-clear-icon)
+  }
 }
 
 /*---------------------
@@ -235,6 +240,15 @@ $keyword-color:#ff7866;
     background: var(--head-text);  
   } 
   
+}
+
+/*---------------------
+      Checkbox
+-----------------------*/
+.checkbox-theme {
+  &.dark :deep(.ant-checkbox-wrapper span){
+    color: var(--head-text)
+  }
 }
 
 /*---------------------
