@@ -27,10 +27,13 @@ const getters = {
       ...state.words[key]
     }))
   },
-  filterWords: (state) => (keyword) => {
-    if (keyword) {
+  filterWords: (state) => (keyword, options) => {
+    if (keyword && options && options.length > 0) {
       return Object.keys(state.words)
-        .filter(key => state.words[key].ws_name.includes(keyword))
+        .filter(key => {
+          const word = state.words[key]
+          return options.some(option => word[option] && word[option].includes(keyword))
+        })
         .map(key => ({
           key,
           ...state.words[key]

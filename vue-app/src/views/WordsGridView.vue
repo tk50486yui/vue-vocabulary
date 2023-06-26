@@ -14,7 +14,7 @@
                 <a-select-option value="100">100</a-select-option>
             </a-select>
             <span style="padding-left: 20px;">
-                <template v-if="this.$keyword != ''">
+                <template v-if="this.$keyword != '' && this.$filters.length > 0">
                     <span style="padding-right: 10px;">
                     ` {{ this.$keyword }} `
                     </span>
@@ -24,7 +24,7 @@
                         全部
                     </span>
                 </template>
-             共  {{ this.filterWords(this.$keyword).length }}  筆
+             共  {{ this.filterWords(this.$keyword, this.$filters).length }}  筆
             </span>
             <span style="padding-left: 20px;">
                 <template v-if="this.$keyword != ''">
@@ -34,7 +34,7 @@
         </div>
         <p></p>
         <div class="list-card-theme" :class="this.$theme">
-            <a-list :data-source="this.filterWords(this.$keyword)" :pagination="pagination"
+            <a-list :data-source="this.filterWords(this.$keyword, this.$filters)" :pagination="pagination"
                 :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 4, xxl: 4, xxxl: 4 }"
             >
                 <template #renderItem="{ item }">
@@ -48,18 +48,34 @@
                                 {{ item.cate_name }} {{ item.cate_id }}
                             </template>
                         </template>
-                        <template v-if="this.$keyword != ''">
-                            <span class="keyword-text">
-                                <a>{{ item.ws_name }}</a>
-                            </span>
+                        <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
+                            <a>
+                            <template v-for="(char, index) in item.ws_name" :key="char + index">
+                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                            </template>
+                            </a>
                         </template>
                         <template v-else>
                             <a>{{ item.ws_name }}</a>
                         </template>
                         <p></p>
-                        {{ item.ws_pronunciation }}
+                        <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">
+                            <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
+                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                            </template>
+                        </template>
+                        <template v-else>
+                            {{ item.ws_pronunciation }}
+                        </template>
                         <p></p>
-                        {{ item.ws_definition }}
+                        <template v-if="this.$keyword != '' && this.$filters.includes('ws_definition') && item.ws_definition.includes(this.$keyword)">
+                            <template v-for="(char, index) in item.ws_definition" :key="char + index">
+                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                            </template>
+                        </template>
+                        <template v-else>
+                            {{ item.ws_definition }}
+                        </template>
                     </a-card>
                 </a-list-item>
                 </template>
@@ -81,6 +97,8 @@ export default {
     ...mapGetters('WordsStore', ['words']),
     ...mapGetters('WordsStore', ['filterWords']),
     ...mapState('Search', ['$keyword']),
+    ...mapState('Search', ['$searchClass']),
+    ...mapState('Search', ['$filters']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {

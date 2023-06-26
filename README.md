@@ -43,7 +43,7 @@
 ----
 ## 版面樣式
 
-基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板，並透過 bootstrap 分割頁面。
+基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板，並透過 bootstrap 進行響應式設計。
 
 ----
 ## 版面元件

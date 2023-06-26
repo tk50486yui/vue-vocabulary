@@ -112,6 +112,8 @@ export default {
     ...mapActions('Theme', ['updateTheme']),
     ...mapActions('Screen', ['updateMobile']),
     ...mapActions('Search', ['updateKeyword']),
+    ...mapActions('Search', ['updateSearchClass']),
+    ...mapActions('Search', ['updateFilters']),
     changeTheme (checked) {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
@@ -124,13 +126,17 @@ export default {
       this.$router.push({ name: 'wordsGrid' })
     },
     onSearchRadio () {
-      console.log(this.searchRadio)
+      this.updateSearchClass(this.searchRadio)
     },
     onWordChecked () {
-      console.log(this.wordCheckbox)
+      if (this.searchRadio === 'word') {
+        this.updateFilters(this.wordCheckbox)
+      }
     },
     onArticleChecked () {
-      console.log(this.articleCheckbox)
+      if (this.searchRadio === 'article') {
+        this.updateFilters(this.articleCheckbox)
+      }
     }
   },
   setup () {
@@ -138,8 +144,8 @@ export default {
     const mediaQuery = window.matchMedia('(max-width: 576px)')
     const searchValue = ref('')
     const searchRadio = ref('word')
-    const wordCheckbox = ref([])
-    const articleCheckbox = ref([])
+    const wordCheckbox = ref(['ws_name'])
+    const articleCheckbox = ref(['arti_title'])
     const wordOptions = [
       {
         label: '詞名',
