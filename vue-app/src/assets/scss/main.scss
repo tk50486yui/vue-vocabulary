@@ -1,8 +1,8 @@
 $main-color: #111111;
-$keyword-color:#ff7866;
+$keyword-color:#ff7866; // 關鍵字顏色
 
 .test-color {
-  background: #56646f !important;
+  background: #56646f;
 }
 
 .main-body {  
@@ -26,7 +26,7 @@ $keyword-color:#ff7866;
 }
 
 /*---------------------
-      --Dark Theme--
+    Dark Theme 主題
 -----------------------*/
 .dark  {  
 
@@ -38,6 +38,9 @@ $keyword-color:#ff7866;
 
     --head-background:#14080e;
     --body-background:#111111;
+
+    --link-text:#08fead;
+    --link-text-hover:#f6ff8f;
     
     --table-background:rgba(27, 29, 30, 1);
     --table-text:rgb(241, 243, 245);
@@ -54,6 +57,9 @@ $keyword-color:#ff7866;
     --tab-text:#fcfdfd;
     --tab-background-active:#0a0e0f; 
     --tab-text-active:#f0db9d;
+    
+    --descriptions-title-background:#231111;
+    --descriptions-title-text:rgb(247, 198, 6);
 
     --editor-background:#353232;
     --editor-text:#faf6f6;
@@ -65,13 +71,11 @@ $keyword-color:#ff7866;
 
     --breadcrumb-text:#f9eaea;
     
-    --footer-a-text:#ede5e5;  
-
-    --h1-color: #51ee0d;
+    --footer-a-text:#ede5e5; 
 
 }
 /*---------------------
-      --Light Theme--
+    Light Theme 主題
 -----------------------*/
 .light  {  
     --input-background: #fffefe;
@@ -99,7 +103,6 @@ $keyword-color:#ff7866;
 
     --footer-a-text:#5C5C5C;  
 
-    --h1-color: #5a1ef1;
 }
 
 /*---------------------
@@ -278,6 +281,7 @@ $keyword-color:#ff7866;
     display: block;
     padding: 2px 0;
     position: relative;
+    text-decoration: none;
   }
 
   &.dark li a {
@@ -320,6 +324,7 @@ $keyword-color:#ff7866;
     margin-right: 18px;
     display: inline-block;
     position: relative;
+    text-decoration: none;
   }
  
   &.dark a {
@@ -335,6 +340,7 @@ $keyword-color:#ff7866;
     font-size: 15px;
     font-weight: 500;  
     display: inline-block;
+
   }
   &.dark span {
     color: var(--breadcrumb-text); 
@@ -372,6 +378,34 @@ $keyword-color:#ff7866;
     background: var(--table-background);   
     color: var(--table-text);
   }
+
+  &.dark :deep(a){    
+    color: var(--link-text);
+    text-decoration: none;   
+  }
+
+  &.dark :deep(a:hover){   
+    color: var(--link-text-hover);
+  }
+}
+
+/*---------------------
+    Descriptions
+-----------------------*/
+.descriptions-theme{  
+  // 內容
+  &.dark :deep(.ant-descriptions-item-content){
+    background: var(--table-background);  
+    color: var(--table-text);
+  }
+  // 標題
+  &.dark :deep(.ant-descriptions-bordered .ant-descriptions-item-label){
+    background: var(--descriptions-title-background);     
+  }
+  &.dark :deep(.ant-descriptions-item-label){   
+    color: var(--descriptions-title-text);
+  }  
+  
 }
 /*---------------------
     Tab

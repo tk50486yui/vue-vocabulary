@@ -45,18 +45,28 @@
                                 無分類
                             </template>
                             <template v-else>
-                                {{ item.cate_name }} {{ item.cate_id }}
+                                <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
+                                    <a>
+                                    <template v-for="(char, index) in item.cate_name" :key="char + index">
+                                        <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                                    </template>
+                                    {{ item.cate_id }}
+                                    </a>
+                                </template>
+                                <template v-else>
+                                    <a>{{ item.cate_name }} {{ item.cate_id }}</a>
+                                </template>
                             </template>
                         </template>
                         <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
-                            <a>
-                            <template v-for="(char, index) in item.ws_name" :key="char + index">
-                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                            </template>
-                            </a>
+                            <router-link :to="{ name: 'wordDetails' }">
+                                <template v-for="(char, index) in item.ws_name" :key="char + index">
+                                    <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                                </template>
+                            </router-link>
                         </template>
                         <template v-else>
-                            <a>{{ item.ws_name }}</a>
+                            <router-link :to="{ name: 'wordDetails' }">{{ item.ws_name }}</router-link>
                         </template>
                         <p></p>
                         <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">

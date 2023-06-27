@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import WordsView from '@/views/WordsView.vue'
 import WordsGridView from '@/views/WordsGridView.vue'
+import WordDetailsView from '@/views/WordDetailsView.vue'
 import ArticlesView from '@/views/ArticlesView.vue'
 import WordsGroupsView from '@/views/WordsGroupsView.vue'
 import TagsView from '@/views/TagsView'
@@ -38,6 +39,11 @@ const routes = [
     path: '/wordsgrid',
     name: 'wordsGrid',
     component: WordsGridView
+  },
+  {
+    path: '/worddetails',
+    name: 'wordDetails',
+    component: WordDetailsView
   },
   {
     path: '/words/category/:cateID',
