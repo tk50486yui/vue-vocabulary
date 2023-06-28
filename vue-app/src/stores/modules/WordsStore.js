@@ -20,6 +20,9 @@ const state = {
 const getters = {
   words: (state) => state.words,
   word: (state) => state.word,
+  wordById: state => id => {
+    return state.words.find(word => word.id === id)
+  },
   wordForm: (state) => state.wordForm,
   wordsArray: (state) => {
     return Object.keys(state.words).map(key => ({

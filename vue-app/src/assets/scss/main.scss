@@ -394,12 +394,12 @@ $keyword-color:#ff7866; // 關鍵字顏色
 -----------------------*/
 .descriptions-theme{  
   // 內容
-  &.dark :deep(.ant-descriptions-item-content){
+  &.dark :deep(.ant-descriptions-item-content){   
     background: var(--table-background);  
     color: var(--table-text);
   }
   // 標題
-  &.dark :deep(.ant-descriptions-bordered .ant-descriptions-item-label){
+  &.dark :deep(.ant-descriptions-bordered .ant-descriptions-item-label){  
     background: var(--descriptions-title-background);     
   }
   &.dark :deep(.ant-descriptions-item-label){   

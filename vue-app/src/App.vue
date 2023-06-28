@@ -106,11 +106,27 @@ export default {
       } else {
         this.updateMobile(false)
       }
+    },
+    isScreenMedium: function (val) {
+      if (val) {
+        this.updateTablet(true)
+      } else {
+        this.updateTablet(false)
+      }
+    },
+    isScreenLarge: function (val) {
+      if (val) {
+        this.updateDesktop(true)
+      } else {
+        this.updateDesktop(false)
+      }
     }
   },
   methods: {
     ...mapActions('Theme', ['updateTheme']),
     ...mapActions('Screen', ['updateMobile']),
+    ...mapActions('Screen', ['updateTablet']),
+    ...mapActions('Screen', ['updateDesktop']),
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Search', ['updateFilters']),
@@ -141,7 +157,11 @@ export default {
   },
   setup () {
     const isScreenSmall = ref(false)
-    const mediaQuery = window.matchMedia('(max-width: 576px)')
+    const isScreenMedium = ref(false)
+    const isScreenLarge = ref(false)
+    const mediaQuerySmall = window.matchMedia('(max-width: 576px)')
+    const mediaQueryMedium = window.matchMedia('(min-width: 577px) and (max-width: 1024px)')
+    const mediaQueryLarge = window.matchMedia('(min-width: 1025px)')
     const searchValue = ref('')
     const searchRadio = ref('word')
     const wordCheckbox = ref(['ws_name'])
@@ -176,16 +196,24 @@ export default {
     ]
 
     const handleMediaQueryChange = () => {
-      isScreenSmall.value = mediaQuery.matches
+      isScreenSmall.value = mediaQuerySmall.matches
+      isScreenMedium.value = mediaQueryMedium.matches
+      isScreenLarge.value = mediaQueryLarge.matches
     }
 
     onMounted(() => {
-      isScreenSmall.value = mediaQuery.matches
-      mediaQuery.addEventListener('change', handleMediaQueryChange)
+      isScreenSmall.value = mediaQuerySmall.matches
+      isScreenMedium.value = mediaQueryMedium.matches
+      isScreenLarge.value = mediaQueryLarge.matches
+      mediaQuerySmall.addEventListener('change', handleMediaQueryChange)
+      mediaQueryMedium.addEventListener('change', handleMediaQueryChange)
+      mediaQueryLarge.addEventListener('change', handleMediaQueryChange)
     })
 
     return {
       isScreenSmall,
+      isScreenMedium,
+      isScreenLarge,
       searchValue,
       searchRadio,
       wordCheckbox,

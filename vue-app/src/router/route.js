@@ -41,7 +41,7 @@ const routes = [
     component: WordsGridView
   },
   {
-    path: '/worddetails',
+    path: '/worddetails/:id',
     name: 'wordDetails',
     component: WordDetailsView
   },

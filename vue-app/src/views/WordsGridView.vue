@@ -59,14 +59,14 @@
                             </template>
                         </template>
                         <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
-                            <router-link :to="{ name: 'wordDetails' }">
+                            <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
                                 <template v-for="(char, index) in item.ws_name" :key="char + index">
                                     <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
                                 </template>
                             </router-link>
                         </template>
                         <template v-else>
-                            <router-link :to="{ name: 'wordDetails' }">{{ item.ws_name }}</router-link>
+                            <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">{{ item.ws_name }}</router-link>
                         </template>
                         <p></p>
                         <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">

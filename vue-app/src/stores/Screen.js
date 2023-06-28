@@ -7,6 +7,12 @@ const state = {
 const actions = {
   updateMobile ({ commit }, screen) {
     commit('setMobile', screen)
+  },
+  updateTablet ({ commit }, screen) {
+    commit('setTablet', screen)
+  },
+  updateDesktop ({ commit }, screen) {
+    commit('setDesktop', screen)
   }
 }
 
