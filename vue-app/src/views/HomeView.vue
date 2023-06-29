@@ -68,7 +68,6 @@ export default {
     },
     handleTreeSelectChange (value) {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : ''
-      console.log(this.formState.word.cate_id + ' TreeValueChange')
     },
     resetForm () {
       this.$refs.treeSelect.handleClear()

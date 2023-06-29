@@ -1,7 +1,7 @@
 <template>
   <template v-if="Ready">
       <div class="descriptions-theme" :class="this.$theme">
-          <h4><router-link :to="{ name: 'wordsGrid' }"> Back </router-link>
+          <h4><router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> Back </router-link>
             {{ wordById(wordId).ws_name }}
           </h4>
           <p></p>
@@ -20,7 +20,21 @@
                 </span>
               </div>
             </a-descriptions-item>
-            <a-descriptions-item label="假名/發音">{{ wordById(wordId).ws_pronunciation }}</a-descriptions-item>
+            <a-descriptions-item label="假名/發音">
+              <template v-if="wordById(wordId).ws_pronunciation == null || wordById(wordId).ws_pronunciation == ''">
+                {{ wordById(wordId).ws_pronunciation }}
+              </template>
+              <template v-else>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>
+                    {{ wordById(wordId).ws_pronunciation }}
+                  </span>
+                  <span class="copy-icon">
+                    <a-typography-paragraph :copyable="{ text: wordById(wordId).ws_pronunciation }"></a-typography-paragraph>
+                  </span>
+                </div>
+              </template>
+            </a-descriptions-item>
             <a-descriptions-item label="中文定義">{{ wordById(wordId).ws_definition }}</a-descriptions-item>
             <a-descriptions-item label="主題分類">{{ wordById(wordId).cate_name }}</a-descriptions-item>
             <a-descriptions-item label="簡易註解">{{ wordById(wordId).ws_slogan }}</a-descriptions-item>
@@ -46,6 +60,7 @@ export default {
   },
   computed: {
     ...mapGetters('WordsStore', ['wordById']),
+    ...mapState('Views', ['$WordsGrid']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$mobile']),
     ...mapState('Screen', ['$tablet']),
@@ -63,16 +78,21 @@ export default {
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
+    ...mapActions('Views', ['updateWordsGrid']),
     changeDescriptionsLayout (isScreenSmall) {
       if (isScreenSmall) {
         this.descriptionsLayout = 'vertical'
       } else {
         this.descriptionsLayout = 'horizontal'
       }
+    },
+    setGridState () {
+      this.updateWordsGrid({ variable: 'jumpPage', data: true })
     }
   },
   async created () {
     try {
+      window.scrollTo({ top: 120, behavior: 'auto' })
       await this.fetch()
       this.Ready = true
     } catch (error) {}

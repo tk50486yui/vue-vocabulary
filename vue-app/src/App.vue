@@ -1,7 +1,9 @@
 <template>
   <div class="main-body" :class="this.$theme">
+    <!-- 頂端 導覽列 -->
     <HeaderView />
-    <!-- Breadcrumb Begin -->
+
+    <!-- Breadcrumb -->
     <div class="breadcrumb-option" :class="[this.$theme]">
         <div class="container">
             <div class="row">
@@ -29,6 +31,8 @@
     <!-- 主頁面 -->
     <div class="spad" :class="[this.$theme]">
       <div class="container">
+
+        <!-- 上方搜尋列 -->
         <div class="row">
           <div class="col-lg-4 col-md-12 d-flex
               justify-content-lg-end justify-content-md-start align-items-center">
@@ -49,6 +53,8 @@
             </div>
           </div>
         </div>
+
+        <!-- 搜尋條件 checkbox -->
         <div class="row">
           <div class="col d-flex justify-content-center align-items-center">
             <template v-if="this.searchRadio == 'word'">
@@ -63,20 +69,28 @@
             </template>
           </div>
         </div>
+
+        <!-- 分隔線 -->
         <a-divider class="divider-theme" />
+
+        <!-- 下方顯示頁面 -->
         <div class="row">
-          <!-- 左側 Left -->
+
+          <!-- 左側 -->
           <div class="col-lg-3 col-md-3">
             <CategoriesMenuView />
           </div>
-          <!-- 右側 Right -->
+
+          <!-- 右側 -->
           <div class="col-lg-9 col-md-9">
             <router-view></router-view>
           </div>
+
         </div>
       </div>
     </div>
 
+    <!-- 底部 Footer -->
     <FooterView />
 
   </div>

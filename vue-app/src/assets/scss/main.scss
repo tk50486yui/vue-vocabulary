@@ -40,7 +40,10 @@ $keyword-color:#ff7866; // 關鍵字顏色
     --body-background:#111111;
 
     --link-text:#08fead;
-    --link-text-hover:#f6ff8f;
+    --link-text-hover:#e3f7af;
+
+    --card-link-text:#fdc6a8;
+    --card-link-text-hover:#f2fec6;
     
     --table-background:rgba(27, 29, 30, 1);
     --table-text:rgb(241, 243, 245);
@@ -379,12 +382,22 @@ $keyword-color:#ff7866; // 關鍵字顏色
     color: var(--table-text);
   }
 
-  &.dark :deep(a){    
+  /* card title */
+  &.dark :deep(.ant-card-head-title a){    
+    color: var(--card-link-text);
+    text-decoration: none;   
+  }
+  &.dark :deep(.ant-card-head-title a:hover){   
+    color: var(--card-link-text-hover);
+  }
+
+  /* card body */
+  &.dark :deep(.ant-card-body a){    
     color: var(--link-text);
     text-decoration: none;   
   }
 
-  &.dark :deep(a:hover){   
+  &.dark :deep(.ant-card-body a:hover){   
     color: var(--link-text-hover);
   }
 }

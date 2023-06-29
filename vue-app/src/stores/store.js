@@ -6,6 +6,7 @@ import ArticlesStore from '@/stores/modules/ArticlesStore.js'
 import Theme from '@/stores/Theme.js'
 import Screen from '@/stores/Screen.js'
 import Search from '@/stores/Search.js'
+import Views from '@/stores/Views.js'
 
 const store = new Vuex.Store({
 
@@ -16,7 +17,8 @@ const store = new Vuex.Store({
     ArticlesStore,
     Theme,
     Screen,
-    Search
+    Search,
+    Views
   }
 })
 
