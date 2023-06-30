@@ -74,7 +74,7 @@
               <template v-if="editShow">
                 <CategoriesTreeSelect size="small" placeholder="選擇"
                   :dropdownMatchSelectWidth="false" style="width: 100%"
-                  v-model="word.cate_id"
+                  v-model="formState.word.cate_id"
                   :defaultValue="word.cate_id"
                   :treeDefaultExpandedKeys="[word.cate_id]"
                  />
