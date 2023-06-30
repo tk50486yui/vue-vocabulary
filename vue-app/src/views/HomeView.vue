@@ -26,14 +26,15 @@
           <a-textarea v-model:value="formState.word.ws_definition" placeholder="中文定義" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <p></p>
-        <a-form-item class="input-theme" :class="this.$theme" :name="['word', 'ws_description']">
-          <a-textarea v-model:value="formState.word.ws_description" placeholder="註解說明.." :auto-size="{ minRows: 4}" allow-clear />
+        <a-form-item  :name="['word', 'ws_description']">
+            <div class="article-editor" :class="this.$theme">
+              <ckeditor v-model="formState.word.ws_description" :editor="editor" :config="wordEditor.Config" />
+            </div>
         </a-form-item>
         <a-form-item>
           <a-button type="primary" html-type="submit">Submit</a-button>
           <a-button style="margin-left: 10px" @click="resetForm" danger>Clear</a-button>
         </a-form-item>
-
       </a-form>
     </div>
 </template>
@@ -42,6 +43,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
@@ -85,6 +87,13 @@ export default {
       formState.word = { ...wordForm }
     })
 
+    const wordEditor = reactive({
+      Config: {
+        autoGrow: true,
+        placeholder: '請輸入說明例句...'
+      }
+    })
+
     const validateMsg = {
       required: 'required'
     }
@@ -102,7 +111,9 @@ export default {
       formRef,
       formState,
       validateMsg,
-      layout
+      layout,
+      wordEditor,
+      editor: ClassicEditor
     }
   }
 }
@@ -110,4 +121,5 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 </style>

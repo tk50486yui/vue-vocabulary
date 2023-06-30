@@ -152,6 +152,9 @@ export default {
       console.log(screen)
     },
     onSearch () {
+      this.onWordChecked()
+      this.onArticleChecked()
+      this.onSearchRadio()
       this.updateKeyword(this.searchValue)
       this.$router.push({ name: 'wordsGrid' })
     },

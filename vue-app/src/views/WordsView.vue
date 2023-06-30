@@ -216,7 +216,7 @@ export default {
 .button-edit{
   display: flex;
   justify-content: center;
-  color:#6A6AFF;
+  color:$edit-icon-color;
 }
 .button-edit-check{
   margin-right: 10px;

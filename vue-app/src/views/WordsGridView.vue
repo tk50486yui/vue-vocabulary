@@ -50,28 +50,27 @@
                                 </template>
                                 <template v-else>
                                     <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
-                                        <a>
+                                        <a @click="handleCategoryFilter(item.cate_name)">
                                         <template v-for="(char, index) in item.cate_name" :key="char + index">
                                             <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
                                         </template>
-                                        {{ item.cate_id }}
                                         </a>
                                     </template>
                                     <template v-else>
-                                        <a>{{ item.cate_name }} {{ item.cate_id }}</a>
+                                        <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
                                     </template>
                                 </template>
                             </template>
                             <!-- ws_name -->
                             <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
-                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
+                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
                                     <template v-for="(char, index) in item.ws_name" :key="char + index">
                                         <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
                                     </template>
                                 </router-link>
                             </template>
                             <template v-else>
-                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">{{ item.ws_name }}</router-link>
+                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">{{ item.ws_name }}</router-link>
                             </template>
                             <p></p>
                             <!-- ws_pronunciation -->
@@ -133,6 +132,8 @@ export default {
   methods: {
     ...mapActions('WordsStore', ['fetch']),
     ...mapActions('Search', ['updateKeyword']),
+    ...mapActions('Search', ['updateFilters']),
+    ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateWordsGrid']),
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
@@ -140,7 +141,17 @@ export default {
     onResetSearch () {
       this.updateKeyword('')
     },
-    async handlePageItem () {
+    handleDetailsClick () {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+      this.updateWordsGrid({ variable: 'currentScrollY', data: scrollY })
+    },
+    handleCategoryFilter (cateName) {
+      this.updateSearchClass('word')
+      this.updateFilters(['cate_name'])
+      this.updateKeyword(cateName)
+      window.scrollTo({ top: 100, behavior: 'auto' })
+    },
+    handlePageItem () {
       const listItems = this.$refs.listCard.querySelectorAll('.ant-list-pagination ul li')
       listItems.forEach((item) => {
         const activeListItem = item.classList.contains('ant-pagination-item-active')
@@ -163,6 +174,7 @@ export default {
           }
         }
       })
+      this.AfterReady = true
     }
   },
   async created () {
@@ -187,10 +199,19 @@ export default {
           }
         })
       }
+    },
+    AfterReady (newVal) {
+      if (newVal) {
+        if (this.$WordsGrid.jumpScroll === true) {
+          window.scrollTo({ top: this.$WordsGrid.currentScrollY, behavior: 'auto' })
+          this.updateWordsGrid({ variable: 'jumpScroll', data: false })
+        }
+      }
     }
   },
   setup () {
     const Ready = ref(false)
+    const AfterReady = ref(false)
     const ReadySpinning = ref(true)
     const selectPageSize = ref(20)
     const dataSize = ref(0)
@@ -200,6 +221,7 @@ export default {
 
     return {
       Ready,
+      AfterReady,
       ReadySpinning,
       pagination,
       selectPageSize,

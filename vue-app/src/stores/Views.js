@@ -1,7 +1,9 @@
 const state = {
   $WordsGrid: {
     currentPage: '1',
-    jumpPage: false
+    jumpPage: false,
+    currentScrollY: 100,
+    jumpScroll: false
   }
 }
 
