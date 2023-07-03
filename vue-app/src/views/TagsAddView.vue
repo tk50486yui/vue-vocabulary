@@ -11,7 +11,7 @@
             style="width: 300px"/>
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
-        <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
+          <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
         <div class="add-button-container">
@@ -41,6 +41,7 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
+    ...mapActions('TagsStore', ['fetch']),
     ...mapActions('TagsStore', {
       addTag: 'add'
     }),
@@ -50,6 +51,7 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.addTag(this.formState.tag)
+        await this.fetch()
         this.resetForm()
         this.confirmLoading = false
       } catch (error) {

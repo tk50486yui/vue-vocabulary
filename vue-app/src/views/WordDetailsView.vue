@@ -106,9 +106,12 @@
               </template>
             </a-descriptions-item>
             <a-descriptions-item label="標籤">
-            tag 1
-            <br />
-            tag 2
+              <template v-for="(item, index) in word.words_tags"  :key="item.ts_id">
+                {{ item.ts_name }}
+              <template v-if="index != word.words_tags.length">
+                <br />
+              </template>
+              </template>
             </a-descriptions-item>
           </a-descriptions>
             <template v-if="editShow">

@@ -44,12 +44,6 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    }
-  },
   computed: {
     ...mapGetters('TagsStore', ['tagsTransformed']),
     ...mapState('Theme', ['$theme'])
@@ -71,7 +65,7 @@ export default {
       context.emit('update:modelValue', value)
     }
     function handleClear () {
-      selectedValue.value = null
+      selectedValue.value = []
       context.emit('update:modelValue')
     }
 

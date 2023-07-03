@@ -13,7 +13,8 @@ const state = {
     ws_is_common: '',
     ws_forget_count: '',
     ws_order: '',
-    cate_id: ''
+    cate_id: '',
+    words_tags: []
   }
 }
 

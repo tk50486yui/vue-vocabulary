@@ -34,6 +34,8 @@ $edit-icon-color: #6A6AFF;
     --input-background: #131120;
     --select-background:#111111;
     --select-text:#51ee0d;
+    --select-selected-text:rgb(22, 95, 56);
+    --select-selected-item-background:rgb(125, 85, 94);
     --input-clear-icon:rgb(243, 239, 239);
     --input-validate:#d46958;
 
@@ -118,7 +120,7 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-    Table
+      Table
 -----------------------*/
 
 .table-theme {    
@@ -189,7 +191,7 @@ $edit-icon-color: #6A6AFF;
   &.light :deep(.ant-input-affix-wrapper){
     background: var(--input-background);
     color: var(--head-text)
-  }  
+  }   
 
   /** Search **/
   &.dark :deep(.ant-btn){
@@ -249,11 +251,27 @@ $edit-icon-color: #6A6AFF;
   &.light :deep(.ant-select-tree-switcher){
     background: var(--select-background);  
   } 
-
+ 
   // 選中時顏色
   &.dark :deep(.ant-select-tree-node-selected){
+    color: var( --select-selected-text);
     background: var(--head-text);  
-  } 
+  }  
+
+  // 選中後 clear icon 顏色
+  &.dark :deep(.ant-select-clear){
+    background: var(--select-background);  
+    color: var(--input-clear-icon) 
+  }  
+
+  // (多選) 選中加入時的背景框
+  &.dark :deep(.ant-select-selection-overflow .ant-select-selection-item){
+    background: var(--select-selected-item-background);  
+  }
+  &.dark :deep(.anticon-close){ 
+    color: var(--input-clear-icon)
+  }
+  
   
 }
 

@@ -1,6 +1,8 @@
 <template>
     <div>
       <a-back-top />
+      <h4>新增單字</h4>
+      <p></p>
       <a-form
         ref="formRef"
         :model="formState"
@@ -9,9 +11,9 @@
         name="wordform"
         @finish="onFinish">
         <a-form-item :name="['word', 'cate_id']">
-          <CategoriesTreeSelect  placeholder="詞語主題分類" size="large" ref="treeSelect"
+          <CategoriesTreeSelect  placeholder="詞語主題分類" size="large" ref="CategoriesTreeSelect"
             v-model="formState.word.cate_id"
-            @update:modelValue="handleTreeSelectChange"/>
+            @update:modelValue="handleCategoriesSelectChange"/>
         </a-form-item>
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['word', 'ws_name']" :rules="[{ required: true }]">
@@ -24,6 +26,14 @@
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['word', 'ws_definition']">
           <a-textarea v-model:value="formState.word.ws_definition" placeholder="中文定義" :auto-size="{ minRows: 3}" allow-clear />
+        </a-form-item>
+        <p></p>
+        <a-form-item :name="['word', 'words_tags']">
+        <TagsTreeSelect placeholder="添加標籤" size="large" ref="TagsTreeSelect"
+            v-model="formState.word.words_tags"
+            @update:modelValue="handleTagsSelectChange"
+            multiple
+            />
         </a-form-item>
         <p></p>
         <a-form-item  :name="['word', 'ws_description']">
@@ -45,11 +55,13 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    CategoriesTreeSelect
+    CategoriesTreeSelect,
+    TagsTreeSelect
   },
   computed: {
     ...mapState('Theme', ['$theme'])
@@ -62,17 +74,22 @@ export default {
       try {
         console.log(values.word)
         message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        /* await new Promise(resolve => setTimeout(resolve, 1000))
         await this.addWord(values.word)
         this.resetForm()
-        window.scrollTo({ top: 100, behavior: 'smooth' })
+        window.scrollTo({ top: 100, behavior: 'smooth' }) */
       } catch (error) {}
     },
-    handleTreeSelectChange (value) {
+    handleCategoriesSelectChange (value) {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : ''
     },
+    handleTagsSelectChange (value) {
+      this.formState.word.words_tags = typeof value !== 'undefined' ? value : []
+    },
     resetForm () {
-      this.$refs.treeSelect.handleClear()
+      this.$refs.CategoriesTreeSelect.handleClear()
+      this.$refs.TagsTreeSelect.handleClear()
+      this.formState.word.words_tags = null
       this.formRef.resetFields()
     }
   },
