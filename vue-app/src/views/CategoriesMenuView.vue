@@ -56,8 +56,8 @@
         <p></p>
         <a-form-item :name="['category', 'cate_parent_id']">
           <CategoriesTreeSelect  placeholder="選擇分類層級" size="large" ref="treeSelect"
-            v-model="formState.category.cate_parent_id"
-            @update:modelValue="handleTreeSelectChange"/>
+            v-model:value="formState.category.cate_parent_id"
+            @change="handleTreeSelectChange"/>
         </a-form-item>
         <a-form-item>
           <div class="modal-button-container">
@@ -130,10 +130,10 @@ export default {
       }
     },
     handleTreeSelectChange (value) {
-      this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : ''
+      this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null
     },
     resetForm () {
-      this.$refs.treeSelect.handleClear()
+      this.formState.category.cate_parent_id = null
       this.formRef.resetFields()
     }
   },

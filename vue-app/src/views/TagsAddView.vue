@@ -6,8 +6,8 @@
         @finish="onFinish">
         <p></p>
         <TagsTreeSelect placeholder="選擇標籤層級" size="large" ref="treeSelect"
-            v-model="formState.tag.ts_parent_id"
-            @update:modelValue="handleTreeSelectChange"
+            v-model:value="formState.tag.ts_parent_id"
+            @chnage="handleTreeSelectChange"
             style="width: 300px"/>
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
@@ -59,10 +59,10 @@ export default {
       }
     },
     handleTreeSelectChange (value) {
-      this.formState.tag.ts_parent_id = typeof value !== 'undefined' ? value : ''
+      this.formState.tag.ts_parent_id = typeof value !== 'undefined' ? value : null
     },
     resetForm () {
-      this.$refs.treeSelect.handleClear()
+      this.formState.tag.ts_parent_id = null
       this.formRef.resetFields()
     }
   },

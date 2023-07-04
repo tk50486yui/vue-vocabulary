@@ -3,7 +3,6 @@
     <a-tree-select
       :getPopupContainer="()=>this.$refs.selectMod"
       v-bind="$attrs"
-      v-model:value="selectedValue"
       v-model:searchValue="searchValue"
       show-search
       allow-clear
@@ -14,7 +13,6 @@
         label: 'cate_name',
         value: 'id',
         key: 'id'}"
-      @change="handleChange"
     >
       <template #title="{ value: val, cate_name }">
         <b v-if="val === 1" style="color: #08c">{{val}}</b>
@@ -44,13 +42,6 @@ import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    }
-  },
   computed: {
     ...mapGetters('CategoriesStore', ['categoriesTransformed']),
     ...mapState('Theme', ['$theme'])
@@ -61,28 +52,15 @@ export default {
   async created () {
     await this.fetch()
   },
-  setup (props, context) {
+  setup () {
     const searchValue = ref('')
-    const selectedValue = ref()
     const treeLine = ref(true)
     const showLeafIcon = ref(false)
 
-    function handleChange (value) {
-      selectedValue.value = value
-      context.emit('update:modelValue', value)
-    }
-    function handleClear () {
-      selectedValue.value = null
-      context.emit('update:modelValue')
-    }
-
     return {
       searchValue,
-      selectedValue,
       treeLine,
-      showLeafIcon,
-      handleChange,
-      handleClear
+      showLeafIcon
     }
   }
 }

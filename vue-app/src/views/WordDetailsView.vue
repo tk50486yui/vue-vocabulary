@@ -1,5 +1,6 @@
 <template>
   <template v-if="Ready">
+      <a-back-top />
       <div class="descriptions-theme" :class="this.$theme">
           <h5><router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> Back </router-link>
             {{ word.ws_name }}
@@ -72,11 +73,13 @@
             </a-descriptions-item>
             <a-descriptions-item label="主題分類">
               <template v-if="editShow">
-                <CategoriesTreeSelect size="small" placeholder="選擇"
+                <CategoriesTreeSelect size="small" ref="CategoriesTreeSelect"
+                  placeholder="選擇分類"
                   :dropdownMatchSelectWidth="false" style="width: 100%"
-                  v-model="formState.word.cate_id"
+                  v-model:value="formState.word.cate_id"
                   :defaultValue="word.cate_id"
                   :treeDefaultExpandedKeys="[word.cate_id]"
+                  @change="handleCategoriesSelectChange"
                  />
               </template>
               <template v-else>
@@ -106,11 +109,25 @@
               </template>
             </a-descriptions-item>
             <a-descriptions-item label="標籤">
-              <template v-for="(item, index) in word.words_tags"  :key="item.ts_id">
-                {{ item.ts_name }}
-              <template v-if="index != word.words_tags.length">
-                <br />
+              <template v-if="editShow">
+                <TagsTreeSelect
+                    size="large"
+                    ref="TagsTreeSelect"
+                    placeholder="添加標籤"
+                    style="width: 100%"
+                    v-model:value="formState.word.words_tags.array"
+                    :treeDefaultExpandedKeys="formState.word.words_tags.array"
+                    @change="handleTagsSelectChange"
+                    multiple
+                    />
               </template>
+              <template v-else>
+                <template v-for="(item, index) in word.words_tags.values"  :key="item.ts_id">
+                  <a-tag color="pink"> {{ item.ts_name }} </a-tag>
+                  <template v-if="index != word.words_tags.values.length && (index/5) == 1">
+                    <br>
+                  </template>
+                </template>
               </template>
             </a-descriptions-item>
           </a-descriptions>
@@ -132,12 +149,14 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { EditOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
   name: 'WordDetailsView',
   components: {
     EditOutlined,
-    CategoriesTreeSelect
+    CategoriesTreeSelect,
+    TagsTreeSelect
   },
   computed: {
     ...mapGetters('WordsStore', ['wordById']),
@@ -186,9 +205,15 @@ export default {
       }
       if (!this.editShow) {
         this.$nextTick(() => {
-          window.scrollTo({ top: 140, behavior: 'auto' })
+          window.scrollTo({ top: 160, behavior: 'auto' })
         })
       }
+    },
+    handleCategoriesSelectChange (value) {
+      this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
+    },
+    handleTagsSelectChange (value) {
+      this.formState.word.words_tags.array = typeof value !== 'undefined' ? value : []
     },
     changeDescriptionsLayout (isScreenSmall) {
       if (isScreenSmall) {

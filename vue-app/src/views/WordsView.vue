@@ -21,7 +21,7 @@
               <template v-if="editTableData[record.key] && column.dataIndex === 'cate_name'">
                 <CategoriesTreeSelect size="small" placeholder="選擇"
                   :dropdownMatchSelectWidth="false" style="width: 100%"
-                  v-model="editTableData[record.key]['cate_id']"
+                  v-model:value="editTableData[record.key]['cate_id']"
                   :defaultValue="editTableData[record.key]['cate_id']"
                   :treeDefaultExpandedKeys="[editTableData[record.key]['cate_id']]"
                  />
@@ -91,9 +91,7 @@ export default {
         this.SyncOutlinedSpin = false
         this.TableLoading = false
         this.editDataSource = this.wordsArray
-      } catch (error) {
-        console.log('retable' + error)
-      }
+      } catch (error) {}
     },
     async onEditFinish (record) {
       try {
@@ -113,11 +111,6 @@ export default {
       this.editDataSource = this.wordsArray
       this.Ready = true
     } catch (error) {}
-  },
-  watch: {
-    '$route' (to, from) {
-      console.log(this.cateID)
-    }
   },
   setup () {
     const Ready = ref(false)

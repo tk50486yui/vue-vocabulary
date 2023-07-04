@@ -14,7 +14,7 @@ const state = {
     ws_forget_count: '',
     ws_order: '',
     cate_id: '',
-    words_tags: []
+    words_tags: { array: [], values: [] }
   }
 }
 

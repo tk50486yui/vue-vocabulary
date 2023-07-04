@@ -1,20 +1,18 @@
 <template>
     <div class="select-theme" :class="this.$theme" ref="selectMod">
         <a-tree-select
-        :getPopupContainer="()=>this.$refs.selectMod"
-        v-bind="$attrs"
-        v-model:value="selectedValue"
-        v-model:searchValue="searchValue"
-        show-search
-        allow-clear
-        :tree-line="treeLine && { showLeafIcon }"
-        :tree-data="this.tagsTransformed"
-        :field-names="{
-            children: 'children',
-            label: 'ts_name',
-            value: 'id',
-            key: 'id'}"
-        @change="handleChange"
+          :getPopupContainer="()=>this.$refs.selectMod"
+          v-bind="$attrs"
+          v-model:searchValue="searchValue"
+          show-search
+          allow-clear
+          :tree-line="treeLine && { showLeafIcon }"
+          :tree-data="this.tagsTransformed"
+          :field-names="{
+              children: 'children',
+              label: 'ts_name',
+              value: 'id',
+              key: 'id'}"
         >
         <template #title="{ value: val, ts_name }">
             <b v-if="val === 1" style="color: #08c">{{val}}</b>
@@ -43,7 +41,6 @@ import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-  emits: ['update:modelValue'],
   computed: {
     ...mapGetters('TagsStore', ['tagsTransformed']),
     ...mapState('Theme', ['$theme'])
@@ -54,28 +51,15 @@ export default {
   async created () {
     await this.fetch()
   },
-  setup (props, context) {
+  setup () {
     const searchValue = ref('')
-    const selectedValue = ref()
     const treeLine = ref(true)
     const showLeafIcon = ref(false)
 
-    function handleChange (value) {
-      selectedValue.value = value
-      context.emit('update:modelValue', value)
-    }
-    function handleClear () {
-      selectedValue.value = []
-      context.emit('update:modelValue')
-    }
-
     return {
       searchValue,
-      selectedValue,
       treeLine,
-      showLeafIcon,
-      handleChange,
-      handleClear
+      showLeafIcon
     }
   }
 }
