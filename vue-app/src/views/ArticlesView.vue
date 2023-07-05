@@ -4,6 +4,63 @@
       <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="所有文章">
+          <div class="article-list-theme" :class="this.$theme">
+            <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="articles">
+              <template #footer>
+                <div>
+                  <b>ant design vue</b>
+                  footer part
+                </div>
+              </template>
+              <template #renderItem="{ item }">
+                <a-list-item key="item.arti_title">
+                  <template #actions>
+                    <span v-for="{ type, text } in actions" :key="type">
+                      <component :is="type" style="margin-right: 8px" />
+                      {{ text }}
+                    </span>
+                  </template>
+                  <template #extra v-if="articleExtra">
+                    <img
+                      width="262"
+                      height="126"
+                      alt="logo"
+                      :src="require('@/assets/img/nihongo.png')"
+                    />
+                  </template>
+                  <a-list-item-meta>
+                    <template #title>
+                      <span class="span-text">Yue</span>
+                    </template>
+                    <template #avatar><a-avatar :src="require('@/assets/img/avatar.png')" /></template>
+                  </a-list-item-meta>
+                    <span class="span-text h5" style="white-space: pre"># {{ item.id }}</span>
+                    <br>
+                    <a class="title-link h5">{{ item.arti_title }}</a>
+                    <br>（字數：{{ item.arti_content.length }}）
+                    <a-divider style="height: 1px; background-color: #7d6b73" />
+                    <template v-if="item.arti_content.length > 50  ">
+                      <template v-if="!expandContent">
+                        <div v-html="item.arti_content.slice(0, 50)"></div>
+                        <p></p>
+                        <a class="list-link" @click="handleExpand">繼續展開</a>
+                      </template>
+                      <template v-else>
+                        <div v-html="item.arti_content"></div>
+                        <p></p>
+                        <a class="list-link" @click="handleCollapse">收起</a>
+                      </template>
+                    </template>
+                    <template v-else>
+                      <div v-html="item.arti_content"></div>
+                    </template>
+                </a-list-item>
+              </template>
+            </a-list>
+          </div>
+        </a-tab-pane>
+        <!-- tab 2 -->
+        <a-tab-pane key="2" tab="近期">
           <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
           <div class="table-theme" :class="this.$theme">
             <a-table :dataSource="this.articlesArray"
@@ -25,8 +82,6 @@
             </a-table>
           </div>
         </a-tab-pane>
-        <!-- tab 2 -->
-        <a-tab-pane key="2" tab="近期">123</a-tab-pane>
         <!-- tab 3 -->
         <a-tab-pane key="3" tab="編輯">
           <a-form-item class="input-theme" :class="this.$theme">
@@ -77,21 +132,41 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
+import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+
+const listData = []
+for (let i = 0; i < 23; i++) {
+  listData.push({
+    href: 'https://www.antdv.com/',
+    title: `ant design vue part ${i}`,
+    avatar: 'avatar.png',
+    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
+  })
+}
 
 export default {
   name: 'ArticlesView',
   components: {
-    RefreshBtn
+    RefreshBtn,
+    StarOutlined,
+    LikeOutlined,
+    MessageOutlined
   },
   computed: {
     ...mapGetters('ArticlesStore', ['articlesArray']),
+    ...mapGetters('ArticlesStore', ['articles']),
     ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$tablet']),
     ...mapState('Screen', ['$mobile'])
   },
   watch: {
     $mobile: function (val) {
+      this.changeTabPosition(val)
+    },
+    $tablet: function (val) {
       this.changeTabPosition(val)
     }
   },
@@ -138,17 +213,26 @@ export default {
       this.articleEditor.arti_title = record.arti_title
       this.articleEditor.arti_content = record.arti_content
     },
+    handleExpand () {
+      this.expandContent = true
+    },
+    handleCollapse () {
+      this.expandContent = false
+    },
     changeTabPosition (isScreenSmall) {
       if (isScreenSmall) {
         this.tabPosition = 'left'
+        this.articleExtra = false
       } else {
         this.tabPosition = 'top'
+        this.articleExtra = true
       }
     }
   },
   async created () {
     try {
       this.changeTabPosition(this.$mobile)
+      this.changeTabPosition(this.$tablet)
       await this.fetch()
       this.Ready = true
     } catch (error) {}
@@ -159,6 +243,8 @@ export default {
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
     const tabPosition = ref('top')
+    const expandContent = ref(false)
+    const articleExtra = ref(true)
     const formRef = ref()
     const formState = reactive({
       article: {}
@@ -195,6 +281,23 @@ export default {
       }
     ]
 
+    const pagination = {
+      onChange: page => {
+        console.log(page)
+      },
+      pageSize: 3
+    }
+    const actions = [{
+      type: 'StarOutlined',
+      text: '156'
+    }, {
+      type: 'LikeOutlined',
+      text: '156'
+    }, {
+      type: 'MessageOutlined',
+      text: '2'
+    }]
+
     return {
       Ready,
       TableLoading,
@@ -202,12 +305,17 @@ export default {
       columns,
       activeTab,
       tabPosition,
+      expandContent,
+      articleExtra,
       formRef,
       formState,
       articleForm,
       validateMsg,
       articleEditor,
-      editor: ClassicEditor
+      editor: ClassicEditor,
+      listData,
+      pagination,
+      actions
     }
   }
 }

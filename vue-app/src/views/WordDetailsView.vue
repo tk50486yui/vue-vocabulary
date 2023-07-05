@@ -123,7 +123,7 @@
               </template>
               <template v-else>
                 <template v-for="(item, index) in word.words_tags.values"  :key="item.ts_id">
-                  <a-tag color="pink"> {{ item.ts_name }} </a-tag>
+                  <a-tag color="green"> {{ item.ts_name }} </a-tag>
                   <template v-if="index != word.words_tags.values.length && (index/5) == 1">
                     <br>
                   </template>

@@ -3,6 +3,7 @@ node_modules
 public/templates
 /dist
 package-lock.json
+src/assets/img
 
 
 # local env files

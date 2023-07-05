@@ -35,7 +35,7 @@ $edit-icon-color: #6A6AFF;
     --select-background:#111111;
     --select-text:#51ee0d;
     --select-selected-text:rgb(22, 95, 56);
-    --select-selected-item-background:rgb(125, 85, 94);
+    --select-selected-item-background:rgb(0, 140, 54);
     --input-clear-icon:rgb(243, 239, 239);
     --input-validate:#d46958;
 
@@ -70,6 +70,10 @@ $edit-icon-color: #6A6AFF;
     --tab-background-active:#0a0e0f; 
     --tab-text-active:#f0db9d;
     
+    --article-list-background:#413c38;
+    --title-link-text:#5dd49f;
+    --title-link-text-hover:#e7d4d9;
+
     --descriptions-title-background:#231111;
     --descriptions-title-text:rgb(247, 198, 6);
 
@@ -433,6 +437,44 @@ $edit-icon-color: #6A6AFF;
     color:var(--pagination-text);
     background: var(--pagination-background);
     border-color: var(--pagination-border);    
+  }
+}
+
+/*---------------------
+    Article List
+-----------------------*/
+.article-list-theme{
+
+  &.dark :deep(.ant-list-item){  
+    background: var(--article-list-background);
+    color: var(--table-text);
+  }
+  &.dark :deep(.ant-list-item-meta-title a){  
+    color: var(--table-text);
+  }
+  &.dark :deep(.ant-list-item-meta-description){  
+    color: var(--table-text);
+  }  
+
+  &.dark :deep(.ant-list-item-action li){  
+    color: var(--table-text);
+  }
+  /* 自定義類別 */
+  &.dark :deep(a.list-link){  
+    color: var(--link-text);
+    text-decoration: none;
+  }
+
+  &.dark :deep(a.title-link){  
+    color: var(--title-link-text);
+    text-decoration: none;
+  }
+  &.dark :deep(a.title-link:hover){  
+    color: var(--title-link-text-hover);
+  }
+  
+  &.dark :deep(span.span-text){  
+    color: var(--table-text);
   }
 }
 
