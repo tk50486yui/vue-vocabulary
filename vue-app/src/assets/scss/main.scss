@@ -275,7 +275,10 @@ $edit-icon-color: #6A6AFF;
   &.dark :deep(.anticon-close){ 
     color: var(--input-clear-icon)
   }
-  
+
+  &.dark :deep(span.span-text){  
+    color: var(--table-text);
+  } 
   
 }
 
@@ -438,6 +441,10 @@ $edit-icon-color: #6A6AFF;
     background: var(--pagination-background);
     border-color: var(--pagination-border);    
   }
+
+  :deep(.ant-pagination) {      
+    padding-bottom: 12px;
+  }
 }
 
 /*---------------------
@@ -476,6 +483,13 @@ $edit-icon-color: #6A6AFF;
   &.dark :deep(span.span-text){  
     color: var(--table-text);
   }
+
+  /* card pagination */
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+    border-color: var(--pagination-border);    
+  }  
 }
 
 /*---------------------

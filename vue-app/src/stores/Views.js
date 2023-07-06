@@ -3,7 +3,8 @@ const state = {
     currentPage: '1',
     jumpPage: false,
     currentScrollY: 100,
-    jumpScroll: false
+    jumpScroll: false,
+    currentPageSize: 20
   }
 }
 

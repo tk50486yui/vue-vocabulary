@@ -1,19 +1,33 @@
 <template>
     <template v-if="Ready">
+        <a-back-top />
         <!-- 上層 -->
         <div class="select-theme" :class="this.$theme">
             每頁顯示：
             <a-select
                 ref="select"
                 v-model:value="selectPageSize"
+                size="small"
                 style="width: 80px"
                 @change="handlePageSize()"
                 >
-                <a-select-option value="10">10</a-select-option>
-                <a-select-option value="20">20</a-select-option>
-                <a-select-option value="50">50</a-select-option>
-                <a-select-option value="100">100</a-select-option>
+                <a-select-option value="10">10 筆</a-select-option>
+                <a-select-option value="20">20 筆</a-select-option>
+                <a-select-option value="50">50 筆</a-select-option>
+                <a-select-option value="100">100 筆</a-select-option>
             </a-select>
+            <span style="padding-left: 6px;">當前：</span>
+              <a-select
+                  ref="selectCurrent"
+                  v-model:value="currentPage"
+                  size="small"
+                  style="width: 80px"
+                  @change="handleCurrentPage()"
+                  >
+                  <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
+                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                  </template>
+              </a-select>
             <span style="padding-left: 20px;">
                 <template v-if="this.$keyword != '' && this.$filters.length > 0">
                     <span style="padding-right: 10px;">
@@ -70,7 +84,7 @@
                                 </router-link>
                             </template>
                             <template v-else>
-                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">{{ item.ws_name }}</router-link>
+                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">{{ item.ws_name }}</router-link>
                             </template>
                             <p></p>
                             <!-- ws_pronunciation -->
@@ -137,6 +151,18 @@ export default {
     ...mapActions('Views', ['updateWordsGrid']),
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
+      this.pagination.current = 1
+      this.currentPage = this.pagination.current
+    },
+    handleCurrentPage () {
+      this.pagination.current = Number(this.currentPage)
+    },
+    setCurrentPage () {
+      this.pagination.pageSize = Number(this.$WordsGrid.currentPageSize)
+      this.selectPageSize = this.$WordsGrid.currentPageSize
+      this.pagination.current = Number(this.$WordsGrid.currentPage)
+      this.currentPage = this.pagination.current
+      this.AfterReady = true
     },
     onResetSearch () {
       this.updateKeyword('')
@@ -144,79 +170,62 @@ export default {
     handleDetailsClick () {
       const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
       this.updateWordsGrid({ variable: 'currentScrollY', data: scrollY })
+      this.updateWordsGrid({ variable: 'currentPage', data: this.currentPage })
+      this.updateWordsGrid({ variable: 'jumpPage', data: false })
+      this.updateWordsGrid({ variable: 'currentPageSize', data: this.selectPageSize })
     },
     handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
       window.scrollTo({ top: 100, behavior: 'auto' })
-    },
-    handlePageItem () {
-      const listItems = this.$refs.listCard.querySelectorAll('.ant-list-pagination ul li')
-      listItems.forEach((item) => {
-        const activeListItem = item.classList.contains('ant-pagination-item-active')
-        if (activeListItem) {
-          const title = item.getAttribute('title')
-          this.updateWordsGrid({ variable: 'currentPage', data: title })
-          this.updateWordsGrid({ variable: 'jumpPage', data: false })
-        }
-      })
-    },
-    setCurrentPage (page) {
-      const listCard = this.$refs.listCard
-      const listItems = listCard.querySelectorAll('.ant-list-pagination ul li')
-      listItems.forEach((item) => {
-        const title = item.getAttribute('title')
-        if (title) {
-          if (title === page) {
-            const clickEvent = new Event('click', { bubbles: true })
-            item.dispatchEvent(clickEvent)
-          }
-        }
-      })
-      this.AfterReady = true
     }
   },
   async created () {
     try {
-      this.ReadySpinning = true
       await this.fetch()
       this.Ready = true
-      this.ReadySpinning = false
     } catch (error) {}
+  },
+  beforeRouteLeave (to, from, next) {
+    this.handleDetailsClick()
+    next()
   },
   watch: {
     Ready (newVal) {
       if (newVal) {
         this.$nextTick(() => {
-          const listCard = this.$refs.listCard
-          const listItems = listCard.querySelectorAll('.ant-list-pagination ul li')
-          listItems.forEach((item) => {
-            item.addEventListener('click', () => this.handlePageItem())
-          })
           if (this.$WordsGrid.jumpPage === true) {
-            this.setCurrentPage(this.$WordsGrid.currentPage)
+            this.setCurrentPage()
           }
         })
       }
     },
     AfterReady (newVal) {
       if (newVal) {
-        if (this.$WordsGrid.jumpScroll === true) {
-          window.scrollTo({ top: this.$WordsGrid.currentScrollY, behavior: 'auto' })
-          this.updateWordsGrid({ variable: 'jumpScroll', data: false })
-        }
+        this.$nextTick(() => {
+          if (this.$WordsGrid.jumpScroll === true) {
+            window.scrollTo({ top: this.$WordsGrid.currentScrollY, behavior: 'auto' })
+            this.updateWordsGrid({ variable: 'jumpScroll', data: false })
+          }
+        })
       }
     }
   },
   setup () {
     const Ready = ref(false)
     const AfterReady = ref(false)
-    const ReadySpinning = ref(true)
-    const selectPageSize = ref(20)
+    const ReadySpinning = ref(false)
+    const selectPageSize = ref('20')
+    const currentPage = ref(1)
     const dataSize = ref(0)
     const pagination = reactive({
-      pageSize: selectPageSize.value
+      onChange: page => {
+        currentPage.value = page
+        pagination.current = currentPage.value
+      },
+      pageSize: Number(selectPageSize.value),
+      position: 'top'
     })
 
     return {
@@ -225,6 +234,7 @@ export default {
       ReadySpinning,
       pagination,
       selectPageSize,
+      currentPage,
       dataSize
     }
   }

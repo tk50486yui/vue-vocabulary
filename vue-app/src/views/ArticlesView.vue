@@ -1,16 +1,44 @@
 <template>
   <template v-if="Ready">
+    <a-back-top />
     <div class="tab-theme" :class="this.$theme">
       <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
         <!-- tab 1 -->
-        <a-tab-pane key="1" tab="所有文章">
+        <a-tab-pane key="1" tab="全部">
+          <div class="select-theme" :class="this.$theme">
+              <span class="span-text">每頁顯示：</span>
+              <a-select
+                  ref="select"
+                  v-model:value="selectPageSize"
+                  size="small"
+                  style="width: 80px"
+                  @change="handlePageSize()"
+                  >
+                  <a-select-option value="3">3 筆</a-select-option>
+                  <a-select-option value="10">10 筆</a-select-option>
+                  <a-select-option value="20">20 筆</a-select-option>
+                  <a-select-option value="50">50 筆</a-select-option>
+                  <a-select-option value="100">100 筆</a-select-option>
+                  <a-select-option :value="this.articles.length">全部</a-select-option>
+              </a-select>
+              <span class="span-text" style="padding-left: 6px;">當前：</span>
+              <a-select
+                  ref="selectCurrent"
+                  v-model:value="currentPage"
+                  size="small"
+                  style="width: 80px"
+                  @change="handleCurrentPage()"
+                  >
+                  <template v-for="index in Math.ceil(this.articles.length/this.selectPageSize)" :key="index">
+                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                  </template>
+              </a-select>
+              <p></p>
+            </div>
           <div class="article-list-theme" :class="this.$theme">
-            <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="articles">
+            <a-list item-layout="vertical" size="large" bordered :pagination="pagination" :data-source="articles">
               <template #footer>
-                <div>
-                  <b>ant design vue</b>
-                  footer part
-                </div>
+                <span class="span-text">共 {{this.articles.length}} 筆</span>
               </template>
               <template #renderItem="{ item }">
                 <a-list-item key="item.arti_title">
@@ -30,15 +58,11 @@
                   </template>
                   <a-list-item-meta>
                     <template #title>
-                      <span class="span-text">Yue</span>
+                      <span class="span-text h5" style="white-space: pre">#{{ item.id }}&nbsp;</span>
+                      <a class="title-link h5">{{ item.arti_title }}</a>
                     </template>
                     <template #avatar><a-avatar :src="require('@/assets/img/avatar.png')" /></template>
                   </a-list-item-meta>
-                    <span class="span-text h5" style="white-space: pre"># {{ item.id }}</span>
-                    <br>
-                    <a class="title-link h5">{{ item.arti_title }}</a>
-                    <br>（字數：{{ item.arti_content.length }}）
-                    <a-divider style="height: 1px; background-color: #7d6b73" />
                     <template v-if="item.arti_content.length > 50  ">
                       <template v-if="!expandContent">
                         <div v-html="item.arti_content.slice(0, 50)"></div>
@@ -60,7 +84,7 @@
           </div>
         </a-tab-pane>
         <!-- tab 2 -->
-        <a-tab-pane key="2" tab="近期">
+        <a-tab-pane key="2" tab="2">
           <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
           <div class="table-theme" :class="this.$theme">
             <a-table :dataSource="this.articlesArray"
@@ -83,7 +107,7 @@
           </div>
         </a-tab-pane>
         <!-- tab 3 -->
-        <a-tab-pane key="3" tab="編輯">
+        <a-tab-pane key="3" tab="3">
           <a-form-item class="input-theme" :class="this.$theme">
             <a-input  v-model:value="articleEditor.arti_title"  placeholder="輸入標題" allow-clear />
           </a-form-item>
@@ -95,7 +119,7 @@
           <button class="btn btn-info btn-outline-light btn-sm" @click="onEdit(articleEditor)">儲存</button>
         </a-tab-pane>
         <!-- tab 4 -->
-        <a-tab-pane key="4" tab="＋添加文章">
+        <a-tab-pane key="4" tab="+">
           <a-form
             ref="formRef"
             :model="formState"
@@ -118,7 +142,7 @@
           </a-form>
         </a-tab-pane>
         <!-- tab 5 -->
-        <a-tab-pane key="5" tab="顯示">
+        <a-tab-pane key="5" tab="5">
           <div class="show-block" :class="this.$theme">
             <div v-html="articleEditor.arti_content"></div>
           </div>
@@ -213,6 +237,14 @@ export default {
       this.articleEditor.arti_title = record.arti_title
       this.articleEditor.arti_content = record.arti_content
     },
+    handlePageSize () {
+      this.pagination.pageSize = Number(this.selectPageSize)
+      this.pagination.current = 1
+      this.currentPage = this.pagination.current
+    },
+    handleCurrentPage () {
+      this.pagination.current = Number(this.currentPage)
+    },
     handleExpand () {
       this.expandContent = true
     },
@@ -221,10 +253,8 @@ export default {
     },
     changeTabPosition (isScreenSmall) {
       if (isScreenSmall) {
-        this.tabPosition = 'left'
         this.articleExtra = false
       } else {
-        this.tabPosition = 'top'
         this.articleExtra = true
       }
     }
@@ -243,6 +273,8 @@ export default {
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
     const tabPosition = ref('top')
+    const selectPageSize = ref('3')
+    const currentPage = ref(1)
     const expandContent = ref(false)
     const articleExtra = ref(true)
     const formRef = ref()
@@ -281,12 +313,14 @@ export default {
       }
     ]
 
-    const pagination = {
+    const pagination = reactive({
       onChange: page => {
-        console.log(page)
+        currentPage.value = page
+        pagination.current = currentPage.value
       },
-      pageSize: 3
-    }
+      pageSize: Number(selectPageSize.value),
+      position: 'top'
+    })
     const actions = [{
       type: 'StarOutlined',
       text: '156'
@@ -305,6 +339,8 @@ export default {
       columns,
       activeTab,
       tabPosition,
+      selectPageSize,
+      currentPage,
       expandContent,
       articleExtra,
       formRef,
