@@ -15,6 +15,7 @@
                 <a-select-option value="20">20 筆</a-select-option>
                 <a-select-option value="50">50 筆</a-select-option>
                 <a-select-option value="100">100 筆</a-select-option>
+                <a-select-option :value="this.words.length">全部</a-select-option>
             </a-select>
             <span style="padding-left: 6px;">當前：</span>
               <a-select
@@ -205,7 +206,7 @@ export default {
       if (newVal) {
         this.$nextTick(() => {
           if (this.$WordsGrid.jumpScroll === true) {
-            window.scrollTo({ top: this.$WordsGrid.currentScrollY, behavior: 'auto' })
+            window.scrollTo({ top: this.$WordsGrid.currentScrollY, behavior: 'instant' })
             this.updateWordsGrid({ variable: 'jumpScroll', data: false })
           }
         })

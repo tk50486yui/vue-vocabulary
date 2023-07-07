@@ -59,7 +59,9 @@
                   <a-list-item-meta>
                     <template #title>
                       <span class="span-text h5" style="white-space: pre">#{{ item.id }}&nbsp;</span>
-                      <a class="title-link h5">{{ item.arti_title }}</a>
+                      <router-link :to="{ name: 'articlesContent', params: { id: item.id } }">
+                          <span class="title-link h5">{{ item.arti_title }}</span>
+                      </router-link>
                     </template>
                     <template #avatar><a-avatar :src="require('@/assets/img/avatar.png')" /></template>
                   </a-list-item-meta>
@@ -182,17 +184,10 @@ export default {
   computed: {
     ...mapGetters('ArticlesStore', ['articlesArray']),
     ...mapGetters('ArticlesStore', ['articles']),
+    ...mapState('Views', ['$ArticlesView']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$tablet']),
     ...mapState('Screen', ['$mobile'])
-  },
-  watch: {
-    $mobile: function (val) {
-      this.changeTabPosition(val)
-    },
-    $tablet: function (val) {
-      this.changeTabPosition(val)
-    }
   },
   methods: {
     ...mapActions('ArticlesStore', ['fetch']),
@@ -202,6 +197,7 @@ export default {
     ...mapActions('ArticlesStore', {
       updateArticle: 'update'
     }),
+    ...mapActions('Views', ['updateArticlesView']),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -245,6 +241,20 @@ export default {
     handleCurrentPage () {
       this.pagination.current = Number(this.currentPage)
     },
+    setCurrentPage () {
+      this.pagination.pageSize = Number(this.$ArticlesView.currentPageSize)
+      this.selectPageSize = this.$ArticlesView.currentPageSize
+      this.pagination.current = Number(this.$ArticlesView.currentPage)
+      this.currentPage = this.pagination.current
+      this.AfterReady = true
+    },
+    handleDetailsClick () {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+      this.updateArticlesView({ variable: 'currentScrollY', data: scrollY })
+      this.updateArticlesView({ variable: 'currentPage', data: this.currentPage })
+      this.updateArticlesView({ variable: 'jumpPage', data: false })
+      this.updateArticlesView({ variable: 'currentPageSize', data: this.selectPageSize })
+    },
     handleExpand () {
       this.expandContent = true
     },
@@ -267,8 +277,40 @@ export default {
       this.Ready = true
     } catch (error) {}
   },
+  beforeRouteLeave (to, from, next) {
+    this.handleDetailsClick()
+    next()
+  },
+  watch: {
+    $mobile: function (val) {
+      this.changeTabPosition(val)
+    },
+    $tablet: function (val) {
+      this.changeTabPosition(val)
+    },
+    Ready (newVal) {
+      if (newVal) {
+        this.$nextTick(() => {
+          if (this.$ArticlesView.jumpPage === true) {
+            this.setCurrentPage()
+          }
+        })
+      }
+    },
+    AfterReady (newVal) {
+      if (newVal) {
+        this.$nextTick(() => {
+          if (this.$ArticlesView.jumpScroll === true) {
+            window.scrollTo({ top: this.$ArticlesView.currentScrollY, behavior: 'instant' })
+            this.updateArticlesView({ variable: 'jumpScroll', data: false })
+          }
+        })
+      }
+    }
+  },
   setup () {
     const Ready = ref(false)
+    const AfterReady = ref(false)
     const TableLoading = ref([false, false, false])
     const SyncOutlinedSpin = ref([false, false, false])
     const activeTab = ref('1')
@@ -334,6 +376,7 @@ export default {
 
     return {
       Ready,
+      AfterReady,
       TableLoading,
       SyncOutlinedSpin,
       columns,

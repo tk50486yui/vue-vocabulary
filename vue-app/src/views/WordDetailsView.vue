@@ -195,7 +195,6 @@ export default {
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.updateWord({ id: this.formState.word.id, data: this.formState.word })
         await this.fetch()
-        this.editDataSource = this.wordsArray
         this.onEditCancel()
       } catch (error) {}
     },
@@ -229,7 +228,7 @@ export default {
   },
   async created () {
     try {
-      window.scrollTo({ top: 120, behavior: 'auto' })
+      window.scrollTo({ top: 120, behavior: 'instant' })
       await this.fetch()
       this.Ready = true
     } catch (error) {}

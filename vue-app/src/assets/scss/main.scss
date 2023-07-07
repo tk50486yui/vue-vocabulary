@@ -178,7 +178,7 @@ $edit-icon-color: #6A6AFF;
 
 .input-theme {
   &.dark :deep(.ant-input){
-    background: var(--input-background)!important;
+    background: var(--input-background);
     color: var(--head-text)
   }
 
@@ -188,7 +188,7 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-input-affix-wrapper){
-    background: var(--input-background)!important;
+    background: var(--input-background);
     color: var(--head-text)
   }
 
@@ -467,16 +467,17 @@ $edit-icon-color: #6A6AFF;
     color: var(--table-text);
   }
   /* 自定義類別 */
-  &.dark :deep(a.list-link){  
-    color: var(--link-text);
+  &.dark :deep(a){    
     text-decoration: none;
+  }
+  &.dark :deep(a.list-link){  
+    color: var(--link-text);  
   }
 
-  &.dark :deep(a.title-link){  
-    color: var(--title-link-text);
-    text-decoration: none;
+  &.dark :deep(.title-link){  
+    color: var(--title-link-text); 
   }
-  &.dark :deep(a.title-link:hover){  
+  &.dark :deep(.title-link:hover){  
     color: var(--title-link-text-hover);
   }
   

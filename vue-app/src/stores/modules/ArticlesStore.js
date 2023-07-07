@@ -14,6 +14,9 @@ const state = {
 const getters = {
   articles: (state) => state.articles,
   article: (state) => state.article,
+  articleById: state => id => {
+    return state.articles.find(article => article.id === id)
+  },
   articleForm: (state) => state.articleForm,
   articlesArray: (state) => {
     return Object.keys(state.articles).map(key => ({

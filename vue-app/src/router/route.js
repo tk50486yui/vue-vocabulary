@@ -4,6 +4,7 @@ import WordsView from '@/views/WordsView.vue'
 import WordsGridView from '@/views/WordsGridView.vue'
 import WordDetailsView from '@/views/WordDetailsView.vue'
 import ArticlesView from '@/views/ArticlesView.vue'
+import ArticlesContentView from '@/views/ArticlesContentView.vue'
 import WordsGroupsView from '@/views/WordsGroupsView.vue'
 import TagsView from '@/views/TagsView'
 import UserView from '@/components/User.vue'
@@ -19,6 +20,11 @@ const routes = [
     path: '/articles',
     name: 'articles',
     component: ArticlesView
+  },
+  {
+    path: '/articles/content/:id',
+    name: 'articlesContent',
+    component: ArticlesContentView
   },
   {
     path: '/tags',
@@ -41,7 +47,7 @@ const routes = [
     component: WordsGridView
   },
   {
-    path: '/worddetails/:id',
+    path: '/word/details/:id',
     name: 'wordDetails',
     component: WordDetailsView
   },
