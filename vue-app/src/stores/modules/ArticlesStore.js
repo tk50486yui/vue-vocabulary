@@ -7,7 +7,8 @@ const state = {
     arti_title: '',
     arti_content: '',
     arti_order: '',
-    cate_id: ''
+    cate_id: '',
+    articles_tags: { array: [], values: [] }
   }
 }
 

@@ -35,7 +35,7 @@ $edit-icon-color: #6A6AFF;
     --select-background:#111111;
     --select-text:#51ee0d;
     --select-selected-text:rgb(22, 95, 56);
-    --select-selected-item-background:rgb(0, 140, 54);
+    --select-selected-item-background:rgb(1, 173, 138);
     --input-clear-icon:rgb(243, 239, 239);
     --input-validate:#d46958;
 
@@ -69,8 +69,11 @@ $edit-icon-color: #6A6AFF;
     --tab-text:#fcfdfd;
     --tab-background-active:#0a0e0f; 
     --tab-text-active:#f0db9d;
-    
+
+    --article-background:#464a49;
     --article-list-background:#413c38;
+    --span-category-text:#ecf4cb;
+    
     --title-link-text:#5dd49f;
     --title-link-text-hover:#e7d4d9;
 
@@ -497,7 +500,7 @@ $edit-icon-color: #6A6AFF;
     Descriptions
 -----------------------*/
 .descriptions-theme{  
-  // 內容
+  // 內容 
   &.dark :deep(.ant-descriptions-item-content){   
     background: var(--table-background);  
     color: var(--table-text);
@@ -508,6 +511,23 @@ $edit-icon-color: #6A6AFF;
   }
   &.dark :deep(.ant-descriptions-item-label){   
     color: var(--descriptions-title-text);
+  }  
+  //   article   
+  &.dark :deep(.article-theme){  
+    background: var(--article-background);   
+  }
+ 
+  // article 標題
+  &.dark :deep(.article-title){     
+    color: var(--descriptions-title-text); 
+  }
+  // article 內容
+  &.dark :deep(.article-content){   
+       color: var(--table-text);
+  }
+
+  &.dark :deep(.span-category){   
+    color: var(--span-category-text);
   }  
   
 }

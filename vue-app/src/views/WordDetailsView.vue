@@ -143,11 +143,11 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
 import { ref, reactive, onMounted } from 'vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { EditOutlined } from '@ant-design/icons-vue'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
+import { EditOutlined } from '@ant-design/icons-vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
@@ -245,6 +245,7 @@ export default {
 
     onMounted(() => {
       formState.word = { ...wordForm }
+      formState.word.words_tags = { array: [], values: [] }
     })
 
     const wordEditor = reactive({

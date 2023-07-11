@@ -43,9 +43,8 @@
               <template #renderItem="{ item }">
                 <a-list-item key="item.arti_title">
                   <template #actions>
-                    <span v-for="{ type, text } in actions" :key="type">
-                      <component :is="type" style="margin-right: 8px" />
-                      {{ text }}
+                    <span v-for="(tag, index) in item.articles_tags.values" :key="tag.ts_id + index">
+                      #{{ tag.ts_name }}
                     </span>
                   </template>
                   <template #extra v-if="articleExtra">
@@ -67,7 +66,7 @@
                   </a-list-item-meta>
                     <template v-if="item.arti_content.length > 50  ">
                       <template v-if="!expandContent">
-                        <div v-html="item.arti_content.slice(0, 50)"></div>
+                        <div v-html="getParagraphs(item.arti_content)"></div>
                         <p></p>
                         <a class="list-link" @click="handleExpand">繼續展開</a>
                       </template>
@@ -158,28 +157,13 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
-import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-
-const listData = []
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'avatar.png',
-    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-  })
-}
 
 export default {
   name: 'ArticlesView',
   components: {
-    RefreshBtn,
-    StarOutlined,
-    LikeOutlined,
-    MessageOutlined
+    RefreshBtn
   },
   computed: {
     ...mapGetters('ArticlesStore', ['articlesArray']),
@@ -267,6 +251,11 @@ export default {
       } else {
         this.articleExtra = true
       }
+    },
+    getParagraphs (content) {
+      const paragraphs = content.split('<br>')
+      const firstFive = paragraphs.slice(0, 5)
+      return firstFive.join('<br>')
     }
   },
   async created () {
@@ -363,16 +352,6 @@ export default {
       pageSize: Number(selectPageSize.value),
       position: 'top'
     })
-    const actions = [{
-      type: 'StarOutlined',
-      text: '156'
-    }, {
-      type: 'LikeOutlined',
-      text: '156'
-    }, {
-      type: 'MessageOutlined',
-      text: '2'
-    }]
 
     return {
       Ready,
@@ -392,9 +371,7 @@ export default {
       validateMsg,
       articleEditor,
       editor: ClassicEditor,
-      listData,
-      pagination,
-      actions
+      pagination
     }
   }
 }

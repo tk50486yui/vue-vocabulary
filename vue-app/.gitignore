@@ -5,7 +5,6 @@ public/templates
 package-lock.json
 src/assets/img
 
-
 # local env files
 .env.local
 .env.*.local
