@@ -72,6 +72,8 @@ $edit-icon-color: #6A6AFF;
 
     --article-background:#464a49;
     --article-list-background:#413c38;
+    --article-date-text:#ebceb7;
+
     --span-category-text:#ecf4cb;
     
     --title-link-text:#5dd49f;
@@ -486,6 +488,10 @@ $edit-icon-color: #6A6AFF;
   
   &.dark :deep(span.span-text){  
     color: var(--table-text);
+  }
+
+  &.dark :deep(.article-date){
+    color: var(--article-date-text);   
   }
 
   /* card pagination */

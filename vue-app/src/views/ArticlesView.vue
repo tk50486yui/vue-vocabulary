@@ -5,81 +5,120 @@
       <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="全部">
-          <div class="select-theme" :class="this.$theme">
-              <span class="span-text">每頁顯示：</span>
-              <a-select
-                  ref="select"
-                  v-model:value="selectPageSize"
-                  size="small"
-                  style="width: 80px"
-                  @change="handlePageSize()"
-                  >
-                  <a-select-option value="3">3 筆</a-select-option>
-                  <a-select-option value="10">10 筆</a-select-option>
-                  <a-select-option value="20">20 筆</a-select-option>
-                  <a-select-option value="50">50 筆</a-select-option>
-                  <a-select-option value="100">100 筆</a-select-option>
-                  <a-select-option :value="this.articles.length">全部</a-select-option>
-              </a-select>
-              <span class="span-text" style="padding-left: 6px;">當前：</span>
-              <a-select
-                  ref="selectCurrent"
-                  v-model:value="currentPage"
-                  size="small"
-                  style="width: 80px"
-                  @change="handleCurrentPage()"
-                  >
-                  <template v-for="index in Math.ceil(this.articles.length/this.selectPageSize)" :key="index">
-                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+          <div class="filter-block d-flex">
+            <div class="select-theme" :class="this.$theme">
+                <span class="span-text">每頁顯示：</span>
+                <a-select
+                    ref="select"
+                    v-model:value="selectPageSize"
+                    size="small"
+                    style="width: 80px"
+                    @change="handlePageSize()"
+                    >
+                    <a-select-option value="3">3 筆</a-select-option>
+                    <a-select-option value="10">10 筆</a-select-option>
+                    <a-select-option value="20">20 筆</a-select-option>
+                    <a-select-option value="50">50 筆</a-select-option>
+                    <a-select-option value="100">100 筆</a-select-option>
+                    <a-select-option :value="this.articles.length">全部</a-select-option>
+                </a-select>
+                <span class="span-text" style="padding-left: 6px;">當前：</span>
+                <a-select
+                    ref="selectCurrent"
+                    v-model:value="currentPage"
+                    size="small"
+                    style="width: 80px"
+                    @change="handleCurrentPage()"
+                    >
+                    <template v-for="index in Math.ceil(this.articles.length/this.selectPageSize)" :key="index">
+                      <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                    </template>
+                </a-select>
+                <span class="span-text" style="padding-left: 6px;">
+                  顯示內容：<a-switch v-model:checked="showContent" size="small" />
+                </span>
+                <span class="span-text" style="padding-left: 6px;">
+                  <template v-if="this.$keyword != '' && this.$filters.length > 0">
+                      <span style="padding-right: 6px;">
+                          搜尋條件：含 ` {{ this.$keyword }} ` 的結果
+                      </span>
                   </template>
-              </a-select>
-              <p></p>
+                  <template v-else>
+                      <span style="padding-right: 6px;">
+                          搜尋條件：無
+                      </span>
+                  </template>
+                共  {{ this.filterArticles(this.$keyword, this.$filters).length }} 筆
+                </span>
+                <span style="padding-left: 12px;">
+                  <template v-if="this.$keyword != ''">
+                    <a-button type="primary" size="small" shape="round" @click="onResetSearch()" danger>清除搜尋</a-button>
+                  </template>
+                </span>
+                <p></p>
             </div>
+          </div>
           <div class="article-list-theme" :class="this.$theme">
-            <a-list item-layout="vertical" size="large" bordered :pagination="pagination" :data-source="articles">
-              <template #footer>
-                <span class="span-text">共 {{this.articles.length}} 筆</span>
-              </template>
+            <a-list :data-source="this.filterArticles(this.$keyword, this.$filters)"
+              :pagination="pagination" item-layout="vertical" size="large" bordered>
               <template #renderItem="{ item }">
                 <a-list-item key="item.arti_title">
-                  <template #actions>
-                    <span v-for="(tag, index) in item.articles_tags.values" :key="tag.ts_id + index">
-                      #{{ tag.ts_name }}
-                    </span>
-                  </template>
-                  <template #extra v-if="articleExtra">
-                    <img
-                      width="262"
-                      height="126"
-                      alt="logo"
-                      :src="require('@/assets/img/nihongo.png')"
-                    />
-                  </template>
+                  <!-- 上方 -->
                   <a-list-item-meta>
+                    <!-- 頭像 -->
+                    <template #avatar>
+                      <a-avatar :src="require('@/assets/img/avatar.png')" />
+                    </template>
+                    <!-- 標題 -->
                     <template #title>
                       <span class="span-text h5" style="white-space: pre">#{{ item.id }}&nbsp;</span>
-                      <router-link :to="{ name: 'articlesContent', params: { id: item.id } }">
-                          <span class="title-link h5">{{ item.arti_title }}</span>
-                      </router-link>
-                    </template>
-                    <template #avatar><a-avatar :src="require('@/assets/img/avatar.png')" /></template>
-                  </a-list-item-meta>
-                    <template v-if="item.arti_content.length > 50  ">
-                      <template v-if="!expandContent">
-                        <div v-html="getParagraphs(item.arti_content)"></div>
-                        <p></p>
-                        <a class="list-link" @click="handleExpand">繼續展開</a>
+                      <template v-if="this.$keyword != '' && this.$filters.includes('arti_title') && item.arti_title.includes(this.$keyword)">
+                        <router-link :to="{ name: 'articlesContent', params: { id: item.id } }">
+                          <span class="title-link h5">
+                            <template v-for="(char, index) in splitTitle(item.arti_title, this.$keyword)" :key="index + char">
+                              <span v-if="char === this.$keyword" class="keyword-text">
+                                {{ char }}
+                              </span>
+                              <span v-else>
+                                {{ char }}
+                              </span>
+                            </template>
+                          </span>
+                        </router-link>
                       </template>
                       <template v-else>
-                        <div v-html="item.arti_content"></div>
-                        <p></p>
-                        <a class="list-link" @click="handleCollapse">收起</a>
+                        <router-link :to="{ name: 'articlesContent', params: { id: item.id } }">
+                            <span class="title-link h5">{{ item.arti_title }}</span>
+                        </router-link>
                       </template>
                     </template>
-                    <template v-else>
-                      <div v-html="item.arti_content"></div>
-                    </template>
+                  </a-list-item-meta>
+                  <!-- 內容-->
+                  <template v-if="showContent">
+                    <div v-html="item.arti_content"></div>
+                  </template>
+                  <template v-else>
+                    <br>
+                    <a class="list-link" @click="Expand">繼續閱讀....</a>
+                    <p></p>
+                  </template>
+                  <br>
+                  <span class="article-date">建立時間： {{ item.created_at }}</span>
+                  <!-- 下方 -->
+                  <template #actions>
+                    <template v-if="item.articles_tags.values != null && item.articles_tags.values != ''"></template>
+                      <span v-for="(tag, index) in item.articles_tags.values" :key="tag.ts_id + index">
+                        #{{ tag.ts_name }}
+                      </span>
+                    <template v-if="item.articles_tags.values != null && item.articles_tags.values != ''"></template>
+                  </template>
                 </a-list-item>
+              </template>
+              <!-- 最底部 -->
+              <template #footer>
+                <span class="span-text">
+                  共 {{ this.filterArticles(this.$keyword, this.$filters).length }} 筆
+                </span>
               </template>
             </a-list>
           </div>
@@ -94,10 +133,10 @@
               :loading="TableLoading[0]"
               :indentSize="12"
             >
-              <template #bodyCell="{ column, text, record }">
+              <template #bodyCell="{ column, text }">
                 <template v-if="['arti_title'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'arti_title'">
-                    <a @click="showContent(record)">{{ text }}</a>
+                    <a>{{ text }}</a>
                   </template>
                   <template v-else>
                   {{ text }}
@@ -107,20 +146,8 @@
             </a-table>
           </div>
         </a-tab-pane>
-        <!-- tab 3 -->
-        <a-tab-pane key="3" tab="3">
-          <a-form-item class="input-theme" :class="this.$theme">
-            <a-input  v-model:value="articleEditor.arti_title"  placeholder="輸入標題" allow-clear />
-          </a-form-item>
-          <p></p>
-          <div class="article-editor" :class="this.$theme">
-          <ckeditor v-model="articleEditor.arti_content" :editor="editor" :config="articleEditor.Config" />
-          </div>
-          <p></p>
-          <button class="btn btn-info btn-outline-light btn-sm" @click="onEdit(articleEditor)">儲存</button>
-        </a-tab-pane>
         <!-- tab 4 -->
-        <a-tab-pane key="4" tab="+">
+        <a-tab-pane key="3" tab="+">
           <a-form
             ref="formRef"
             :model="formState"
@@ -142,12 +169,6 @@
             </a-form-item>
           </a-form>
         </a-tab-pane>
-        <!-- tab 5 -->
-        <a-tab-pane key="5" tab="5">
-          <div class="show-block" :class="this.$theme">
-            <div v-html="articleEditor.arti_content"></div>
-          </div>
-        </a-tab-pane>
       </a-tabs>
     </div>
 </template>
@@ -168,6 +189,10 @@ export default {
   computed: {
     ...mapGetters('ArticlesStore', ['articlesArray']),
     ...mapGetters('ArticlesStore', ['articles']),
+    ...mapGetters('ArticlesStore', ['filterArticles']),
+    ...mapState('Search', ['$keyword']),
+    ...mapState('Search', ['$searchClass']),
+    ...mapState('Search', ['$filters']),
     ...mapState('Views', ['$ArticlesView']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$tablet']),
@@ -181,6 +206,9 @@ export default {
     ...mapActions('ArticlesStore', {
       updateArticle: 'update'
     }),
+    ...mapActions('Search', ['updateKeyword']),
+    ...mapActions('Search', ['updateFilters']),
+    ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateArticlesView']),
     async refreshTable (index) {
       try {
@@ -212,11 +240,6 @@ export default {
         await this.fetch()
       } catch (error) {}
     },
-    showContent (record) {
-      this.articleEditor.id = record.id
-      this.articleEditor.arti_title = record.arti_title
-      this.articleEditor.arti_content = record.arti_content
-    },
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
@@ -239,18 +262,13 @@ export default {
       this.updateArticlesView({ variable: 'jumpPage', data: false })
       this.updateArticlesView({ variable: 'currentPageSize', data: this.selectPageSize })
     },
-    handleExpand () {
-      this.expandContent = true
+    splitTitle (title, keyword) {
+      const regex = new RegExp(`(${keyword})`, 'i')
+      const parts = title.split(regex)
+      return parts.filter(part => part !== '')
     },
-    handleCollapse () {
-      this.expandContent = false
-    },
-    changeTabPosition (isScreenSmall) {
-      if (isScreenSmall) {
-        this.articleExtra = false
-      } else {
-        this.articleExtra = true
-      }
+    onResetSearch () {
+      this.updateKeyword('')
     },
     getParagraphs (content) {
       const paragraphs = content.split('<br>')
@@ -260,9 +278,8 @@ export default {
   },
   async created () {
     try {
-      this.changeTabPosition(this.$mobile)
-      this.changeTabPosition(this.$tablet)
       await this.fetch()
+      this.updateSearchClass('article')
       this.Ready = true
     } catch (error) {}
   },
@@ -271,12 +288,6 @@ export default {
     next()
   },
   watch: {
-    $mobile: function (val) {
-      this.changeTabPosition(val)
-    },
-    $tablet: function (val) {
-      this.changeTabPosition(val)
-    },
     Ready (newVal) {
       if (newVal) {
         this.$nextTick(() => {
@@ -306,8 +317,7 @@ export default {
     const tabPosition = ref('top')
     const selectPageSize = ref('3')
     const currentPage = ref(1)
-    const expandContent = ref(false)
-    const articleExtra = ref(true)
+    const showContent = ref(true)
     const formRef = ref()
     const formState = reactive({
       article: {}
@@ -322,7 +332,10 @@ export default {
         placeholder: '請輸入文章...'
       }
     })
-
+    const expandContent = reactive([{
+      id: '',
+      expand: false
+    }])
     onMounted(() => {
       formState.article = { ...articleForm }
     })
@@ -364,7 +377,7 @@ export default {
       selectPageSize,
       currentPage,
       expandContent,
-      articleExtra,
+      showContent,
       formRef,
       formState,
       articleForm,
@@ -379,6 +392,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
+.keyword-text{
+    color:$keyword-color;
+}
+.filter-block{
+  padding-bottom: 6px;
+}
+
+.article-date{
+  padding-top: 18px;
+  font-size:12px;
+}
 
 .button-container {
 display: flex;

@@ -156,7 +156,11 @@ export default {
       this.onArticleChecked()
       this.onSearchRadio()
       this.updateKeyword(this.searchValue)
-      this.$router.push({ name: 'wordsGrid' })
+      if (this.searchRadio === 'word') {
+        this.$router.push({ name: 'wordsGrid' })
+      } else {
+        this.$router.push({ name: 'articles' })
+      }
     },
     onSearchRadio () {
       this.updateSearchClass(this.searchRadio)

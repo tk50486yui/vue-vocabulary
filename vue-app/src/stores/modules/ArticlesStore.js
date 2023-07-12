@@ -24,6 +24,24 @@ const getters = {
       key,
       ...state.articles[key]
     }))
+  },
+  filterArticles: (state) => (keyword, options) => {
+    if (keyword && options && options.length > 0) {
+      return Object.keys(state.articles)
+        .filter(key => {
+          const article = state.articles[key]
+          return options.some(option => article[option] && article[option].includes(keyword))
+        })
+        .map(key => ({
+          key,
+          ...state.articles[key]
+        }))
+    } else {
+      return Object.keys(state.articles).map(key => ({
+        key,
+        ...state.articles[key]
+      }))
+    }
   }
 }
 
