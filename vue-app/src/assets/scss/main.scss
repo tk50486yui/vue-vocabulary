@@ -38,6 +38,18 @@ $edit-icon-color: #6A6AFF;
     --select-selected-item-background:rgb(1, 173, 138);
     --input-clear-icon:rgb(243, 239, 239);
     --input-validate:#d46958;
+    
+    --radio-button-text:#fff;
+    --radio-button-text-active:#d1def9;
+    --radio-button-background:#152231;
+    --radio-button-background-active:#f16728;
+    --radio-button-border:#d4b7a2;
+
+    --radio-button-toggle-text:#fff;
+    --radio-button-toggle-text-active:#eaecf2;
+    --radio-button-toggle-background:#394345;
+    --radio-button-toggle-background-active:#00dda6ec;
+    --radio-button-toggle-border:#7d8885;
 
     --head-background:#14080e;
     --body-background:#111111;
@@ -67,8 +79,9 @@ $edit-icon-color: #6A6AFF;
 
     --tab-background:#22373c; 
     --tab-text:#fcfdfd;
-    --tab-background-active:#0a0e0f; 
-    --tab-text-active:#f0db9d;
+    --tab-background-active:#57043d; 
+    --tab-background-active-hover:#63555e; 
+    --tab-text-active:#ffffff;
 
     --article-background:#464a49;
     --article-list-background:#413c38;
@@ -76,8 +89,8 @@ $edit-icon-color: #6A6AFF;
 
     --span-category-text:#ecf4cb;
     
-    --title-link-text:#5dd49f;
-    --title-link-text-hover:#e7d4d9;
+    --title-link-text:#e7d4d9;
+    --title-link-text-hover:#5dd49f;
 
     --descriptions-title-background:#231111;
     --descriptions-title-text:rgb(247, 198, 6);
@@ -91,6 +104,7 @@ $edit-icon-color: #6A6AFF;
     --head-text:#fefefe;
 
     --breadcrumb-text:#f9eaea;
+    --breadcrumb-text-active:rgb(251, 250, 220);
     
     --footer-a-text:#ede5e5; 
 
@@ -108,6 +122,18 @@ $edit-icon-color: #6A6AFF;
     --head-background:#f9f5f5;
     --body-background:#f7f8fa;
 
+    --radio-button-text:#fff;
+    --radio-button-text-active:#d1def9;
+    --radio-button-background:#152231;
+    --radio-button-background-active:#f16728;
+    --radio-button-border:#d4b7a2;
+
+    --radio-button-toggle-text:#fff;
+    --radio-button-toggle-text-active:#eaecf2;
+    --radio-button-toggle-background:#394345;
+    --radio-button-toggle-background-active:#00dda6ec;
+    --radio-button-toggle-border:#7d8885;
+
     --table-background:rgb(250, 251, 251);
     --table-text:rgb(1, 6, 10);
 
@@ -123,13 +149,14 @@ $edit-icon-color: #6A6AFF;
     --head-text:#111111;
 
     --breadcrumb-text:#1390e4;
+    --breadcrumb-text-active:rgb(75, 74, 75);
 
     --footer-a-text:#5C5C5C;  
 
 }
 
 /*---------------------
-      Table
+    Table
 -----------------------*/
 
 .table-theme {    
@@ -178,7 +205,7 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-      Input
+    Input
 -----------------------*/
 
 .input-theme {
@@ -224,11 +251,11 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-      Select
+    Select
 -----------------------*/
 .select-theme {
   &.dark :deep(.ant-select-selector){
-    background: var(--input-background)!important;
+    background: var(--input-background);
     color: var(--head-text)
   }
 
@@ -286,9 +313,98 @@ $edit-icon-color: #6A6AFF;
   } 
   
 }
+/*---------------------
+    Radio Button
+-----------------------*/
+.radio-button-theme{
+  // dark
+  &.dark :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-background);    
+    color: var(--radio-button-text);    
+  }
+  &.dark :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-background-active);    
+    color: var( --radio-button-text-active);   
+  }
+  &.dark :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-background-active); 
+    color: var( --radio-button-text);   
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-background-active);
+    color: var( --radio-button-text-active); 
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-border);    
+  }
+  // light
+  &.light :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-background);    
+    color: var(--radio-button-text);    
+  }
+  &.light :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-background-active);    
+    color: var( --radio-button-text-active);   
+  }
+  &.light :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-background-active); 
+    color: var( --radio-button-text);   
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-background-active);
+    color: var( --radio-button-text-active); 
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-border);    
+  }
+}
+
+.toggle-theme{
+  // dark
+  &.dark :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-toggle-background);    
+    color: var(--radio-button-toggle-text);    
+  }
+  &.dark :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-toggle-background-active);    
+    color: var( --radio-button-toggle-text-active);   
+  }
+  &.dark :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-toggle-background-active); 
+    color: var( --radio-button-toggle-text);   
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-toggle-background-active);
+    color: var( --radio-button-toggle-text-active); 
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-toggle-border);    
+  }
+
+  // light
+  &.light :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-toggle-background);    
+    color: var(--radio-button-toggle-text);    
+  }
+  &.light :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-toggle-background-active);    
+    color: var( --radio-button-toggle-text-active);   
+  }
+  &.light :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-toggle-background-active); 
+    color: var( --radio-button-toggle-text);   
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-toggle-background-active);
+    color: var( --radio-button-toggle-text-active); 
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-toggle-border);    
+  }
+}
 
 /*---------------------
-      Checkbox
+    Checkbox
 -----------------------*/
 .checkbox-theme {
   &.dark :deep(.ant-checkbox-wrapper span){
@@ -297,7 +413,7 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-    Header
+    Header (唯一)
 -----------------------*/
 .header {
   &.dark {
@@ -313,7 +429,7 @@ $edit-icon-color: #6A6AFF;
   }  
 }
 /*---------------------
-    Navbar
+    Navbar (唯一)
 -----------------------*/
 .nav-menu {  
   li a {
@@ -336,11 +452,9 @@ $edit-icon-color: #6A6AFF;
 } 
 
 /*---------------------
-    Breadcrumb
+    Breadcrumb (唯一)
 -----------------------*/
-.breadcrumb-option {
-  padding-top: 35px; 
-
+.breadcrumb-theme {
   &.dark {
     background: var(--body-background);    
   }
@@ -349,46 +463,33 @@ $edit-icon-color: #6A6AFF;
   }   
 }
 
-.breadcrumb__links{
-  display: flex;
+.breadcrumb-links{  
   &.dark {
     background: var(--body-background); 
   }
   &.light {
     background: var(--body-background);
-  } 
-}
-
-.breadcrumb__links {
-  a {
-    font-size: 15px;
-    font-weight: 500;
-    margin-right: 18px;
-    display: inline-block;
-    position: relative;
-    text-decoration: none;
-  }
- 
+  }  
+  
   &.dark a {
     color: var(--head-text); 
   }
   &.light a {
     color: var(--head-text); 
-  } 
-}
-
-.breadcrumb__links {
-  span {
-    font-size: 15px;
-    font-weight: 500;  
-    display: inline-block;
-
   }
+
   &.dark span {
     color: var(--breadcrumb-text); 
   }
   &.light span {
     color: var(--breadcrumb-text); 
+  }
+
+  &.dark span.active{
+    color: var( --breadcrumb-text-active); 
+  } 
+  &.light span.active{
+    color: var( --breadcrumb-text-active); 
   } 
 }
 
@@ -545,11 +646,16 @@ $edit-icon-color: #6A6AFF;
   &.dark :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active){    
     background: var(--tab-background-active);   
   }
+  &.dark :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active:hover){    
+    background: var(--tab-background-active-hover);   
+  }
+  &.dark :deep(.ant-tabs-tab:hover){    
+    background: var(--tab-background-active-hover);   
+  }
 
   &.dark :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn){
     color: var(--tab-text-active);
   }
-
   
   &.dark :deep(.ant-tabs-tab){
     background: var(--tab-background);
@@ -670,7 +776,7 @@ $edit-icon-color: #6A6AFF;
 
 }
 /*---------------------
-    footer
+    Footer (唯一)
 -----------------------*/
 .footer {   
   margin-top: 360px;  

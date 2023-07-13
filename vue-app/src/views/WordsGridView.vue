@@ -29,20 +29,20 @@
                     <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                   </template>
               </a-select>
-            <span style="padding-left: 12px;">
+            <span style="padding-left: 6px;">
                 <template v-if="this.$keyword != '' && this.$filters.length > 0">
-                    <span style="padding-right: 12px;">
-                      搜尋條件：包含 ` {{ this.$keyword }} ` 的結果
+                    <span style="padding-right: 6px;">
+                      搜尋條件：含 ` {{ this.$keyword }} ` 的結果
                     </span>
                 </template>
                 <template v-else>
-                    <span style="padding-right: 12px;">
+                    <span style="padding-right: 6px;">
                       搜尋條件：無
                     </span>
                 </template>
             共  {{ this.filterWords(this.$keyword, this.$filters).length }} 筆
             </span>
-            <span style="padding-left: 12px;">
+            <span style="padding-left: 6px;">
                 <template v-if="this.$keyword != ''">
                   <a-button type="primary" size="small" shape="round" @click="onResetSearch()" danger>清除搜尋</a-button>
                 </template>

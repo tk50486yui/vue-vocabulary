@@ -14,16 +14,16 @@
                     <nav class="header__menu" >
                         <ul class="nav-menu" :class="[this.$theme]">
                             <li>
-                                <router-link :to="{ name: 'home' }">Home</router-link>
+                                <router-link :to="{ name: 'home' }">首頁</router-link>
                             </li>
-                            <li id="ShowWords" class="active">
-                                <router-link :to="{ name: 'words' }">單字表</router-link>
+                            <li class="active">
+                                <router-link :to="{ name: 'words' }">表格</router-link>
                             </li>
-                            <li><router-link :to="{ name: 'tags' }">Tags</router-link></li>
+                            <li><router-link :to="{ name: 'tags' }">標籤</router-link></li>
                             <li><router-link :to="{ name: 'articles' }">文章</router-link></li>
                             <li><router-link :to="{ name: 'wordsGroups' }">群組</router-link></li>
-                            <li><router-link :to="{ name: 'wordsGrid' }">Grid</router-link></li>
-                            <li><router-link :to="{ name: 'words' }">User</router-link>
+                            <li><router-link :to="{ name: 'wordsGrid' }">單字</router-link></li>
+                            <li><router-link :to="{ name: 'words' }">測試</router-link>
                                 <ul class="dropdown">
                                     <template v-for="i in 2" :key="i">
                                         <li>
@@ -96,7 +96,6 @@ export default {
     margin-right: 40px;
     position: relative;
 }
-
 .header__menu ul li.active a:after {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);

@@ -4,42 +4,22 @@
     <HeaderView />
 
     <!-- Breadcrumb -->
-    <div class="breadcrumb-option" :class="[this.$theme]">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__links" :class="[this.$theme]">
-                      <router-link :to="{ name: 'words' }">
-                        <font-awesome-icon :icon="['fas', 'house']" /> Home
-                      </router-link>
-                      <span class="breadcrumb-separator"><font-awesome-icon :icon="['fas', 'chevron-right']" size="xs"/></span>
-                      <span>單字表</span>
-                      <div class="breadcrumb__switch">
-                        <a-switch
-                          :checked="this.$theme === 'dark'"
-                          checked-children="暗黑模式"
-                          un-checked-children="明亮模式"
-                          @change="changeTheme"
-                        />
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <BreadcrumbView/>
 
     <!-- 主頁面 -->
-    <div class="spad" :class="[this.$theme]">
+    <div class="spad" :class="this.$theme">
       <div class="container">
 
         <!-- 上方搜尋列 -->
         <div class="row">
           <div class="col-lg-4 col-md-12 d-flex
               justify-content-lg-end justify-content-md-start align-items-center">
-              <a-radio-group v-model:value="searchRadio" @change="onSearchRadio()">
-                <a-radio-button value="word">單字</a-radio-button>
-                <a-radio-button value="article">文章</a-radio-button>
-              </a-radio-group>
+              <div class="radio-button-theme" :class="this.$theme">
+                <a-radio-group v-model:value="searchRadio" @change="onSearchRadio()">
+                  <a-radio-button value="word">單字</a-radio-button>
+                  <a-radio-button value="article">文章</a-radio-button>
+                </a-radio-group>
+              </div>
           </div>
           <div class="col-lg-8 col-md-12 d-flex justify-content-start">
             <div class="input-theme input-search" :class="this.$theme">
@@ -78,7 +58,25 @@
 
           <!-- 左側 -->
           <div class="col-lg-3 col-md-3">
-            <CategoriesMenuView />
+            <div class="toggle-theme" :class="this.$theme">
+              <a-radio-group v-model:value="sideGroup" @change="toggleSide()">
+                <a-radio-button value="1">類別</a-radio-button>
+                <a-radio-button value="2">群組</a-radio-button>
+                <a-radio-button value="3">標籤</a-radio-button>
+              </a-radio-group>
+            </div>
+            <p></p>
+            <keep-alive>
+              <template v-if="sideGroup === '1'">
+                <CategoriesMenuView/>
+              </template>
+              <template v-else-if="sideGroup === '2'">
+                <WordsGroupsView/>
+              </template>
+              <template v-else-if="sideGroup === '3'">
+                333333
+              </template>
+            </keep-alive>
           </div>
 
           <!-- 右側 -->
@@ -96,18 +94,22 @@
   </div>
 </template>
 <script>
-import CategoriesMenuView from '@/views/CategoriesMenuView.vue'
-import HeaderView from '@/views/HeaderView.vue'
-import FooterView from '@/views/FooterView.vue'
 import { ref, onMounted } from 'vue'
 import { mapState, mapActions } from 'vuex'
+import HeaderView from '@/views/HeaderView.vue'
+import BreadcrumbView from '@/views/BreadcrumbView.vue'
+import FooterView from '@/views/FooterView.vue'
+import CategoriesMenuView from '@/views/CategoriesMenuView.vue'
+import WordsGroupsView from '@/views/WordsGroupsView.vue'
 
 export default {
   name: 'App',
   components: {
     HeaderView,
+    BreadcrumbView,
+    FooterView,
     CategoriesMenuView,
-    FooterView
+    WordsGroupsView
   },
   computed: {
     ...mapState('Theme', ['$theme']),
@@ -137,17 +139,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Theme', ['updateTheme']),
     ...mapActions('Screen', ['updateMobile']),
     ...mapActions('Screen', ['updateTablet']),
     ...mapActions('Screen', ['updateDesktop']),
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Search', ['updateFilters']),
-    changeTheme (checked) {
-      const theme = checked ? 'dark' : 'light'
-      this.updateTheme(theme)
-    },
     changeScreen (screen) {
       console.log(screen)
     },
@@ -174,6 +171,9 @@ export default {
       if (this.searchRadio === 'article') {
         this.updateFilters(this.articleCheckbox)
       }
+    },
+    toggleSide () {
+
     }
   },
   setup () {
@@ -183,6 +183,7 @@ export default {
     const mediaQuerySmall = window.matchMedia('(max-width: 576px)')
     const mediaQueryMedium = window.matchMedia('(min-width: 577px) and (max-width: 1024px)')
     const mediaQueryLarge = window.matchMedia('(min-width: 1025px)')
+    const sideGroup = ref('1')
     const searchValue = ref('')
     const searchRadio = ref('word')
     const wordCheckbox = ref(['ws_name'])
@@ -235,6 +236,7 @@ export default {
       isScreenSmall,
       isScreenMedium,
       isScreenLarge,
+      sideGroup,
       searchValue,
       searchRadio,
       wordCheckbox,
@@ -272,11 +274,11 @@ export default {
   transform: translateY(-50%);
 }
 
-.breadcrumb__links a i {
+.breadcrumb-links a i {
   margin-right: 5px;
 }
 
-.breadcrumb__switch {
+.breadcrumb-switch {
   margin-left: auto;
 }
 
@@ -322,26 +324,6 @@ export default {
 .divider-theme {
   height: 2px;
   background: #515959
-}
-
-.ant-radio-button-wrapper{
-  background:#152231;
-  color:#fff;
-}
-.ant-radio-button-wrapper:hover{
-  color:#d1def9;
-  background:#f16728;
-}
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
-  color: #fff;
-  background:#f16728;
-}
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
-  color:#d1def9;
-  background:#f16728;
-}
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child{
-  border-color: #d4b7a2;
 }
 
 </style>

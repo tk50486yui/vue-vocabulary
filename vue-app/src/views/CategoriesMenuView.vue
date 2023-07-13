@@ -1,6 +1,6 @@
 <template>
-  <div class="sidebar__categories">
-    <div class="section-title d-flex justify-content-between align-items-center" :class="this.$theme">
+  <div>
+    <div class="d-flex justify-content-between align-items-center section-title" :class="this.$theme">
       <h4>詞組類別</h4>
       <div class="button-container">
         <PlusBtn class="button-container" @click="visible=true"/>
