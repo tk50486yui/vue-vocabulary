@@ -75,8 +75,9 @@
                                         <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
                                     </template>
                                 </template>
-                                <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
                             </template>
+                            <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
+                            <p></p>
                             <!-- ws_name -->
                             <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
                                 <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
