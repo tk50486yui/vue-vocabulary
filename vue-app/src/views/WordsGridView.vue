@@ -75,6 +75,7 @@
                                         <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
                                     </template>
                                 </template>
+                                <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
                             </template>
                             <!-- ws_name -->
                             <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
@@ -139,6 +140,7 @@ export default {
     ...mapState('Search', ['$searchClass']),
     ...mapState('Search', ['$filters']),
     ...mapState('Views', ['$WordsGrid']),
+    ...mapState('Views', ['$WordsGroupsView']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
@@ -147,6 +149,7 @@ export default {
     ...mapActions('Search', ['updateFilters']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateWordsGrid']),
+    ...mapActions('Views', ['updateWordsGroupsView']),
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
@@ -177,6 +180,23 @@ export default {
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
       window.scrollTo({ top: 100, behavior: 'auto' })
+    },
+    changeCheckbox (id, wsName) {
+      if (this.checkboxArray[id]) {
+        this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: true } })
+      } else {
+        this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: false } })
+      }
+    },
+    setCheckbox () {
+      if (this.$WordsGroupsView.groupArray.length > 0) {
+        for (const item of this.$WordsGroupsView.groupArray) {
+          this.checkboxArray[item.ws_id] = true
+        }
+      }
+    },
+    clearCheckbox () {
+      this.checkboxArray = []
     }
   },
   async created () {
@@ -196,6 +216,7 @@ export default {
           if (this.$WordsGrid.jumpPage === true) {
             this.setCurrentPage()
           }
+          this.setCheckbox()
         })
       }
     },
@@ -208,6 +229,12 @@ export default {
           }
         })
       }
+    },
+    '$WordsGroupsView.groupArray' (val) {
+      console.log('watch')
+      if (val.length === 0) {
+        this.clearCheckbox()
+      }
     }
   },
   setup () {
@@ -217,6 +244,7 @@ export default {
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
+    const checkboxArray = ref([])
     const pagination = reactive({
       onChange: page => {
         currentPage.value = page
@@ -233,7 +261,8 @@ export default {
       pagination,
       selectPageSize,
       currentPage,
-      dataSize
+      dataSize,
+      checkboxArray
     }
   }
 

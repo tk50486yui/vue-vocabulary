@@ -61,8 +61,10 @@
             <div class="toggle-theme" :class="this.$theme">
               <a-radio-group v-model:value="sideGroup" @change="toggleSide()">
                 <a-radio-button value="1">類別</a-radio-button>
-                <a-radio-button value="2">群組</a-radio-button>
-                <a-radio-button value="3">標籤</a-radio-button>
+                <a-radio-button value="2">標籤</a-radio-button>
+                <a-badge :count="this.$WordsGroupsView.groupArray.length" color="magenta">
+                  <a-radio-button value="3">群組</a-radio-button>
+                </a-badge>
               </a-radio-group>
             </div>
             <p></p>
@@ -71,10 +73,10 @@
                 <CategoriesMenuView/>
               </template>
               <template v-else-if="sideGroup === '2'">
-                <WordsGroupsView/>
+                333333
               </template>
               <template v-else-if="sideGroup === '3'">
-                333333
+                <WordsGroupsView/>
               </template>
             </keep-alive>
           </div>
@@ -112,6 +114,7 @@ export default {
     WordsGroupsView
   },
   computed: {
+    ...mapState('Views', ['$WordsGroupsView']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$mobile'])
   },
@@ -184,6 +187,7 @@ export default {
     const mediaQueryMedium = window.matchMedia('(min-width: 577px) and (max-width: 1024px)')
     const mediaQueryLarge = window.matchMedia('(min-width: 1025px)')
     const sideGroup = ref('1')
+    const groupCount = ref('1')
     const searchValue = ref('')
     const searchRadio = ref('word')
     const wordCheckbox = ref(['ws_name'])
@@ -237,6 +241,7 @@ export default {
       isScreenMedium,
       isScreenLarge,
       sideGroup,
+      groupCount,
       searchValue,
       searchRadio,
       wordCheckbox,
