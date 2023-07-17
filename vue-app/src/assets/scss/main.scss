@@ -57,8 +57,8 @@ $edit-icon-color: #6A6AFF;
     --link-text:#e3f7af;
     --link-text-hover:#08fead;
 
-    --card-link-text:#fdc6a8;
-    --card-link-text-hover:#f2fec6;
+    --card-link-text:#b0f1fb;
+    --card-link-text-hover:#f2fec6; 
 
     --edit-icon:#54f88b;
 
@@ -511,7 +511,7 @@ $edit-icon-color: #6A6AFF;
     List Card
 -----------------------*/
 .list-card-theme { 
-
+  /* background  */
   &.dark :deep(.ant-card-head){
     background: var(--table-background);  
     color: var(--table-text);
@@ -521,7 +521,7 @@ $edit-icon-color: #6A6AFF;
     background: var(--table-background);   
     color: var(--table-text);
   }
-
+  
   /* card title */
   &.dark :deep(.ant-card-head-title a){    
     color: var(--card-link-text);
@@ -604,6 +604,23 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
+   List 
+-----------------------*/
+.list-theme{
+  &.dark :deep(.ant-list-item){     
+    color: var(--table-text);
+  }
+ 
+  &.dark :deep(.ant-list-item-meta-description){  
+    color: var(--table-text);
+  }
+
+  &.dark :deep(span.span-text){  
+    color: var(--table-text);
+  }
+}
+
+/*---------------------
     Descriptions
 -----------------------*/
 .descriptions-theme{  
@@ -638,6 +655,7 @@ $edit-icon-color: #6A6AFF;
   }  
   
 }
+
 /*---------------------
     Tab
 -----------------------*/

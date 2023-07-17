@@ -49,6 +49,20 @@
             </span>
         </div>
         <p></p>
+        <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="checkboxShow">
+          <template v-if="checkboxShow === false">
+          新增單字組別
+          </template>
+          <template v-else>
+          請勾選單字
+          </template>
+        </a-button>
+        <template v-if="checkboxShow === true">
+          <span style="padding-left: 6px;" >
+            <a-button size="small" shape="round" @click="clickGroupCancel()" danger>取消並清空</a-button>
+          </span>
+        </template>
+        <p></p>
         <!-- 主頁面 card -->
         <a-spin :spinning="ReadySpinning">
             <div class="list-card-theme" :class="this.$theme" ref="listCard">
@@ -60,24 +74,27 @@
                         <a-card>
                             <!-- cate_name -->
                             <template #title>
-                                <template v-if="item.cate_name == null || item.cate_name == ''">
-                                    --
-                                </template>
-                                <template v-else>
-                                    <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
-                                        <a @click="handleCategoryFilter(item.cate_name)">
-                                        <template v-for="(char, index) in item.cate_name" :key="char + index">
-                                            <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                                        </template>
-                                        </a>
-                                    </template>
-                                    <template v-else>
-                                        <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
-                                    </template>
-                                </template>
+                              <template v-if="item.cate_name == null || item.cate_name == ''">
+                                  --
+                              </template>
+                              <template v-else>
+                                  <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
+                                      <a @click="handleCategoryFilter(item.cate_name)">
+                                      <template v-for="(char, index) in item.cate_name" :key="char + index">
+                                          <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                                      </template>
+                                      </a>
+                                  </template>
+                                  <template v-else>
+                                      <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
+                                  </template>
+                              </template>
                             </template>
-                            <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
-                            <p></p>
+                            <!-- checkbox -->
+                            <template v-if="checkboxShow === true">
+                              <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
+                              <p></p>
+                            </template>
                             <!-- ws_name -->
                             <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
                                 <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
@@ -135,6 +152,13 @@ import { ref, reactive } from 'vue'
 export default {
   name: 'WordsGridView',
   computed: {
+    checkboxArray () {
+      const newArray = {}
+      for (const item of this.$WordsGroupsView.groupArray) {
+        newArray[item.ws_id] = item.checked
+      }
+      return newArray
+    },
     ...mapGetters('WordsStore', ['words']),
     ...mapGetters('WordsStore', ['filterWords']),
     ...mapState('Search', ['$keyword']),
@@ -189,15 +213,17 @@ export default {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: false } })
       }
     },
+    clickGroupAdd () {
+      this.checkboxShow = true
+    },
+    clickGroupCancel () {
+      this.checkboxShow = false
+      this.updateWordsGroupsView({ variable: 'groupArray', data: { clear: true } })
+    },
     setCheckbox () {
       if (this.$WordsGroupsView.groupArray.length > 0) {
-        for (const item of this.$WordsGroupsView.groupArray) {
-          this.checkboxArray[item.ws_id] = true
-        }
+        this.checkboxShow = true
       }
-    },
-    clearCheckbox () {
-      this.checkboxArray = []
     }
   },
   async created () {
@@ -231,10 +257,9 @@ export default {
         })
       }
     },
-    '$WordsGroupsView.groupArray' (val) {
-      console.log('watch')
-      if (val.length === 0) {
-        this.clearCheckbox()
+    checkboxArray (val) {
+      if (Object.keys(val).length === 0) {
+        this.checkboxShow = false
       }
     }
   },
@@ -245,7 +270,7 @@ export default {
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
-    const checkboxArray = ref([])
+    const checkboxShow = ref(false)
     const pagination = reactive({
       onChange: page => {
         currentPage.value = page
@@ -263,7 +288,7 @@ export default {
       selectPageSize,
       currentPage,
       dataSize,
-      checkboxArray
+      checkboxShow
     }
   }
 

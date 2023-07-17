@@ -1,6 +1,7 @@
 const state = {
   $WordsGroupsView: {
-    groupArray: []
+    groupArray: [],
+    update: false
   },
   $WordsGrid: {
     currentPage: '1',
