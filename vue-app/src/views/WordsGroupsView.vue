@@ -24,13 +24,20 @@
           </template>
           <template #footer>
               <span class="span-text">
-                共 {{ this.$WordsGroupsView.groupArray.length }} 筆 單字
+                共 {{ this.wordsCount }} 筆 單字
               </span>
             </template>
         </a-list>
       </div>
-      <template v-if="this.$WordsGroupsView.groupArray.length > 0">
-        <a-button type="primary" size="small" shape="round"  @click="onSaveCheckbox()">儲存</a-button>
+      <template v-if="this.wordsCount > 0">
+        <div class="input-theme" :class="this.$theme" style="padding-bottom: 12px;">
+          <a-input
+            v-model:value="formState.wordsGroup.wg_name"
+            placeholder="組別名稱"
+            allow-clear
+            />
+        </div>
+        <a-button type="primary" size="small" shape="round"  @click="onSave()" :disabled="saveDisabled">儲存</a-button>
         <span style="padding-left: 6px;">
           <a-popconfirm title="確定要清空嗎？" ok-text="是" cancel-text="否" @confirm="clearCheckbox()">
             <a-button type="primary" size="small" shape="round" danger>清空</a-button>
@@ -42,8 +49,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
 
 export default {
@@ -53,15 +61,30 @@ export default {
   },
   computed: {
     ...mapState('Views', ['$WordsGroupsView']),
-    ...mapState('Theme', ['$theme'])
+    ...mapState('Theme', ['$theme']),
+    wordsCount () {
+      return this.$WordsGroupsView.groupArray.length
+    }
   },
   methods: {
+    ...mapActions('WordsGroupsStore', {
+      addWordsGroup: 'add'
+    }),
     ...mapActions('Views', ['updateWordsGroupsView']),
-    onSaveCheckbox () {
-      console.log(this.$WordsGroupsView.groupArray)
+    async onSave () {
+      try {
+        const wordsIdArray = this.$WordsGroupsView.groupArray.map(item => item.ws_id)
+        this.formState.wordsGroup.words_groups_details = wordsIdArray
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.addWordsGroup(this.formState.wordsGroup)
+        this.clearCheckbox()
+      } catch (error) {}
     },
     clearCheckbox () {
       this.updateWordsGroupsView({ variable: 'groupArray', data: { clear: true } })
+      this.formState.wordsGroup.wg_name = ''
+      this.saveDisabled = false
     },
     onRemove (id, wsName) {
       this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: false } })
@@ -75,11 +98,34 @@ export default {
   activated () {
 
   },
+  watch: {
+    'formState.wordsGroup.wg_name' (val) {
+      if (val == null || val === '' || this.wordsCount === 0) {
+        this.saveDisabled = true
+      } else {
+        this.saveDisabled = false
+      }
+    }
+  },
   setup () {
     const Ready = ref(false)
+    const saveDisabled = ref(true)
+    const formRef = ref()
+    const formState = reactive({
+      wordsGroup: {}
+    })
+    const { wordsGroupForm } = mapGetters('WordsGroupStore', ['wordsGroupForm'])
+
+    onMounted(() => {
+      formState.wordsGroup = { ...wordsGroupForm }
+      formState.wordsGroup.words_groups_details = []
+    })
 
     return {
-      Ready
+      Ready,
+      saveDisabled,
+      formRef,
+      formState
     }
   }
 }

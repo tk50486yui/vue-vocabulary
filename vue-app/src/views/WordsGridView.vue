@@ -49,19 +49,19 @@
             </span>
         </div>
         <p></p>
-        <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="checkboxShow">
+        <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="checkboxBtn">
           <template v-if="checkboxShow === false">
-          新增單字組別
+            新增單字組別
           </template>
           <template v-else>
-          請勾選單字
+            <template v-if="this.$WordsGroupsView.groupArray.length === 0">
+              請勾選單字或取消
+            </template>
+            <template v-else>
+              請繼續勾選單字
+            </template>
           </template>
         </a-button>
-        <template v-if="checkboxShow === true">
-          <span style="padding-left: 6px;" >
-            <a-button size="small" shape="round" @click="clickGroupCancel()" danger>取消並清空</a-button>
-          </span>
-        </template>
         <p></p>
         <!-- 主頁面 card -->
         <a-spin :spinning="ReadySpinning">
@@ -212,17 +212,19 @@ export default {
       } else {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: false } })
       }
+      this.setCheckbox()
     },
     clickGroupAdd () {
-      this.checkboxShow = true
-    },
-    clickGroupCancel () {
-      this.checkboxShow = false
-      this.updateWordsGroupsView({ variable: 'groupArray', data: { clear: true } })
+      if (this.checkboxShow === true && this.$WordsGroupsView.groupArray.length === 0) {
+        this.checkboxShow = false
+      } else {
+        this.checkboxShow = true
+      }
     },
     setCheckbox () {
       if (this.$WordsGroupsView.groupArray.length > 0) {
         this.checkboxShow = true
+        this.checkboxBtn = true
       }
     }
   },
@@ -260,6 +262,7 @@ export default {
     checkboxArray (val) {
       if (Object.keys(val).length === 0) {
         this.checkboxShow = false
+        this.checkboxBtn = false
       }
     }
   },
@@ -271,6 +274,7 @@ export default {
     const currentPage = ref(1)
     const dataSize = ref(0)
     const checkboxShow = ref(false)
+    const checkboxBtn = ref(false)
     const pagination = reactive({
       onChange: page => {
         currentPage.value = page
@@ -288,7 +292,8 @@ export default {
       selectPageSize,
       currentPage,
       dataSize,
-      checkboxShow
+      checkboxShow,
+      checkboxBtn
     }
   }
 
