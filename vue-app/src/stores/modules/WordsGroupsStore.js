@@ -11,7 +11,16 @@ const state = {
 
 const getters = {
   wordsGroups: (state) => state.wordsGroups,
-  wordsGroupsForm: (state) => state.wordsGroupsForm
+  wordsGroupsById: state => id => {
+    return state.wordsGroups.find(wordsGroup => wordsGroup.id === id)
+  },
+  wordsGroupsForm: (state) => state.wordsGroupsForm,
+  wordsGroupsArray: (state) => {
+    return Object.keys(state.wordsGroups).map(key => ({
+      key,
+      ...state.wordsGroups[key]
+    }))
+  }
 }
 
 const actions = {

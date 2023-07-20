@@ -21,7 +21,7 @@
                         <div class="breadcrumb-switch">
                             <a-switch
                             :checked="this.$theme === 'dark'"
-                            checked-children="暗黑主題"
+                            checked-children="深色主題"
                             un-checked-children="亮色主題"
                             @change="changeTheme"
                             />
@@ -58,7 +58,7 @@ export default {
           this.activeRoute = '單字'
           break
         case 'wordDetails':
-          this.activeRoute = '詳細單字'
+          this.activeRoute = '單字詳細說明'
           break
         case 'articles':
           this.activeRoute = '文章'
@@ -68,6 +68,12 @@ export default {
           break
         case 'tags':
           this.activeRoute = '標籤'
+          break
+        case 'wordsGroupsList':
+          this.activeRoute = '群組列表'
+          break
+        case 'wordsGroupsDetails':
+          this.activeRoute = '群組詳細說明'
           break
         default:
           this.activeRoute = '查無此頁面'

@@ -21,7 +21,7 @@
                             </li>
                             <li><router-link :to="{ name: 'tags' }">標籤</router-link></li>
                             <li><router-link :to="{ name: 'articles' }">文章</router-link></li>
-                            <li><router-link :to="{ name: 'wordsGroups' }">群組</router-link></li>
+                            <li><router-link :to="{ name: 'wordsGroupsList' }">群組</router-link></li>
                             <li><router-link :to="{ name: 'wordsGrid' }">單字</router-link></li>
                             <li><router-link :to="{ name: 'words' }">測試</router-link>
                                 <ul class="dropdown">

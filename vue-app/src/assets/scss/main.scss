@@ -57,6 +57,9 @@ $edit-icon-color: #6A6AFF;
     --link-text:#e3f7af;
     --link-text-hover:#08fead;
 
+    --list-link-text:#5af7ff;
+    --list-link-text-hover:#ebff35;
+
     --card-link-text:#b0f1fb;
     --card-link-text-hover:#f2fec6; 
 
@@ -617,6 +620,24 @@ $edit-icon-color: #6A6AFF;
 
   &.dark :deep(span.span-text){  
     color: var(--table-text);
+  }
+  
+  /* a */
+  &.dark :deep(a){    
+    text-decoration: none;
+  }
+  &.dark :deep(.list-link a){  
+    color: var(--list-link-text);  
+  }
+
+  &.dark :deep(.list-link a:hover){  
+    color: var(--list-link-text-hover);
+  }
+  /* pagination */
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+    border-color: var(--pagination-border);    
   }
 }
 
