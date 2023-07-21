@@ -4,6 +4,9 @@
             <router-link :to="{ name: 'wordsGroupsList' }"> 返回 </router-link>
              > {{ this.wordsGroup.wg_name }}
         </h5>
+        <div class="d-flex justify-content-end">
+            <EditOutlined class="button-edit " :class="this.$theme" @click="onEdit()"/>
+        </div>
         <p></p>
         <div class="list-theme" :class="this.$theme">
             <a-list
@@ -37,22 +40,58 @@
 <script>
 import { ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { EditOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'WordsGroupsDetailsView',
+  components: {
+    EditOutlined
+  },
   computed: {
     ...mapGetters('WordsGroupsStore', ['wordsGroups']),
     ...mapGetters('WordsGroupsStore', ['wordsGroupsById']),
+    ...mapState('Views', ['$WordsGroupsView']),
+    ...mapState('Views', ['$WordsGroupsDetailsView']),
     ...mapState('Theme', ['$theme']),
     wgId () {
       return this.$route.params.id
     },
     wordsGroup () {
       return this.wordsGroupsById(this.wgId)
+    },
+    editShow () {
+      return this.$WordsGroupsDetailsView.updateNow
     }
   },
   methods: {
-    ...mapActions('WordsGroupsStore', ['fetch'])
+    ...mapActions('WordsGroupsStore', ['fetch']),
+    ...mapActions('Views', ['updateWordsGroupsView']),
+    ...mapActions('Views', ['updateWordsGroupsDetailsView']),
+    onEdit () {
+      if (this.editShow === false) {
+        this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: true })
+        this.injectEditData()
+      } else {
+        this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: false })
+        this.inBlock = false
+        if (this.$WordsGroupsView.id !== this.wordsGroup.id) {
+          this.updateWordsGroupsView({ variable: 'groupArray', data: { clear: true } })
+          this.injectEditData()
+          this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: true })
+          this.inBlock = true
+        }
+        if (!this.inBlock) {
+          this.updateWordsGroupsView({ variable: 'groupArray', data: { clear: true } })
+        }
+      }
+    },
+    injectEditData () {
+      this.updateWordsGroupsView({ variable: 'wg_name', data: this.wordsGroup.wg_name })
+      this.updateWordsGroupsView({ variable: 'id', data: this.wordsGroup.id })
+      this.wordsGroup.details.forEach(item => {
+        this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: item.ws_id, ws_name: item.ws_name, checked: true } })
+      })
+    }
   },
   async created () {
     try {
@@ -63,7 +102,6 @@ export default {
   },
   setup () {
     const Ready = ref(false)
-
     return {
       Ready
     }
@@ -73,5 +111,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
+.button-edit {
+  &.dark{
+    color:var(--edit-icon);
+  }
+  &.light{
+    color:var(--edit-icon);
+  }
+}
 
 </style>

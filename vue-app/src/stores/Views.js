@@ -1,8 +1,4 @@
 const state = {
-  $WordsGroupsView: {
-    groupArray: [],
-    update: false
-  },
   $WordsGrid: {
     currentPage: '1',
     jumpPage: false,
@@ -16,6 +12,14 @@ const state = {
     currentScrollY: 100,
     jumpScroll: false,
     currentPageSize: 20
+  },
+  $WordsGroupsView: {
+    groupArray: [],
+    wg_name: '',
+    id: ''
+  },
+  $WordsGroupsDetailsView: {
+    updateNow: false
   }
 }
 
@@ -29,6 +33,15 @@ const actions = {
   updateWordsGroupsView ({ commit }, { variable, data }) {
     if (variable === 'groupArray') {
       commit('setWordsGroupsView', { variable, data })
+    } else if (variable === 'wg_name') {
+      state.$WordsGroupsView.wg_name = data
+    } else if (variable === 'id') {
+      state.$WordsGroupsView.id = data
+    }
+  },
+  updateWordsGroupsDetailsView ({ commit }, { variable, data }) {
+    if (variable === 'updateNow') {
+      commit('setWordsGroupsDetailsView', { variable, data })
     }
   }
 }
@@ -43,6 +56,8 @@ const mutations = {
   setWordsGroupsView (state, { variable, data }) {
     if (data.clear && data.clear === true) {
       state.$WordsGroupsView[variable] = []
+      state.$WordsGroupsView.wg_name = ''
+      state.$WordsGroupsView.id = ''
     } else {
       if (data.checked === true) {
         state.$WordsGroupsView[variable].push(data)
@@ -55,6 +70,9 @@ const mutations = {
         }
       }
     }
+  },
+  setWordsGroupsDetailsView (state, { variable, data }) {
+    state.$WordsGroupsDetailsView[variable] = data
   }
 }
 

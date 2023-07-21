@@ -62,9 +62,16 @@
               <a-radio-group v-model:value="sideGroup" @change="toggleSide()">
                 <a-radio-button value="1">類別</a-radio-button>
                 <a-radio-button value="2">標籤</a-radio-button>
-                <a-badge :count="this.$WordsGroupsView.groupArray.length" color="magenta">
-                  <a-radio-button value="3">群組</a-radio-button>
-                </a-badge>
+                <template v-if="updateNow === false">
+                  <a-badge :count="this.$WordsGroupsView.groupArray.length" color="magenta">
+                    <a-radio-button value="3">群組</a-radio-button>
+                  </a-badge>
+                </template>
+                <template v-else>
+                  <a-badge :count="'編輯中'" color="blue">
+                    <a-radio-button value="3">群組</a-radio-button>
+                  </a-badge>
+                </template>
               </a-radio-group>
             </div>
             <p></p>
@@ -114,7 +121,11 @@ export default {
     WordsGroupsView
   },
   computed: {
+    updateNow () {
+      return this.$WordsGroupsDetailsView.updateNow
+    },
     ...mapState('Views', ['$WordsGroupsView']),
+    ...mapState('Views', ['$WordsGroupsDetailsView']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$mobile'])
   },

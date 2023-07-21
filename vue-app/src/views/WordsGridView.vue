@@ -50,7 +50,7 @@
         </div>
         <p></p>
         <!-- 上層  第二層 -->
-        <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="checkboxBtn">
+        <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
             新增單字組別
           </template>
@@ -92,7 +92,7 @@
                               </template>
                             </template>
                             <!-- checkbox -->
-                            <template v-if="checkboxShow === true">
+                            <template v-if="this.$WordsGroupsDetailsView.updateNow === true || checkboxShow === true">
                               <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
                               <p></p>
                             </template>
@@ -160,6 +160,9 @@ export default {
       }
       return newArray
     },
+    btnDisibled () {
+      return this.$WordsGroupsDetailsView.updateNow || this.checkboxBtn
+    },
     ...mapGetters('WordsStore', ['words']),
     ...mapGetters('WordsStore', ['filterWords']),
     ...mapState('Search', ['$keyword']),
@@ -167,6 +170,7 @@ export default {
     ...mapState('Search', ['$filters']),
     ...mapState('Views', ['$WordsGrid']),
     ...mapState('Views', ['$WordsGroupsView']),
+    ...mapState('Views', ['$WordsGroupsDetailsView']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
@@ -176,6 +180,16 @@ export default {
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateWordsGrid']),
     ...mapActions('Views', ['updateWordsGroupsView']),
+    onResetSearch () {
+      this.updateKeyword('')
+    },
+    handleCategoryFilter (cateName) {
+      this.updateSearchClass('word')
+      this.updateFilters(['cate_name'])
+      this.updateKeyword(cateName)
+      window.scrollTo({ top: 100, behavior: 'auto' })
+    },
+    /* select pagination */
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
@@ -191,9 +205,7 @@ export default {
       this.currentPage = this.pagination.current
       this.AfterReady = true
     },
-    onResetSearch () {
-      this.updateKeyword('')
-    },
+    /* scroll */
     handleDetailsClick () {
       const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
       this.updateWordsGrid({ variable: 'currentScrollY', data: scrollY })
@@ -201,12 +213,7 @@ export default {
       this.updateWordsGrid({ variable: 'jumpPage', data: false })
       this.updateWordsGrid({ variable: 'currentPageSize', data: this.selectPageSize })
     },
-    handleCategoryFilter (cateName) {
-      this.updateSearchClass('word')
-      this.updateFilters(['cate_name'])
-      this.updateKeyword(cateName)
-      window.scrollTo({ top: 100, behavior: 'auto' })
-    },
+    /* checkbox */
     changeCheckbox (id, wsName) {
       if (this.checkboxArray[id]) {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: true } })
