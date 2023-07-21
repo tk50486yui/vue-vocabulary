@@ -7,7 +7,7 @@
 ----
 ## Vue 3.2.3
 
-專案是透過 vue-cli 建立的，並搭配 vue-router 及 vuex 進行開發，開發環境中有使用 eslint 檢查 code 規範。
+專案是透過 vue-cli 建立的，並搭配 vue-router 及 vuex 進行開發，並在開發環境中使用 eslint 規範。
 
 
 ----
@@ -43,14 +43,14 @@
 ----
 ## 版面樣式
 
-基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板，並透過 bootstrap 進行響應式設計。
+基礎版型是使用 [Colorlib](https://colorlib.com/) 所提供的樣板，並透過 bootstrap 5 進行響應式設計，整體設計以網頁為主。
 
 ----
 ## 版面元件
 
-使用非常多的 [ant-design-vue](https://www.antdv.com/docs/vue/introduce-cn) 元件。
+使用非常多的 [ant-design-vue](https://www.antdv.com/docs/vue/introduce-cn) （v3.x）元件。
 
 ----
 ## 主題顏色
 
-預設為暗黑模式，可依偏好設定切換成明亮模式。主題顏色是透過 SCSS 來管理切換。
+網站主要顏色為深色模式，可切換成明亮模式。主題顏色是透過 SCSS 來管理切換。
