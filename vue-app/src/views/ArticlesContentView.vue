@@ -3,7 +3,7 @@
         <a-back-top />
         <div class="descriptions-theme" :class="this.$theme">
             <h5>
-              <router-link :to="{ name: 'articles' }" @click="setGridState()"> Back </router-link>
+              <router-link :to="{ name: 'articles' }" @click="setGridState()"> 返回 </router-link>
             </h5>
             <div class="d-flex justify-content-end">
               <EditOutlined class="button-edit " :class="this.$theme" @click="onEdit()"/>

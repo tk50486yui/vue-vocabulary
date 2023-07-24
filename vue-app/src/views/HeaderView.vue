@@ -19,6 +19,7 @@
                             <li class="active">
                                 <router-link :to="{ name: 'words' }">表格</router-link>
                             </li>
+                            <li><router-link :to="{ name: 'categories' }">類別</router-link></li>
                             <li><router-link :to="{ name: 'tags' }">標籤</router-link></li>
                             <li><router-link :to="{ name: 'articles' }">文章</router-link></li>
                             <li><router-link :to="{ name: 'wordsGroupsList' }">群組</router-link></li>

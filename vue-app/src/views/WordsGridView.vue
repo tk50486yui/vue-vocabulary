@@ -68,7 +68,7 @@
         <a-spin :spinning="ReadySpinning">
             <div class="list-card-theme" :class="this.$theme" ref="listCard">
                 <a-list :data-source="this.filterWords(this.$keyword, this.$filters)" :pagination="pagination"
-                    :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 4, xxl: 4, xxxl: 4 }"
+                    :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3, xxxl: 4 }"
                 >
                     <template #renderItem="{ item }">
                     <a-list-item>

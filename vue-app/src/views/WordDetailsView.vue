@@ -2,8 +2,8 @@
   <template v-if="Ready">
       <a-back-top />
       <div class="descriptions-theme" :class="this.$theme">
-          <h5><router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> Back </router-link>
-            {{ word.ws_name }}
+          <h5><router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> 返回 </router-link>
+              #{{  word.id }}
           </h5>
           <div class="d-flex justify-content-end">
             <EditOutlined class="button-edit " :class="this.$theme" @click="onEdit()"/>

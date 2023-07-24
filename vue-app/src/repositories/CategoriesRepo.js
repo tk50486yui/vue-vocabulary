@@ -6,6 +6,11 @@ export default {
     return response.data
   },
 
+  async getRecent () {
+    const response = await api.get('/categories/recent/')
+    return response.data
+  },
+
   async getById (id) {
     const response = await api.get(`/categories/${id}`)
     return response.data
