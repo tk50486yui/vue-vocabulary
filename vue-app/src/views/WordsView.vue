@@ -133,7 +133,6 @@ export default {
 
     const columns = [
       {
-        title: 'edit',
         dataIndex: 'operation',
         width: '10%',
         fixed: true

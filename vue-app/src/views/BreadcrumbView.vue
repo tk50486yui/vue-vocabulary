@@ -66,6 +66,9 @@ export default {
         case 'articlesContent':
           this.activeRoute = '文章內容'
           break
+        case 'categories':
+          this.activeRoute = '類別'
+          break
         case 'tags':
           this.activeRoute = '標籤'
           break

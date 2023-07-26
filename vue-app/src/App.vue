@@ -77,10 +77,10 @@
             <p></p>
             <keep-alive>
               <template v-if="sideGroup === '1'">
-                <CategoriesMenuView/>
+                <CategoriesMenuView />
               </template>
               <template v-else-if="sideGroup === '2'">
-                333333
+                <TagsMenuView />
               </template>
               <template v-else-if="sideGroup === '3'">
                 <WordsGroupsView/>
@@ -109,6 +109,7 @@ import HeaderView from '@/views/HeaderView.vue'
 import BreadcrumbView from '@/views/BreadcrumbView.vue'
 import FooterView from '@/views/FooterView.vue'
 import CategoriesMenuView from '@/views/CategoriesMenuView.vue'
+import TagsMenuView from '@/views/TagsMenuView.vue'
 import WordsGroupsView from '@/views/WordsGroupsView.vue'
 
 export default {
@@ -118,6 +119,7 @@ export default {
     BreadcrumbView,
     FooterView,
     CategoriesMenuView,
+    TagsMenuView,
     WordsGroupsView
   },
   computed: {

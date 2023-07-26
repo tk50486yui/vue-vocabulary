@@ -14,11 +14,25 @@
               >
                 <template #bodyCell="{ column, text, record }">
                   <template v-if="['cate_name'].includes(column.dataIndex)">
-                    <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
-                    {{ text }} （{{ record.children.length }}）
+                    <template v-if="editTableData[record.id]">
+                        <div class="button-edit-container">
+                          <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)"/>
+                          <CloseOutlined class="button-edit-close" @click="cancel(record, 1)"/>
+                          <a-input v-model:value="editTableData[record.id][column.dataIndex]"
+                          style="margin: -5px 0"/>
+                        </div>
                     </template>
                     <template v-else>
-                    {{ text }}
+                        <div class="column-container">
+                        <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
+                          <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                          {{ text }} （{{ record.children.length }}）
+                        </template>
+                        <template v-else>
+                          <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                          {{ text }}
+                        </template>
+                       </div>
                     </template>
                   </template>
                 </template>
@@ -26,7 +40,7 @@
             </div>
           </a-tab-pane>
           <!-- tab 2 -->
-          <a-tab-pane key="2" tab="近期新增">
+          <a-tab-pane key="2" tab="近期">
             <RefreshBtn class="button-container btn-warning" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
             <div class="table-theme" :class="this.$theme">
               <a-table :dataSource="this.recentCategoriesArray"
@@ -36,25 +50,23 @@
               >
                 <template #bodyCell="{ column, text, record }">
                   <template v-if="['cate_name'].includes(column.dataIndex)">
-                    <div>
-                      <template v-if="editTableData[record.key]">
-                        <a-input v-model:value="editTableData[record.key][column.dataIndex]"
-                          style="margin: -5px 0"/>
-                      </template>
-                      <template v-else>
-                      {{ text }}
-                      </template>
-                    </div>
+                    <template v-if="editTableData2[record.id]">
+                      <a-input v-model:value="editTableData2[record.id][column.dataIndex]"
+                        style="margin: -5px 0"/>
+                    </template>
+                    <template v-else>
+                    {{ text }}
+                    </template>
                   </template>
                   <template v-else-if="column.dataIndex === 'operation'">
-                    <template v-if="editTableData[record.key]">
+                    <template v-if="editTableData2[record.id]">
                       <div class="button-edit-container">
-                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record)"/>
-                        <CloseOutlined class="button-edit-close" @click="cancel(record)"/>
+                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 2)"/>
+                        <CloseOutlined class="button-edit-close" @click="cancel(record, 2)"/>
                       </div>
                     </template>
                     <template v-else>
-                      <EditOutlined class="button-edit" @click="edit(record)" />
+                      <EditOutlined class="button-edit2" @click="edit(record, 2)" />
                     </template>
                   </template>
                 </template>
@@ -62,7 +74,7 @@
             </div>
           </a-tab-pane>
           <!-- tab 3 -->
-          <a-tab-pane key="3" tab="常用">Content of Tab Pane 3</a-tab-pane>
+          <a-tab-pane key="3" tab="+">Content of Tab Pane 3</a-tab-pane>
         </a-tabs>
       </div>
   </template>
@@ -112,16 +124,16 @@ export default {
         this.TableLoading[index] = false
       } catch (error) {}
     },
-    async onEditFinish (record) {
+    async onEditFinish (record, tab) {
       try {
-        const editData = await this.save(record)
+        const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.updateCategory({ id: editData.id, data: editData })
         await this.fetch()
         await this.fetchRecent()
         this.editDataSource = this.recentCategoriesArray
-        this.cancel(record)
+        this.cancel(record, tab)
       } catch (error) {}
     }
   },
@@ -140,18 +152,30 @@ export default {
     const activeTab = ref('1')
     const editDataSource = ref()
     const editTableData = reactive({})
+    const editTableData2 = reactive({})
 
-    const edit = record => {
-      console.log(record.key)
-      editTableData[record.key] = cloneDeep(editDataSource.value.filter(item => record.key === item.key)[0])
+    const edit = (record, tab) => {
+      if (tab === 1) {
+        editTableData[record.id] = cloneDeep(editDataSource.value.filter(item => record.id === item.id)[0])
+      } else {
+        editTableData2[record.id] = cloneDeep(editDataSource.value.filter(item => record.id === item.id)[0])
+      }
     }
 
-    const cancel = record => {
-      delete editTableData[record.key]
+    const save = async (record, tab) => {
+      if (tab === 1) {
+        return editTableData[record.id]
+      } else {
+        return editTableData2[record.id]
+      }
     }
 
-    const save = async record => {
-      return editTableData[record.key]
+    const cancel = (record, tab) => {
+      if (tab === 1) {
+        delete editTableData[record.id]
+      } else {
+        delete editTableData2[record.id]
+      }
     }
 
     const columns = [
@@ -174,6 +198,7 @@ export default {
       activeTab,
       editDataSource,
       editTableData,
+      editTableData2,
       edit,
       save,
       cancel
@@ -210,13 +235,22 @@ export default {
 .add-submit-button {
   margin-left: 10px;
 }
+.column-container{
+  display: flex;
+  align-items: center;
+}
+
+.button-edit{
+  color:#d8f74f;
+  padding-right: 6px;
+}
 
 .button-edit-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.button-edit{
+.button-edit2{
   display: flex;
   justify-content: center;
   color:#6A6AFF;
@@ -228,5 +262,6 @@ export default {
 .button-edit-close{
   margin-left: auto;
   color:#EA0000;
+  padding-right: 6px;
 }
 </style>
