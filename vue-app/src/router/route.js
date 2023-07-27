@@ -10,6 +10,7 @@ import WordsGroupsListView from '@/views/WordsGroupsListView.vue'
 import WordsGroupsDetailsView from '@/views/WordsGroupsDetailsView.vue'
 import TagsView from '@/views/TagsView'
 import CategoriesView from '@/views/CategoriesView.vue'
+import CategoriesDragView from '@/views/CategoriesDragView.vue'
 import UserView from '@/components/User.vue'
 import Postiew from '@/components/PostUser.vue'
 
@@ -38,6 +39,11 @@ const routes = [
     path: '/categories',
     name: 'categories',
     component: CategoriesView
+  },
+  {
+    path: '/categoriesdrag',
+    name: 'categoriesdrag',
+    component: CategoriesDragView
   },
   {
     path: '/wordsgroups',
