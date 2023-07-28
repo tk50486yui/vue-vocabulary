@@ -4,7 +4,7 @@
         class="draggable-tree"
         draggable
         block-node
-        :tree-data="gData"
+        :tree-data="dropData"
         @drop="onDrop"
         :field-names="{
             children: 'children',
@@ -28,25 +28,22 @@ export default ({
   },
   async created () {
     await this.fetch()
-    this.rowData = this.categories
-    this.gData = this.rowData
+    this.dropData = this.categories
     this.ready = true
   },
   setup () {
     const ready = ref(false)
-    const expandedKeys = ref(['1'])
-    const rowData = []
-    const gData = ref(rowData)
+    const dropData = ref([])
 
     const onDrop = info => {
       console.log(info)
       // const dropPos = info.dragNode.pos.split('-')
       // console.log(dropPos[1] + ' ' + info.dropPosition)
-      const elementId = info.dragNode.id
-      const currentData = gData.value.find(item => item.id === elementId)
-      const currentNode = gData.value.findIndex(item => item.id === elementId)
+      const targetId = info.dragNode.id
+      const currentData = dropData.value.find(item => item.id === targetId) // 第一層
 
       if (currentData && currentData.parents.length === 0) {
+        const currentNode = dropData.value.findIndex(item => item.id === targetId)
         let newNode = info.dropPosition - 1
 
         if (info.dropPosition === -1) {
@@ -61,20 +58,17 @@ export default ({
           console.log(currentNode + ' ' + newNode)
         }
 
-        // const data = [...gData.value]
-        const element = gData.value.splice(currentNode, 1)[0] // Remove the element from the original position and get the element itself
-        gData.value.splice(newNode, 0, element)
+        const element = dropData.value.splice(currentNode, 1)[0]
+        dropData.value.splice(newNode, 0, element)
 
-        gData.value = gData.value.map((item, index) => ({ ...item, index }))
+        dropData.value = dropData.value.map((item, index) => ({ ...item, index }))
       } else {
         console.log('in')
       }
     }
     return {
       ready,
-      expandedKeys,
-      rowData,
-      gData,
+      dropData,
       onDrop
     }
   }
