@@ -14,7 +14,7 @@
     </template>
   </template>
 <script>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default ({
@@ -34,20 +34,43 @@ export default ({
   setup () {
     const ready = ref(false)
     const dropData = ref([])
-
+    const categoriesForm = reactive([])
+    /* 只允許排序同個父節點 */
     const onDrop = info => {
       console.log(info)
-      // const dropPos = info.dragNode.pos.split('-')
-      // console.log(dropPos[1] + ' ' + info.dropPosition)
-      const targetId = info.dragNode.id
-      const currentData = dropData.value.find(item => item.id === targetId) // 第一層
+      const currentId = info.dragNode.id
+      const currentParentId = info.dragNode.cate_parent_id
+      const dropToGap = info.dropToGap
+      // categoriesForm[currentId] = {}
+      const targetLevel = parseInt(info.node.cate_level)
+      const targetParentId = info.node.cate_parent_id
+      // dropToGap === true 為同一層的情況
+      if ((currentParentId !== targetParentId) && (dropToGap === true)) {
+        console.log('parent of inconsistency')
+        return
+      }
+      if (targetLevel > 0) {
+        let currentNode
+        let currentArray = dropData.value
+        const currentParents = info.dragNode.parents
+        // if 第一層 else 第二層以後
+        if (currentParents && currentParents.length === 0) {
+          currentNode = dropData.value.findIndex(item => item.id === currentId)
+        } else {
+          for (const parentId of currentParents) {
+            const parent = currentArray.find(item => item.id === parentId)
+            if (parent) {
+              currentArray = parent.children
+            } else {
+              break
+            }
+          }
+          currentNode = currentArray.findIndex(item => item.id === currentId)
+        }
 
-      if (currentData && currentData.parents.length === 0) {
-        const currentNode = dropData.value.findIndex(item => item.id === targetId)
-        let newNode = info.dropPosition - 1
-
-        if (info.dropPosition === -1) {
-          // 拖曳到目標節點前面的情況
+        let newNode = info.dropPosition
+        // -1為拖曳至最前方的情況, dropToGap為false則是拖曳至父節點之下首位的情況
+        if (info.dropPosition === -1 || dropToGap === false) {
           newNode = 0
         } else {
           if (currentNode < newNode) {
@@ -55,20 +78,29 @@ export default ({
           } else {
             newNode = info.dropPosition
           }
-          console.log(currentNode + ' ' + newNode)
         }
 
-        const element = dropData.value.splice(currentNode, 1)[0]
-        dropData.value.splice(newNode, 0, element)
-
-        dropData.value = dropData.value.map((item, index) => ({ ...item, index }))
+        const element = currentArray.splice(currentNode, 1)[0]
+        currentArray.splice(newNode, 0, element)
+        currentArray = currentArray.map((item, index) => ({ ...item, index }))
+        currentArray.forEach((item, index) => {
+          if (!categoriesForm[item.id]) {
+            categoriesForm[item.id] = {}
+          }
+          categoriesForm[item.id].id = item.id
+          categoriesForm[item.id].cate_order = index
+          console.log(`Index: ${index}, Data:`, item.cate_name, ' ' + item.id)
+        })
+        console.log(currentArray)
+        console.log(categoriesForm)
       } else {
-        console.log('in')
+        console.log('else')
       }
     }
     return {
       ready,
       dropData,
+      categoriesForm,
       onDrop
     }
   }
