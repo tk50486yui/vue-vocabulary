@@ -78,6 +78,10 @@ const actions = {
 
   async update ({ commit }, { id, data }) {
     await CategoriesRepo.update(id, data)
+  },
+
+  async updateOrder ({ commit }, data) {
+    await CategoriesRepo.updateOrder(data)
   }
 
 }

@@ -1,5 +1,6 @@
 <template>
     <template v-if="ready">
+      <a-spin :spinning="spinning">
         <a-tree
         class="draggable-tree"
         draggable
@@ -11,11 +12,18 @@
             title: 'cate_name',
             key: 'id'}"
         />
+      </a-spin>
+      <p></p>
+      <div>
+        <a-button type="primary" @click="onFinish(categoriesForm)" :disabled="saveDisabled">儲存</a-button>
+        <a-button style="margin-left: 10px" @click="onReset()" danger>重置</a-button>
+      </div>
     </template>
   </template>
 <script>
 import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { message } from 'ant-design-vue'
 
 export default ({
   name: 'CategoriesDragView',
@@ -24,7 +32,35 @@ export default ({
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetch'])
+    ...mapActions('CategoriesStore', ['fetch']),
+    ...mapActions('CategoriesStore', {
+      updateCategoryOrder: 'updateOrder'
+    }),
+    async onFinish (values) {
+      try {
+        const categoriesArray = Object.values(values).filter(item => item !== null && typeof item === 'object')
+        this.spinning = true
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.updateCategoryOrder(categoriesArray)
+        await this.fetch()
+        this.dropData = this.categories
+        this.categoriesForm.splice(0, this.categoriesForm.length)
+        this.spinning = false
+        this.saveDisabled = true
+      } catch (error) {}
+    },
+    async onReset () {
+      try {
+        this.spinning = true
+        await new Promise(resolve => setTimeout(resolve, 500))
+        await this.fetch()
+        this.dropData = this.categories
+        this.categoriesForm.splice(0, this.categoriesForm.length)
+        this.spinning = false
+        this.saveDisabled = true
+      } catch (error) {}
+    }
   },
   async created () {
     await this.fetch()
@@ -35,13 +71,14 @@ export default ({
     const ready = ref(false)
     const dropData = ref([])
     const categoriesForm = reactive([])
+    const saveDisabled = ref(true)
+    const spinning = ref(false)
     /* 只允許排序同個父節點 */
     const onDrop = info => {
       console.log(info)
       const currentId = info.dragNode.id
       const currentParentId = info.dragNode.cate_parent_id
       const dropToGap = info.dropToGap
-      // categoriesForm[currentId] = {}
       const targetLevel = parseInt(info.node.cate_level)
       const targetParentId = info.node.cate_parent_id
       // dropToGap === true 為同一層的情況
@@ -89,20 +126,25 @@ export default ({
           }
           categoriesForm[item.id].id = item.id
           categoriesForm[item.id].cate_order = index
-          console.log(`Index: ${index}, Data:`, item.cate_name, ' ' + item.id)
+          // console.log(`Index: ${index}, Data:`, item.cate_name, ' ' + item.id)
         })
-        console.log(currentArray)
-        console.log(categoriesForm)
+        saveDisabled.value = false
       } else {
-        console.log('else')
+        console.log('exception')
       }
     }
     return {
       ready,
       dropData,
       categoriesForm,
+      saveDisabled,
+      spinning,
       onDrop
     }
   }
 })
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/main.scss';
+
+</style>

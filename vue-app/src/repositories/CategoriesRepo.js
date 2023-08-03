@@ -24,5 +24,10 @@ export default {
   async update (id, data) {
     const response = await api.put(`/categories/${id}`, data)
     return response.data
+  },
+
+  async updateOrder (data) {
+    const response = await api.put('/categories/order/', data)
+    return response.data
   }
 }
