@@ -80,6 +80,10 @@ const actions = {
 
   async update ({ commit }, { id, data }) {
     await TagsRepo.update(id, data)
+  },
+
+  async updateOrder ({ commit }, data) {
+    await TagsRepo.updateOrder(data)
   }
 
 }
