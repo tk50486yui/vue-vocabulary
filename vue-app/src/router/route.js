@@ -9,6 +9,7 @@ import WordsGroupsView from '@/views/WordsGroupsView.vue'
 import WordsGroupsListView from '@/views/WordsGroupsListView.vue'
 import WordsGroupsDetailsView from '@/views/WordsGroupsDetailsView.vue'
 import TagsView from '@/views/TagsView'
+import TagsDragView from '@/views/TagsDragView.vue'
 import CategoriesView from '@/views/CategoriesView.vue'
 import CategoriesDragView from '@/views/CategoriesDragView.vue'
 import UserView from '@/components/User.vue'
@@ -34,6 +35,11 @@ const routes = [
     path: '/tags',
     name: 'tags',
     component: TagsView
+  },
+  {
+    path: '/tagsdrag',
+    name: 'tagsdrag',
+    component: TagsDragView
   },
   {
     path: '/categories',

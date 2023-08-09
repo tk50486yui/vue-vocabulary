@@ -9,13 +9,13 @@
         @drop="onDrop"
         :field-names="{
             children: 'children',
-            title: 'cate_name',
+            title: 'ts_name',
             key: 'id'}"
         />
       </a-spin>
       <p></p>
       <div>
-        <a-button type="primary" @click="onFinish(categoriesForm)" :disabled="saveDisabled">儲存</a-button>
+        <a-button type="primary" @click="onFinish(tagsForm)" :disabled="saveDisabled">儲存</a-button>
         <a-button style="margin-left: 10px" @click="onReset()" danger>重置</a-button>
       </div>
     </template>
@@ -26,26 +26,26 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 
 export default ({
-  name: 'CategoriesDragView',
+  name: 'TagsDragView',
   computed: {
-    ...mapGetters('CategoriesStore', ['categories']),
+    ...mapGetters('TagsStore', ['tags']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetch']),
-    ...mapActions('CategoriesStore', {
-      updateCategoryOrder: 'updateOrder'
+    ...mapActions('TagsStore', ['fetch']),
+    ...mapActions('TagsStore', {
+      updateTagsOrder: 'updateOrder'
     }),
     async onFinish (values) {
       try {
-        const categoriesArray = Object.values(values).filter(item => item !== null && typeof item === 'object')
+        const tagsArray = Object.values(values).filter(item => item !== null && typeof item === 'object')
         this.spinning = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateCategoryOrder(categoriesArray)
+        await this.updateTagsOrder(tagsArray)
         await this.fetch()
-        this.dropData = this.categories
-        this.categoriesForm.splice(0, this.categoriesForm.length)
+        this.dropData = this.tags
+        this.tagsForm.splice(0, this.tagsForm.length)
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {}
@@ -55,8 +55,8 @@ export default ({
         this.spinning = true
         await new Promise(resolve => setTimeout(resolve, 500))
         await this.fetch()
-        this.dropData = this.categories
-        this.categoriesForm.splice(0, this.categoriesForm.length)
+        this.dropData = this.tags
+        this.tagsForm.splice(0, this.tagsForm.length)
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {}
@@ -64,13 +64,13 @@ export default ({
   },
   async created () {
     await this.fetch()
-    this.dropData = this.categories
+    this.dropData = this.tags
     this.ready = true
   },
   setup () {
     const ready = ref(false)
     const dropData = ref([])
-    const categoriesForm = reactive([])
+    const tagsForm = reactive([])
     const saveDisabled = ref(true)
     const spinning = ref(false)
     /* 只允許排序同個父節點 */
@@ -120,11 +120,11 @@ export default ({
         currentArray.splice(newNode, 0, element)
         currentArray = currentArray.map((item, index) => ({ ...item, index }))
         currentArray.forEach((item, index) => {
-          if (!categoriesForm[item.id]) {
-            categoriesForm[item.id] = {}
+          if (!tagsForm[item.id]) {
+            tagsForm[item.id] = {}
           }
-          categoriesForm[item.id].id = item.id
-          categoriesForm[item.id].cate_order = index
+          tagsForm[item.id].id = item.id
+          tagsForm[item.id].ts_order = index
           // console.log(`Index: ${index}, Data:`, item.cate_name, ' ' + item.id)
         })
         saveDisabled.value = false
@@ -135,7 +135,7 @@ export default ({
     return {
       ready,
       dropData,
-      categoriesForm,
+      tagsForm,
       saveDisabled,
       spinning,
       onDrop

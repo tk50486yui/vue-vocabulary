@@ -25,6 +25,7 @@
                             <li><router-link :to="{ name: 'wordsGroupsList' }">群組</router-link></li>
                             <li><router-link :to="{ name: 'wordsGrid' }">單字</router-link></li>
                             <li><router-link :to="{ name: 'categoriesdrag' }">拖曳</router-link></li>
+                            <li><router-link :to="{ name: 'tagsdrag' }">拖曳t</router-link></li>
                             <li><router-link :to="{ name: 'words' }">測試</router-link>
                                 <ul class="dropdown">
                                     <template v-for="i in 2" :key="i">
