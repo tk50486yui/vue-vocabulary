@@ -24,15 +24,27 @@
                     </template>
                     <template v-else>
                         <div class="column-container">
-                        <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
-                          <EditOutlined class="button-edit" @click="edit(record, 1)" />
-                          {{ text }} （{{ record.children.length }}）
-                        </template>
-                        <template v-else>
-                          <EditOutlined class="button-edit" @click="edit(record, 1)" />
-                          {{ text }}
-                        </template>
+                          <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
+                            <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                            {{ text }} （{{ record.children.length }}）
+                          </template>
+                          <template v-else>
+                            <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                            {{ text }}
+                          </template>
                        </div>
+                    </template>
+                  </template>
+                  <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
+                    <template v-if="column.dataIndex === 'cate_parent_id'">
+                      <template v-if="editTableData[record.id]">
+                        <CategoriesTreeSelect size="small" placeholder="選擇父類別"
+                          :dropdownMatchSelectWidth="false" style="width: 100%"
+                          v-model:value="editTableData[record.id]['cate_parent_id']"
+                          :defaultValue="editTableData[record.id]['cate_parent_id']"
+                          :treeDefaultExpandedKeys="[editTableData[record.id]['cate_parent_id']]"
+                        />
+                      </template>
                     </template>
                   </template>
                 </template>
@@ -87,6 +99,7 @@ import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
+import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
   name: 'CategoriesView',
@@ -94,7 +107,8 @@ export default {
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
-    RefreshBtn
+    RefreshBtn,
+    CategoriesTreeSelect
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categoriesArray']),
@@ -186,7 +200,11 @@ export default {
       },
       {
         dataIndex: 'cate_name',
-        width: '90%'
+        width: '60%'
+      },
+      {
+        dataIndex: 'cate_parent_id',
+        width: '30%'
       }
     ]
 
