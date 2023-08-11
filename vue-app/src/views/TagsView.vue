@@ -35,6 +35,18 @@
                       </div>
                     </template>
                   </template>
+                  <template v-else-if="['ts_parent_id'].includes(column.dataIndex)">
+                    <template v-if="column.dataIndex === 'ts_parent_id'">
+                      <template v-if="editTableData[record.id]">
+                        <TagsTreeSelect size="small" placeholder="選擇父類別"
+                          :dropdownMatchSelectWidth="false" style="width: 100%"
+                          v-model:value="editTableData[record.id]['ts_parent_id']"
+                          :defaultValue="editTableData[record.id]['ts_parent_id']"
+                          :treeDefaultExpandedKeys="[editTableData[record.id]['ts_parent_id']]"
+                        />
+                      </template>
+                    </template>
+                  </template>
                 </template>
               </a-table>
             </div>
@@ -92,6 +104,7 @@ import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vu
 import { cloneDeep } from 'lodash-es'
 import TagsAddView from '@/views/TagsAddView.vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
+import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
   name: 'TagsView',
@@ -100,7 +113,8 @@ export default {
     CheckOutlined,
     CloseOutlined,
     RefreshBtn,
-    TagsAddView
+    TagsAddView,
+    TagsTreeSelect
   },
   computed: {
     ...mapGetters('TagsStore', ['tagsArray']),
@@ -192,7 +206,11 @@ export default {
       },
       {
         dataIndex: 'ts_name',
-        width: '90%'
+        width: '60%'
+      },
+      {
+        dataIndex: 'ts_parent_id',
+        width: '30%'
       }
     ]
 
