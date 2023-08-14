@@ -142,30 +142,7 @@
             </div>
           </a-tab-pane>
           <!-- tab 2 -->
-          <a-tab-pane key="2" tab="2">
-            <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
-            <div class="table-theme" :class="this.$theme">
-              <a-table :dataSource="this.articlesArray"
-                :columns="columns"
-                :scroll="{ y: 600, x: 450 }"
-                :loading="TableLoading[0]"
-                :indentSize="12"
-              >
-                <template #bodyCell="{ column, text }">
-                  <template v-if="['arti_title'].includes(column.dataIndex)">
-                    <template v-if="column.dataIndex === 'arti_title'">
-                      <a>{{ text }}</a>
-                    </template>
-                    <template v-else>
-                    {{ text }}
-                    </template>
-                  </template>
-                </template>
-              </a-table>
-            </div>
-          </a-tab-pane>
-          <!-- tab 4 -->
-          <a-tab-pane key="3" tab="+">
+          <a-tab-pane key="2" tab="+">
             <a-form
               ref="formRef"
               :model="formState"
@@ -198,16 +175,11 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive, onMounted, h } from 'vue'
 import { message } from 'ant-design-vue'
 import { LoadingOutlined } from '@ant-design/icons-vue'
-import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
   name: 'ArticlesView',
-  components: {
-    RefreshBtn
-  },
   computed: {
-    ...mapGetters('ArticlesStore', ['articlesArray']),
     ...mapGetters('ArticlesStore', ['articles']),
     ...mapGetters('ArticlesStore', ['filterArticles']),
     ...mapState('Search', ['$keyword']),
@@ -230,18 +202,6 @@ export default {
     ...mapActions('Search', ['updateFilters']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateArticlesView']),
-    async refreshTable (index) {
-      try {
-        this.SyncOutlinedSpin[index] = true
-        this.TableLoading[index] = true
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        if (index === 0) {
-          await this.fetch()
-        }
-        this.SyncOutlinedSpin[index] = false
-        this.TableLoading[index] = false
-      } catch (error) {}
-    },
     async refreshArticles () {
       try {
         this.spinning = true
@@ -345,8 +305,6 @@ export default {
     const selectPageSize = ref('3')
     const currentPage = ref(1)
     const showContent = ref(true)
-    const TableLoading = ref([false, false, false])
-    const SyncOutlinedSpin = ref([false, false, false])
 
     const formRef = ref()
     const formState = reactive({
@@ -394,19 +352,6 @@ export default {
       required: ''
     }
 
-    const columns = [
-      {
-        title: '文章列表',
-        dataIndex: 'arti_title',
-        width: '60%'
-      },
-      {
-        title: '建立時間',
-        dataIndex: 'created_at',
-        width: '40%'
-      }
-    ]
-
     return {
       Ready,
       AfterReady,
@@ -424,9 +369,6 @@ export default {
       formRef,
       formState,
       articleForm,
-      TableLoading,
-      SyncOutlinedSpin,
-      columns,
       validateMsg
     }
   }

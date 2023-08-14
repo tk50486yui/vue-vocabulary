@@ -198,6 +198,7 @@ export default {
   background: #4acaed;
   content: "";
 }
+
 .button-container {
   display: flex;
   align-items: center;

@@ -25,12 +25,12 @@
                 </template>
                 <template v-else>
                   <div>
-                    <span class="h3 fw-bolder">{{ article.arti_title }}</span>
+                    <span class="h4 fw-bolder">{{ article.arti_title }}</span>
                   </div>
                 </template>
               </div>
               <p></p>
-              <a-divider style="height: 2px; background-color: #cccccc" />
+              <a-divider style="height: 1px; background-color: #cccccc" />
               <p></p>
               <!-- content -->
               <div class="article-content">
@@ -43,7 +43,7 @@
                   <h4><div v-html="article.arti_content"></div></h4>
                 </template>
               </div>
-              <a-divider style="height: 1px; background-color: #adadad" />
+
               <div class="article-category">
                 <template v-if="editShow">
                   <CategoriesTreeSelect size="large" ref="CategoriesTreeSelect"
@@ -65,26 +65,26 @@
                 </template>
               </div>
               <div class="article-tag">
-              <template v-if="editShow">
-                <TagsTreeSelect
-                    size="large"
-                    ref="TagsTreeSelect"
-                    placeholder="添加標籤"
-                    style="width: 100%"
-                    v-model:value="formState.article.articles_tags.array"
-                    :treeDefaultExpandedKeys="formState.article.articles_tags.array"
-                    @change="handleTagsSelectChange"
-                    multiple
-                    />
-              </template>
-              <template v-else>
-                <template v-for="(item, index) in article.articles_tags.values"  :key="item.ts_id">
-                  <a-tag color="blue" style="font-size: 18px;"> {{ item.ts_name }} </a-tag>
-                  <template v-if="index != article.articles_tags.values.length && (index/5) == 1">
-                    <br>
+                <template v-if="editShow">
+                  <TagsTreeSelect
+                      size="large"
+                      ref="TagsTreeSelect"
+                      placeholder="添加標籤"
+                      style="width: 100%"
+                      v-model:value="formState.article.articles_tags.array"
+                      :treeDefaultExpandedKeys="formState.article.articles_tags.array"
+                      @change="handleTagsSelectChange"
+                      multiple
+                      />
+                </template>
+                <template v-else>
+                  <template v-for="(item, index) in article.articles_tags.values"  :key="item.ts_id">
+                    <a-tag color="blue" style="font-size: 18px;"> {{ item.ts_name }} </a-tag>
+                    <template v-if="index != article.articles_tags.values.length && (index/5) == 1">
+                      <br>
+                    </template>
                   </template>
                 </template>
-              </template>
               </div>
             </div>
             <!-- button -->
@@ -234,6 +234,7 @@ export default {
 .article-content{
   padding-left: 12px;
   padding-right: 12px;
+  padding-bottom: 16px;
 }
 
 .article-tag{

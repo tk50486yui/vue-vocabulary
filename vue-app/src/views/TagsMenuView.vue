@@ -53,7 +53,7 @@ export default {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #d927cd;
+  background: #f6aaf1;
   content: "";
 }
 

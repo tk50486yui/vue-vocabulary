@@ -60,6 +60,8 @@ $edit-icon-color: #6A6AFF;
     --list-link-text:#5af7ff;
     --list-link-text-hover:#ebff35;
 
+    --draggable-tree-text-hover:#e8f69a;
+
     --card-link-text:#b0f1fb;
     --card-link-text-hover:#f2fec6; 
 
@@ -161,7 +163,6 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Table
 -----------------------*/
-
 .table-theme {    
   
   /* table */
@@ -216,7 +217,6 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Input
 -----------------------*/
-
 .input-theme {
   &.dark :deep(.ant-input){
     background: var(--input-background);
@@ -322,6 +322,23 @@ $edit-icon-color: #6A6AFF;
   } 
   
 }
+
+/*---------------------
+    draggable-tree-theme
+-----------------------*/
+.draggable-tree-theme{
+  &.dark :deep(.ant-tree){
+    background: var(--table-background);
+    color: var(--head-text)
+  }
+
+  &.dark :deep(.ant-tree .ant-tree-node-content-wrapper:hover){
+    background: var(--draggable-tree-text-hover);
+    color: var(--input-background)
+  }
+  
+}
+
 /*---------------------
     Radio Button
 -----------------------*/
@@ -437,6 +454,7 @@ $edit-icon-color: #6A6AFF;
     box-shadow: 0px 5px 10px rgba(230, 9, 9, 0.1);
   }  
 }
+
 /*---------------------
     Navbar (唯一)
 -----------------------*/
@@ -744,6 +762,7 @@ $edit-icon-color: #6A6AFF;
     color: var(--head-text); 
   } 
 }
+
 /*---------------------
     Collapse
 -----------------------*/
@@ -824,6 +843,7 @@ $edit-icon-color: #6A6AFF;
   }
 
 }
+
 /*---------------------
     Footer (唯一)
 -----------------------*/
