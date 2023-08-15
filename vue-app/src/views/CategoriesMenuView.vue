@@ -190,17 +190,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 
-.menu-scroll {
-  position: relative;
-  height: 350px;
-  overflow: scroll
-}
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .section-title {
   margin-bottom: 8px !important;
 }
@@ -213,6 +202,17 @@ export default {
   width: 70px;
   background: #efffb4;
   content: "";
+}
+
+.menu-scroll {
+  position: relative;
+  height: 350px;
+  overflow: scroll
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cate-menu-modal {

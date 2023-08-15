@@ -10,27 +10,27 @@
             </div>
             <p></p>
             <div class="article-theme">
-            <br>
-            <!-- title -->
+              <br>
+              <!-- title -->
               <div class="article-title">
                 <template v-if="editShow">
                   <div class="input-theme" :class="this.$theme">
                       <a-input
                           v-model:value="formState.article.arti_title"
                           size="large"
-                          style="width: 450px;background-color:transparent"
+                          style="width: 450px; background-color:transparent"
                           :bordered="false"
                       />
                   </div>
                 </template>
                 <template v-else>
                   <div>
-                    <span class="h4 fw-bolder">{{ article.arti_title }}</span>
+                    <span>{{ article.arti_title }}</span>
                   </div>
                 </template>
               </div>
               <p></p>
-              <a-divider style="height: 1px; background-color: #cccccc" />
+              <a-divider style="height: 1px; background-color: #3f3e3e" />
               <p></p>
               <!-- content -->
               <div class="article-content">
@@ -40,7 +40,7 @@
                   </div>
                 </template>
                 <template v-else>
-                  <h4><div v-html="article.arti_content"></div></h4>
+                  <div v-html="article.arti_content"></div>
                 </template>
               </div>
 
@@ -60,7 +60,7 @@
                     主題分類：<span class="span-category">{{ article.cate_name }}</span>
                   </template>
                   <template v-else>
-                    主題分類：<span>暫無</span>
+                    主題分類：<span class="span-category">暫無</span>
                   </template>
                 </template>
               </div>
@@ -231,10 +231,14 @@ export default {
 .article-title{
   padding-left: 12px;
 }
+.article-title span{
+  font-size: 24px;
+  font-weight:bolder;
+}
 .article-content{
   padding-left: 12px;
   padding-right: 12px;
-  padding-bottom: 16px;
+  padding-bottom: 24px;
 }
 
 .article-tag{

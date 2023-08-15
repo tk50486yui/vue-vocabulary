@@ -88,14 +88,15 @@ $edit-icon-color: #6A6AFF;
     --tab-background-active-hover:#0fadbb; 
     --tab-text-active:#ffffff; 
 
-    --article-background:#464a49;
-    --article-list-background:#413c38;
+    --article-background:#101414;
+    --article-list-background:#24211e;
     --article-date-text:#ebceb7;
+    --atticle-title-text:rgb(210, 210, 210);
 
     --span-category-text:#ecf4cb;
     
-    --title-link-text:#e7d4d9;
-    --title-link-text-hover:#5dd49f;
+    --title-link-text:#f3ebed;
+    --title-link-text-hover:#99eac5;
 
     --descriptions-title-background:#231111;
     --descriptions-title-text:rgb(247, 198, 6);
@@ -688,7 +689,7 @@ $edit-icon-color: #6A6AFF;
  
   // article 標題
   &.dark :deep(.article-title){     
-    color: var(--descriptions-title-text); 
+    color: var(--atticle-title-text); 
   }
   // article 內容
   &.dark :deep(.article-content){   
