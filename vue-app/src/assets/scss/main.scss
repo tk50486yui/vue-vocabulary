@@ -60,6 +60,11 @@ $edit-icon-color: #6A6AFF;
     --list-link-text:#5af7ff;
     --list-link-text-hover:#ebff35;
 
+    --link-icon-star:#e2ff29;
+    --link-icon-star-false:#ffffff;
+    --link-icon-heart:#f25e01;
+    --link-icon-heart-false:#f5f3f3;
+
     --draggable-tree-text-hover:#e8f69a;
 
     --card-link-text:#b0f1fb;
@@ -142,6 +147,11 @@ $edit-icon-color: #6A6AFF;
 
     --table-background:rgb(250, 251, 251);
     --table-text:rgb(1, 6, 10);
+
+    --link-icon-star:rgb(253, 216, 8);
+    --link-icon-star-false:#d6d6d6;
+    --link-icon-heart:#f25e01;
+    --link-icon-heart-false:#e6e6e6;
 
     --edit-icon:#6A6AFF;
    
@@ -567,7 +577,7 @@ $edit-icon-color: #6A6AFF;
 
   &.dark :deep(.ant-card-body a:hover){   
     color: var(--link-text-hover);
-  }
+  } 
 
   /* card pagination */
   &.dark :deep(.ant-pagination-item-active){   
@@ -579,6 +589,74 @@ $edit-icon-color: #6A6AFF;
   :deep(.ant-pagination) {      
     padding-bottom: 12px;
   }
+
+  /*    icon    */
+  // dark icon-star
+  &.dark :deep(.icon-star a){  
+  color: var(--link-icon-star);  
+  }
+
+  &.dark :deep(.icon-star a:hover){  
+    color: var(--link-icon-star-false);
+  }
+
+  &.dark :deep(.icon-star-false a){  
+    color: var(--link-icon-star-false);
+  }
+
+  &.dark :deep(.icon-star-false a:hover){  
+    color: var(--link-icon-star);
+  }
+
+  // light icon-star
+  &.light :deep(.icon-star a){  
+    color: var(--link-icon-star);  
+  }
+
+  &.light :deep(.icon-star a:hover){  
+    color: var(--link-icon-star-false);
+  }
+
+  &.light :deep(.icon-star-false a){  
+    color: var(--link-icon-star-false);   
+  }
+
+  &.light :deep(.icon-star-false a:hover){  
+    color: var(--link-icon-star);
+  } 
+  // dark icon-heart
+  &.dark :deep(.icon-heart a){  
+    color: var(--link-icon-heart);  
+    }
+  
+    &.dark :deep(.icon-heart a:hover){  
+      color: var(--link-icon-heart-false);
+    }
+  
+    &.dark :deep(.icon-heart-false a){  
+      color: var(--link-icon-heart-false);
+    }
+  
+    &.dark :deep(.icon-heart-false a:hover){  
+      color: var(--link-icon-heart);
+    }
+  
+    // light icon-heart
+    &.light :deep(.icon-heart a){  
+      color: var(--link-icon-heart);  
+    }
+  
+    &.light :deep(.icon-heart a:hover){  
+      color: var(--link-icon-heart-false);
+    }
+  
+    &.light :deep(.icon-heart-false a){  
+      color: var(--link-icon-heart-false);   
+    }
+  
+    &.light :deep(.icon-heart-false a:hover){  
+      color: var(--link-icon-heart);
+    } 
 }
 
 /*---------------------
@@ -657,7 +735,8 @@ $edit-icon-color: #6A6AFF;
 
   &.dark :deep(.list-link a:hover){  
     color: var(--list-link-text-hover);
-  }
+  }  
+
   /* pagination */
   &.dark :deep(.ant-pagination-item-active){   
     color:var(--pagination-text);

@@ -16,8 +16,7 @@ api.interceptors.response.use(
   (response) => {
     if (response.status === 200) {
       if (response.config.method === 'post' ||
-          response.config.method === 'put' ||
-          response.config.method === 'patch') {
+          response.config.method === 'put') {
         openNotification(response)
       }
     }

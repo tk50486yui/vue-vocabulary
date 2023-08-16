@@ -68,7 +68,16 @@ const actions = {
 
   async update ({ commit, dispatch }, { id, data }) {
     await WordsRepo.update(id, data)
+  },
+
+  async updateCommon ({ commit, dispatch }, { id, data }) {
+    await WordsRepo.updateCommon(id, data)
+  },
+
+  async  updateImportant ({ commit, dispatch }, { id, data }) {
+    await WordsRepo.updateImportant(id, data)
   }
+
 }
 
 const mutations = {

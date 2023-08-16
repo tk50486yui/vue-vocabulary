@@ -96,6 +96,27 @@
                               <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
                               <p></p>
                             </template>
+                            <template v-if="item.ws_is_common">
+                              <span class="icon-star">
+                                <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
+                              </span>
+                            </template>
+                            <template v-else>
+                              <span class="icon-star-false">
+                                <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
+                              </span>
+                            </template>
+                            <template v-if="item.ws_is_important">
+                              <span class="icon-heart">
+                                <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
+                              </span>
+                            </template>
+                            <template v-else>
+                              <span class="icon-heart-false">
+                                <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
+                              </span>
+                            </template>
+                            <p></p>
                             <!-- ws_name -->
                             <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
                                 <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
@@ -149,9 +170,14 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { ref, reactive } from 'vue'
+import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 
 export default {
   name: 'WordsGridView',
+  components: {
+    StarFilled,
+    HeartFilled
+  },
   computed: {
     checkboxArray () {
       const newArray = {}
@@ -175,11 +201,31 @@ export default {
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
+    ...mapActions('WordsStore', {
+      updateCommon: 'updateCommon'
+    }),
+    ...mapActions('WordsStore', {
+      updateImportant: 'updateImportant'
+    }),
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateFilters']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateWordsGrid']),
     ...mapActions('Views', ['updateWordsGroupsView']),
+    async onUpdateCommon (id, data) {
+      try {
+        data.ws_is_common = !data.ws_is_common
+        await this.updateCommon({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
+    },
+    async onUpdateImportant (id, data) {
+      try {
+        data.ws_is_important = !data.ws_is_important
+        await this.updateImportant({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
+    },
     onResetSearch () {
       this.updateKeyword('')
     },
@@ -312,5 +358,14 @@ export default {
 @import '@/assets/scss/main.scss';
 .keyword-text{
     color:$keyword-color;
+}
+
+.icon-star{
+  padding-left: 2px;
+  padding-right: 8px;
+}
+.icon-star-false{
+  padding-left: 2px;
+  padding-right: 8px;
 }
 </style>
