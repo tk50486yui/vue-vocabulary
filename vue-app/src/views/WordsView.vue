@@ -1,11 +1,41 @@
 <template>
   <template v-if="Ready">
+    <div class="select-theme" :class="this.$theme">
+      每頁顯示：
+      <a-select
+          ref="select"
+          v-model:value="selectPageSize"
+          size="small"
+          style="width: 80px"
+          @change="handlePageSize()"
+          >
+          <a-select-option value="10">10 筆</a-select-option>
+          <a-select-option value="20">20 筆</a-select-option>
+          <a-select-option value="50">50 筆</a-select-option>
+          <a-select-option value="100">100 筆</a-select-option>
+          <a-select-option :value="this.wordsArray.length">全部</a-select-option>
+      </a-select>
+      <span style="padding-left: 8px;">表格高度：</span>
+      <a-select
+          v-model:value="selectTablescrollY"
+          size="small"
+          style="width: 80px"
+          @change="handleTableScrollY()"
+          >
+          <a-select-option value="400">極低</a-select-option>
+          <a-select-option value="600">低</a-select-option>
+          <a-select-option value="800">適中</a-select-option>
+          <a-select-option value="1000">高</a-select-option>
+          <a-select-option value="1500">極高</a-select-option>
+      </a-select>
+    </div>
     <RefreshBtn class="button-container" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
     <div class="table-theme" :class="this.$theme">
       <a-table :dataSource="this.wordsArray"
         :columns="columns"
-        :scroll="{ y: 600, x: 850 }"
+        :scroll="{ y: TablescrollY, x: 850 }"
         :loading="TableLoading"
+        :pagination="pagination"
       >
         <template #expandedRowRender="{ record }">
           <p style="margin: 0">
@@ -46,6 +76,31 @@
               </template>
             </div>
           </template>
+          <template v-else-if="column.dataIndex === 'common'">
+            <!-- Icon Star Heart -->
+            <span class="icon-theme" :class="this.$theme">
+              <template v-if="record.ws_is_common">
+                <span class="icon-star">
+                  <a @click="onUpdateCommon(record.id, record)"><StarFilled /></a>
+                </span>
+              </template>
+              <template v-else>
+                <span class="icon-star-false">
+                  <a @click="onUpdateCommon(record.id, record)"><StarFilled /></a>
+                </span>
+              </template>
+              <template v-if="record.ws_is_important">
+                <span class="icon-heart">
+                  <a @click="onUpdateImportant(record.id, record)"><HeartFilled /></a>
+                </span>
+              </template>
+              <template v-else>
+                <span class="icon-heart-false">
+                  <a @click="onUpdateImportant(record.id, record)"><HeartFilled /></a>
+                </span>
+              </template>
+            </span>
+          </template>
         </template>
       </a-table>
     </div>
@@ -56,7 +111,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
@@ -67,6 +122,8 @@ export default {
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
+    StarFilled,
+    HeartFilled,
     RefreshBtn,
     CategoriesTreeSelect
   },
@@ -81,6 +138,12 @@ export default {
     ...mapActions('WordsStore', ['fetch']),
     ...mapActions('WordsStore', {
       updateWord: 'update'
+    }),
+    ...mapActions('WordsStore', {
+      updateCommon: 'updateCommon'
+    }),
+    ...mapActions('WordsStore', {
+      updateImportant: 'updateImportant'
     }),
     async refreshTable () {
       try {
@@ -103,6 +166,26 @@ export default {
         this.editDataSource = this.wordsArray
         this.cancel(record)
       } catch (error) {}
+    },
+    async onUpdateCommon (id, data) {
+      try {
+        data.ws_is_common = !data.ws_is_common
+        await this.updateCommon({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
+    },
+    async onUpdateImportant (id, data) {
+      try {
+        data.ws_is_important = !data.ws_is_important
+        await this.updateImportant({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
+    },
+    handlePageSize () {
+      this.pagination.pageSize = Number(this.selectPageSize)
+    },
+    handleTableScrollY () {
+      this.TablescrollY = Number(this.selectTablescrollY)
     }
   },
   async created () {
@@ -118,7 +201,13 @@ export default {
     const SyncOutlinedSpin = ref(false)
     const editDataSource = ref()
     const editTableData = reactive({})
-
+    const TablescrollY = ref(400)
+    const selectTablescrollY = ref('400')
+    const selectPageSize = ref('10')
+    const pagination = reactive({
+      pageSize: Number(selectPageSize.value),
+      position: 'top'
+    })
     const edit = record => {
       editTableData[record.key] = cloneDeep(editDataSource.value.filter(item => record.key === item.key)[0])
     }
@@ -134,13 +223,13 @@ export default {
     const columns = [
       {
         dataIndex: 'operation',
-        width: '10%',
+        width: '8%',
         fixed: true
       },
       {
         title: '類別',
         dataIndex: 'cate_name',
-        width: '20%',
+        width: '18%',
         filters: [
           {
             text: '動物',
@@ -156,17 +245,21 @@ export default {
       {
         title: '單字名稱',
         dataIndex: 'ws_name',
-        width: '30%'
+        width: '28%'
       },
       {
-        title: '假名 / 外來語',
+        title: '假名 / 發音',
         dataIndex: 'ws_pronunciation',
         width: '20%'
       },
       {
         title: '中文定義',
         dataIndex: 'ws_definition',
-        width: '20%'
+        width: '18%'
+      },
+      {
+        dataIndex: 'common',
+        width: '8%'
       }
     ]
 
@@ -175,6 +268,10 @@ export default {
       TableLoading,
       SyncOutlinedSpin,
       columns,
+      TablescrollY,
+      selectTablescrollY,
+      selectPageSize,
+      pagination,
       editDataSource,
       editTableData,
       edit,
@@ -217,5 +314,11 @@ export default {
 .button-edit-close{
   margin-left: auto;
   color:#EA0000;
+}
+.icon-star{
+  padding-right: 4px;
+}
+.icon-star-false{
+  padding-right: 4px;
 }
 </style>

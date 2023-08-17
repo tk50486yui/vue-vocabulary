@@ -86,7 +86,7 @@
                 {{ word.cate_name }}
               </template>
             </a-descriptions-item>
-            <a-descriptions-item label="簡易註解">
+            <a-descriptions-item label="印象例句">
               <template v-if="editShow">
                 <div class="input-theme" :class="this.$theme">
                 <a-input
@@ -97,6 +97,30 @@
               <template v-else>
                 {{ word.ws_slogan }}
               </template>
+            </a-descriptions-item>
+            <a-descriptions-item label="常用 / 重要性">
+              <span class="icon-theme" :class="this.$theme">
+                <template v-if="word.ws_is_common">
+                  <span class="icon-star">
+                    <a @click="onUpdateCommon(word.id, word)"><StarFilled /></a>
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="icon-star-false">
+                    <a @click="onUpdateCommon(word.id, word)"><StarFilled /></a>
+                  </span>
+                </template>
+                <template v-if="word.ws_is_important">
+                  <span class="icon-heart">
+                    <a @click="onUpdateImportant(word.id, word)"><HeartFilled /></a>
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="icon-heart-false">
+                    <a @click="onUpdateImportant(word.id, word)"><HeartFilled /></a>
+                  </span>
+                </template>
+              </span>
             </a-descriptions-item>
             <a-descriptions-item label="例句說明">
               <template v-if="editShow">
@@ -146,7 +170,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
@@ -155,6 +179,8 @@ export default {
   name: 'WordDetailsView',
   components: {
     EditOutlined,
+    StarFilled,
+    HeartFilled,
     CategoriesTreeSelect,
     TagsTreeSelect
   },
@@ -184,6 +210,12 @@ export default {
     ...mapActions('WordsStore', {
       updateWord: 'update'
     }),
+    ...mapActions('WordsStore', {
+      updateCommon: 'updateCommon'
+    }),
+    ...mapActions('WordsStore', {
+      updateImportant: 'updateImportant'
+    }),
     ...mapActions('Views', ['updateWordsGrid']),
     onEdit () {
       this.editShow = !this.editShow
@@ -207,6 +239,20 @@ export default {
           window.scrollTo({ top: 160, behavior: 'auto' })
         })
       }
+    },
+    async onUpdateCommon (id, data) {
+      try {
+        data.ws_is_common = !data.ws_is_common
+        await this.updateCommon({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
+    },
+    async onUpdateImportant (id, data) {
+      try {
+        data.ws_is_important = !data.ws_is_important
+        await this.updateImportant({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
     },
     handleCategoriesSelectChange (value) {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
@@ -288,9 +334,16 @@ export default {
     color:var(--edit-icon);
   }
 }
-
 .copy-icon{
   padding-top: 5px;
+}
+.icon-star{
+  padding-left: 2px;
+  padding-right: 8px;
+}
+.icon-star-false{
+  padding-left: 2px;
+  padding-right: 8px;
 }
 .descriptions-theme{
   :deep(.ant-descriptions-item-content){
@@ -300,5 +353,4 @@ export default {
     width:20%;
   }
 }
-
 </style>

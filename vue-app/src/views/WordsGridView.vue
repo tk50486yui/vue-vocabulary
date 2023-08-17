@@ -96,26 +96,29 @@
                               <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
                               <p></p>
                             </template>
-                            <template v-if="item.ws_is_common">
-                              <span class="icon-star">
-                                <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
-                              </span>
-                            </template>
-                            <template v-else>
-                              <span class="icon-star-false">
-                                <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
-                              </span>
-                            </template>
-                            <template v-if="item.ws_is_important">
-                              <span class="icon-heart">
-                                <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
-                              </span>
-                            </template>
-                            <template v-else>
-                              <span class="icon-heart-false">
-                                <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
-                              </span>
-                            </template>
+                            <!-- Icon Star Heart -->
+                            <span class="icon-theme" :class="this.$theme">
+                              <template v-if="item.ws_is_common">
+                                <span class="icon-star">
+                                  <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
+                                </span>
+                              </template>
+                              <template v-else>
+                                <span class="icon-star-false">
+                                  <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
+                                </span>
+                              </template>
+                              <template v-if="item.ws_is_important">
+                                <span class="icon-heart">
+                                  <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
+                                </span>
+                              </template>
+                              <template v-else>
+                                <span class="icon-heart-false">
+                                  <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
+                                </span>
+                              </template>
+                            </span>
                             <p></p>
                             <!-- ws_name -->
                             <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">

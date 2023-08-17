@@ -588,76 +588,78 @@ $edit-icon-color: #6A6AFF;
 
   :deep(.ant-pagination) {      
     padding-bottom: 12px;
-  }
-
-  /*    icon    */
-  // dark icon-star
-  &.dark :deep(.icon-star a){  
-  color: var(--link-icon-star);  
-  }
-
-  &.dark :deep(.icon-star a:hover){  
-    color: var(--link-icon-star-false);
-  }
-
-  &.dark :deep(.icon-star-false a){  
-    color: var(--link-icon-star-false);
-  }
-
-  &.dark :deep(.icon-star-false a:hover){  
-    color: var(--link-icon-star);
-  }
-
-  // light icon-star
-  &.light :deep(.icon-star a){  
-    color: var(--link-icon-star);  
-  }
-
-  &.light :deep(.icon-star a:hover){  
-    color: var(--link-icon-star-false);
-  }
-
-  &.light :deep(.icon-star-false a){  
-    color: var(--link-icon-star-false);   
-  }
-
-  &.light :deep(.icon-star-false a:hover){  
-    color: var(--link-icon-star);
   } 
-  // dark icon-heart
-  &.dark :deep(.icon-heart a){  
-    color: var(--link-icon-heart);  
-    }
-  
-    &.dark :deep(.icon-heart a:hover){  
-      color: var(--link-icon-heart-false);
-    }
-  
-    &.dark :deep(.icon-heart-false a){  
-      color: var(--link-icon-heart-false);
-    }
-  
-    &.dark :deep(.icon-heart-false a:hover){  
-      color: var(--link-icon-heart);
-    }
-  
-    // light icon-heart
-    &.light :deep(.icon-heart a){  
-      color: var(--link-icon-heart);  
-    }
-  
-    &.light :deep(.icon-heart a:hover){  
-      color: var(--link-icon-heart-false);
-    }
-  
-    &.light :deep(.icon-heart-false a){  
-      color: var(--link-icon-heart-false);   
-    }
-  
-    &.light :deep(.icon-heart-false a:hover){  
-      color: var(--link-icon-heart);
-    } 
 }
+
+/*    icon    */
+.icon-theme{
+  &.dark :deep(.icon-star a){  
+    color: var(--link-icon-star);  
+    }
+    
+    &.dark :deep(.icon-star a:hover){  
+      color: var(--link-icon-star-false);
+    }
+    
+    &.dark :deep(.icon-star-false a){  
+      color: var(--link-icon-star-false);
+    }
+    
+    &.dark :deep(.icon-star-false a:hover){  
+      color: var(--link-icon-star);
+    }
+    
+    // light icon-star
+    &.light :deep(.icon-star a){  
+      color: var(--link-icon-star);  
+    }
+    
+    &.light :deep(.icon-star a:hover){  
+      color: var(--link-icon-star-false);
+    }
+    
+    &.light :deep(.icon-star-false a){  
+      color: var(--link-icon-star-false);   
+    }
+    
+    &.light :deep(.icon-star-false a:hover){  
+      color: var(--link-icon-star);
+    } 
+    // dark icon-heart
+    &.dark :deep(.icon-heart a){  
+      color: var(--link-icon-heart);  
+      }
+    
+      &.dark :deep(.icon-heart a:hover){  
+        color: var(--link-icon-heart-false);
+      }
+    
+      &.dark :deep(.icon-heart-false a){  
+        color: var(--link-icon-heart-false);
+      }
+    
+      &.dark :deep(.icon-heart-false a:hover){  
+        color: var(--link-icon-heart);
+      }
+    
+      // light icon-heart
+      &.light :deep(.icon-heart a){  
+        color: var(--link-icon-heart);  
+      }
+    
+      &.light :deep(.icon-heart a:hover){  
+        color: var(--link-icon-heart-false);
+      }
+    
+      &.light :deep(.icon-heart-false a){  
+        color: var(--link-icon-heart-false);   
+      }
+    
+      &.light :deep(.icon-heart-false a:hover){  
+        color: var(--link-icon-heart);
+      }
+}
+
 
 /*---------------------
     Article List
