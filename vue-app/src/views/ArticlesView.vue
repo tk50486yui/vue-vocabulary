@@ -1,6 +1,9 @@
 <template>
   <template v-if="Ready">
     <a-back-top />
+    <div class="section-title">
+      <h4>文章列表</h4>
+    </div>
     <a-spin :indicator="indicator" :spinning="spinning">
       <div class="tab-theme" :class="this.$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
@@ -377,7 +380,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.section-title {
+  margin-bottom: 12px;
+}
 
+.section-title h4:after {
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 70px;
+  background: #ffb348;
+  content: "";
+}
 .keyword-text{
     color:$keyword-color;
 }

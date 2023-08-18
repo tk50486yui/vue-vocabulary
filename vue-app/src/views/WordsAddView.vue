@@ -1,7 +1,9 @@
 <template>
     <template v-if="Ready">
       <a-back-top />
-      <h4>新增單字</h4>
+      <div class="section-title">
+        <h4>新增單字</h4>
+      </div>
       <p></p>
       <a-form
         ref="formRef"
@@ -28,10 +30,19 @@
           <a-textarea v-model:value="formState.word.ws_definition" placeholder="中文定義" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <p></p>
+        <a-form-item class="input-theme" :class="this.$theme" :name="['word', 'ws_slogan']">
+          <a-textarea v-model:value="formState.word.ws_slogan" placeholder="標誌性短句" :auto-size="{ minRows: 2}" allow-clear />
+        </a-form-item>
+        <p></p>
         <a-form-item :name="['word', 'words_tags.array']">
           <TagsTreeSelect placeholder="添加標籤" size="large" ref="TagsTreeSelect"
               v-model:value="formState.word.words_tags.array"
               @change="handleTagsSelectChange"
+              :field-names="{
+                children: 'children',
+                label: 'ts_name',
+                value: 'id',
+                key: 'id'}"
               multiple
               />
         </a-form-item>
@@ -58,7 +69,7 @@ import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
-  name: 'HomeView',
+  name: 'WordsAddView',
   components: {
     CategoriesTreeSelect,
     TagsTreeSelect
@@ -139,8 +150,19 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.section-title {
+  margin-bottom: 8px;
+}
 
+.section-title h4:after {
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 70px;
+  background: #17b0f7;
+  content: "";
+}
 </style>

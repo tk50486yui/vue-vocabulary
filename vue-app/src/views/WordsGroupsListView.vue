@@ -1,6 +1,9 @@
 <template>
     <template v-if="Ready">
         <a-back-top />
+        <div class="section-title">
+          <h4>單字群組列表</h4>
+        </div>
         <!-- 上層 -->
         <div class="select-theme" :class="this.$theme">
             每頁顯示：
@@ -118,5 +121,17 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.section-title {
+  margin-bottom: 12px;
+}
 
+.section-title h4:after {
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 70px;
+  background: #17b0f7;
+  content: "";
+}
 </style>

@@ -1,5 +1,8 @@
 <template>
     <template v-if="Ready">
+      <div class="section-title">
+        <h4>標籤列表</h4>
+      </div>
       <div class="tab-theme" :class="this.$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
@@ -43,6 +46,11 @@
                           v-model:value="editTableData[record.id]['ts_parent_id']"
                           :defaultValue="editTableData[record.id]['ts_parent_id']"
                           :treeDefaultExpandedKeys="[editTableData[record.id]['ts_parent_id']]"
+                          :field-names="{
+                            children: 'children',
+                            label: 'ts_name',
+                            value: 'id',
+                            key: 'id'}"
                         />
                       </template>
                     </template>
@@ -233,7 +241,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.section-title {
+  margin-bottom: 8px;
+}
 
+.section-title h4:after {
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 70px;
+  background: #f6aaf1;
+  content: "";
+}
 .button-container {
   display: flex;
   justify-content: center;

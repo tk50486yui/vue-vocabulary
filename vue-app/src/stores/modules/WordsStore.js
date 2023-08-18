@@ -31,9 +31,11 @@ const getters = {
       ...state.words[key]
     }))
   },
-  filterWords: (state) => (keyword, options) => {
+  filterWords: (state) => (keyword, options, tagsArray) => {
+    let firstFilteredWords = []
+    // 第一次搜尋篩選
     if (keyword && options && options.length > 0) {
-      return Object.keys(state.words)
+      firstFilteredWords = Object.keys(state.words)
         .filter(key => {
           const word = state.words[key]
           return options.some(option => word[option] && word[option].includes(keyword))
@@ -42,11 +44,23 @@ const getters = {
           key,
           ...state.words[key]
         }))
+      return firstFilteredWords
     } else {
-      return Object.keys(state.words).map(key => ({
+      firstFilteredWords = Object.keys(state.words).map(key => ({
         key,
         ...state.words[key]
       }))
+    }
+    // 第二次用tags分類篩選
+    if (tagsArray && tagsArray.length > 0) {
+      return firstFilteredWords.filter(word => {
+        return (
+          word.words_tags.values &&
+          word.words_tags.values.some(tag => tagsArray.includes(tag.ts_name))
+        )
+      })
+    } else {
+      return firstFilteredWords
     }
   }
 }

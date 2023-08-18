@@ -142,6 +142,11 @@
                     v-model:value="formState.word.words_tags.array"
                     :treeDefaultExpandedKeys="formState.word.words_tags.array"
                     @change="handleTagsSelectChange"
+                    :field-names="{
+                      children: 'children',
+                      label: 'ts_name',
+                      value: 'id',
+                      key: 'id'}"
                     multiple
                     />
               </template>

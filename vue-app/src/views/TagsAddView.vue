@@ -8,7 +8,13 @@
         <TagsTreeSelect placeholder="選擇標籤層級" size="large" ref="treeSelect"
             v-model:value="formState.tag.ts_parent_id"
             @chnage="handleTreeSelectChange"
-            style="width: 300px"/>
+            style="width: 300px"
+            :field-names="{
+              children: 'children',
+              label: 'ts_name',
+              value: 'id',
+              key: 'id'}"
+        />
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
           <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />

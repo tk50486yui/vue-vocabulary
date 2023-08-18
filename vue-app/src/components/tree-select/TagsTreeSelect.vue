@@ -8,11 +8,6 @@
           allow-clear
           :tree-line="treeLine && { showLeafIcon }"
           :tree-data="this.tagsTransformed"
-          :field-names="{
-              children: 'children',
-              label: 'ts_name',
-              value: 'id',
-              key: 'id'}"
         >
         <template #title="{ value: val, ts_name }">
             <b v-if="val === 1" style="color: #08c">{{val}}</b>

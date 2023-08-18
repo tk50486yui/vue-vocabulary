@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
+import WordsAddView from '@/views/WordsAddView.vue'
 import WordsView from '@/views/WordsView.vue'
 import WordsGridView from '@/views/WordsGridView.vue'
 import WordDetailsView from '@/views/WordDetailsView.vue'
@@ -17,9 +17,9 @@ import Postiew from '@/components/PostUser.vue'
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/wordsadd',
+    name: 'wordsAdd',
+    component: WordsAddView
   },
   {
     path: '/articles',
@@ -38,7 +38,7 @@ const routes = [
   },
   {
     path: '/tagsdrag',
-    name: 'tagsdrag',
+    name: 'tagsDrag',
     component: TagsDragView
   },
   {
@@ -48,7 +48,7 @@ const routes = [
   },
   {
     path: '/categoriesdrag',
-    name: 'categoriesdrag',
+    name: 'categoriesDrag',
     component: CategoriesDragView
   },
   {

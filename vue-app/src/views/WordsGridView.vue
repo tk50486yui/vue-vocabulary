@@ -1,6 +1,9 @@
 <template>
     <template v-if="Ready">
         <a-back-top />
+        <div class="section-title">
+          <h4>單字總覽</h4>
+        </div>
         <!-- 上層 -->
         <div class="select-theme" :class="this.$theme">
             每頁顯示：
@@ -40,7 +43,7 @@
                       搜尋條件：無
                     </span>
                 </template>
-            共  {{ this.filterWords(this.$keyword, this.$filters).length }} 筆
+            共  {{ this.filterWordsResult.length }} 筆
             </span>
             <span style="padding-left: 6px;">
                 <template v-if="this.$keyword != ''">
@@ -50,6 +53,47 @@
         </div>
         <p></p>
         <!-- 上層  第二層 -->
+        <a-input-group>
+          <a-row :gutter="4">
+            <a-col :span="18">
+              <TagsTreeSelect
+              size="small"
+              ref="TagsTreeSelect"
+              placeholder="以標籤過濾資料"
+              style="width: 100%"
+              v-model:value="selectTagsArray"
+              :treeDefaultExpandedKeys="selectTagsArray"
+              :field-names="{
+                  children: 'children',
+                  label: 'ts_name',
+                  value: 'ts_name',
+                  key: 'ts_name'}"
+              multiple
+              />
+            </a-col>
+            <a-col :span="2">
+              <a-button  size="small" shape="round" @click="handleTagsFilter()" danger>確認</a-button>
+            </a-col>
+          </a-row>
+        </a-input-group>
+        <p></p>
+        <span>
+          <template v-if="this.tagsArray.length > 0">
+              <span style="padding-right: 6px;">
+                搜尋標籤（OR）：
+                <template v-for="(tag, index) in tagsArray" :key="index">
+                  #{{ tag }}
+                </template>
+          </span>
+          </template>
+          <template v-else>
+              <span style="padding-right: 6px;">
+                搜尋標籤：無
+              </span>
+        </template>
+        </span>
+        <p></p>
+        <!-- 上層  第三層 -->
         <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
             新增單字組別
@@ -67,7 +111,7 @@
         <!-- 主頁面 card -->
         <a-spin :spinning="ReadySpinning">
             <div class="list-card-theme" :class="this.$theme" ref="listCard">
-                <a-list :data-source="this.filterWords(this.$keyword, this.$filters)" :pagination="pagination"
+                <a-list :data-source="this.filterWordsResult" :pagination="pagination"
                     :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3, xxxl: 4 }"
                 >
                     <template #renderItem="{ item }">
@@ -174,14 +218,19 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { ref, reactive } from 'vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
+import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
   name: 'WordsGridView',
   components: {
     StarFilled,
-    HeartFilled
+    HeartFilled,
+    TagsTreeSelect
   },
   computed: {
+    filterWordsResult () {
+      return this.filterWords(this.$keyword, this.$filters, this.tagsArray)
+    },
     checkboxArray () {
       const newArray = {}
       for (const item of this.$WordsGroupsView.groupArray) {
@@ -197,6 +246,7 @@ export default {
     ...mapState('Search', ['$keyword']),
     ...mapState('Search', ['$searchClass']),
     ...mapState('Search', ['$filters']),
+    ...mapState('Search', ['$filtersTags']),
     ...mapState('Views', ['$WordsGrid']),
     ...mapState('Views', ['$WordsGroupsView']),
     ...mapState('Views', ['$WordsGroupsDetailsView']),
@@ -212,6 +262,7 @@ export default {
     }),
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateFilters']),
+    ...mapActions('Search', ['updateFiltersTags']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateWordsGrid']),
     ...mapActions('Views', ['updateWordsGroupsView']),
@@ -237,6 +288,9 @@ export default {
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
       window.scrollTo({ top: 100, behavior: 'auto' })
+    },
+    handleTagsFilter () {
+      this.tagsArray = this.selectTagsArray
     },
     /* select pagination */
     handlePageSize () {
@@ -327,6 +381,8 @@ export default {
     const Ready = ref(false)
     const AfterReady = ref(false)
     const ReadySpinning = ref(false)
+    const selectTagsArray = ref([])
+    const tagsArray = ref([])
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
@@ -345,6 +401,8 @@ export default {
       Ready,
       AfterReady,
       ReadySpinning,
+      selectTagsArray,
+      tagsArray,
       pagination,
       selectPageSize,
       currentPage,
@@ -359,10 +417,22 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.section-title {
+  margin-bottom: 12px;
+}
+
+.section-title h4:after {
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 70px;
+  background: #17b0f7;
+  content: "";
+}
 .keyword-text{
     color:$keyword-color;
 }
-
 .icon-star{
   padding-left: 2px;
   padding-right: 8px;

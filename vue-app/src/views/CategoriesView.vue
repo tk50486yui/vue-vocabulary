@@ -1,5 +1,8 @@
 <template>
     <template v-if="Ready">
+      <div class="section-title">
+        <h4>類別列表</h4>
+      </div>
       <div class="tab-theme" :class="this.$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
@@ -227,7 +230,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.section-title {
+  margin-bottom: 8px;
+}
 
+.section-title h4:after {
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 70px;
+  background: #efffb4;
+  content: "";
+}
 .button-container {
   display: flex;
   justify-content: center;

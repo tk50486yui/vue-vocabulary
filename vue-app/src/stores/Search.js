@@ -1,7 +1,8 @@
 const state = {
   $keyword: '',
   $searchClass: '',
-  $filters: ['ws_name']
+  $filters: ['ws_name'],
+  $filtersTags: []
 }
 
 const actions = {
@@ -13,6 +14,9 @@ const actions = {
   },
   updateFilters ({ commit }, filters) {
     commit('setFilters', filters)
+  },
+  updateFiltersTags ({ commit }, filters) {
+    commit('setFiltersTags', filters)
   }
 }
 
@@ -25,6 +29,9 @@ const mutations = {
   },
   setFilters (state, filters) {
     state.$filters = filters
+  },
+  setFiltersTags (state, filtersTags) {
+    state.$filtersTags = filtersTags
   }
 }
 
