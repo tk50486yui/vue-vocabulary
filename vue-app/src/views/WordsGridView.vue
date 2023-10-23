@@ -77,6 +77,7 @@
           </a-row>
         </a-input-group>
         <p></p>
+        <!-- 上層  第三層 -->
         <span>
           <template v-if="this.tagsArray.length > 0">
               <span style="padding-right: 6px;">
@@ -93,7 +94,7 @@
         </template>
         </span>
         <p></p>
-        <!-- 上層  第三層 -->
+        <!-- 上層  第四層 -->
         <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
             新增單字組別
