@@ -7,7 +7,7 @@ export default {
   },
 
   async getRecent () {
-    const response = await api.get('/tags/recent/')
+    const response = await api.get('/tags/recent/all')
     return response.data
   },
 

@@ -22,7 +22,7 @@ const getters = {
   words: (state) => state.words,
   word: (state) => state.word,
   wordById: state => id => {
-    return state.words.find(word => word.id === id)
+    return state.words.find(word => parseInt(word.id) === parseInt(id))
   },
   wordForm: (state) => state.wordForm,
   wordsArray: (state) => {

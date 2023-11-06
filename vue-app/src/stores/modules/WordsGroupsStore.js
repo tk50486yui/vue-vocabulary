@@ -12,7 +12,7 @@ const state = {
 const getters = {
   wordsGroups: (state) => state.wordsGroups,
   wordsGroupsById: state => id => {
-    return state.wordsGroups.find(wordsGroup => wordsGroup.id === id)
+    return state.wordsGroups.find(wordsGroup => parseInt(wordsGroup.id) === parseInt(id))
   },
   wordsGroupsForm: (state) => state.wordsGroupsForm,
   wordsGroupsArray: (state) => {

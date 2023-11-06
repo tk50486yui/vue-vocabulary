@@ -7,7 +7,7 @@ export default {
   },
 
   async getRecent () {
-    const response = await api.get('/categories/recent/')
+    const response = await api.get('/categories/recent/all')
     return response.data
   },
 
