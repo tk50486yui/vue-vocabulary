@@ -74,12 +74,17 @@
                       v-model:value="formState.article.articles_tags.array"
                       :treeDefaultExpandedKeys="formState.article.articles_tags.array"
                       @change="handleTagsSelectChange"
+                      :field-names="{
+                        children: 'children',
+                        label: 'ts_name',
+                        value: 'id',
+                        key: 'id'}"
                       multiple
                       />
                 </template>
                 <template v-else>
                   <template v-for="(item, index) in article.articles_tags.values"  :key="item.ts_id">
-                    <a-tag color="blue" style="font-size: 18px;"> {{ item.ts_name }} </a-tag>
+                    <a-tag color="orange" style="font-size: 18px;"> {{ item.ts_name }} </a-tag>
                     <template v-if="index != article.articles_tags.values.length && (index/5) == 1">
                       <br>
                     </template>

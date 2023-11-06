@@ -35,7 +35,10 @@
         </a-form-item>
         <p></p>
         <a-form-item :name="['word', 'words_tags.array']">
-          <TagsTreeSelect placeholder="添加標籤" size="large" ref="TagsTreeSelect"
+          <TagsTreeSelect
+              placeholder="添加標籤"
+              size="large"
+              ref="TagsTreeSelect"
               v-model:value="formState.word.words_tags.array"
               @change="handleTagsSelectChange"
               :field-names="{
