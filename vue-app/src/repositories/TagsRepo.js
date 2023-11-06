@@ -29,5 +29,10 @@ export default {
   async updateOrder (data) {
     const response = await api.put('/tags/order/all', data)
     return response.data
+  },
+
+  async deleteById (id) {
+    const response = await api.delete(`/tags/${id}`)
+    return response.data
   }
 }

@@ -30,10 +30,26 @@
                           <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
                             <EditOutlined class="button-edit" @click="edit(record, 1)" />
                             {{ text }} （{{ record.children.length }}）
+                            <a-popconfirm
+                              title="確定要刪除嗎？"
+                              ok-text="是"
+                              cancel-text="否"
+                              @confirm="onDelete(record.id)"
+                            >
+                              <DeleteFilled class="button-delete"/>
+                            </a-popconfirm>
                           </template>
                           <template v-else>
                             <EditOutlined class="button-edit" @click="edit(record, 1)" />
                             {{ text }}
+                            <a-popconfirm
+                              title="確定要刪除嗎？"
+                              ok-text="是"
+                              cancel-text="否"
+                              @confirm="onDelete(record.id)"
+                            >
+                             <DeleteFilled class="button-delete"/>
+                            </a-popconfirm>
                           </template>
                        </div>
                     </template>
@@ -99,7 +115,7 @@
 import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, CheckOutlined, CloseOutlined, DeleteFilled } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
@@ -110,6 +126,7 @@ export default {
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
+    DeleteFilled,
     RefreshBtn,
     CategoriesTreeSelect
   },
@@ -126,6 +143,7 @@ export default {
     ...mapActions('CategoriesStore', {
       updateCategory: 'update'
     }),
+    ...mapActions('CategoriesStore', ['deleteById']),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -151,6 +169,15 @@ export default {
         await this.fetchRecent()
         this.editDataSource = this.recentCategoriesArray
         this.cancel(record, tab)
+      } catch (error) {}
+    },
+    async onDelete (id) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+        await this.fetchRecent()
       } catch (error) {}
     }
   },
@@ -296,5 +323,9 @@ export default {
   margin-left: auto;
   color:#EA0000;
   padding-right: 6px;
+}
+.button-delete{
+  color:rgb(231, 121, 121);
+  padding-left: 6px;
 }
 </style>

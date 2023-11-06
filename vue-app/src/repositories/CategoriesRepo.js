@@ -29,5 +29,10 @@ export default {
   async updateOrder (data) {
     const response = await api.put('/categories/order/all', data)
     return response.data
+  },
+
+  async deleteById (id) {
+    const response = await api.delete(`/categories/${id}`)
+    return response.data
   }
 }

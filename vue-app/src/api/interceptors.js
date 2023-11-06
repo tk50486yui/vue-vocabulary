@@ -16,7 +16,8 @@ api.interceptors.response.use(
   (response) => {
     if (response.status === 200) {
       if (response.config.method === 'post' ||
-          response.config.method === 'put') {
+          response.config.method === 'put' ||
+          response.config.method === 'delete') {
         openNotification(response)
       }
     }

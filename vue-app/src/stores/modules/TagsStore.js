@@ -84,6 +84,10 @@ const actions = {
 
   async updateOrder ({ commit }, data) {
     await TagsRepo.updateOrder(data)
+  },
+
+  async deleteById ({ commit }, id) {
+    await TagsRepo.deleteById(id)
   }
 
 }
