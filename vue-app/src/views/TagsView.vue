@@ -6,7 +6,7 @@
       <div class="tab-theme" :class="this.$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
-          <a-tab-pane key="1" tab="所有標籤">
+          <a-tab-pane key="1" tab="全部">
             <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
             <div class="table-theme" :class="this.$theme">
               <a-table :dataSource="this.tagsArray"
@@ -92,7 +92,15 @@
                           style="margin: -5px 0"/>
                       </template>
                       <template v-else>
-                      {{ text }}
+                        {{ text }}
+                        <a-popconfirm
+                          title="確定要刪除嗎？"
+                          ok-text="是"
+                          cancel-text="否"
+                          @confirm="onDelete(record.id)"
+                        >
+                          <DeleteFilled class="button-delete"/>
+                        </a-popconfirm>
                       </template>
                     </div>
                   </template>
@@ -111,7 +119,7 @@
               </a-table>
             </div>
           </a-tab-pane>
-          <!-- tab 4 -->
+          <!-- tab 3 -->
           <a-tab-pane key="3" tab="+">
             <TagsAddView />
           </a-tab-pane>
@@ -241,11 +249,7 @@ export default {
       },
       {
         dataIndex: 'ts_name',
-        width: '60%'
-      },
-      {
-        dataIndex: 'ts_parent_id',
-        width: '30%'
+        width: '90%'
       }
     ]
 

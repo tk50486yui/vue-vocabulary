@@ -32,7 +32,6 @@
           <a-select-option value="1500">極高</a-select-option>
       </a-select>
     </div>
-    <RefreshBtn class="button-container" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
     <div class="table-theme" :class="this.$theme">
       <a-table :dataSource="this.wordsArray"
         :columns="columns"
@@ -40,6 +39,11 @@
         :loading="TableLoading"
         :pagination="pagination"
       >
+        <!-- Table header -->
+        <template #title>
+          <RefreshBtn class="button-container" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
+        </template>
+        <!-- Table expanded -->
         <template #expandedRowRender="{ record }">
           <p style="margin: 0">
             <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
@@ -48,6 +52,7 @@
             {{ record.ws_description }}
           </p>
         </template>
+        <!-- Table body -->
         <template #bodyCell="{ column, text, record }">
           <template v-if="['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(column.dataIndex)">
             <div>
@@ -209,7 +214,8 @@ export default {
     const selectPageSize = ref('10')
     const pagination = reactive({
       pageSize: Number(selectPageSize.value),
-      position: 'top'
+      position: ['topLEFT', 'bottomLeft'],
+      showSizeChanger: false
     })
     const edit = record => {
       editTableData[record.key] = cloneDeep(editDataSource.value.filter(item => record.key === item.key)[0])

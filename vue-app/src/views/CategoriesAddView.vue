@@ -5,22 +5,22 @@
         :validate-messages="validateMsg"
         @finish="onFinish">
         <p></p>
-        <TagsTreeSelect
-            placeholder="選擇標籤層級"
+        <CategoriesTreeSelect
+            placeholder="選擇類別層級"
             size="large"
             ref="treeSelect"
-            v-model:value="formState.tag.ts_parent_id"
+            v-model:value="formState.category.cate_parent_id"
             @chnage="handleTreeSelectChange"
             style="width: 300px"
             :field-names="{
               children: 'children',
-              label: 'ts_name',
+              label: 'cate_name',
               value: 'id',
               key: 'id'}"
         />
         <p></p>
-        <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
-          <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
+        <a-form-item class="input-theme" :class="this.$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
+          <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
         <div class="add-button-container">
@@ -38,29 +38,29 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
-import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import { message } from 'ant-design-vue'
 
 export default {
-  name: 'TagsAddView',
+  name: 'CategoriesAddView',
   components: {
-    TagsTreeSelect
+    CategoriesTreeSelect
   },
   computed: {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch']),
-    ...mapActions('TagsStore', ['fetchRecent']),
-    ...mapActions('TagsStore', {
-      addTag: 'add'
+    ...mapActions('CategoriesStore', ['fetch']),
+    ...mapActions('CategoriesStore', ['fetchRecent']),
+    ...mapActions('CategoriesStore', {
+      addCategory: 'add'
     }),
     async onFinish () {
       try {
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addTag(this.formState.tag)
+        await this.addCategory(this.formState.category)
         await this.fetch()
         await this.fetchRecent()
         this.resetForm()
@@ -70,10 +70,10 @@ export default {
       }
     },
     handleTreeSelectChange (value) {
-      this.formState.tag.ts_parent_id = typeof value !== 'undefined' ? value : null
+      this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null
     },
     resetForm () {
-      this.formState.tag.ts_parent_id = null
+      this.formState.category.cate_parent_id = null
       this.formRef.resetFields()
     }
   },
@@ -82,7 +82,7 @@ export default {
     const formRef = ref()
 
     const formState = reactive({
-      tag: {}
+      category: {}
     })
 
     const validateMsg = {

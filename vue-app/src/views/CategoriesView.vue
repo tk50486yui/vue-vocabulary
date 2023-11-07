@@ -6,7 +6,7 @@
       <div class="tab-theme" :class="this.$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
-          <a-tab-pane key="1" tab="所有類別">
+          <a-tab-pane key="1" tab="全部">
             <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
             <div class="table-theme" :class="this.$theme">
               <a-table :dataSource="this.categoriesArray"
@@ -86,7 +86,15 @@
                         style="margin: -5px 0"/>
                     </template>
                     <template v-else>
-                    {{ text }}
+                      {{ text }}
+                      <a-popconfirm
+                        title="確定要刪除嗎？"
+                        ok-text="是"
+                        cancel-text="否"
+                        @confirm="onDelete(record.id)"
+                      >
+                        <DeleteFilled class="button-delete"/>
+                      </a-popconfirm>
                     </template>
                   </template>
                   <template v-else-if="column.dataIndex === 'operation'">
@@ -105,7 +113,9 @@
             </div>
           </a-tab-pane>
           <!-- tab 3 -->
-          <a-tab-pane key="3" tab="+">Content of Tab Pane 3</a-tab-pane>
+          <a-tab-pane key="3" tab="+">
+            <CategoriesAddView />
+          </a-tab-pane>
         </a-tabs>
       </div>
   </template>
@@ -118,6 +128,7 @@ import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined, DeleteFilled } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
+import CategoriesAddView from '@/views/CategoriesAddView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
@@ -128,6 +139,7 @@ export default {
     CloseOutlined,
     DeleteFilled,
     RefreshBtn,
+    CategoriesAddView,
     CategoriesTreeSelect
   },
   computed: {
@@ -230,11 +242,7 @@ export default {
       },
       {
         dataIndex: 'cate_name',
-        width: '60%'
-      },
-      {
-        dataIndex: 'cate_parent_id',
-        width: '30%'
+        width: '90%'
       }
     ]
 

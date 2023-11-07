@@ -395,7 +395,8 @@ export default {
         pagination.current = currentPage.value
       },
       pageSize: Number(selectPageSize.value),
-      position: 'top'
+      position: 'bottom',
+      showSizeChanger: false
     })
 
     return {

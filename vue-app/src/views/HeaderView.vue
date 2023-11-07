@@ -13,29 +13,38 @@
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu" >
                         <ul class="nav-menu" :class="[this.$theme]">
-                            <li>
+                            <li @click="setActive(0)" :class="{ 'active': activeIndex === 0 }">
                                 <router-link :to="{ name: 'wordsAdd' }">新增</router-link>
                             </li>
-                            <li class="active">
+                            <li @click="setActive(1)" :class="{ 'active': activeIndex === 1 }">
                                 <router-link :to="{ name: 'words' }">表格</router-link>
                             </li>
-                            <li><router-link :to="{ name: 'wordsGrid' }">單字</router-link></li>
-                            <li><router-link :to="{ name: 'articles' }">文章</router-link></li>
-                            <li><router-link :to="{ name: 'categories' }">類別</router-link></li>
-                            <li><router-link :to="{ name: 'tags' }">標籤</router-link></li>
-                            <li><router-link :to="{ name: 'wordsGroupsList' }">群組</router-link></li>
-                            <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
-                            <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
-                            <li><router-link :to="{ name: 'words' }">測試</router-link>
+                            <li @click="setActive(2)" :class="{ 'active': activeIndex === 2 }">
+                                <router-link :to="{ name: 'wordsGrid' }">單字</router-link>
+                            </li>
+                            <li @click="setActive(3)" :class="{ 'active': activeIndex === 3 }">
+                                <router-link :to="{ name: 'articles' }">文章</router-link>
+                            </li>
+                            <li @click="setActive(4)" :class="{ 'active': activeIndex === 4 }">
+                                <router-link :to="{ name: 'categories' }">
+                                    類別
+                                    <CaretDownOutlined />
+                                </router-link>
                                 <ul class="dropdown">
-                                    <template v-for="i in 2" :key="i">
-                                        <li>
-                                            <router-link :to="{ name: 'users', params: { id: i } } ">
-                                                User {{ i }}
-                                            </router-link>
-                                        </li>
-                                    </template>
+                                    <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
                                 </ul>
+                            </li>
+                            <li @click="setActive(5)" :class="{ 'active': activeIndex === 5 }">
+                                <router-link :to="{ name: 'tags' }">
+                                    標籤
+                                    <CaretDownOutlined />
+                                </router-link>
+                                <ul class="dropdown">
+                                    <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
+                                </ul>
+                            </li>
+                            <li @click="setActive(6)" :class="{ 'active': activeIndex === 6 }">
+                                <router-link :to="{ name: 'wordsGroupsList' }">群組</router-link>
                             </li>
                         </ul>
                     </nav>
@@ -57,10 +66,28 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { ref } from 'vue'
+import { CaretDownOutlined } from '@ant-design/icons-vue'
 export default {
   name: 'HeaderView',
+  components: {
+    CaretDownOutlined
+  },
   computed: {
     ...mapState('Theme', ['$theme'])
+  },
+  methods: {
+    setActive (index) {
+      this.activeIndex = index
+    }
+  },
+  setup () {
+    const activeIndex = ref(1)
+
+    return {
+      activeIndex
+
+    }
   }
 }
 </script>

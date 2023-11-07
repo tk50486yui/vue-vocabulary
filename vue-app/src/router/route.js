@@ -12,8 +12,6 @@ import TagsView from '@/views/TagsView'
 import TagsDragView from '@/views/TagsDragView.vue'
 import CategoriesView from '@/views/CategoriesView.vue'
 import CategoriesDragView from '@/views/CategoriesDragView.vue'
-import UserView from '@/components/User.vue'
-import Postiew from '@/components/PostUser.vue'
 
 const routes = [
   {
@@ -85,18 +83,6 @@ const routes = [
     path: '/words/category/:cateID',
     name: 'wordsByCateID',
     component: WordsView
-  },
-  {
-    path: '/users/:id',
-    name: 'users',
-    component: UserView,
-    children: [
-      {
-        name: 'postsChild',
-        path: 'posts',
-        component: Postiew
-      }
-    ]
   }
 ]
 
