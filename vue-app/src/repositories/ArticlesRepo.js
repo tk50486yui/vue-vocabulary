@@ -19,5 +19,10 @@ export default {
   async update (id, data) {
     const response = await api.put(`/articles/${id}`, data)
     return response.data
+  },
+
+  async deleteById (id) {
+    const response = await api.delete(`/articles/${id}`)
+    return response.data
   }
 }

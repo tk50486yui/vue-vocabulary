@@ -48,9 +48,17 @@
           <p style="margin: 0">
             <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
           </p>
-          <p style="margin: 0">
-            {{ record.ws_description }}
-          </p>
+          <p></p>
+          <a-popconfirm
+            title="確定要刪除嗎？"
+            ok-text="是"
+            cancel-text="否"
+            @confirm="onDelete(record.id)"
+          >
+            <DeleteFilled class="button-delete"/>
+          </a-popconfirm>
+          <p></p>
+          <div v-html="record.ws_description"></div>
         </template>
         <!-- Table body -->
         <template #bodyCell="{ column, text, record }">
@@ -119,7 +127,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
+import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled, DeleteFilled } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
@@ -132,6 +140,7 @@ export default {
     CloseOutlined,
     StarFilled,
     HeartFilled,
+    DeleteFilled,
     RefreshBtn,
     CategoriesTreeSelect
   },
@@ -153,6 +162,7 @@ export default {
     ...mapActions('WordsStore', {
       updateImportant: 'updateImportant'
     }),
+    ...mapActions('WordsStore', ['deleteById']),
     async refreshTable () {
       try {
         this.SyncOutlinedSpin = true
@@ -186,6 +196,15 @@ export default {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
+        await this.fetch()
+      } catch (error) {}
+    },
+    async onDelete (id) {
+      try {
+        console.log(id)
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
         await this.fetch()
       } catch (error) {}
     },
@@ -341,5 +360,10 @@ export default {
 }
 .icon-star-false{
   padding-right: 4px;
+}
+
+.button-delete{
+  color:rgb(231, 121, 121);
+  padding-left: 6px;
 }
 </style>

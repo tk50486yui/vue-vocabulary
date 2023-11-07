@@ -100,6 +100,9 @@
                 <a-button style="margin-left: 10px" @click="onEditCancel()" danger>取消</a-button>
               </div>
             </template>
+            <template v-else>
+              <DeleteBtn @confirm="onDelete(this.articleId)"/>
+            </template>
         </div>
     </template>
   </template>
@@ -112,11 +115,13 @@ import { EditOutlined } from '@ant-design/icons-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'ArticlesContentView',
   components: {
     EditOutlined,
+    DeleteBtn,
     CategoriesTreeSelect,
     TagsTreeSelect
   },
@@ -138,6 +143,7 @@ export default {
       updateArticle: 'update'
     }),
     ...mapActions('Views', ['updateArticlesView']),
+    ...mapActions('ArticlesStore', ['deleteById']),
     onEdit () {
       this.editShow = !this.editShow
       this.formState.article = Object.assign({}, this.formState.article, this.article)
@@ -160,6 +166,15 @@ export default {
           window.scrollTo({ top: 160, behavior: 'auto' })
         })
       }
+    },
+    async onDelete (id) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+        this.$router.push({ name: 'articles' })
+      } catch (error) {}
     },
     handleCategoriesSelectChange (value) {
       this.formState.article.cate_id = typeof value !== 'undefined' ? value : null
@@ -263,6 +278,11 @@ export default {
     &.light{
         color:var(--edit-icon);
     }
+}
+
+.button-delete{
+  color:rgb(231, 121, 121);
+  padding-left: 12px;
 }
 
 </style>

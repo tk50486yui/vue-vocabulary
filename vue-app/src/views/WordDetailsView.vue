@@ -160,12 +160,13 @@
               </template>
             </a-descriptions-item>
           </a-descriptions>
+            <p></p>
             <template v-if="editShow">
-              <p></p>
-              <div>
-                <a-button type="primary" @click="onEditFinish()">儲存</a-button>
-                <a-button style="margin-left: 10px" @click="onEditCancel()" danger>取消</a-button>
-              </div>
+              <a-button type="primary" @click="onEditFinish()">儲存</a-button>
+              <a-button style="margin-left: 10px" @click="onEditCancel()" danger>取消</a-button>
+            </template>
+            <template v-else>
+              <DeleteBtn @confirm="onDelete(this.wordId)" />
             </template>
       </div>
   </template>
@@ -179,6 +180,7 @@ import { EditOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'WordDetailsView',
@@ -186,6 +188,7 @@ export default {
     EditOutlined,
     StarFilled,
     HeartFilled,
+    DeleteBtn,
     CategoriesTreeSelect,
     TagsTreeSelect
   },
@@ -221,6 +224,7 @@ export default {
     ...mapActions('WordsStore', {
       updateImportant: 'updateImportant'
     }),
+    ...mapActions('WordsStore', ['deleteById']),
     ...mapActions('Views', ['updateWordsGrid']),
     onEdit () {
       this.editShow = !this.editShow
@@ -257,6 +261,15 @@ export default {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
         await this.fetch()
+      } catch (error) {}
+    },
+    async onDelete (id) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+        this.$router.push({ name: 'wordsGrid' })
       } catch (error) {}
     },
     handleCategoriesSelectChange (value) {
@@ -358,4 +371,5 @@ export default {
     width:20%;
   }
 }
+
 </style>

@@ -30,26 +30,12 @@
                         <template v-if="column.dataIndex === 'ts_name' && record.children.length > 0">
                           <EditOutlined class="button-edit" @click="edit(record, 1)" />
                           {{ text }} （{{ record.children.length }}）
-                          <a-popconfirm
-                            title="確定要刪除嗎？"
-                            ok-text="是"
-                            cancel-text="否"
-                            @confirm="onDelete(record.id)"
-                          >
-                            <DeleteFilled class="button-delete"/>
-                          </a-popconfirm>
+                          <DeleteBtn @confirm="onDelete(record.id)"/>
                         </template>
                         <template v-else>
                           <EditOutlined class="button-edit" @click="edit(record, 1)" />
                           {{ text }}
-                          <a-popconfirm
-                            title="確定要刪除嗎？"
-                            ok-text="是"
-                            cancel-text="否"
-                            @confirm="onDelete(record.id)"
-                          >
-                            <DeleteFilled class="button-delete"/>
-                          </a-popconfirm>
+                          <DeleteBtn @confirm="onDelete(record.id)"/>
                         </template>
                       </div>
                     </template>
@@ -132,11 +118,12 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined, DeleteFilled } from '@ant-design/icons-vue'
+import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import TagsAddView from '@/views/TagsAddView.vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'TagsView',
@@ -144,7 +131,7 @@ export default {
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
-    DeleteFilled,
+    DeleteBtn,
     RefreshBtn,
     TagsAddView,
     TagsTreeSelect
@@ -340,10 +327,5 @@ export default {
   margin-left: auto;
   color:#EA0000;
   padding-right: 6px;
-}
-
-.button-delete{
-  color:rgb(231, 121, 121);
-  padding-left: 6px;
 }
 </style>

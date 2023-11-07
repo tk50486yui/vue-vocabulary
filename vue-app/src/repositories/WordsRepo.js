@@ -29,5 +29,10 @@ export default {
   async updateImportant (id, data) {
     const response = await api.put(`/words/important/${id}`, data)
     return response.data
+  },
+
+  async deleteById (id) {
+    const response = await api.delete(`/words/${id}`)
+    return response.data
   }
 }

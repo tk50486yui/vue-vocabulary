@@ -40,6 +40,10 @@ const actions = {
 
   async update ({ commit }, { id, data }) {
     await WordsGroupsRepo.update(id, data)
+  },
+
+  async deleteById ({ commit }, id) {
+    await WordsGroupsRepo.deleteById(id)
   }
 
 }

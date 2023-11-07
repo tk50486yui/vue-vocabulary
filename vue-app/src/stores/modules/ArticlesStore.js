@@ -62,6 +62,10 @@ const actions = {
 
   async update ({ commit, dispatch }, { id, data }) {
     await ArticlesRepo.update(id, data)
+  },
+
+  async deleteById ({ commit }, id) {
+    await ArticlesRepo.deleteById(id)
   }
 }
 

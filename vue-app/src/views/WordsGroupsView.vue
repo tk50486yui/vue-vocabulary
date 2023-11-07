@@ -106,16 +106,19 @@ export default {
         await this.addWordsGroup(this.formState.wordsGroup)
         await this.fetch()
         this.clearCheckbox()
+        this.$router.push({ name: 'wordsGroupsList' })
       } catch (error) {}
     },
     async onEditSave () {
       const wordsIdArray = this.$WordsGroupsView.groupArray.map(item => item.ws_id)
       this.formState.wordsGroup.words_groups_details = wordsIdArray
+      const editId = this.$WordsGroupsView.id
       message.loading({ content: 'Loading..', duration: 1 })
       await new Promise(resolve => setTimeout(resolve, 1000))
-      await this.updateWordsGroup({ id: this.$WordsGroupsView.id, data: this.formState.wordsGroup })
+      await this.updateWordsGroup({ id: editId, data: this.formState.wordsGroup })
       await this.fetch()
       this.clearCheckbox()
+      this.$router.push({ name: 'wordsGroupsDetails', params: { id: editId } })
     },
     clearCheckbox () {
       this.updateWordsGroupsView({ variable: 'groupArray', data: { clear: true } })

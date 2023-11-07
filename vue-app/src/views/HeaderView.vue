@@ -13,19 +13,19 @@
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu" >
                         <ul class="nav-menu" :class="[this.$theme]">
-                            <li @click="setActive(0)" :class="{ 'active': activeIndex === 0 }">
+                            <li :class="{ 'active': activeIndex === 0 }">
                                 <router-link :to="{ name: 'wordsAdd' }">新增</router-link>
                             </li>
-                            <li @click="setActive(1)" :class="{ 'active': activeIndex === 1 }">
+                            <li :class="{ 'active': activeIndex === 1 }">
                                 <router-link :to="{ name: 'words' }">表格</router-link>
                             </li>
-                            <li @click="setActive(2)" :class="{ 'active': activeIndex === 2 }">
+                            <li :class="{ 'active': activeIndex === 2 }">
                                 <router-link :to="{ name: 'wordsGrid' }">單字</router-link>
                             </li>
-                            <li @click="setActive(3)" :class="{ 'active': activeIndex === 3 }">
+                            <li :class="{ 'active': activeIndex === 3 }">
                                 <router-link :to="{ name: 'articles' }">文章</router-link>
                             </li>
-                            <li @click="setActive(4)" :class="{ 'active': activeIndex === 4 }">
+                            <li :class="{ 'active': activeIndex === 4 }">
                                 <router-link :to="{ name: 'categories' }">
                                     類別
                                     <CaretDownOutlined />
@@ -34,7 +34,7 @@
                                     <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
                                 </ul>
                             </li>
-                            <li @click="setActive(5)" :class="{ 'active': activeIndex === 5 }">
+                            <li :class="{ 'active': activeIndex === 5 }">
                                 <router-link :to="{ name: 'tags' }">
                                     標籤
                                     <CaretDownOutlined />
@@ -43,7 +43,7 @@
                                     <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
                                 </ul>
                             </li>
-                            <li @click="setActive(6)" :class="{ 'active': activeIndex === 6 }">
+                            <li :class="{ 'active': activeIndex === 6 }">
                                 <router-link :to="{ name: 'wordsGroupsList' }">群組</router-link>
                             </li>
                         </ul>
@@ -77,8 +77,39 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    setActive (index) {
-      this.activeIndex = index
+    async created () {
+      this.setActive()
+    },
+    setActive () {
+      const { name } = this.$route
+      switch (name) {
+        case 'wordsAdd':
+          this.activeIndex = 0
+          break
+        case 'words':
+          this.activeIndex = 1
+          break
+        case 'wordsGrid':
+          this.activeIndex = 2
+          break
+        case 'articles':
+          this.activeIndex = 3
+          break
+        case 'categories':
+          this.activeIndex = 4
+          break
+        case 'tags':
+          this.activeIndex = 5
+          break
+        case 'wordsGroupsList':
+          this.activeIndex = 6
+          break
+      }
+    }
+  },
+  watch: {
+    $route: function (val) {
+      this.setActive()
     }
   },
   setup () {
@@ -86,7 +117,6 @@ export default {
 
     return {
       activeIndex
-
     }
   }
 }

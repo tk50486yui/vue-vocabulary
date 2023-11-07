@@ -90,6 +90,10 @@ const actions = {
 
   async  updateImportant ({ commit, dispatch }, { id, data }) {
     await WordsRepo.updateImportant(id, data)
+  },
+
+  async deleteById ({ commit }, id) {
+    await WordsRepo.deleteById(id)
   }
 
 }

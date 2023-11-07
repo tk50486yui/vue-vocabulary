@@ -47,15 +47,21 @@ export default {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
     },
+    async created () {
+      this.getCurrentRoute()
+    },
     getCurrentRoute () {
       const { name } = this.$route
       this.activeHome = false
       switch (name) {
+        case 'wordsAdd':
+          this.activeRoute = '單字新增'
+          break
         case 'words':
-          this.activeRoute = '表格'
+          this.activeRoute = '單字表'
           break
         case 'wordsGrid':
-          this.activeRoute = '單字'
+          this.activeRoute = '單字總覽'
           break
         case 'wordDetails':
           this.activeRoute = '單字詳細說明'

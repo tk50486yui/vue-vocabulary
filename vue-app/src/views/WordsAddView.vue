@@ -34,23 +34,23 @@
           <a-textarea v-model:value="formState.word.ws_slogan" placeholder="標誌性短句" :auto-size="{ minRows: 2}" allow-clear />
         </a-form-item>
         <p></p>
-        <a-form-item :name="['word', 'words_tags.array']">
+        <a-form-item>
           <TagsTreeSelect
-              placeholder="添加標籤"
-              size="large"
-              ref="TagsTreeSelect"
-              v-model:value="formState.word.words_tags.array"
-              @change="handleTagsSelectChange"
-              :field-names="{
-                children: 'children',
-                label: 'ts_name',
-                value: 'id',
-                key: 'id'}"
-              multiple
-              />
+            placeholder="添加標籤"
+            size="large"
+            ref="TagsTreeSelect"
+            v-model:value="formState.word.words_tags.array"
+            @change="handleTagsSelectChange"
+            :field-names="{
+              children: 'children',
+              label: 'ts_name',
+              value: 'id',
+              key: 'id'}"
+            multiple
+          />
         </a-form-item>
         <p></p>
-        <a-form-item  :name="['word', 'ws_description']">
+        <a-form-item :name="['word', 'ws_description']">
             <div class="article-editor" :class="this.$theme">
               <ckeditor v-model="formState.word.ws_description" :editor="editor" :config="wordEditor.Config" />
             </div>
@@ -88,7 +88,7 @@ export default {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addWord(values.word)
+        await this.addWord(this.formState.word)
         this.resetForm()
         window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {}

@@ -19,5 +19,10 @@ export default {
   async update (id, data) {
     const response = await api.put(`/wordsgroups/${id}`, data)
     return response.data
+  },
+
+  async deleteById (id) {
+    const response = await api.delete(`/wordsgroups/${id}`)
+    return response.data
   }
 }

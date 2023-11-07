@@ -6,9 +6,20 @@ function openNotification (response) {
   let description = ''
   switch (response.status) {
     case 200:
-      type = 'success'
-      title = 'Success'
-      description = 'Successfully'
+      if (response.config.method === 'delete') {
+        type = 'success'
+        title = '刪除成功'
+        description = '刪除成功'
+      } else if (response.config.method === 'put') {
+        type = 'success'
+        title = '資料修改'
+        description = '資料修改成功'
+      } else {
+        type = 'success'
+        title = '資料新增'
+        description = '資料新增成功'
+      }
+
       break
     case 400:
       type = 'error'

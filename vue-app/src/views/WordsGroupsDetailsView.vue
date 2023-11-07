@@ -26,9 +26,13 @@
                 <span class="span-text">
                     <template v-if="this.wordsGroup.details.length === 0">
                         尚無單字
+                        <p></p>
+                        <DeleteBtn @confirm="onDelete(this.wgId)" />
                     </template>
                     <template v-else>
                         共 {{ this.wordsGroup.details.length }} 筆 單字
+                        <p></p>
+                        <DeleteBtn @confirm="onDelete(this.wgId)" />
                     </template>
                 </span>
                 </template>
@@ -40,12 +44,15 @@
 <script>
 import { ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { message } from 'ant-design-vue'
 import { EditOutlined } from '@ant-design/icons-vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'WordsGroupsDetailsView',
   components: {
-    EditOutlined
+    EditOutlined,
+    DeleteBtn
   },
   computed: {
     ...mapGetters('WordsGroupsStore', ['wordsGroups']),
@@ -65,6 +72,7 @@ export default {
   },
   methods: {
     ...mapActions('WordsGroupsStore', ['fetch']),
+    ...mapActions('WordsGroupsStore', ['deleteById']),
     ...mapActions('Views', ['updateWordsGroupsView']),
     ...mapActions('Views', ['updateWordsGroupsDetailsView']),
     onEdit () {
@@ -91,6 +99,16 @@ export default {
       this.wordsGroup.details.forEach(item => {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: item.ws_id, ws_name: item.ws_name, checked: true } })
       })
+    },
+    async onDelete (id) {
+      try {
+        console.log(id)
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+        this.$router.push({ name: 'wordsGroupsList' })
+      } catch (error) {}
     }
   },
   async created () {
