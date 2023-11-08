@@ -163,6 +163,9 @@
                                   <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
                                 </span>
                               </template>
+                              <span class="icon-delete">
+                                <DeleteBtn  @confirm="onDelete(item.id)" />
+                              </span>
                             </span>
                             <p></p>
                             <!-- ws_name -->
@@ -206,6 +209,13 @@
                                     {{ item.ws_definition }}
                                 </template>
                             </template>
+                            <!-- tags -->
+                            <template v-if="item.words_tags.values != null && item.words_tags.values.length>0">
+                              <p></p>
+                              <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
+                                <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
+                              </template>
+                            </template>
                         </a-card>
                     </a-list-item>
                     </template>
@@ -218,14 +228,17 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { ref, reactive } from 'vue'
+import { message } from 'ant-design-vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'WordsGridView',
   components: {
     StarFilled,
     HeartFilled,
+    DeleteBtn,
     TagsTreeSelect
   },
   computed: {
@@ -261,6 +274,7 @@ export default {
     ...mapActions('WordsStore', {
       updateImportant: 'updateImportant'
     }),
+    ...mapActions('WordsStore', ['deleteById']),
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateFilters']),
     ...mapActions('Search', ['updateFiltersTags']),
@@ -281,14 +295,23 @@ export default {
         await this.fetch()
       } catch (error) {}
     },
+    async onDelete (id) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+      } catch (error) {}
+    },
     onResetSearch () {
       this.updateKeyword('')
     },
-    handleCategoryFilter (cateName) {
+    async handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
-      window.scrollTo({ top: 100, behavior: 'auto' })
+      await new Promise(resolve => setTimeout(resolve, 100))
+      window.scrollTo({ top: 180, behavior: 'instant' })
     },
     handleTagsFilter () {
       this.tagsArray = this.selectTagsArray
@@ -435,6 +458,7 @@ export default {
 .keyword-text{
     color:$keyword-color;
 }
+
 .icon-star{
   padding-left: 2px;
   padding-right: 8px;
@@ -442,5 +466,13 @@ export default {
 .icon-star-false{
   padding-left: 2px;
   padding-right: 8px;
+}
+
+.icon-delete {
+  float: right;
+}
+
+.tag-align {
+  margin-top: 6px;
 }
 </style>
