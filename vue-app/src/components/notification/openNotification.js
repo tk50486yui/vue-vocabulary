@@ -14,6 +14,10 @@ function openNotification (response) {
         type = 'success'
         title = '資料修改'
         description = '資料修改成功'
+      } else if (response.config.method === 'patch') {
+        type = 'success'
+        title = '資料修改'
+        description = '資料修改成功'
       } else {
         type = 'success'
         title = '資料新增'

@@ -27,7 +27,7 @@ export default {
   },
 
   async updateOrder (data) {
-    const response = await api.put('/tags/order/all', data)
+    const response = await api.patch('/tags/order/all', data)
     return response.data
   },
 

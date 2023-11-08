@@ -27,7 +27,7 @@ export default {
   },
 
   async updateOrder (data) {
-    const response = await api.put('/categories/order/all', data)
+    const response = await api.patch('/categories/order/all', data)
     return response.data
   },
 

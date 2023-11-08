@@ -49,14 +49,7 @@
             <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
           </p>
           <p></p>
-          <a-popconfirm
-            title="確定要刪除嗎？"
-            ok-text="是"
-            cancel-text="否"
-            @confirm="onDelete(record.id)"
-          >
-            <DeleteFilled class="button-delete"/>
-          </a-popconfirm>
+          <DeleteBtn @confirm="onDelete(record.id)"/>
           <p></p>
           <div v-html="record.ws_description"></div>
         </template>
@@ -65,11 +58,14 @@
           <template v-if="['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(column.dataIndex)">
             <div>
               <template v-if="editTableData[record.key] && column.dataIndex === 'cate_name'">
-                <CategoriesTreeSelect size="small" placeholder="選擇"
+                <CategoriesTreeSelect
+                  size="small"
+                  placeholder="選擇"
                   :dropdownMatchSelectWidth="false" style="width: 100%"
                   v-model:value="editTableData[record.key]['cate_id']"
                   :defaultValue="editTableData[record.key]['cate_id']"
                   :treeDefaultExpandedKeys="[editTableData[record.key]['cate_id']]"
+                  @change="handleCategoriesSelectChange(editTableData[record.key])"
                  />
               </template>
               <template v-else-if="editTableData[record.key]">
@@ -79,6 +75,7 @@
               <template v-else>{{ text }}</template>
             </div>
           </template>
+          <!-- Table operation -->
           <template v-else-if="column.dataIndex === 'operation'">
             <div>
               <template v-if="editTableData[record.key]">
@@ -127,9 +124,10 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled, DeleteFilled } from '@ant-design/icons-vue'
+import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
@@ -140,7 +138,7 @@ export default {
     CloseOutlined,
     StarFilled,
     HeartFilled,
-    DeleteFilled,
+    DeleteBtn,
     RefreshBtn,
     CategoriesTreeSelect
   },
@@ -207,6 +205,9 @@ export default {
         await this.deleteById(id)
         await this.fetch()
       } catch (error) {}
+    },
+    handleCategoriesSelectChange (currentData) {
+      currentData.cate_id = typeof currentData.cate_id !== 'undefined' ? currentData.cate_id : null
     },
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
