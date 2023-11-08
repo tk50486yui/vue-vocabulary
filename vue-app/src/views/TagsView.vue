@@ -78,15 +78,10 @@
                           style="margin: -5px 0"/>
                       </template>
                       <template v-else>
-                        {{ text }}
-                        <a-popconfirm
-                          title="確定要刪除嗎？"
-                          ok-text="是"
-                          cancel-text="否"
-                          @confirm="onDelete(record.id)"
-                        >
-                          <DeleteFilled class="button-delete"/>
-                        </a-popconfirm>
+                        <div class="column-container">
+                          {{ text }}
+                          <DeleteBtn @confirm="onDelete(record.id)"/>
+                        </div>
                       </template>
                     </div>
                   </template>

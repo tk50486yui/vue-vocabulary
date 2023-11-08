@@ -27,8 +27,10 @@
                             </li>
                             <li :class="{ 'active': activeIndex === 4 }">
                                 <router-link :to="{ name: 'categories' }">
-                                    類別
-                                    <CaretDownOutlined />
+                                    <div class="dropdown-container">
+                                        類別
+                                        <CaretDownOutlined />
+                                    </div>
                                 </router-link>
                                 <ul class="dropdown">
                                     <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
@@ -36,8 +38,10 @@
                             </li>
                             <li :class="{ 'active': activeIndex === 5 }">
                                 <router-link :to="{ name: 'tags' }">
-                                    標籤
-                                    <CaretDownOutlined />
+                                    <div class="dropdown-container">
+                                        標籤
+                                        <CaretDownOutlined />
+                                    </div>
                                 </router-link>
                                 <ul class="dropdown">
                                     <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
@@ -130,6 +134,11 @@ export default {
 
 .canvas__open {
     display: none;
+}
+
+.dropdown-container{
+  display: flex;
+  align-items: center;
 }
 
 /*---------------------
