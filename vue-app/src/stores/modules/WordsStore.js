@@ -31,11 +31,11 @@ const getters = {
       ...state.words[key]
     }))
   },
-  filterWords: (state) => (keyword, options, tagsArray) => {
-    let firstFilteredWords = []
-    // 第一次搜尋篩選
+  filterWords: (state) => (keyword, options, tagsArray, choiceArray) => {
+    let currentFilteredWords = []
+    // 第一次搜尋篩選 (關鍵字及類別共用)
     if (keyword && options && options.length > 0) {
-      firstFilteredWords = Object.keys(state.words)
+      currentFilteredWords = Object.keys(state.words)
         .filter(key => {
           const word = state.words[key]
           return options.some(option => word[option] && word[option].includes(keyword))
@@ -44,23 +44,37 @@ const getters = {
           key,
           ...state.words[key]
         }))
-      return firstFilteredWords
     } else {
-      firstFilteredWords = Object.keys(state.words).map(key => ({
+      currentFilteredWords = Object.keys(state.words).map(key => ({
         key,
         ...state.words[key]
       }))
     }
-    // 第二次用tags分類篩選
+
+    // 第二次用 tags 篩選 接續第一個篩選結果 (OR)
     if (tagsArray && tagsArray.length > 0) {
-      return firstFilteredWords.filter(word => {
+      currentFilteredWords = currentFilteredWords.filter(word => {
         return (
           word.words_tags.values &&
           word.words_tags.values.some(tag => tagsArray.includes(tag.ts_name))
         )
       })
+    }
+    // 第三次用 ws_is_important ws_is_common 篩選 接續第二個篩選結果 (OR)
+    if (choiceArray && choiceArray.length > 0) {
+      return currentFilteredWords.filter(word => {
+        if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
+          return word.ws_is_important === true && word.ws_is_common === true
+        } else if (choiceArray.includes('ws_is_important')) {
+          return word.ws_is_important === true
+        } else if (choiceArray.includes('ws_is_common')) {
+          return word.ws_is_common === true
+        } else {
+          return currentFilteredWords
+        }
+      })
     } else {
-      return firstFilteredWords
+      return currentFilteredWords
     }
   }
 }

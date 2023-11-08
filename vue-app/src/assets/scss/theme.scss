@@ -1,0 +1,144 @@
+/*---------------------
+    Dark Theme 主題
+-----------------------*/
+.dark  {  
+
+    --input-background: #131120;
+    --select-background:#111111;
+    --select-text:#51ee0d;
+    --select-selected-text:rgb(22, 95, 56);
+    --select-selected-item-background:rgb(207, 63, 125);
+    --input-clear-icon:rgb(243, 239, 239);
+    --input-validate:#d46958;
+    
+    --radio-button-text:#fff;
+    --radio-button-text-active:#d1def9;
+    --radio-button-background:#152231;
+    --radio-button-background-active:#f16728;
+    --radio-button-border:#d4b7a2;
+
+    --radio-button-toggle-text:#fff;
+    --radio-button-toggle-text-active:#eaecf2;
+    --radio-button-toggle-background:#394345;
+    --radio-button-toggle-background-active:#00dda6ec;
+    --radio-button-toggle-border:#7d8885;
+
+    --head-background:#14080e;
+    --body-background:#111111;
+
+    --link-text:#e3f7af;
+    --link-text-hover:#08fead;
+
+    --list-link-text:#5af7ff;
+    --list-link-text-hover:#ebff35;
+
+    --link-icon-star:#e2ff29;
+    --link-icon-star-false:#ffffff;
+    --link-icon-heart:#f25e01;
+    --link-icon-heart-false:#f5f3f3;
+
+    --draggable-tree-text-hover:#e8f69a;
+
+    --card-link-text:rgb(251, 243, 243);
+    --card-link-text-hover:#f2fec6; 
+
+    --edit-icon:#54f88b;
+
+    --pagination-text:#e1fff0;
+    --pagination-background:#29b3e9;
+    --pagination-border:#fff;  
+    
+    --table-background:rgba(27, 29, 30, 1);
+    --table-text:rgb(241, 243, 245);
+    --table-border:rgb(52, 57, 59);
+    --table-expand-icon:#26140e;
+    --table-scrollbar:#454a4d #202324;
+    --table-scrollbar-shadow:0 1px 0 1px #202324;
+    
+    --collapse-head-background:#122929;
+    --collapse-background:#081521;
+    --collapse-sub-background:rgba(27, 29, 30, 0.4);
+
+    --tab-background:#22373c; 
+    --tab-text:#fcfdfd;
+    --tab-background-active:#0fadbb; 
+    --tab-background-active-hover:#0fadbb; 
+    --tab-text-active:#ffffff; 
+
+    --article-background:#101414;
+    --article-list-background:#24211e;
+    --article-date-text:#ebceb7;
+    --atticle-title-text:rgb(210, 210, 210);
+
+    --span-category-text:#ecf4cb;
+    
+    --title-link-text:#f3ebed;
+    --title-link-text-hover:#99eac5;
+
+    --descriptions-title-background:#231111;
+    --descriptions-title-text:rgb(247, 198, 6);
+
+    --editor-background:#353232;
+    --editor-text:#faf6f6;
+  
+    --menu-text-hover:#08fead;
+    --menu-text-selected:#0852c9;
+
+    --head-text:#fefefe;
+
+    --breadcrumb-text:#f9eaea;
+    --breadcrumb-text-active:rgb(251, 250, 220);
+    
+    --footer-a-text:#ede5e5; 
+
+}
+/*---------------------
+    Light Theme 主題
+-----------------------*/
+.light  {  
+    --input-background: #fffefe;
+    --input-validate:#eb2507;
+
+    --select-background:#fffefe;
+    --select-text:#111111;
+
+    --head-background:#f9f5f5;
+    --body-background:#f7f8fa;
+
+    --radio-button-text:#fff;
+    --radio-button-text-active:#d1def9;
+    --radio-button-background:#152231;
+    --radio-button-background-active:#f16728;
+    --radio-button-border:#d4b7a2;
+
+    --radio-button-toggle-text:#fff;
+    --radio-button-toggle-text-active:#eaecf2;
+    --radio-button-toggle-background:#394345;
+    --radio-button-toggle-background-active:#00dda6ec;
+    --radio-button-toggle-border:#7d8885;
+
+    --table-background:rgb(250, 251, 251);
+    --table-text:rgb(1, 6, 10);
+
+    --link-icon-star:rgb(253, 216, 8);
+    --link-icon-star-false:#d6d6d6;
+    --link-icon-heart:#f25e01;
+    --link-icon-heart-false:#e6e6e6;
+
+    --edit-icon:#6A6AFF;
+   
+    --collapse-head-background:#eee9ee;
+    --collapse-background:#FFFFFF;
+    --collapse-sub-background:#ebebeb;
+
+    --menu-text-hover:#08fead;
+    --menu-text-selected:#843e0b;
+
+    --head-text:#111111;
+
+    --breadcrumb-text:#1390e4;
+    --breadcrumb-text-active:rgb(75, 74, 75);
+
+    --footer-a-text:#5C5C5C;  
+
+}

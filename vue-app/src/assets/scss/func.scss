@@ -1,0 +1,29 @@
+@mixin icon-colors($theme) {
+    &.#{$theme} :deep(.icon-star a){
+      color: var(--link-icon-star);
+    }
+    &.#{$theme} :deep(.icon-heart a) {
+      color: var(--link-icon-heart);
+    }
+  
+    &.#{$theme} :deep(.icon-star a:hover){
+      color: var(--link-icon-star-false);
+    }
+    &.#{$theme} :deep(.icon-heart a:hover) {
+      color: var(--link-icon-heart-false);
+    }
+  
+    &.#{$theme} :deep(.icon-star-false a){
+      color: var(--link-icon-star-false);
+    }
+    &.#{$theme} :deep(.icon-heart-false a) {
+      color: var(--link-icon-heart-false);
+    }
+  
+    &.#{$theme} :deep(.icon-star-false a:hover){
+      color: var(--link-icon-star);
+    }
+    &.#{$theme} :deep(.icon-heart-false a:hover) {
+      color: var(--link-icon-heart);
+    }
+  }

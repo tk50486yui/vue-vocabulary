@@ -52,7 +52,7 @@
             </span>
         </div>
         <p></p>
-        <!-- 上層  第二層 -->
+        <!-- 上層  第二層 tags select -->
         <a-input-group>
           <a-row :gutter="4">
             <a-col :span="18">
@@ -77,13 +77,16 @@
           </a-row>
         </a-input-group>
         <p></p>
-        <!-- 上層  第三層 -->
+        <!-- 上層  第三層 tags filter (OR) -->
         <span>
           <template v-if="this.tagsArray.length > 0">
               <span style="padding-right: 6px;">
                 搜尋標籤（OR）：
                 <template v-for="(tag, index) in tagsArray" :key="index">
-                  #{{ tag }}
+                  {{ tag }}
+                  <template v-if="(this.tagsArray.length-1) !== index">
+                    ||
+                  </template>
                 </template>
           </span>
           </template>
@@ -93,15 +96,40 @@
               </span>
         </template>
         </span>
+        <template v-if="this.tagsArray.length > 0">
+          <p></p>
+          <a-button type="primary" size="small" shape="round" @click="onResetTags()" danger>重置標籤</a-button>
+        </template>
         <p></p>
-        <!-- 上層  第四層 -->
+        <!-- 上層  第四層 heart star -->
+        顯示（OR）：
+        <a-checkbox-group v-model:value="choiceArray" :options="choiceArrayOptions">
+          <template #label="{value}">
+            <span class="icon-theme" :class="$theme">
+              <div class="choice-container">
+              <template v-if="value === 'ws_is_important'">
+                <span class="icon-heart">
+                  <a class="choice-heart"><HeartFilled /></a>
+                </span>
+              </template>
+              <template v-if="value === 'ws_is_common'">
+                <span class="icon-star">
+                  <a class="choice-star"><StarFilled /></a>
+                </span>
+              </template>
+              </div>
+            </span>
+          </template>
+        </a-checkbox-group>
+        <p></p>
+        <!-- 上層  第五層  groups add -->
         <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
             新增單字組別
           </template>
           <template v-else>
             <template v-if="this.$WordsGroupsView.groupArray.length === 0">
-              請勾選單字或取消
+              請勾選單字或點擊取消
             </template>
             <template v-else>
               請繼續勾選單字
@@ -210,7 +238,7 @@
                                 </template>
                             </template>
                             <!-- tags -->
-                            <template v-if="item.words_tags.values != null && item.words_tags.values.length>0">
+                            <template v-if="item.words_tags.values != null && item.words_tags.values.length > 0">
                               <p></p>
                               <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
                                 <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
@@ -243,7 +271,7 @@ export default {
   },
   computed: {
     filterWordsResult () {
-      return this.filterWords(this.$keyword, this.$filters, this.tagsArray)
+      return this.filterWords(this.$keyword, this.$filters, this.tagsArray, this.choiceArray)
     },
     checkboxArray () {
       const newArray = {}
@@ -306,6 +334,10 @@ export default {
     onResetSearch () {
       this.updateKeyword('')
     },
+    onResetTags () {
+      this.selectTagsArray = []
+      this.handleTagsFilter()
+    },
     async handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
@@ -316,7 +348,6 @@ export default {
     handleTagsFilter () {
       this.tagsArray = this.selectTagsArray
     },
-    /* select pagination */
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
@@ -332,7 +363,7 @@ export default {
       this.currentPage = this.pagination.current
       this.AfterReady = true
     },
-    /* scroll */
+    // scroll
     handleDetailsClick () {
       const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
       this.updateWordsGrid({ variable: 'currentScrollY', data: scrollY })
@@ -340,7 +371,6 @@ export default {
       this.updateWordsGrid({ variable: 'jumpPage', data: false })
       this.updateWordsGrid({ variable: 'currentPageSize', data: this.selectPageSize })
     },
-    /* checkbox */
     changeCheckbox (id, wsName) {
       if (this.checkboxArray[id]) {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: true } })
@@ -407,6 +437,7 @@ export default {
     const ReadySpinning = ref(false)
     const selectTagsArray = ref([])
     const tagsArray = ref([])
+    const choiceArray = ref([])
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
@@ -422,12 +453,23 @@ export default {
       showSizeChanger: false
     })
 
+    const choiceArrayOptions = [
+      {
+        value: 'ws_is_important'
+      },
+      {
+        value: 'ws_is_common'
+      }
+    ]
+
     return {
       Ready,
       AfterReady,
       ReadySpinning,
       selectTagsArray,
       tagsArray,
+      choiceArray,
+      choiceArrayOptions,
       pagination,
       selectPageSize,
       currentPage,
@@ -471,7 +513,16 @@ export default {
 .icon-delete {
   float: right;
 }
-
+.choice-container{
+  display: flex;
+  align-items: center;
+}
+.choice-heart{
+  display: flex;
+}
+.choice-star{
+  display: flex;
+}
 .tag-align {
   margin-top: 6px;
 }
