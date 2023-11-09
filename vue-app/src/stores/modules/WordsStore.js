@@ -52,16 +52,31 @@ const getters = {
     }
 
     // 第二次用 tags 篩選 接續第一個篩選結果
-    if (tagsArray && tagsArray.length > 0) {
+    if (tagsOperator === 'none') { // NONE
+      currentFilteredWords = currentFilteredWords.filter(word => {
+        return !word.words_tags.values || word.words_tags.values.length === 0
+      })
+    } else if (tagsArray && tagsArray.length > 0) {
       // AND
-      if (tagsOperator && tagsOperator === 'and' && tagsArray.length > 1) {
-        currentFilteredWords = currentFilteredWords.filter(word => {
-          return (
-            word.words_tags.values &&
-            word.words_tags.values.length >= tagsArray.length &&
-            tagsArray.every(tag => word.words_tags.values.some(t => t.ts_name === tag))
-          )
-        })
+      if (tagsOperator && tagsOperator === 'and' && tagsArray.length >= 1) {
+        // length = 1
+        if (tagsArray.length === 1) {
+          currentFilteredWords = currentFilteredWords.filter(word => {
+            return (
+              word.words_tags.values &&
+              word.words_tags.values.length === tagsArray.length &&
+              tagsArray.every(tag => word.words_tags.values.some(t => t.ts_name === tag))
+            )
+          })
+        } else { // length > 1
+          currentFilteredWords = currentFilteredWords.filter(word => {
+            return (
+              word.words_tags.values &&
+              word.words_tags.values.length >= tagsArray.length &&
+              tagsArray.every(tag => word.words_tags.values.some(t => t.ts_name === tag))
+            )
+          })
+        }
       } else { // OR
         currentFilteredWords = currentFilteredWords.filter(word => {
           return (
@@ -78,10 +93,14 @@ const getters = {
       })
     } else if (choiceArray && choiceArray.length > 0) {
       // AND
-      if (choiceOperator && choiceOperator === 'and' && choiceArray.length > 1) {
+      if (choiceOperator && choiceOperator === 'and' && choiceArray.length >= 1) {
         return currentFilteredWords.filter(word => {
           if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
             return word.ws_is_important === true && word.ws_is_common === true
+          } else if (choiceArray.includes('ws_is_important')) {
+            return word.ws_is_important === true && word.ws_is_common === false
+          } else if (choiceArray.includes('ws_is_common')) {
+            return word.ws_is_important === false && word.ws_is_common === true
           } else {
             return currentFilteredWords
           }

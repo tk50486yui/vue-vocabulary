@@ -87,20 +87,10 @@
             <a-radio-group v-model:value="tagsOperator">
               <a-radio value="or">OR</a-radio>
               <a-radio value="and">AND</a-radio>
+              <a-radio value="none">NONE</a-radio>
             </a-radio-group>
           </span>
           ）
-          <template v-if="tagsArray.length > 0">
-            <template v-for="(tag, index) in tagsArray" :key="index">
-              {{ tag }}
-              <template v-if="(tagsArray.length-1) !== index">
-                {{ tagsOperatorText[tagsOperator] }}
-              </template>
-            </template>
-          </template>
-          <template v-else>
-              無
-          </template>
         </span>
         <p></p>
         <!-- 上層  第四層 heart star -->
@@ -111,7 +101,7 @@
             <a-radio-group v-model:value="choiceOperator">
               <a-radio value="or">OR</a-radio>
               <a-radio value="and">AND</a-radio>
-              <a-radio value="none">無標記</a-radio>
+              <a-radio value="none">NONE</a-radio>
             </a-radio-group>
           </span>
           ）
@@ -480,11 +470,6 @@ export default {
       showSizeChanger: false
     })
 
-    const tagsOperatorText = reactive({
-      or: ' ｜ ',
-      and: ' ＆ '
-    })
-
     const choiceArrayOptions = [
       {
         value: 'ws_is_important'
@@ -501,7 +486,6 @@ export default {
       selectTagsArray,
       tagsArray,
       tagsOperator,
-      tagsOperatorText,
       choiceArray,
       choiceArrayOptions,
       choiceOperator,
