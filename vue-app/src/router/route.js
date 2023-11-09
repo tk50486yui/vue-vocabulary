@@ -15,6 +15,11 @@ import CategoriesDragView from '@/views/CategoriesDragView.vue'
 
 const routes = [
   {
+    path: '',
+    name: 'home',
+    component: WordsGridView
+  },
+  {
     path: '/wordsadd',
     name: 'wordsAdd',
     component: WordsAddView

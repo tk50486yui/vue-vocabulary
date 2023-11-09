@@ -1,18 +1,18 @@
 <template>
 <div>
-    <header class="header" :class="[this.$theme]">
+    <header class="header" :class="$theme">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <router-link :to="{ name: 'words' }">
+                        <router-link :to="{ name: 'home' }">
                             <img :src="require('@/assets/logo.png')" />
                         </router-link>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu" >
-                        <ul class="nav-menu" :class="[this.$theme]">
+                        <ul class="nav-menu" :class="$theme">
                             <li :class="{ 'active': activeIndex === 0 }">
                                 <router-link :to="{ name: 'wordsAdd' }">新增</router-link>
                             </li>
@@ -108,6 +108,9 @@ export default {
         case 'wordsGroupsList':
           this.activeIndex = 6
           break
+        default:
+          this.activeIndex = 2
+          break
       }
     }
   },
@@ -117,7 +120,7 @@ export default {
     }
   },
   setup () {
-    const activeIndex = ref(1)
+    const activeIndex = ref(2)
 
     return {
       activeIndex

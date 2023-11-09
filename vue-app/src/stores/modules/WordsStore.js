@@ -31,7 +31,7 @@ const getters = {
       ...state.words[key]
     }))
   },
-  filterWords: (state) => (keyword, options, tagsArray, choiceArray) => {
+  filterWords: (state) => (keyword, options, tagsArray, choiceArray, tagsOperator, choiceOperator) => {
     let currentFilteredWords = []
     // 第一次搜尋篩選 (關鍵字及類別共用)
     if (keyword && options && options.length > 0) {
@@ -51,28 +51,54 @@ const getters = {
       }))
     }
 
-    // 第二次用 tags 篩選 接續第一個篩選結果 (OR)
+    // 第二次用 tags 篩選 接續第一個篩選結果
     if (tagsArray && tagsArray.length > 0) {
-      currentFilteredWords = currentFilteredWords.filter(word => {
-        return (
-          word.words_tags.values &&
-          word.words_tags.values.some(tag => tagsArray.includes(tag.ts_name))
-        )
-      })
+      // AND
+      if (tagsOperator && tagsOperator === 'and' && tagsArray.length > 1) {
+        currentFilteredWords = currentFilteredWords.filter(word => {
+          return (
+            word.words_tags.values &&
+            word.words_tags.values.length >= tagsArray.length &&
+            tagsArray.every(tag => word.words_tags.values.some(t => t.ts_name === tag))
+          )
+        })
+      } else { // OR
+        currentFilteredWords = currentFilteredWords.filter(word => {
+          return (
+            word.words_tags.values &&
+            word.words_tags.values.some(tag => tagsArray.includes(tag.ts_name))
+          )
+        })
+      }
     }
-    // 第三次用 ws_is_important ws_is_common 篩選 接續第二個篩選結果 (OR)
-    if (choiceArray && choiceArray.length > 0) {
+    // 第三次用 ws_is_important ws_is_common 篩選 接續第二個篩選結果 OR AND NONE
+    if (choiceOperator === 'none') { // NONE
       return currentFilteredWords.filter(word => {
-        if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
-          return word.ws_is_important === true && word.ws_is_common === true
-        } else if (choiceArray.includes('ws_is_important')) {
-          return word.ws_is_important === true
-        } else if (choiceArray.includes('ws_is_common')) {
-          return word.ws_is_common === true
-        } else {
-          return currentFilteredWords
-        }
+        return word.ws_is_important === false && word.ws_is_common === false
       })
+    } else if (choiceArray && choiceArray.length > 0) {
+      // AND
+      if (choiceOperator && choiceOperator === 'and' && choiceArray.length > 1) {
+        return currentFilteredWords.filter(word => {
+          if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
+            return word.ws_is_important === true && word.ws_is_common === true
+          } else {
+            return currentFilteredWords
+          }
+        })
+      } else { // OR
+        return currentFilteredWords.filter(word => {
+          if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
+            return word.ws_is_important === true || word.ws_is_common === true
+          } else if (choiceArray.includes('ws_is_important')) {
+            return word.ws_is_important === true
+          } else if (choiceArray.includes('ws_is_common')) {
+            return word.ws_is_common === true
+          } else {
+            return currentFilteredWords
+          }
+        })
+      }
     } else {
       return currentFilteredWords
     }

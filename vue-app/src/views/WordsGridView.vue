@@ -5,7 +5,7 @@
           <h4>單字總覽</h4>
         </div>
         <!-- 上層 -->
-        <div class="select-theme" :class="this.$theme">
+        <div class="select-theme" :class="$theme">
             每頁顯示：
             <a-select
                 ref="select"
@@ -61,8 +61,8 @@
               ref="TagsTreeSelect"
               placeholder="以標籤過濾資料"
               style="width: 100%"
-              v-model:value="selectTagsArray"
-              :treeDefaultExpandedKeys="selectTagsArray"
+              v-model:value="tagsArray"
+              :treeDefaultExpandedKeys="tagsArray"
               :field-names="{
                   children: 'children',
                   label: 'ts_name',
@@ -72,37 +72,50 @@
               />
             </a-col>
             <a-col :span="2">
-              <a-button  size="small" shape="round" @click="handleTagsFilter()" danger>確認</a-button>
+              <template v-if="tagsArray.length > 0">
+                <a-button type="primary" size="small" shape="round" @click="onResetTags()" danger>重置標籤</a-button>
+              </template>
             </a-col>
           </a-row>
         </a-input-group>
         <p></p>
         <!-- 上層  第三層 tags filter (OR) -->
         <span>
-          <template v-if="this.tagsArray.length > 0">
-              <span style="padding-right: 6px;">
-                搜尋標籤（OR）：
-                <template v-for="(tag, index) in tagsArray" :key="index">
-                  {{ tag }}
-                  <template v-if="(this.tagsArray.length-1) !== index">
-                    ||
-                  </template>
-                </template>
+          標籤：
+          （
+          <span class="radio-theme" :class="$theme">
+            <a-radio-group v-model:value="tagsOperator">
+              <a-radio value="or">OR</a-radio>
+              <a-radio value="and">AND</a-radio>
+            </a-radio-group>
           </span>
+          ）
+          <template v-if="tagsArray.length > 0">
+            <template v-for="(tag, index) in tagsArray" :key="index">
+              {{ tag }}
+              <template v-if="(tagsArray.length-1) !== index">
+                {{ tagsOperatorText[tagsOperator] }}
+              </template>
+            </template>
           </template>
           <template v-else>
-              <span style="padding-right: 6px;">
-                搜尋標籤：無
-              </span>
-        </template>
+              無
+          </template>
         </span>
-        <template v-if="this.tagsArray.length > 0">
-          <p></p>
-          <a-button type="primary" size="small" shape="round" @click="onResetTags()" danger>重置標籤</a-button>
-        </template>
         <p></p>
         <!-- 上層  第四層 heart star -->
-        顯示（OR）：
+        <span>
+          標記：
+          （
+          <span class="radio-theme" :class="$theme">
+            <a-radio-group v-model:value="choiceOperator">
+              <a-radio value="or">OR</a-radio>
+              <a-radio value="and">AND</a-radio>
+              <a-radio value="none">無標記</a-radio>
+            </a-radio-group>
+          </span>
+          ）
+        </span>
         <a-checkbox-group v-model:value="choiceArray" :options="choiceArrayOptions">
           <template #label="{value}">
             <span class="icon-theme" :class="$theme">
@@ -241,7 +254,9 @@
                             <template v-if="item.words_tags.values != null && item.words_tags.values.length > 0">
                               <p></p>
                               <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
-                                <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
+                                <a @click="handleTagsLink(subItem.ts_name)">
+                                  <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
+                                </a>
                               </template>
                             </template>
                         </a-card>
@@ -271,7 +286,10 @@ export default {
   },
   computed: {
     filterWordsResult () {
-      return this.filterWords(this.$keyword, this.$filters, this.tagsArray, this.choiceArray)
+      return this.filterWords(
+        this.$keyword, this.$filters, this.tagsArray, this.choiceArray,
+        this.tagsOperator, this.choiceOperator
+      )
     },
     checkboxArray () {
       const newArray = {}
@@ -331,13 +349,6 @@ export default {
         await this.fetch()
       } catch (error) {}
     },
-    onResetSearch () {
-      this.updateKeyword('')
-    },
-    onResetTags () {
-      this.selectTagsArray = []
-      this.handleTagsFilter()
-    },
     async handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
@@ -345,8 +356,22 @@ export default {
       await new Promise(resolve => setTimeout(resolve, 100))
       window.scrollTo({ top: 180, behavior: 'instant' })
     },
-    handleTagsFilter () {
-      this.tagsArray = this.selectTagsArray
+    async handleTagsLink (val) {
+      await this.onResetAll()
+      this.tagsArray.push(val)
+      await new Promise(resolve => setTimeout(resolve, 100))
+      window.scrollTo({ top: 180, behavior: 'instant' })
+    },
+    async onResetSearch () {
+      this.updateKeyword('')
+    },
+    async onResetTags () {
+      this.tagsArray = []
+    },
+    async onResetAll () {
+      this.onResetSearch()
+      this.onResetTags()
+      this.choiceArray = []
     },
     handlePageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
@@ -437,7 +462,9 @@ export default {
     const ReadySpinning = ref(false)
     const selectTagsArray = ref([])
     const tagsArray = ref([])
+    const tagsOperator = ref('or')
     const choiceArray = ref([])
+    const choiceOperator = ref('or')
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
@@ -451,6 +478,11 @@ export default {
       pageSize: Number(selectPageSize.value),
       position: 'bottom',
       showSizeChanger: false
+    })
+
+    const tagsOperatorText = reactive({
+      or: ' ｜ ',
+      and: ' ＆ '
     })
 
     const choiceArrayOptions = [
@@ -468,8 +500,11 @@ export default {
       ReadySpinning,
       selectTagsArray,
       tagsArray,
+      tagsOperator,
+      tagsOperatorText,
       choiceArray,
       choiceArrayOptions,
+      choiceOperator,
       pagination,
       selectPageSize,
       currentPage,

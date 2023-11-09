@@ -211,6 +211,15 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Radio Button
 -----------------------*/
+.radio-theme{  
+  &.dark :deep(.ant-radio-wrapper){
+    color: var(--head-text);
+  }
+  &.light :deep(.ant-radio-wrapper){   
+    color: var(--head-text);
+  }
+}
+
 .radio-button-theme{
   // dark
   &.dark :deep(.ant-radio-button-wrapper){   

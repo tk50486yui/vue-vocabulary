@@ -6,7 +6,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-links" :class="[this.$theme]">
                         <span>
-                            <router-link :to="{ name: 'words' }">
+                            <router-link :to="{ name: 'home' }">
                                 <font-awesome-icon :icon="['fas', 'house']" />  首頁
                             </router-link>
                         </span>
@@ -97,7 +97,7 @@ export default {
     }
   },
   setup () {
-    const activeRoute = ref('當前')
+    const activeRoute = ref('')
     const activeHome = ref(false)
     return {
       activeRoute,
