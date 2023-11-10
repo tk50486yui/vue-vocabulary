@@ -14,18 +14,22 @@
                     <nav class="header__menu" >
                         <ul class="nav-menu" :class="$theme">
                             <li :class="{ 'active': activeIndex === 0 }">
-                                <router-link :to="{ name: 'wordsAdd' }">新增</router-link>
+                                <router-link :to="{ name: 'wordsGrid' }">
+                                    <div class="dropdown-container">
+                                        單字
+                                        <CaretDownOutlined />
+                                    </div>
+                                </router-link>
+                                <ul class="dropdown">
+                                    <li><router-link :to="{ name: 'wordsGrid' }">單字總覽</router-link></li>
+                                    <li><router-link :to="{ name: 'words' }">單字表</router-link></li>
+                                    <li><router-link :to="{ name: 'wordsAdd' }">單字新增</router-link></li>
+                                </ul>
                             </li>
                             <li :class="{ 'active': activeIndex === 1 }">
-                                <router-link :to="{ name: 'words' }">表格</router-link>
-                            </li>
-                            <li :class="{ 'active': activeIndex === 2 }">
-                                <router-link :to="{ name: 'wordsGrid' }">單字</router-link>
-                            </li>
-                            <li :class="{ 'active': activeIndex === 3 }">
                                 <router-link :to="{ name: 'articles' }">文章</router-link>
                             </li>
-                            <li :class="{ 'active': activeIndex === 4 }">
+                            <li :class="{ 'active': activeIndex === 2 }">
                                 <router-link :to="{ name: 'categories' }">
                                     <div class="dropdown-container">
                                         類別
@@ -33,10 +37,11 @@
                                     </div>
                                 </router-link>
                                 <ul class="dropdown">
+                                    <li><router-link :to="{ name: 'categories' }">類別列表</router-link></li>
                                     <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
                                 </ul>
                             </li>
-                            <li :class="{ 'active': activeIndex === 5 }">
+                            <li :class="{ 'active': activeIndex === 3 }">
                                 <router-link :to="{ name: 'tags' }">
                                     <div class="dropdown-container">
                                         標籤
@@ -44,10 +49,11 @@
                                     </div>
                                 </router-link>
                                 <ul class="dropdown">
+                                    <li><router-link :to="{ name: 'categories' }">標籤列表</router-link></li>
                                     <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
                                 </ul>
                             </li>
-                            <li :class="{ 'active': activeIndex === 6 }">
+                            <li :class="{ 'active': activeIndex === 4 }">
                                 <router-link :to="{ name: 'wordsGroupsList' }">群組</router-link>
                             </li>
                         </ul>
@@ -87,29 +93,27 @@ export default {
     setActive () {
       const { name } = this.$route
       switch (name) {
+        case 'wordsGrid':
+        case 'words':
         case 'wordsAdd':
           this.activeIndex = 0
           break
-        case 'words':
+        case 'articles':
           this.activeIndex = 1
           break
-        case 'wordsGrid':
-          this.activeIndex = 2
-          break
-        case 'articles':
-          this.activeIndex = 3
-          break
         case 'categories':
-          this.activeIndex = 4
+        case 'categoriesDrag':
+          this.activeIndex = 2
           break
         case 'tags':
-          this.activeIndex = 5
+        case 'tagsDrag':
+          this.activeIndex = 3
           break
         case 'wordsGroupsList':
-          this.activeIndex = 6
+          this.activeIndex = 4
           break
         default:
-          this.activeIndex = 2
+          this.activeIndex = 0
           break
       }
     }

@@ -4,54 +4,6 @@
         <div class="section-title">
           <h4>單字總覽</h4>
         </div>
-        <!-- 上層 -->
-        <div class="select-theme" :class="$theme">
-            每頁顯示：
-            <a-select
-                ref="select"
-                v-model:value="selectPageSize"
-                size="small"
-                style="width: 80px"
-                @change="handlePageSize()"
-                >
-                <a-select-option value="10">10 筆</a-select-option>
-                <a-select-option value="20">20 筆</a-select-option>
-                <a-select-option value="50">50 筆</a-select-option>
-                <a-select-option value="100">100 筆</a-select-option>
-                <a-select-option :value="this.words.length">全部</a-select-option>
-            </a-select>
-            <span style="padding-left: 6px;">當前：</span>
-              <a-select
-                  ref="selectCurrent"
-                  v-model:value="currentPage"
-                  size="small"
-                  style="width: 80px"
-                  @change="handleCurrentPage()"
-                  >
-                  <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
-                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
-                  </template>
-              </a-select>
-            <span style="padding-left: 6px;">
-                <template v-if="this.$keyword != '' && this.$filters.length > 0">
-                    <span style="padding-right: 6px;">
-                      搜尋條件：含 ` {{ this.$keyword }} ` 的結果
-                    </span>
-                </template>
-                <template v-else>
-                    <span style="padding-right: 6px;">
-                      搜尋條件：無
-                    </span>
-                </template>
-            共  {{ this.filterWordsResult.length }} 筆
-            </span>
-            <span style="padding-left: 6px;">
-                <template v-if="this.$keyword != ''">
-                  <a-button type="primary" size="small" shape="round" @click="onResetSearch()" danger>清除搜尋</a-button>
-                </template>
-            </span>
-        </div>
-        <p></p>
         <!-- 上層  第二層 tags select -->
         <a-input-group>
           <a-row :gutter="4">
@@ -139,121 +91,169 @@
             </template>
           </template>
         </a-button>
-        <p></p>
         <!-- 主頁面 card -->
         <a-spin :spinning="ReadySpinning">
-            <div class="list-card-theme" :class="this.$theme" ref="listCard">
-                <a-list :data-source="this.filterWordsResult" :pagination="pagination"
-                    :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3, xxxl: 4 }"
-                >
-                    <template #renderItem="{ item }">
-                    <a-list-item>
-                        <a-card>
-                            <!-- cate_name -->
-                            <template #title>
-                              <template v-if="item.cate_name == null || item.cate_name == ''">
-                                  --
-                              </template>
-                              <template v-else>
-                                  <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
-                                      <a @click="handleCategoryFilter(item.cate_name)">
-                                      <template v-for="(char, index) in item.cate_name" :key="char + index">
-                                          <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                                      </template>
-                                      </a>
-                                  </template>
-                                  <template v-else>
-                                      <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
-                                  </template>
-                              </template>
-                            </template>
-                            <!-- checkbox -->
-                            <template v-if="this.$WordsGroupsDetailsView.updateNow === true || checkboxShow === true">
-                              <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
-                              <p></p>
-                            </template>
-                            <!-- Icon Star Heart -->
-                            <span class="icon-theme" :class="this.$theme">
-                              <template v-if="item.ws_is_common">
-                                <span class="icon-star">
-                                  <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
-                                </span>
-                              </template>
-                              <template v-else>
-                                <span class="icon-star-false">
-                                  <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
-                                </span>
-                              </template>
-                              <template v-if="item.ws_is_important">
-                                <span class="icon-heart">
-                                  <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
-                                </span>
-                              </template>
-                              <template v-else>
-                                <span class="icon-heart-false">
-                                  <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
-                                </span>
-                              </template>
-                              <span class="icon-delete">
-                                <DeleteBtn  @confirm="onDelete(item.id)" />
-                              </span>
-                            </span>
-                            <p></p>
-                            <!-- ws_name -->
-                            <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
-                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
-                                    <template v-for="(char, index) in item.ws_name" :key="char + index">
-                                        <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                                    </template>
-                                </router-link>
-                            </template>
-                            <template v-else>
-                                <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">{{ item.ws_name }}</router-link>
-                            </template>
-                            <p></p>
-                            <!-- ws_pronunciation -->
-                            <template v-if="item.ws_pronunciation == null || item.ws_pronunciation == ''">
-                                <br>
-                            </template>
-                            <template v-else>
-                                <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">
-                                    <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
-                                        <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                                    </template>
-                                </template>
-                                <template v-else>
-                                    {{ item.ws_pronunciation }}
-                                </template>
-                            </template>
-                            <p></p>
-                            <!-- ws_definition -->
-                            <template v-if="item.ws_definition == null || item.ws_definition == ''">
-                                <br>
-                            </template>
-                            <template v-else>
-                                <template v-if="this.$keyword != '' && this.$filters.includes('ws_definition') && item.ws_definition.includes(this.$keyword)">
-                                    <template v-for="(char, index) in item.ws_definition" :key="char + index">
-                                        <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                                    </template>
-                                </template>
-                                <template v-else>
-                                    {{ item.ws_definition }}
-                                </template>
-                            </template>
-                            <!-- tags -->
-                            <template v-if="item.words_tags.values != null && item.words_tags.values.length > 0">
-                              <p></p>
-                              <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
-                                <a @click="handleTagsLink(subItem.ts_name)">
-                                  <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
-                                </a>
-                              </template>
-                            </template>
-                        </a-card>
-                    </a-list-item>
+          <div class="list-card-theme" :class="this.$theme" ref="listCard">
+            <a-list :data-source="this.filterWordsResult" :pagination="pagination"
+                :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3, xxxl: 4 }"
+            >
+              <!-- header -->
+              <template #header>
+                <span class="select-theme" :class="$theme">
+                  每頁顯示：
+                  <a-select
+                    ref="select"
+                    v-model:value="selectPageSize"
+                    size="small"
+                    style="width: 80px"
+                    @change="handlePageSize()"
+                    >
+                    <a-select-option value="10">10 筆</a-select-option>
+                    <a-select-option value="20">20 筆</a-select-option>
+                    <a-select-option value="50">50 筆</a-select-option>
+                    <a-select-option value="100">100 筆</a-select-option>
+                    <a-select-option :value="this.words.length">全部</a-select-option>
+                  </a-select>
+                  <span style="padding-left: 6px;">當前：</span>
+                    <a-select
+                      ref="selectCurrent"
+                      v-model:value="currentPage"
+                      size="small"
+                      style="width: 80px"
+                      @change="handleCurrentPage()"
+                      >
+                      <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
+                        <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                      </template>
+                    </a-select>
+                  <span style="padding-left: 6px;">
+                    <template v-if="this.$keyword != '' && this.$filters.length > 0">
+                      <span style="padding-right: 6px;">
+                        搜尋條件： ` {{ this.$keyword }} `
+                      </span>
                     </template>
-                </a-list>
-            </div>
+                    <template v-else>
+                      <span style="padding-right: 6px;">
+                        搜尋條件：無
+                      </span>
+                    </template>
+                    共  {{ this.filterWordsResult.length }} 筆
+                  </span>
+                  <span style="padding-left: 6px;">
+                    <template v-if="this.$keyword != ''">
+                      <a-button type="primary" size="small" shape="round" @click="onResetSearch()" danger>清空搜尋</a-button>
+                    </template>
+                  </span>
+                </span>
+              </template>
+              <template #renderItem="{ item }">
+              <a-list-item>
+                  <a-card>
+                      <!-- cate_name -->
+                      <template #title>
+                        <template v-if="item.cate_name == null || item.cate_name == ''">
+                            --
+                        </template>
+                        <template v-else>
+                            <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
+                                <a @click="handleCategoryFilter(item.cate_name)">
+                                <template v-for="(char, index) in item.cate_name" :key="char + index">
+                                    <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                                </template>
+                                </a>
+                            </template>
+                            <template v-else>
+                                <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
+                            </template>
+                        </template>
+                      </template>
+                      <!-- checkbox -->
+                      <template v-if="this.$WordsGroupsDetailsView.updateNow === true || checkboxShow === true">
+                        <a-checkbox  v-model:checked="checkboxArray[item.id]" @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
+                        <p></p>
+                      </template>
+                      <!-- Icon Star Heart -->
+                      <span class="icon-theme" :class="this.$theme">
+                        <template v-if="item.ws_is_common">
+                          <span class="icon-star">
+                            <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
+                          </span>
+                        </template>
+                        <template v-else>
+                          <span class="icon-star-false">
+                            <a @click="onUpdateCommon(item.id, item)"><StarFilled /></a>
+                          </span>
+                        </template>
+                        <template v-if="item.ws_is_important">
+                          <span class="icon-heart">
+                            <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
+                          </span>
+                        </template>
+                        <template v-else>
+                          <span class="icon-heart-false">
+                            <a @click="onUpdateImportant(item.id, item)"><HeartFilled /></a>
+                          </span>
+                        </template>
+                        <span class="icon-delete">
+                          <DeleteBtn  @confirm="onDelete(item.id)" />
+                        </span>
+                      </span>
+                      <p></p>
+                      <!-- ws_name -->
+                      <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
+                          <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
+                              <template v-for="(char, index) in item.ws_name" :key="char + index">
+                                  <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                              </template>
+                          </router-link>
+                      </template>
+                      <template v-else>
+                          <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">{{ item.ws_name }}</router-link>
+                      </template>
+                      <p></p>
+                      <!-- ws_pronunciation -->
+                      <template v-if="item.ws_pronunciation == null || item.ws_pronunciation == ''">
+                          <br>
+                      </template>
+                      <template v-else>
+                          <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">
+                              <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
+                                  <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                              </template>
+                          </template>
+                          <template v-else>
+                              {{ item.ws_pronunciation }}
+                          </template>
+                      </template>
+                      <p></p>
+                      <!-- ws_definition -->
+                      <template v-if="item.ws_definition == null || item.ws_definition == ''">
+                          <br>
+                      </template>
+                      <template v-else>
+                          <template v-if="this.$keyword != '' && this.$filters.includes('ws_definition') && item.ws_definition.includes(this.$keyword)">
+                              <template v-for="(char, index) in item.ws_definition" :key="char + index">
+                                  <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                              </template>
+                          </template>
+                          <template v-else>
+                              {{ item.ws_definition }}
+                          </template>
+                      </template>
+                      <!-- tags -->
+                      <template v-if="item.words_tags.values != null && item.words_tags.values.length > 0">
+                        <p></p>
+                        <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
+                          <a @click="handleTagsLink(subItem.ts_name)">
+                            <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
+                          </a>
+                        </template>
+                      </template>
+                  </a-card>
+              </a-list-item>
+              </template>
+            </a-list>
+          </div>
         </a-spin>
     </template>
 </template>
@@ -519,7 +519,6 @@ export default {
 .keyword-text{
     color:$keyword-color;
 }
-
 .icon-star{
   padding-left: 2px;
   padding-right: 8px;

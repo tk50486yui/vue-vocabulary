@@ -67,16 +67,22 @@ export default {
           this.activeRoute = '單字詳細說明'
           break
         case 'articles':
-          this.activeRoute = '文章'
+          this.activeRoute = '文章列表'
           break
         case 'articlesContent':
           this.activeRoute = '文章內容'
           break
         case 'categories':
-          this.activeRoute = '類別'
+          this.activeRoute = '類別列表'
+          break
+        case 'categoriesDrag':
+          this.activeRoute = '類別順序調整'
           break
         case 'tags':
-          this.activeRoute = '標籤'
+          this.activeRoute = '標籤列表'
+          break
+        case 'tagsDrag':
+          this.activeRoute = '標籤順序調整'
           break
         case 'wordsGroupsList':
           this.activeRoute = '群組列表'

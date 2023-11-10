@@ -428,6 +428,11 @@ $edit-icon-color: #6A6AFF;
     background: var(--table-background);   
     color: var(--table-text);
   }
+
+  /* card header */
+  &.dark :deep(.ant-list-header){
+    color: var(--table-text);
+  } 
   
   /* card title */
   &.dark :deep(.ant-card-head-title a){    
