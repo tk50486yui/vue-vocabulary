@@ -49,7 +49,7 @@
                                     </div>
                                 </router-link>
                                 <ul class="dropdown">
-                                    <li><router-link :to="{ name: 'categories' }">標籤列表</router-link></li>
+                                    <li><router-link :to="{ name: 'tags' }">標籤列表</router-link></li>
                                     <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
                                 </ul>
                             </li>

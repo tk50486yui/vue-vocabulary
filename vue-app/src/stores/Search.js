@@ -2,7 +2,8 @@ const state = {
   $keyword: '',
   $searchClass: '',
   $filters: ['ws_name'],
-  $filtersTags: []
+  $filtersTags: [],
+  $filtersTagsState: false
 }
 
 const actions = {
@@ -17,6 +18,9 @@ const actions = {
   },
   updateFiltersTags ({ commit }, filters) {
     commit('setFiltersTags', filters)
+  },
+  pushFiltersTags ({ commit }, filters) {
+    commit('pushFiltersTags', filters)
   }
 }
 
@@ -30,8 +34,20 @@ const mutations = {
   setFilters (state, filters) {
     state.$filters = filters
   },
-  setFiltersTags (state, filtersTags) {
+  async setFiltersTags (state, filtersTags) {
     state.$filtersTags = filtersTags
+    state.$filtersTagsState = false // 不是在 menu 設定的
+  },
+  async pushFiltersTags (state, id) {
+    if (state.$filtersTags.includes(id)) {
+      const index = state.$filtersTags.indexOf(id)
+      if (index !== -1) {
+        state.$filtersTags.splice(index, 1)
+      }
+    } else {
+      state.$filtersTags.push(id)
+    }
+    state.$filtersTagsState = true // 是在 menu 設定的
   }
 }
 

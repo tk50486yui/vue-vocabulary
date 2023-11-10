@@ -14,24 +14,33 @@
         <a-collapse v-model:activeKey="activeKey">
           <!--  子摺疊區塊  -->
           <a-collapse-panel key="1">
-              <div class="menu-scroll">
-                  <!--  類別最頂層 -->
-                  <a-menu mode="inline">
-                      <!--  第一層  for 顯示  -->
-                      <template v-for="data in categories" :key="data.id">
-                          <template v-if="data.children && data.children.length">
-                              <a-sub-menu :key="data.id" :title="data.cate_name">
-                                  <TreeCategoriesMenu :data="data" />
-                              </a-sub-menu>
+            <div class="menu-scroll">
+                <!--  類別最頂層 -->
+                <a-menu mode="inline">
+                  <!--  第一層  for 顯示  -->
+                  <template v-for="data in categories" :key="data.id">
+                      <template v-if="data.children && data.children.length">
+                        <a-sub-menu :key="data.id">
+                          <template #title>
+                            <a @click="handleCategoryFilter(data.cate_name)">
+                              {{ data.cate_name}}
+                            </a>
                           </template>
-                          <template v-else>
-                              <a-menu-item :key="data.id"> {{ data.cate_name }}</a-menu-item>
-                          </template>
+                          <TreeCategoriesMenu :data="data" />
+                        </a-sub-menu>
                       </template>
-                      <!--  第一層  for 結束  -->
-                  </a-menu>
-                  <!-- 類別最頂層  end  -->
-              </div>
+                      <template v-else>
+                        <a-menu-item :key="data.id">
+                          <a @click="handleCategoryFilter(data.cate_name)">
+                            {{ data.cate_name }}
+                          </a>
+                        </a-menu-item>
+                      </template>
+                  </template>
+                  <!--  第一層  for 結束  -->
+                </a-menu>
+                <!-- 類別最頂層  end  -->
+            </div>
           </a-collapse-panel>
         </a-collapse>
       </a-spin>
@@ -98,10 +107,21 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
+    ...mapActions('Search', ['updateKeyword']),
+    ...mapActions('Search', ['updateFilters']),
+    ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('CategoriesStore', ['fetch']),
     ...mapActions('CategoriesStore', {
       addCategory: 'add'
     }),
+    async handleCategoryFilter (cateName) {
+      this.updateSearchClass('word')
+      this.updateFilters(['cate_name'])
+      this.updateKeyword(cateName)
+      if (this.$route !== 'wordsGrid') {
+        this.$router.push({ name: 'wordsGrid' })
+      }
+    },
     async onFinish (values) {
       try {
         this.confirmLoading = true
@@ -124,10 +144,7 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.spinning = false
-      } catch (error) {
-        this.SyncOutlinedSpin = false
-        this.spinning = false
-      }
+      } catch (error) {}
     },
     handleTreeSelectChange (value) {
       this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null

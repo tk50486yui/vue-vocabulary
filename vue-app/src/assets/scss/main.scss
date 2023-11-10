@@ -664,7 +664,7 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Collapse
 -----------------------*/
-// 部分只設定dark light預設
+// 部分只設定dark
 .collapse-theme {
 
   // head 
@@ -708,8 +708,8 @@ $edit-icon-color: #6A6AFF;
   // item hover 顏色
   &.dark :deep(.ant-menu .ant-menu-item:hover){   
     color : var(--menu-text-hover)
-  }
- 
+  } 
+  
   // 展開時title的顏色
   &.dark :deep(.ant-menu .ant-menu-submenu-open){   
     color : var(--menu-text-hover)
@@ -717,13 +717,23 @@ $edit-icon-color: #6A6AFF;
 
   &.dark :deep(.ant-menu .ant-menu-submenu-open:hover){   
     color : var(--menu-text-hover)
+  }
+
+  // a
+  &.dark :deep(.ant-menu .ant-menu-title-content a:not(:hover)){   
+    color : var(--head-text)
+  } 
+  // 選中時的a
+  &.dark :deep(.ant-menu .ant-menu-item-selected .ant-menu-title-content a:not(:hover)){   
+    color : var(--menu-text-selected);
+    background: var(--head-text)
   } 
   
   // 選中時的顏色
   &.dark :deep(.ant-menu .ant-menu-item-selected){   
     color : var(--menu-text-selected);
     background: var(--head-text)
-  } 
+  }   
 
   // 主箭頭
   &.dark :deep(.ant-collapse-arrow){

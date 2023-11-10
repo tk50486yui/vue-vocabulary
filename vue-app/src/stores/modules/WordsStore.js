@@ -65,7 +65,7 @@ const getters = {
             return (
               word.words_tags.values &&
               word.words_tags.values.length === tagsArray.length &&
-              tagsArray.every(tag => word.words_tags.values.some(t => t.ts_name === tag))
+              tagsArray.every(tag => word.words_tags.values.some(t => t.ts_id === tag))
             )
           })
         } else { // length > 1
@@ -73,7 +73,7 @@ const getters = {
             return (
               word.words_tags.values &&
               word.words_tags.values.length >= tagsArray.length &&
-              tagsArray.every(tag => word.words_tags.values.some(t => t.ts_name === tag))
+              tagsArray.every(tag => word.words_tags.values.some(t => t.ts_id === tag))
             )
           })
         }
@@ -81,7 +81,7 @@ const getters = {
         currentFilteredWords = currentFilteredWords.filter(word => {
           return (
             word.words_tags.values &&
-            word.words_tags.values.some(tag => tagsArray.includes(tag.ts_name))
+            word.words_tags.values.some(tag => tagsArray.includes(tag.ts_id))
           )
         })
       }

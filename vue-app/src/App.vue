@@ -59,7 +59,7 @@
           <!-- 左側 -->
           <div class="col-lg-3 col-md-3">
             <div class="toggle-theme" :class="this.$theme">
-              <a-radio-group v-model:value="sideGroup" @change="toggleSide()">
+              <a-radio-group v-model:value="sideGroup">
                 <a-radio-button value="1">類別</a-radio-button>
                 <a-radio-button value="2">標籤</a-radio-button>
                 <template v-if="updateNow === false">
@@ -131,29 +131,6 @@ export default {
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$mobile'])
   },
-  watch: {
-    isScreenSmall: function (val) {
-      if (val) {
-        this.updateMobile(true)
-      } else {
-        this.updateMobile(false)
-      }
-    },
-    isScreenMedium: function (val) {
-      if (val) {
-        this.updateTablet(true)
-      } else {
-        this.updateTablet(false)
-      }
-    },
-    isScreenLarge: function (val) {
-      if (val) {
-        this.updateDesktop(true)
-      } else {
-        this.updateDesktop(false)
-      }
-    }
-  },
   methods: {
     ...mapActions('Screen', ['updateMobile']),
     ...mapActions('Screen', ['updateTablet']),
@@ -161,9 +138,6 @@ export default {
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Search', ['updateFilters']),
-    changeScreen (screen) {
-      console.log(screen)
-    },
     onSearch () {
       this.onWordChecked()
       this.onArticleChecked()
@@ -187,9 +161,29 @@ export default {
       if (this.searchRadio === 'article') {
         this.updateFilters(this.articleCheckbox)
       }
+    }
+  },
+  watch: {
+    isScreenSmall: function (val) {
+      if (val) {
+        this.updateMobile(true)
+      } else {
+        this.updateMobile(false)
+      }
     },
-    toggleSide () {
-
+    isScreenMedium: function (val) {
+      if (val) {
+        this.updateTablet(true)
+      } else {
+        this.updateTablet(false)
+      }
+    },
+    isScreenLarge: function (val) {
+      if (val) {
+        this.updateDesktop(true)
+      } else {
+        this.updateDesktop(false)
+      }
     }
   },
   setup () {
