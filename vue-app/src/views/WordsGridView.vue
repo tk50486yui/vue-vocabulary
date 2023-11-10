@@ -360,7 +360,8 @@ export default {
     },
     async handleTagsLink (val) {
       await this.onResetAll()
-      this.pushFiltersTags(val)
+      this.tagsArray.push(val)
+      await this.updateFiltersTags(this.tagsArray)
       await new Promise(resolve => setTimeout(resolve, 100))
       window.scrollTo({ top: 180, behavior: 'instant' })
     },
@@ -369,7 +370,7 @@ export default {
     },
     async onResetTags () {
       this.tagsArray = []
-      this.updateFiltersTags([])
+      await this.updateFiltersTags([])
     },
     async onResetAll () {
       this.onResetSearch()
