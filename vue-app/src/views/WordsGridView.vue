@@ -130,7 +130,13 @@
                   <span style="padding-left: 6px;">
                     <template v-if="this.$keyword != '' && this.$filters.length > 0">
                       <span style="padding-right: 6px;">
-                        搜尋條件： ` {{ this.$keyword }} `
+                        搜尋條件：
+                        <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
+                          ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
+                        </template>
+                        <template v-else>
+                          ` <span class="keyword-text">{{ this.$keyword }} </span>`
+                        </template>
                       </span>
                     </template>
                     <template v-else>
@@ -160,7 +166,7 @@
                         <template v-if="this.$keyword != '' && this.$filters.includes('cate_name') && item.cate_name.includes(this.$keyword)">
                             <a @click="handleCategoryFilter(item.cate_name)">
                             <template v-for="(char, index) in item.cate_name" :key="char + index">
-                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                                <span :class="{'category-keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
                             </template>
                             </a>
                         </template>
@@ -528,6 +534,9 @@ export default {
 }
 .keyword-text{
     color:$keyword-color;
+}
+.category-keyword-text{
+    color:$category-keyword-color;
 }
 .icon-star{
   padding-left: 2px;

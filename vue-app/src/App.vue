@@ -197,7 +197,7 @@ export default {
     const groupCount = ref('1')
     const searchValue = ref('')
     const searchRadio = ref('word')
-    const wordCheckbox = ref(['ws_name'])
+    const wordCheckbox = ref(['ws_name', 'ws_pronunciation'])
     const articleCheckbox = ref(['arti_title'])
     const wordOptions = [
       {
