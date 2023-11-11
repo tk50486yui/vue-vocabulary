@@ -37,7 +37,7 @@
           標籤：
           （
           <span class="radio-theme" :class="$theme">
-            <a-radio-group v-model:value="tagsOperator" @change="setTagsOperator()">
+            <a-radio-group v-model:value="tagsOperator" @change="setFilterItems()">
               <a-radio value="or">OR</a-radio>
               <a-radio value="and">AND</a-radio>
               <a-radio value="none">NONE</a-radio>
@@ -51,7 +51,7 @@
           標記：
           （
           <span class="radio-theme" :class="$theme">
-            <a-radio-group v-model:value="choiceOperator" @change="setChoiceOperator()">
+            <a-radio-group v-model:value="choiceOperator" @change="setFilterItems()">
               <a-radio value="or">OR</a-radio>
               <a-radio value="and">AND</a-radio>
               <a-radio value="none">NONE</a-radio>
@@ -62,7 +62,7 @@
         <a-checkbox-group
           v-model:value="choiceArray"
           :options="choiceArrayOptions"
-          @change="setChoiceArray()"
+          @change="setFilterItems()"
         >
           <template #label="{value}">
             <span class="icon-theme" :class="$theme">
@@ -81,6 +81,25 @@
             </span>
           </template>
         </a-checkbox-group>
+        <p></p>
+        <span class="checkbox-theme" :class="$theme">
+          顯示項目：
+          <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
+            假名
+          </a-checkbox>
+          <a-checkbox v-model:checked="isDefinition" @change="setItemShow()">
+            中譯
+          </a-checkbox>
+          <a-checkbox v-model:checked="isSlogan" @change="setItemShow()">
+            短句
+          </a-checkbox>
+          <a-checkbox v-model:checked="isCate" @change="setItemShow()">
+            類別
+          </a-checkbox>
+          <a-checkbox v-model:checked="isTag" @change="setItemShow()">
+            標籤
+          </a-checkbox>
+        </span>
         <p></p>
         <!-- 第四層  words groups add -->
         <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
@@ -160,9 +179,11 @@
               <!-- main -->
               <template #renderItem="{ item }">
               <a-list-item>
+                <p></p>
                 <a-card>
                   <!-- cate_name -->
                   <template #title>
+                    <template v-if="isCate">
                     <template v-if="item.cate_name == null || item.cate_name == ''">
                         --
                     </template>
@@ -177,6 +198,7 @@
                         <template v-else>
                             <a @click="handleCategoryFilter(item.cate_name)">{{ item.cate_name }} </a>
                         </template>
+                    </template>
                     </template>
                   </template>
                   <!-- checkbox -->
@@ -222,43 +244,56 @@
                   <template v-else>
                       <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">{{ item.ws_name }}</router-link>
                   </template>
-                  <p></p>
                   <!-- ws_pronunciation -->
-                  <template v-if="item.ws_pronunciation == null || item.ws_pronunciation == ''">
-                      <br>
+                  <template v-if="isPronunciation">
+                    <p></p>
+                    <template v-if="item.ws_pronunciation == null || item.ws_pronunciation == ''">
+                        <br>
+                    </template>
+                    <template v-else>
+                        <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">
+                            <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
+                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                            </template>
+                        </template>
+                        <template v-else>
+                            {{ item.ws_pronunciation }}
+                        </template>
+                    </template>
                   </template>
-                  <template v-else>
-                      <template v-if="this.$keyword != '' && this.$filters.includes('ws_pronunciation') && item.ws_pronunciation.includes(this.$keyword)">
-                          <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
-                              <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                          </template>
-                      </template>
-                      <template v-else>
-                          {{ item.ws_pronunciation }}
-                      </template>
-                  </template>
-                  <p></p>
                   <!-- ws_definition -->
-                  <template v-if="item.ws_definition == null || item.ws_definition == ''">
-                      <br>
+                  <template v-if="isDefinition">
+                    <p></p>
+                    <template v-if="item.ws_definition == null || item.ws_definition == ''">
+                        <br>
+                    </template>
+                    <template v-else>
+                        <template v-if="this.$keyword != '' && this.$filters.includes('ws_definition') && item.ws_definition.includes(this.$keyword)">
+                            <template v-for="(char, index) in item.ws_definition" :key="char + index">
+                                <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
+                            </template>
+                        </template>
+                        <template v-else>
+                            {{ item.ws_definition }}
+                        </template>
+                    </template>
                   </template>
-                  <template v-else>
-                      <template v-if="this.$keyword != '' && this.$filters.includes('ws_definition') && item.ws_definition.includes(this.$keyword)">
-                          <template v-for="(char, index) in item.ws_definition" :key="char + index">
-                              <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
-                          </template>
-                      </template>
-                      <template v-else>
-                          {{ item.ws_definition }}
-                      </template>
+                  <!-- ws_slogan -->
+                  <template v-if="isSlogan">
+                    <template v-if="item.ws_slogan != null && item.ws_slogan != ''">
+                      <p></p>
+                      {{ item.ws_slogan }}
+                    </template>
                   </template>
                   <!-- tags -->
-                  <template v-if="item.words_tags.values != null && item.words_tags.values.length > 0">
-                    <p></p>
-                    <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
-                      <a @click="handleTagsLink(subItem.ts_id)">
-                        <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
-                      </a>
+                  <template v-if="isTag">
+                    <template v-if="item.words_tags.values != null && item.words_tags.values.length > 0">
+                      <p></p>
+                      <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
+                        <a @click="handleTagsLink(subItem.ts_id)">
+                          <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
+                        </a>
+                      </template>
                     </template>
                   </template>
                 </a-card>
@@ -272,7 +307,7 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { ref, reactive } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
@@ -368,14 +403,11 @@ export default {
       window.scrollTo({ top: 180, behavior: 'instant' })
     },
     // ---- set value in vuex ----
-    setTagsOperator () {
-      this.updateWordsGrid({ variable: 'tagsOperator', data: this.tagsOperator })
+    setItemShow () {
+      this.updateWordsGrid({ variable: 'isItemsState', data: this.isItemsState })
     },
-    setChoiceOperator () {
-      this.updateWordsGrid({ variable: 'choiceOperator', data: this.choiceOperator })
-    },
-    setChoiceArray () {
-      this.updateWordsGrid({ variable: 'choiceArray', data: this.choiceArray })
+    setFilterItems () {
+      this.updateWordsGrid({ variable: 'filterItemsState', data: this.filterItemsState })
     },
     // ---- clear button ----
     async onResetSearch () {
@@ -389,7 +421,7 @@ export default {
       this.onResetSearch()
       this.onResetTags()
       this.choiceArray = []
-      this.setChoiceArray()
+      this.setFilterItems()
     },
     // ---- set page ----
     setPageSize () {
@@ -409,15 +441,22 @@ export default {
       this.updateWordsGrid({ variable: 'currentPageSize', data: this.selectPageSize })
     },
     // ---- set default ----
-    setDefaultFromState () {
+    setPagination () {
       this.pagination.pageSize = Number(this.$WordsGrid.currentPageSize)
       this.selectPageSize = this.$WordsGrid.currentPageSize
       this.pagination.current = Number(this.$WordsGrid.currentPage)
       this.currentPage = this.pagination.current
+    },
+    setDefaultFromState () {
       this.tagsArray = this.$filtersTags
-      this.tagsOperator = this.$WordsGrid.tagsOperator
-      this.choiceArray = this.$WordsGrid.choiceArray
-      this.choiceOperator = this.$WordsGrid.choiceOperator
+      const filterItemsStateProperty = Object.keys(this.filterItemsState)
+      filterItemsStateProperty.forEach(property => {
+        this.filterItemsState[property] = this.$WordsGrid.filterItemsState[property]
+      })
+      const isItemsStateProperty = Object.keys(this.isItemsState)
+      isItemsStateProperty.forEach(property => {
+        this.isItemsState[property] = this.$WordsGrid.isItemsState[property]
+      })
       this.AfterReady = true
     },
     // ---- words groups ----
@@ -446,8 +485,8 @@ export default {
   async created () {
     try {
       await this.fetch()
+      this.setDefaultFromState()
       this.Ready = true
-      this.tagsArray = this.$filtersTags
     } catch (error) {}
   },
   beforeRouteLeave (to, from, next) {
@@ -460,7 +499,7 @@ export default {
         this.$nextTick(() => {
           // set page checkbox
           if (this.$WordsGrid.jumpPage === true) {
-            this.setDefaultFromState()
+            this.setPagination()
           }
           this.setCheckbox()
         })
@@ -496,9 +535,6 @@ export default {
     const AfterReady = ref(false)
     const ReadySpinning = ref(false)
     const tagsArray = ref([])
-    const tagsOperator = ref('or')
-    const choiceArray = ref([])
-    const choiceOperator = ref('or')
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
@@ -512,6 +548,19 @@ export default {
       pageSize: Number(selectPageSize.value),
       position: 'bottom',
       showSizeChanger: false
+    })
+
+    const filterItemsState = reactive({
+      tagsOperator: 'or',
+      choiceArray: [],
+      choiceOperator: 'or'
+    })
+    const isItemsState = reactive({
+      isPronunciation: true,
+      isDefinition: true,
+      isSlogan: false,
+      isCate: false,
+      isTag: true
     })
 
     const choiceArrayOptions = [
@@ -528,16 +577,17 @@ export default {
       AfterReady,
       ReadySpinning,
       tagsArray,
-      tagsOperator,
-      choiceArray,
       choiceArrayOptions,
-      choiceOperator,
+      checkboxShow,
+      checkboxBtn,
       pagination,
       selectPageSize,
       currentPage,
       dataSize,
-      checkboxShow,
-      checkboxBtn
+      filterItemsState,
+      ...toRefs(filterItemsState),
+      isItemsState,
+      ...toRefs(isItemsState)
     }
   }
 

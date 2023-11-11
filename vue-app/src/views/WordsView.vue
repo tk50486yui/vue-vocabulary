@@ -161,7 +161,7 @@ export default {
       try {
         this.SyncOutlinedSpin = true
         this.TableLoading = true
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(resolve, 100))
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.TableLoading = false

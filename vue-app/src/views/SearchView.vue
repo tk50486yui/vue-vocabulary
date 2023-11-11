@@ -91,7 +91,7 @@ export default {
         value: 'ws_pronunciation'
       },
       {
-        label: '中文',
+        label: '中譯',
         value: 'ws_definition'
       },
       {

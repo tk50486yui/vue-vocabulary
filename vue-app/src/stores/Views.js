@@ -5,9 +5,18 @@ const state = {
     currentScrollY: 100,
     jumpScroll: false,
     currentPageSize: 20,
-    choiceArray: [],
-    choiceOperator: 'or',
-    tagsOperator: 'or'
+    filterItemsState: {
+      choiceArray: [],
+      choiceOperator: 'or',
+      tagsOperator: 'or'
+    },
+    isItemsState: {
+      isPronunciation: true,
+      isDefinition: true,
+      isSlogan: false,
+      isCate: false,
+      isTag: true
+    }
   },
   $ArticlesView: {
     currentPage: '1',
