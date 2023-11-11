@@ -404,9 +404,7 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Spad
 -----------------------*/
-.spad {
-  padding-top: 20px;
-  padding-bottom: 50px;
+.spad { 
   &.dark {
     background: var(--body-background); 
   }

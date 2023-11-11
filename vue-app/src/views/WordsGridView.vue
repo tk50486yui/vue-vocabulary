@@ -4,7 +4,7 @@
         <div class="section-title">
           <h4>單字總覽</h4>
         </div>
-        <!-- 上層  第二層 tags select -->
+        <!-- 第一層 tags select -->
         <a-input-group>
           <a-row :gutter="4">
             <a-col :span="18">
@@ -32,12 +32,12 @@
           </a-row>
         </a-input-group>
         <p></p>
-        <!-- 上層  第三層 tags filter (OR) -->
+        <!-- 第二層 tags filter -->
         <span>
           標籤：
           （
           <span class="radio-theme" :class="$theme">
-            <a-radio-group v-model:value="tagsOperator">
+            <a-radio-group v-model:value="tagsOperator" @change="setTagsOperator()">
               <a-radio value="or">OR</a-radio>
               <a-radio value="and">AND</a-radio>
               <a-radio value="none">NONE</a-radio>
@@ -46,12 +46,12 @@
           ）
         </span>
         <p></p>
-        <!-- 上層  第四層 heart star -->
+        <!-- 第三層 heart star -->
         <span>
           標記：
           （
           <span class="radio-theme" :class="$theme">
-            <a-radio-group v-model:value="choiceOperator">
+            <a-radio-group v-model:value="choiceOperator" @change="setChoiceOperator()">
               <a-radio value="or">OR</a-radio>
               <a-radio value="and">AND</a-radio>
               <a-radio value="none">NONE</a-radio>
@@ -59,7 +59,11 @@
           </span>
           ）
         </span>
-        <a-checkbox-group v-model:value="choiceArray" :options="choiceArrayOptions">
+        <a-checkbox-group
+          v-model:value="choiceArray"
+          :options="choiceArrayOptions"
+          @change="setChoiceArray()"
+        >
           <template #label="{value}">
             <span class="icon-theme" :class="$theme">
               <div class="choice-container">
@@ -78,7 +82,7 @@
           </template>
         </a-checkbox-group>
         <p></p>
-        <!-- 上層  第五層  groups add -->
+        <!-- 第四層  words groups add -->
         <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
             新增單字組別
@@ -107,7 +111,7 @@
                     v-model:value="selectPageSize"
                     size="small"
                     style="width: 80px"
-                    @change="handlePageSize()"
+                    @change="setPageSize()"
                     >
                     <a-select-option value="10">10 筆</a-select-option>
                     <a-select-option value="20">20 筆</a-select-option>
@@ -121,7 +125,7 @@
                       v-model:value="currentPage"
                       size="small"
                       style="width: 80px"
-                      @change="handleCurrentPage()"
+                      @change="setPaginationCurrent()"
                       >
                       <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
                         <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
@@ -209,7 +213,7 @@
                   <p></p>
                   <!-- ws_name -->
                   <template v-if="this.$keyword != '' && this.$filters.includes('ws_name') && item.ws_name.includes(this.$keyword)">
-                      <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="handleDetailsClick()">
+                      <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="setDetailsClick()">
                           <template v-for="(char, index) in item.ws_name" :key="char + index">
                               <span :class="{'keyword-text': this.$keyword.includes(char)}">{{ char }}</span>
                           </template>
@@ -312,12 +316,8 @@ export default {
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
-    ...mapActions('WordsStore', {
-      updateCommon: 'updateCommon'
-    }),
-    ...mapActions('WordsStore', {
-      updateImportant: 'updateImportant'
-    }),
+    ...mapActions('WordsStore', ['updateCommon']),
+    ...mapActions('WordsStore', ['updateImportant']),
     ...mapActions('WordsStore', ['deleteById']),
     ...mapActions('Search', ['updateKeyword']),
     ...mapActions('Search', ['updateFilters']),
@@ -326,6 +326,7 @@ export default {
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateWordsGrid']),
     ...mapActions('Views', ['updateWordsGroupsView']),
+    // ---- actions ----
     async onUpdateCommon (id, data) {
       try {
         data.ws_is_common = !data.ws_is_common
@@ -348,6 +349,7 @@ export default {
         await this.fetch()
       } catch (error) {}
     },
+    // ---- filter ----
     async handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
@@ -365,6 +367,17 @@ export default {
       await new Promise(resolve => setTimeout(resolve, 100))
       window.scrollTo({ top: 180, behavior: 'instant' })
     },
+    // ---- set value in vuex ----
+    setTagsOperator () {
+      this.updateWordsGrid({ variable: 'tagsOperator', data: this.tagsOperator })
+    },
+    setChoiceOperator () {
+      this.updateWordsGrid({ variable: 'choiceOperator', data: this.choiceOperator })
+    },
+    setChoiceArray () {
+      this.updateWordsGrid({ variable: 'choiceArray', data: this.choiceArray })
+    },
+    // ---- clear button ----
     async onResetSearch () {
       this.updateKeyword('')
     },
@@ -376,29 +389,44 @@ export default {
       this.onResetSearch()
       this.onResetTags()
       this.choiceArray = []
+      this.setChoiceArray()
     },
-    handlePageSize () {
+    // ---- set page ----
+    setPageSize () {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
       this.currentPage = this.pagination.current
     },
-    handleCurrentPage () {
+    setPaginationCurrent () {
       this.pagination.current = Number(this.currentPage)
     },
-    setCurrentPage () {
-      this.pagination.pageSize = Number(this.$WordsGrid.currentPageSize)
-      this.selectPageSize = this.$WordsGrid.currentPageSize
-      this.pagination.current = Number(this.$WordsGrid.currentPage)
-      this.currentPage = this.pagination.current
-      this.AfterReady = true
-    },
-    // scroll
-    handleDetailsClick () {
+    // ---- scroll setting ----
+    setDetailsClick () {
       const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
       this.updateWordsGrid({ variable: 'currentScrollY', data: scrollY })
       this.updateWordsGrid({ variable: 'currentPage', data: this.currentPage })
       this.updateWordsGrid({ variable: 'jumpPage', data: false })
       this.updateWordsGrid({ variable: 'currentPageSize', data: this.selectPageSize })
+    },
+    // ---- set default ----
+    setDefaultFromState () {
+      this.pagination.pageSize = Number(this.$WordsGrid.currentPageSize)
+      this.selectPageSize = this.$WordsGrid.currentPageSize
+      this.pagination.current = Number(this.$WordsGrid.currentPage)
+      this.currentPage = this.pagination.current
+      this.tagsArray = this.$filtersTags
+      this.tagsOperator = this.$WordsGrid.tagsOperator
+      this.choiceArray = this.$WordsGrid.choiceArray
+      this.choiceOperator = this.$WordsGrid.choiceOperator
+      this.AfterReady = true
+    },
+    // ---- words groups ----
+    clickGroupAdd () {
+      if (this.checkboxShow === true && this.$WordsGroupsView.groupArray.length === 0) {
+        this.checkboxShow = false
+      } else {
+        this.checkboxShow = true
+      }
     },
     changeCheckbox (id, wsName) {
       if (this.checkboxArray[id]) {
@@ -407,13 +435,6 @@ export default {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: id, ws_name: wsName, checked: false } })
       }
       this.setCheckbox()
-    },
-    clickGroupAdd () {
-      if (this.checkboxShow === true && this.$WordsGroupsView.groupArray.length === 0) {
-        this.checkboxShow = false
-      } else {
-        this.checkboxShow = true
-      }
     },
     setCheckbox () {
       if (this.$WordsGroupsView.groupArray.length > 0) {
@@ -426,18 +447,20 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
+      this.tagsArray = this.$filtersTags
     } catch (error) {}
   },
   beforeRouteLeave (to, from, next) {
-    this.handleDetailsClick()
+    this.setDetailsClick()
     next()
   },
   watch: {
     Ready (newVal) {
       if (newVal) {
         this.$nextTick(() => {
+          // set page checkbox
           if (this.$WordsGrid.jumpPage === true) {
-            this.setCurrentPage()
+            this.setDefaultFromState()
           }
           this.setCheckbox()
         })
@@ -446,6 +469,7 @@ export default {
     AfterReady (newVal) {
       if (newVal) {
         this.$nextTick(() => {
+          // run scroll after page setting
           if (this.$WordsGrid.jumpScroll === true) {
             window.scrollTo({ top: this.$WordsGrid.currentScrollY, behavior: 'instant' })
             this.updateWordsGrid({ variable: 'jumpScroll', data: false })
@@ -453,15 +477,17 @@ export default {
         })
       }
     },
+    // tags filters
+    '$filtersTags.length' (val) {
+      if (val !== this.tagsArray.length) {
+        this.tagsArray = this.$filtersTags
+      }
+    },
+    // words groups checkbox
     checkboxArray (val) {
       if (Object.keys(val).length === 0) {
         this.checkboxShow = false
         this.checkboxBtn = false
-      }
-    },
-    '$filtersTags.length' (val) {
-      if (val !== this.tagsArray.length) {
-        this.tagsArray = this.$filtersTags
       }
     }
   },

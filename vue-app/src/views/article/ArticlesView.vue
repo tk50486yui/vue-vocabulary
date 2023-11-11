@@ -18,7 +18,7 @@
                       v-model:value="selectPageSize"
                       size="small"
                       style="width: 80px"
-                      @change="handlePageSize()"
+                      @change="setPageSize()"
                       >
                       <a-select-option value="3">3 筆</a-select-option>
                       <a-select-option value="10">10 筆</a-select-option>
@@ -33,7 +33,7 @@
                       v-model:value="currentPage"
                       size="small"
                       style="width: 80px"
-                      @change="handleCurrentPage()"
+                      @change="setCurrentPage()"
                       >
                       <template v-for="index in Math.ceil(this.articles.length/this.selectPageSize)" :key="index">
                         <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
@@ -205,6 +205,7 @@ export default {
     ...mapActions('Search', ['updateFilters']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Views', ['updateArticlesView']),
+    // actions
     async refreshArticles () {
       try {
         this.spinning = true
@@ -222,36 +223,7 @@ export default {
         window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {}
     },
-    async onEdit (values) {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateArticle({ id: values.id, data: values })
-        await this.fetch()
-      } catch (error) {}
-    },
-    handlePageSize () {
-      this.pagination.pageSize = Number(this.selectPageSize)
-      this.pagination.current = 1
-      this.currentPage = this.pagination.current
-    },
-    handleCurrentPage () {
-      this.pagination.current = Number(this.currentPage)
-    },
-    setCurrentPage () {
-      this.pagination.pageSize = Number(this.$ArticlesView.currentPageSize)
-      this.selectPageSize = this.$ArticlesView.currentPageSize
-      this.pagination.current = Number(this.$ArticlesView.currentPage)
-      this.currentPage = this.pagination.current
-      this.AfterReady = true
-    },
-    handleDetailsClick () {
-      const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
-      this.updateArticlesView({ variable: 'currentScrollY', data: scrollY })
-      this.updateArticlesView({ variable: 'currentPage', data: this.currentPage })
-      this.updateArticlesView({ variable: 'jumpPage', data: false })
-      this.updateArticlesView({ variable: 'currentPageSize', data: this.selectPageSize })
-    },
+    // articles tiltle
     splitTitle (title, keyword) {
       const regex = new RegExp(`(${keyword})`, 'i')
       const parts = title.split(regex)
@@ -259,6 +231,31 @@ export default {
     },
     onResetSearch () {
       this.updateKeyword('')
+    },
+    // set value in vuex
+    setDefaultFromState () {
+      this.pagination.pageSize = Number(this.$ArticlesView.currentPageSize)
+      this.selectPageSize = this.$ArticlesView.currentPageSize
+      this.pagination.current = Number(this.$ArticlesView.currentPage)
+      this.currentPage = this.pagination.current
+      this.AfterReady = true
+    },
+    // pagination
+    setPageSize () {
+      this.pagination.pageSize = Number(this.selectPageSize)
+      this.pagination.current = 1
+      this.currentPage = this.pagination.current
+    },
+    setCurrentPage () {
+      this.pagination.current = Number(this.currentPage)
+    },
+    // scroll setting
+    setContentClick () {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+      this.updateArticlesView({ variable: 'currentScrollY', data: scrollY })
+      this.updateArticlesView({ variable: 'currentPage', data: this.currentPage })
+      this.updateArticlesView({ variable: 'jumpPage', data: false })
+      this.updateArticlesView({ variable: 'currentPageSize', data: this.selectPageSize })
     }
   },
   async created () {
@@ -268,7 +265,7 @@ export default {
     } catch (error) {}
   },
   beforeRouteLeave (to, from, next) {
-    this.handleDetailsClick()
+    this.setContentClick()
     next()
   },
   watch: {
@@ -276,7 +273,7 @@ export default {
       if (newVal) {
         this.$nextTick(() => {
           if (this.$ArticlesView.jumpPage === true) {
-            this.setCurrentPage()
+            this.setDefaultFromState()
           }
         })
       }

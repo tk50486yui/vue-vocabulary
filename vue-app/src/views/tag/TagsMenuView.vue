@@ -15,7 +15,6 @@
               <a-menu mode="inline"
                 v-model:selectedKeys="selectedKeys"
                 v-model:openKeys="openKeys"
-                @select="onSelect()"
                 multiple>
                 <!--  第一層  for 顯示  -->
                 <template v-for="data in tags" :key="data.id">
@@ -75,44 +74,37 @@ export default {
     ...mapGetters('TagsStore', ['recentTagsArray']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Search', ['$filtersTags']),
-    ...mapState('Search', ['$filtersTagsState'])
+    ...mapState('Search', ['$filtersTagsState']),
+    hasChildrenArray () {
+      return this.recentTagsArray.filter(tag => tag.children.length > 0)
+    },
+    noChildrenArray () {
+      return this.$filtersTags.filter(tagId => !this.hasChildrenArray.some(tag => tag.id === tagId))
+    }
   },
   methods: {
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('Search', ['pushFiltersTags']),
     ...mapActions('TagsStore', ['fetch']),
     ...mapActions('TagsStore', ['fetchRecent']),
-    onSelect () {
-
-    },
     async handleTagsFilter (id) {
       await this.pushFiltersTags(id)
       this.updateSearchClass('word')
       if (this.$route !== 'wordsGrid') {
         this.$router.push({ name: 'wordsGrid' })
       }
-    },
-    async refresh () {
-      try {
-        this.spinning = true
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.fetch()
-        this.spinning = false
-      } catch (error) {}
     }
   },
   async created () {
     try {
-      await this.refresh()
+      await this.fetch()
       await this.fetchRecent()
+      this.selectedKeys = this.noChildrenArray
     } catch (error) {}
   },
   watch: {
     '$filtersTags.length' (val) {
       if (!this.$filtersTagsState) {
-        // this.selectedKeys = this.selectedKeys.filter(key => this.$filtersTags.includes(key))
-        this.hasChildrenArray = this.recentTagsArray.filter(tag => tag.children.length > 0)
-        this.noChildrenArray = this.$filtersTags.filter(tagId => !this.hasChildrenArray.some(tag => tag.id === tagId))
         this.selectedKeys = this.noChildrenArray
       }
     }
@@ -122,8 +114,6 @@ export default {
     const spinning = ref(false)
     const selectedKeys = ref([])
     const openKeys = ref()
-    const hasChildrenArray = ref([])
-    const noChildrenArray = ref([])
     const selectedCurrent = ref(false)
     const selectedCount = ref(0)
     return {
@@ -131,8 +121,6 @@ export default {
       spinning,
       selectedKeys,
       openKeys,
-      hasChildrenArray,
-      noChildrenArray,
       selectedCurrent,
       selectedCount
     }

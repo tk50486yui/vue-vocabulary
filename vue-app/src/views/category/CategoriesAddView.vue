@@ -11,7 +11,7 @@
             ref="treeSelect"
             v-model:value="formState.category.cate_parent_id"
             @chnage="handleTreeSelectChange"
-            style="width: 300px"
+            style="width: 100%"
             :field-names="{
               children: 'children',
               label: 'cate_name',
@@ -20,17 +20,11 @@
         />
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
-          <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名" :auto-size="{ minRows: 3}" allow-clear />
+          <a-input  v-model:value="formState.category.cate_name"  placeholder="類別名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
-        <div class="add-button-container">
-            <div class="add-clear-button">
-                <a-button @click="resetForm" danger>Clear</a-button>
-            </div>
-            <div class="add-submit-button">
-            <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
-            </div>
-        </div>
+          <a-button type="primary" html-type="submit">儲存</a-button>
+          <a-button style="margin-left: 10px" @click="resetForm" :loading="confirmLoading" danger>清空</a-button>
         </a-form-item>
     </a-form>
 </template>
@@ -101,31 +95,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8px
-}
-
-.add-button-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.add-clear-button {
-  margin-right: auto;
-}
-
-.add-cancel-button {
-  margin-right: 10px;
-}
-
-.add-submit-button {
-  margin-left: 10px;
-}
-
 </style>

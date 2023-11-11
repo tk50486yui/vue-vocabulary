@@ -154,12 +154,8 @@ export default {
     ...mapActions('WordsStore', {
       updateWord: 'update'
     }),
-    ...mapActions('WordsStore', {
-      updateCommon: 'updateCommon'
-    }),
-    ...mapActions('WordsStore', {
-      updateImportant: 'updateImportant'
-    }),
+    ...mapActions('WordsStore', ['updateCommon']),
+    ...mapActions('WordsStore', ['updateImportant']),
     ...mapActions('WordsStore', ['deleteById']),
     async refreshTable () {
       try {

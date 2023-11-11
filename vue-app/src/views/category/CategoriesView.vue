@@ -1,7 +1,7 @@
 <template>
     <template v-if="Ready">
       <div class="section-title">
-        <h4>標籤列表</h4>
+        <h4>類別列表</h4>
       </div>
       <div class="tab-theme" :class="this.$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
@@ -9,14 +9,14 @@
           <a-tab-pane key="1" tab="全部">
             <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
             <div class="table-theme" :class="this.$theme">
-              <a-table :dataSource="this.tagsArray"
+              <a-table :dataSource="this.categoriesArray"
                 :columns="columns"
                 :scroll="{ y: 600, x: 400 }"
                 :loading="TableLoading[0]"
                 :indentSize="12"
               >
                 <template #bodyCell="{ column, text, record }">
-                  <template v-if="['ts_name'].includes(column.dataIndex)">
+                  <template v-if="['cate_name'].includes(column.dataIndex)">
                     <template v-if="editTableData[record.id]">
                         <div class="button-edit-container">
                           <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)"/>
@@ -26,33 +26,28 @@
                         </div>
                     </template>
                     <template v-else>
-                      <div class="column-container">
-                        <template v-if="column.dataIndex === 'ts_name' && record.children.length > 0">
-                          <EditOutlined class="button-edit" @click="edit(record, 1)" />
-                          {{ text }} （{{ record.children.length }}）
-                          <DeleteBtn @confirm="onDelete(record.id)"/>
-                        </template>
-                        <template v-else>
-                          <EditOutlined class="button-edit" @click="edit(record, 1)" />
-                          {{ text }}
-                          <DeleteBtn @confirm="onDelete(record.id)"/>
-                        </template>
-                      </div>
+                        <div class="column-container">
+                          <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
+                            <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                            {{ text }} （{{ record.children.length }}）
+                            <DeleteBtn @confirm="onDelete(record.id)"/>
+                          </template>
+                          <template v-else>
+                            <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                            {{ text }}
+                            <DeleteBtn @confirm="onDelete(record.id)"/>
+                          </template>
+                       </div>
                     </template>
                   </template>
-                  <template v-else-if="['ts_parent_id'].includes(column.dataIndex)">
-                    <template v-if="column.dataIndex === 'ts_parent_id'">
+                  <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
+                    <template v-if="column.dataIndex === 'cate_parent_id'">
                       <template v-if="editTableData[record.id]">
-                        <TagsTreeSelect size="small" placeholder="選擇父類別"
+                        <CategoriesTreeSelect size="small" placeholder="選擇父類別"
                           :dropdownMatchSelectWidth="false" style="width: 100%"
-                          v-model:value="editTableData[record.id]['ts_parent_id']"
-                          :defaultValue="editTableData[record.id]['ts_parent_id']"
-                          :treeDefaultExpandedKeys="[editTableData[record.id]['ts_parent_id']]"
-                          :field-names="{
-                            children: 'children',
-                            label: 'ts_name',
-                            value: 'id',
-                            key: 'id'}"
+                          v-model:value="editTableData[record.id]['cate_parent_id']"
+                          :defaultValue="editTableData[record.id]['cate_parent_id']"
+                          :treeDefaultExpandedKeys="[editTableData[record.id]['cate_parent_id']]"
                         />
                       </template>
                     </template>
@@ -65,25 +60,23 @@
           <a-tab-pane key="2" tab="近期">
             <RefreshBtn class="button-container btn-warning" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
             <div class="table-theme" :class="this.$theme">
-              <a-table :dataSource="this.recentTagsArray"
+              <a-table :dataSource="this.recentCategoriesArray"
                 :columns="columns"
                 :scroll="{ y: 600 }"
                 :loading="TableLoading[1]"
               >
                 <template #bodyCell="{ column, text, record }">
-                  <template v-if="['ts_name'].includes(column.dataIndex)">
-                    <div>
-                      <template v-if="editTableData2[record.id]">
-                        <a-input v-model:value="editTableData2[record.id][column.dataIndex]"
-                          style="margin: -5px 0"/>
-                      </template>
-                      <template v-else>
-                        <div class="column-container">
+                  <template v-if="['cate_name'].includes(column.dataIndex)">
+                    <template v-if="editTableData2[record.id]">
+                      <a-input v-model:value="editTableData2[record.id][column.dataIndex]"
+                        style="margin: -5px 0"/>
+                    </template>
+                    <template v-else>
+                      <div class="column-container">
                           {{ text }}
                           <DeleteBtn @confirm="onDelete(record.id)"/>
                         </div>
-                      </template>
-                    </div>
+                    </template>
                   </template>
                   <template v-else-if="column.dataIndex === 'operation'">
                     <template v-if="editTableData2[record.id]">
@@ -102,7 +95,7 @@
           </a-tab-pane>
           <!-- tab 3 -->
           <a-tab-pane key="3" tab="+">
-            <TagsAddView />
+            <CategoriesAddView />
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -110,41 +103,41 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
-import TagsAddView from '@/views/TagsAddView.vue'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
-import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
+import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
-  name: 'TagsView',
+  name: 'CategoriesView',
   components: {
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
     DeleteBtn,
     RefreshBtn,
-    TagsAddView,
-    TagsTreeSelect
+    CategoriesAddView,
+    CategoriesTreeSelect
   },
   computed: {
-    ...mapGetters('TagsStore', ['tagsArray']),
-    ...mapGetters('TagsStore', ['recentTagsArray']),
-    ...mapGetters('TagsStore', ['tagsEditArray']),
+    ...mapGetters('CategoriesStore', ['categoriesArray']),
+    ...mapGetters('CategoriesStore', ['recentCategoriesArray']),
+    ...mapGetters('CategoriesStore', ['categoriesEditArray']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$mobile'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch']),
-    ...mapActions('TagsStore', ['fetchRecent']),
-    ...mapActions('TagsStore', {
-      updateTag: 'update'
+    ...mapActions('CategoriesStore', ['fetch']),
+    ...mapActions('CategoriesStore', ['fetchRecent']),
+    ...mapActions('CategoriesStore', {
+      updateCategory: 'update'
     }),
-    ...mapActions('TagsStore', ['deleteById']),
+    ...mapActions('CategoriesStore', ['deleteById']),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -152,7 +145,7 @@ export default {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (index === 0) {
           await this.fetch()
-          this.editDataSource = this.recentTagsArray
+          this.editDataSource = this.recentCategoriesArray
         } else if (index === 1) {
           await this.fetchRecent()
         }
@@ -165,10 +158,10 @@ export default {
         const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateTag({ id: editData.id, data: editData })
+        await this.updateCategory({ id: editData.id, data: editData })
         await this.fetch()
         await this.fetchRecent()
-        this.editDataSource = this.recentTagsArray
+        this.editDataSource = this.recentCategoriesArray
         this.cancel(record, tab)
       } catch (error) {}
     },
@@ -186,7 +179,7 @@ export default {
     try {
       await this.fetch()
       await this.fetchRecent()
-      this.editDataSource = this.recentTagsArray
+      this.editDataSource = this.recentCategoriesArray
       this.Ready = true
     } catch (error) {}
   },
@@ -230,7 +223,7 @@ export default {
         fixed: true
       },
       {
-        dataIndex: 'ts_name',
+        dataIndex: 'cate_name',
         width: '90%'
       }
     ]
@@ -264,7 +257,7 @@ export default {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #f6aaf1;
+  background: #efffb4;
   content: "";
 }
 .button-container {
@@ -292,14 +285,13 @@ export default {
 .add-submit-button {
   margin-left: 10px;
 }
-
 .column-container{
   display: flex;
   align-items: center;
 }
 
 .button-edit{
-  color:#ec5ef4;
+  color:#d8f74f;
   padding-right: 6px;
 }
 
@@ -317,10 +309,13 @@ export default {
   margin-right: 10px;
   color:#00DB00;
 }
-
 .button-edit-close{
   margin-left: auto;
   color:#EA0000;
   padding-right: 6px;
+}
+.button-delete{
+  color:rgb(231, 121, 121);
+  padding-left: 6px;
 }
 </style>

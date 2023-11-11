@@ -1,17 +1,18 @@
 <template>
     <a-form
-        ref="formRef"
-        :model="formState"
-        :validate-messages="validateMsg"
-        @finish="onFinish">
+      ref="formRef"
+      :model="formState"
+      :validate-messages="validateMsg"
+      @finish="onFinish"
+    >
         <p></p>
         <TagsTreeSelect
             placeholder="選擇標籤層級"
             size="large"
             ref="treeSelect"
+            style="width: 100%"
             v-model:value="formState.tag.ts_parent_id"
             @chnage="handleTreeSelectChange"
-            style="width: 300px"
             :field-names="{
               children: 'children',
               label: 'ts_name',
@@ -20,17 +21,11 @@
         />
         <p></p>
         <a-form-item class="input-theme" :class="this.$theme" :name="['tag', 'ts_name']" :rules="[{ required: true }]">
-          <a-textarea  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
+          <a-input  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
-        <div class="add-button-container">
-            <div class="add-clear-button">
-                <a-button @click="resetForm" danger>Clear</a-button>
-            </div>
-            <div class="add-submit-button">
-            <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
-            </div>
-        </div>
+          <a-button type="primary" html-type="submit">儲存</a-button>
+          <a-button style="margin-left: 10px" @click="resetForm" :loading="confirmLoading" danger>清空</a-button>
         </a-form-item>
     </a-form>
 </template>
@@ -101,31 +96,5 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8px
-}
-
-.add-button-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.add-clear-button {
-  margin-right: auto;
-}
-
-.add-cancel-button {
-  margin-right: 10px;
-}
-
-.add-submit-button {
-  margin-left: 10px;
-}
 
 </style>

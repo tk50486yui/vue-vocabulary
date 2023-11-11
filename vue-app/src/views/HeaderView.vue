@@ -54,7 +54,7 @@
                                 </ul>
                             </li>
                             <li :class="{ 'active': activeIndex === 4 }">
-                                <router-link :to="{ name: 'wordsGroupsList' }">群組</router-link>
+                                <router-link :to="{ name: 'wordsGroups' }">群組</router-link>
                             </li>
                         </ul>
                     </nav>

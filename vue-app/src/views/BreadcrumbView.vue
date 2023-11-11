@@ -1,10 +1,10 @@
 <template>
     <!-- Breadcrumb -->
-    <div class="breadcrumb-theme" :class="this.$theme">
+    <div class="breadcrumb-theme" :class="$theme">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="breadcrumb-links" :class="[this.$theme]">
+                    <div class="breadcrumb-links" :class="$theme">
                         <span>
                             <router-link :to="{ name: 'home' }">
                                 <font-awesome-icon :icon="['fas', 'house']" />  首頁
@@ -84,14 +84,14 @@ export default {
         case 'tagsDrag':
           this.activeRoute = '標籤順序調整'
           break
-        case 'wordsGroupsList':
+        case 'wordsGroups':
           this.activeRoute = '群組列表'
           break
         case 'wordsGroupsDetails':
           this.activeRoute = '群組詳細說明'
           break
         default:
-          this.activeRoute = '查無此頁面'
+          this.activeRoute = ''
           this.activeHome = true
           break
       }

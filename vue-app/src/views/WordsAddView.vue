@@ -56,8 +56,8 @@
             </div>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit">Submit</a-button>
-          <a-button style="margin-left: 10px" @click="resetForm" danger>Clear</a-button>
+          <a-button type="primary" html-type="submit">儲存</a-button>
+          <a-button style="margin-left: 10px" @click="resetForm" danger>清空</a-button>
         </a-form-item>
       </a-form>
     </template>

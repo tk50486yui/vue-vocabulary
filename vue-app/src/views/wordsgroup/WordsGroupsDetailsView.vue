@@ -1,7 +1,7 @@
 <template>
     <template v-if="Ready">
         <h5>
-            <router-link :to="{ name: 'wordsGroupsList' }"> 返回 </router-link>
+            <router-link :to="{ name: 'wordsGroups' }"> 返回 </router-link>
              > {{ this.wordsGroup.wg_name }}
         </h5>
         <div class="d-flex justify-content-end">

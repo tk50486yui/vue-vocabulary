@@ -64,20 +64,23 @@
         </a-form-item>
         <p></p>
         <a-form-item :name="['category', 'cate_parent_id']">
-          <CategoriesTreeSelect  placeholder="選擇分類層級" size="large" ref="treeSelect"
+          <CategoriesTreeSelect
+            placeholder="選擇分類層級"
+            size="large"
+            ref="treeSelect"
             v-model:value="formState.category.cate_parent_id"
             @change="handleTreeSelectChange"/>
         </a-form-item>
         <a-form-item>
           <div class="modal-button-container">
             <div class="modal-clear-button">
-                <a-button @click="resetForm" danger>Clear</a-button>
+                <a-button @click="resetForm" danger>清空</a-button>
             </div>
             <div class="modal-cancel-button">
-                <a-button @click="visible=false">Cancel</a-button>
+                <a-button @click="visible=false">取消</a-button>
             </div>
             <div class="modal-submit-button">
-              <a-button type="primary" html-type="submit" :loading="confirmLoading">Submit</a-button>
+              <a-button type="primary" html-type="submit" :loading="confirmLoading">儲存</a-button>
             </div>
           </div>
         </a-form-item>
@@ -114,13 +117,15 @@ export default {
     ...mapActions('CategoriesStore', {
       addCategory: 'add'
     }),
-    async handleCategoryFilter (cateName) {
-      this.updateSearchClass('word')
-      this.updateFilters(['cate_name'])
-      this.updateKeyword(cateName)
-      if (this.$route !== 'wordsGrid') {
-        this.$router.push({ name: 'wordsGrid' })
-      }
+    async refresh () {
+      try {
+        this.SyncOutlinedSpin = true
+        this.spinning = true
+        await new Promise(resolve => setTimeout(resolve, 100))
+        await this.fetch()
+        this.SyncOutlinedSpin = false
+        this.spinning = false
+      } catch (error) {}
     },
     async onFinish (values) {
       try {
@@ -136,15 +141,13 @@ export default {
         this.confirmLoading = false
       }
     },
-    async refresh () {
-      try {
-        this.SyncOutlinedSpin = true
-        this.spinning = true
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.fetch()
-        this.SyncOutlinedSpin = false
-        this.spinning = false
-      } catch (error) {}
+    async handleCategoryFilter (cateName) {
+      this.updateSearchClass('word')
+      this.updateFilters(['cate_name'])
+      this.updateKeyword(cateName)
+      if (this.$route !== 'wordsGrid') {
+        this.$router.push({ name: 'wordsGrid' })
+      }
     },
     handleTreeSelectChange (value) {
       this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null

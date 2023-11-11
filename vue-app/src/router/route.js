@@ -3,15 +3,14 @@ import WordsAddView from '@/views/WordsAddView.vue'
 import WordsView from '@/views/WordsView.vue'
 import WordsGridView from '@/views/WordsGridView.vue'
 import WordDetailsView from '@/views/WordDetailsView.vue'
-import ArticlesView from '@/views/ArticlesView.vue'
-import ArticlesContentView from '@/views/ArticlesContentView.vue'
-import WordsGroupsView from '@/views/WordsGroupsView.vue'
-import WordsGroupsListView from '@/views/WordsGroupsListView.vue'
-import WordsGroupsDetailsView from '@/views/WordsGroupsDetailsView.vue'
-import TagsView from '@/views/TagsView'
-import TagsDragView from '@/views/TagsDragView.vue'
-import CategoriesView from '@/views/CategoriesView.vue'
-import CategoriesDragView from '@/views/CategoriesDragView.vue'
+import ArticlesView from '@/views/article/ArticlesView.vue'
+import ArticlesContentView from '@/views/article/ArticlesContentView.vue'
+import WordsGroupsListView from '@/views/wordsgroup/WordsGroupsListView.vue'
+import WordsGroupsDetailsView from '@/views/wordsgroup/WordsGroupsDetailsView.vue'
+import TagsView from '@/views/tag/TagsView'
+import TagsDragView from '@/views/tag/TagsDragView.vue'
+import CategoriesView from '@/views/category/CategoriesView.vue'
+import CategoriesDragView from '@/views/category/CategoriesDragView.vue'
 
 const routes = [
   {
@@ -57,11 +56,6 @@ const routes = [
   {
     path: '/wordsgroups',
     name: 'wordsGroups',
-    component: WordsGroupsView
-  },
-  {
-    path: '/wordsgroups/list',
-    name: 'wordsGroupsList',
     component: WordsGroupsListView
   },
   {

@@ -4,7 +4,10 @@ const state = {
     jumpPage: false,
     currentScrollY: 100,
     jumpScroll: false,
-    currentPageSize: 20
+    currentPageSize: 20,
+    choiceArray: [],
+    choiceOperator: 'or',
+    tagsOperator: 'or'
   },
   $ArticlesView: {
     currentPage: '1',
