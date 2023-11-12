@@ -2,16 +2,57 @@
   <template v-if="Ready">
     <a-back-top />
     <div class="section-title">
-      <h4>文章列表</h4>
+      <h4>文章總覽</h4>
     </div>
     <a-spin :indicator="indicator" :spinning="spinning">
-      <div class="tab-theme" :class="this.$theme">
+      <div class="tab-theme" :class="$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
           <!-- tab 1 -->
           <a-tab-pane key="1" tab="全部">
             <!-- 篩選 選擇 搜索列表 -->
+            <!-- 第一層 tags select -->
+            <a-input-group>
+                <a-row :gutter="4">
+                  <a-col :span="18">
+                    <TagsTreeSelect
+                      size="small"
+                      ref="TagsTreeSelect"
+                      placeholder="以標籤過濾資料"
+                      style="width: 100%"
+                      v-model:value="tagsArray"
+                      :treeDefaultExpandedKeys="tagsArray"
+                      :field-names="{
+                          children: 'children',
+                          label: 'ts_name',
+                          value: 'id',
+                          key: 'id'}"
+                      multiple
+                    />
+                  </a-col>
+                  <a-col :span="2">
+                    <template v-if="tagsArray.length > 0">
+                      <a-button type="primary" size="small" shape="round" @click="tagsArray = []" danger>重置標籤</a-button>
+                    </template>
+                  </a-col>
+                </a-row>
+              </a-input-group>
+              <p></p>
+              <!-- 第二層 tags filter -->
+              <span class="tab-body-text">
+                標籤：
+                （
+                <span class="radio-theme" :class="$theme">
+                  <a-radio-group v-model:value="tagsOperator">
+                    <a-radio value="or">OR</a-radio>
+                    <a-radio value="and">AND</a-radio>
+                    <a-radio value="none">NONE</a-radio>
+                  </a-radio-group>
+                </span>
+                ）
+              </span>
+              <p></p>
             <div class="filter-block d-flex">
-              <div class="select-theme" :class="this.$theme">
+              <div class="select-theme" :class="$theme">
                   <span class="span-text">每頁：</span>
                   <a-select
                       ref="select"
@@ -53,7 +94,7 @@
                             關鍵字：無
                         </span>
                     </template>
-                  共  {{ this.filterArticles(this.$keyword, this.$filters).length }} 筆
+                  共  {{ this.filterdResult.length }} 筆
                   </span>
                   <span style="padding-left: 12px;">
                     <template v-if="this.$keyword != ''">
@@ -64,8 +105,8 @@
               </div>
             </div>
             <!-- 文章列表 -->
-            <div class="article-list-theme" :class="this.$theme">
-              <a-list :data-source="this.filterArticles(this.$keyword, this.$filters)"
+            <div class="article-list-theme" :class="$theme">
+              <a-list :data-source="this.filterdResult"
                 :pagination="pagination" item-layout="vertical" size="large" bordered>
                 <template #renderItem="{ item }">
                   <a-list-item key="item.arti_title">
@@ -136,14 +177,17 @@
                 <!-- 最底部 -->
                 <template #footer>
                   <span class="span-text">
-                    共 {{ this.filterArticles(this.$keyword, this.$filters).length }} 筆
+                    共 {{ this.filterdResult.length }} 筆
                   </span>
                 </template>
               </a-list>
             </div>
           </a-tab-pane>
           <!-- tab 2 -->
-          <a-tab-pane key="2" tab="+">
+          <a-tab-pane key="2">
+            <template #tab>
+              <font-awesome-icon :icon="['fas', 'plus']" />
+            </template>
             <a-form
               ref="formRef"
               :model="formState"
@@ -177,10 +221,19 @@ import { ref, reactive, onMounted, h } from 'vue'
 import { message } from 'ant-design-vue'
 import { LoadingOutlined } from '@ant-design/icons-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
   name: 'ArticlesView',
+  components: {
+    TagsTreeSelect
+  },
   computed: {
+    filterdResult () {
+      return this.filterArticles(
+        this.$keyword, this.$filters, this.tagsArray, this.tagsOperator
+      )
+    },
     ...mapGetters('ArticlesStore', ['articles']),
     ...mapGetters('ArticlesStore', ['filterArticles']),
     ...mapState('Search', ['$keyword']),
@@ -303,6 +356,8 @@ export default {
     const selectPageSize = ref('3')
     const currentPage = ref(1)
     const showContent = ref(true)
+    const tagsArray = ref([])
+    const tagsOperator = ref('or')
 
     const formRef = ref()
     const formState = reactive({
@@ -362,6 +417,8 @@ export default {
       pagination,
       showContent,
       expandContent,
+      tagsArray,
+      tagsOperator,
       articleEditor,
       editor: ClassicEditor,
       formRef,

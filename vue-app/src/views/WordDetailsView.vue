@@ -1,12 +1,12 @@
 <template>
   <template v-if="Ready">
       <a-back-top />
-      <div class="descriptions-theme" :class="this.$theme">
+      <div class="descriptions-theme" :class="$theme">
           <h5><router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> 返回 </router-link>
               #{{  word.id }}
           </h5>
           <div class="d-flex justify-content-end">
-            <EditOutlined class="button-edit " :class="this.$theme" @click="onEdit()"/>
+            <EditOutlined class="button-edit " :class="$theme" @click="onEdit()"/>
           </div>
           <p></p>
           <a-descriptions
@@ -17,7 +17,7 @@
           >
             <a-descriptions-item label="單字名稱">
               <template v-if="editShow">
-                <div class="input-theme" :class="this.$theme">
+                <div class="input-theme" :class="$theme">
                 <a-input
                   v-model:value="formState.word.ws_name"
                   allow-clear />
@@ -36,7 +36,7 @@
             </a-descriptions-item>
             <a-descriptions-item label="假名 / 發音">
               <template v-if="editShow">
-                <div class="input-theme" :class="this.$theme">
+                <div class="input-theme" :class="$theme">
                 <a-input
                   v-model:value="formState.word.ws_pronunciation"
                   allow-clear />
@@ -61,7 +61,7 @@
             </a-descriptions-item>
             <a-descriptions-item label="中文定義">
               <template v-if="editShow">
-                <div class="input-theme" :class="this.$theme">
+                <div class="input-theme" :class="$theme">
                 <a-input
                   v-model:value="formState.word.ws_definition"
                   allow-clear />
@@ -88,7 +88,7 @@
             </a-descriptions-item>
             <a-descriptions-item label="印象例句">
               <template v-if="editShow">
-                <div class="input-theme" :class="this.$theme">
+                <div class="input-theme" :class="$theme">
                 <a-input
                   v-model:value="formState.word.ws_slogan"
                   allow-clear />
@@ -99,7 +99,7 @@
               </template>
             </a-descriptions-item>
             <a-descriptions-item label="常用 / 重要性">
-              <span class="icon-theme" :class="this.$theme">
+              <span class="icon-theme" :class="$theme">
                 <template v-if="word.ws_is_common">
                   <span class="icon-star">
                     <a @click="onUpdateCommon(word.id, word)"><StarFilled /></a>
@@ -124,7 +124,7 @@
             </a-descriptions-item>
             <a-descriptions-item label="例句說明">
               <template v-if="editShow">
-                <div class="article-editor" :class="this.$theme">
+                <div class="article-editor" :class="$theme">
                   <ckeditor v-model="formState.word.ws_description" :editor="editor" :config="wordEditor.Config" />
                 </div>
               </template>

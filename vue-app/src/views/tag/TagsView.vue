@@ -3,12 +3,12 @@
       <div class="section-title">
         <h4>標籤列表</h4>
       </div>
-      <div class="tab-theme" :class="this.$theme">
+      <div class="tab-theme" :class="$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
           <a-tab-pane key="1" tab="全部">
             <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
-            <div class="table-theme" :class="this.$theme">
+            <div class="table-theme" :class="$theme">
               <a-table :dataSource="this.tagsArray"
                 :columns="columns"
                 :scroll="{ y: 600, x: 400 }"
@@ -64,7 +64,7 @@
           <!-- tab 2 -->
           <a-tab-pane key="2" tab="近期">
             <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
-            <div class="table-theme" :class="this.$theme">
+            <div class="table-theme" :class="$theme">
               <a-table :dataSource="this.recentTagsArray"
                 :columns="columns"
                 :scroll="{ y: 600 }"
@@ -101,7 +101,10 @@
             </div>
           </a-tab-pane>
           <!-- tab 3 -->
-          <a-tab-pane key="3" tab="+">
+          <a-tab-pane key="3">
+            <template #tab>
+              <font-awesome-icon :icon="['fas', 'plus']" />
+            </template>
             <TagsAddView />
           </a-tab-pane>
         </a-tabs>
@@ -135,8 +138,7 @@ export default {
     ...mapGetters('TagsStore', ['tagsArray']),
     ...mapGetters('TagsStore', ['recentTagsArray']),
     ...mapGetters('TagsStore', ['tagsEditArray']),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$mobile'])
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('TagsStore', ['fetch']),
@@ -266,31 +268,6 @@ export default {
   width: 70px;
   background: #f6aaf1;
   content: "";
-}
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8px
-}
-
-.add-button-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.add-clear-button {
-  margin-right: auto;
-}
-
-.add-cancel-button {
-  margin-right: 10px;
-}
-
-.add-submit-button {
-  margin-left: 10px;
 }
 
 .column-container{

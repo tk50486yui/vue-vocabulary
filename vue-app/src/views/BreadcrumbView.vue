@@ -67,7 +67,7 @@ export default {
           this.activeRoute = '單字詳細說明'
           break
         case 'articles':
-          this.activeRoute = '文章列表'
+          this.activeRoute = '文章總覽'
           break
         case 'articlesContent':
           this.activeRoute = '文章內容'
