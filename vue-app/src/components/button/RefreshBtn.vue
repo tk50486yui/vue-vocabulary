@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-primary btn-outline-light btn-sm float-end me-md-3">
+    <button type="button" class="button-container">
         <SyncOutlined :spin="spin"/>
     </button>
 </template>
@@ -16,3 +16,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

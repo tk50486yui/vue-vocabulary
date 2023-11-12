@@ -50,11 +50,6 @@
           />
         </a-form-item>
         <p></p>
-        <a-form-item :name="['word', 'ws_description']">
-            <div class="article-editor" :class="this.$theme">
-              <ckeditor v-model="formState.word.ws_description" :editor="editor" :config="wordEditor.Config" />
-            </div>
-        </a-form-item>
         <a-form-item>
           <a-button type="primary" html-type="submit">儲存</a-button>
           <a-button style="margin-left: 10px" @click="resetForm" danger>清空</a-button>
@@ -67,7 +62,6 @@
 import { reactive, ref, onMounted } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
@@ -81,6 +75,7 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
+    ...mapActions('WordsStore', ['fetch']),
     ...mapActions('WordsStore', {
       addWord: 'add'
     }),
@@ -89,6 +84,7 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.addWord(this.formState.word)
+        await this.fetch()
         this.resetForm()
         window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {}
@@ -121,13 +117,6 @@ export default {
       Ready.value = true
     })
 
-    const wordEditor = reactive({
-      Config: {
-        autoGrow: true,
-        placeholder: '請輸入說明例句...'
-      }
-    })
-
     const validateMsg = {
       required: 'required'
     }
@@ -137,7 +126,7 @@ export default {
         span: 8
       },
       wrapperCol: {
-        span: 16
+        span: 24
       }
     }
 
@@ -146,9 +135,7 @@ export default {
       formRef,
       formState,
       validateMsg,
-      layout,
-      wordEditor,
-      editor: ClassicEditor
+      layout
     }
   }
 }

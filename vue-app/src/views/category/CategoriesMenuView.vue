@@ -1,13 +1,10 @@
 <template>
   <div>
-    <div class="d-flex justify-content-between align-items-center section-title" :class="this.$theme">
+    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
       <h4>詞組類別</h4>
-      <div class="button-container">
-        <PlusBtn class="button-container" @click="visible=true"/>
-        <RefreshBtn class="button-container btn-secondary" :spin="SyncOutlinedSpin" @click="refresh"/>
-      </div>
+      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1" @click="visible=true"/>
     </div>
-    <div class="collapse-theme" :class="this.$theme">
+    <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
       <a-spin :spinning="spinning">
         <!--  主摺疊  -->
@@ -48,62 +45,31 @@
   </div>
   <p></p>
   <!-- Modal  -->
-  <div class="cate-menu-modal" ref="cateMod" :class="this.$theme">
+  <div class="menu-modal" ref="cateMod" :class="$theme">
     <a-modal v-model:visible="visible" :footer="null" :getContainer = '()=>$refs.cateMod'>
       <template #title >
-      <div class="modal-head-text" :class="this.$theme">新增分類</div>
+        <span class="section-title" :class="$theme">
+          <h4>新增分類</h4>
+        </span>
       </template>
       <p></p>
-      <a-form
-        ref="formRef"
-        :model="formState"
-        :validate-messages="validateMsg"
-        @finish="onFinish">
-        <a-form-item class="input-theme" :class="this.$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
-          <a-textarea  v-model:value="formState.category.cate_name"  placeholder="類別名稱" :auto-size="{ minRows: 3}" allow-clear />
-        </a-form-item>
-        <p></p>
-        <a-form-item :name="['category', 'cate_parent_id']">
-          <CategoriesTreeSelect
-            placeholder="選擇分類層級"
-            size="large"
-            ref="treeSelect"
-            v-model:value="formState.category.cate_parent_id"
-            @change="handleTreeSelectChange"/>
-        </a-form-item>
-        <a-form-item>
-          <div class="modal-button-container">
-            <div class="modal-clear-button">
-                <a-button @click="resetForm" danger>清空</a-button>
-            </div>
-            <div class="modal-cancel-button">
-                <a-button @click="visible=false">取消</a-button>
-            </div>
-            <div class="modal-submit-button">
-              <a-button type="primary" html-type="submit" :loading="confirmLoading">儲存</a-button>
-            </div>
-          </div>
-        </a-form-item>
-      </a-form>
+      <CategoriesAddView />
     </a-modal>
   </div>
 </template>
 <script>
-import { ref, reactive, onMounted } from 'vue'
+import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { message } from 'ant-design-vue'
-import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import PlusBtn from '@/components/button/PlusBtn.vue'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
-import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
 
 export default {
   name: 'CategoriesMenuView',
   components: {
     TreeCategoriesMenu,
-    RefreshBtn,
     PlusBtn,
-    CategoriesTreeSelect
+    CategoriesAddView
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categories']),
@@ -114,9 +80,6 @@ export default {
     ...mapActions('Search', ['updateFilters']),
     ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('CategoriesStore', ['fetch']),
-    ...mapActions('CategoriesStore', {
-      addCategory: 'add'
-    }),
     async refresh () {
       try {
         this.SyncOutlinedSpin = true
@@ -127,20 +90,6 @@ export default {
         this.spinning = false
       } catch (error) {}
     },
-    async onFinish (values) {
-      try {
-        this.confirmLoading = true
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addCategory(values.category)
-        this.resetForm()
-        this.confirmLoading = false
-        this.visible = false
-        this.refresh()
-      } catch (error) {
-        this.confirmLoading = false
-      }
-    },
     async handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
@@ -148,13 +97,6 @@ export default {
       if (this.$route !== 'wordsGrid') {
         this.$router.push({ name: 'wordsGrid' })
       }
-    },
-    handleTreeSelectChange (value) {
-      this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null
-    },
-    resetForm () {
-      this.formState.category.cate_parent_id = null
-      this.formRef.resetFields()
     }
   },
   async created () {
@@ -164,44 +106,13 @@ export default {
     const activeKey = ref(['1'])
     const spinning = ref(false)
     const SyncOutlinedSpin = ref(false)
-
-    const formState = reactive({
-      category: {}
-    })
-
-    const { categoryForm } = mapGetters('CategoriesStore', ['categoryForm'])
-
-    onMounted(() => {
-      formState.category = { ...categoryForm }
-    })
-
-    const layout = {
-      labelCol: {
-        span: 8
-      },
-      wrapperCol: {
-        span: 16
-      }
-    }
-
-    const validateMsg = {
-      required: 'required'
-    }
-
-    const modal = {
-      visible: ref(false),
-      confirmLoading: ref(false),
-      formRef: ref(),
-      formState,
-      layout,
-      validateMsg
-    }
+    const visible = ref(false)
 
     return {
       activeKey,
       spinning,
       SyncOutlinedSpin,
-      ...modal
+      visible
     }
   }
 }
@@ -211,7 +122,7 @@ export default {
 @import '@/assets/scss/main.scss';
 
 .section-title {
-  margin-bottom: 8px !important;
+  margin-bottom: 8px ;
 }
 
 .section-title h4:after {
@@ -228,62 +139,6 @@ export default {
   position: relative;
   height: 350px;
   overflow: scroll
-}
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cate-menu-modal {
-  /* modal head */
-  &.dark :deep(.ant-modal-header){
-    background:var(--head-background);
-    color:var(--head-text);
-  }
-
-  &.light :deep(.ant-modal-header){
-    background:var(--head-background);
-    color:var(--head-text);
-  }
-
-  /* modal body */
-  &.dark :deep(.ant-modal-content){
-    background:var(--body-background);
-  }
-
-  &.light :deep(.ant-modal-content){
-    background:var(--body-background);
-  }
-
-}
-.modal-head-text  {
-  &.dark{
-    color:var(--head-text);
-  }
-
-  &.light{
-    color:var(--head-text);
-  }
-}
-
-.modal-button-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.modal-clear-button {
-  margin-right: auto;
-}
-
-.modal-cancel-button {
-  margin-right: 10px;
-}
-
-.modal-submit-button {
-  margin-left: 10px;
 }
 
 </style>

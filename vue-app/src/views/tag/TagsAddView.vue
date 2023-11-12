@@ -24,8 +24,8 @@
           <a-input  v-model:value="formState.tag.ts_name"  placeholder="標籤名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit">儲存</a-button>
-          <a-button style="margin-left: 10px" @click="resetForm" :loading="confirmLoading" danger>清空</a-button>
+          <a-button type="primary" html-type="submit" :loading="confirmLoading">儲存</a-button>
+          <a-button class="float-end" @click="resetForm" danger>清空</a-button>
         </a-form-item>
     </a-form>
 </template>

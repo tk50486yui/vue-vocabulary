@@ -7,7 +7,7 @@
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
           <a-tab-pane key="1" tab="全部">
-            <RefreshBtn class="button-container btn-info" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
+            <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
             <div class="table-theme" :class="this.$theme">
               <a-table :dataSource="this.categoriesArray"
                 :columns="columns"
@@ -58,7 +58,7 @@
           </a-tab-pane>
           <!-- tab 2 -->
           <a-tab-pane key="2" tab="近期">
-            <RefreshBtn class="button-container btn-warning" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
+            <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
             <div class="table-theme" :class="this.$theme">
               <a-table :dataSource="this.recentCategoriesArray"
                 :columns="columns"
@@ -142,7 +142,7 @@ export default {
       try {
         this.SyncOutlinedSpin[index] = true
         this.TableLoading[index] = true
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => setTimeout(resolve, 100))
         if (index === 0) {
           await this.fetch()
           this.editDataSource = this.recentCategoriesArray

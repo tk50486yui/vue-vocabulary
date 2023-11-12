@@ -12,7 +12,7 @@
             <!-- 篩選 選擇 搜索列表 -->
             <div class="filter-block d-flex">
               <div class="select-theme" :class="this.$theme">
-                  <span class="span-text">每頁顯示：</span>
+                  <span class="span-text">每頁：</span>
                   <a-select
                       ref="select"
                       v-model:value="selectPageSize"
@@ -45,12 +45,12 @@
                   <span class="span-text" style="padding-left: 6px;">
                     <template v-if="this.$keyword != '' && this.$filters.length > 0">
                         <span style="padding-right: 6px;">
-                            搜尋條件：含 ` {{ this.$keyword }} ` 的結果
+                            關鍵字：` {{ this.$keyword }} `
                         </span>
                     </template>
                     <template v-else>
                         <span style="padding-right: 6px;">
-                            搜尋條件：無
+                            關鍵字：無
                         </span>
                     </template>
                   共  {{ this.filterArticles(this.$keyword, this.$filters).length }} 筆
@@ -104,9 +104,7 @@
                       <div v-html="item.arti_content"></div>
                     </template>
                     <template v-else>
-                      <br>
-                      <a class="list-link" @click="Expand">繼續閱讀....</a>
-                      <p></p>
+                      <a class="list-link" @click="Expand"></a>
                     </template>
                     <br>
                     <span class="article-date">
@@ -209,7 +207,7 @@ export default {
     async refreshArticles () {
       try {
         this.spinning = true
-        await new Promise(resolve => setTimeout(resolve, 600))
+        await new Promise(resolve => setTimeout(resolve, 400))
         this.spinning = false
       } catch (error) {}
     },

@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div class="section-title" :class="this.$theme">
+    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
       <h4>標籤選單</h4>
+      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1" @click="visible=true"/>
     </div>
-    <div class="collapse-theme" :class="this.$theme">
+    <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
       <a-spin :spinning="spinning">
         <!--  主摺疊  -->
@@ -55,6 +56,19 @@
       </a-spin>
     </div>
   </div>
+  <p></p>
+  <!-- Modal  -->
+  <div class="menu-modal" ref="tagMod" :class="$theme">
+    <a-modal v-model:visible="visible" :footer="null" :getContainer = '()=>$refs.tagMod'>
+      <template #title >
+        <span class="section-title" :class="$theme">
+          <h4>新增標籤</h4>
+        </span>
+      </template>
+      <p></p>
+      <TagsAddView />
+    </a-modal>
+  </div>
 </template>
 
 <script>
@@ -62,12 +76,16 @@ import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import { CheckOutlined } from '@ant-design/icons-vue'
+import PlusBtn from '@/components/button/PlusBtn.vue'
+import TagsAddView from '@/views/tag/TagsAddView.vue'
 
 export default {
   name: 'TagsMenuView',
   components: {
     TreeTagsMenu,
-    CheckOutlined
+    CheckOutlined,
+    PlusBtn,
+    TagsAddView
   },
   computed: {
     ...mapGetters('TagsStore', ['tags']),
@@ -116,13 +134,15 @@ export default {
     const openKeys = ref()
     const selectedCurrent = ref(false)
     const selectedCount = ref(0)
+    const visible = ref(false)
     return {
       activeKey,
       spinning,
       selectedKeys,
       openKeys,
       selectedCurrent,
-      selectedCount
+      selectedCount,
+      visible
     }
   }
 }

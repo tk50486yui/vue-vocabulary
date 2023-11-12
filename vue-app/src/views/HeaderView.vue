@@ -1,87 +1,111 @@
 <template>
-<div>
-    <header class="header" :class="$theme">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-3 col-lg-2">
-                    <div class="header__logo">
-                        <router-link :to="{ name: 'home' }">
-                            <img :src="require('@/assets/logo.png')" />
-                        </router-link>
+    <div>
+        <header class="header" :class="$theme">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-2">
+                        <div class="header__logo">
+                            <router-link :to="{ name: 'home' }">
+                                <img :src="require('@/assets/logo.png')" />
+                            </router-link>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-7">
+                        <nav class="header__menu" >
+                            <ul class="nav-menu" :class="$theme">
+                                <li :class="{ 'active': activeIndex === 0 }">
+                                    <router-link :to="{ name: 'wordsGrid' }">
+                                        <div class="dropdown-container">
+                                            單字
+                                            <CaretDownOutlined />
+                                        </div>
+                                    </router-link>
+                                    <ul class="dropdown">
+                                        <li><router-link :to="{ name: 'wordsGrid' }">單字總覽</router-link></li>
+                                        <li><router-link :to="{ name: 'words' }">單字表</router-link></li>
+                                        <li><router-link :to="{ name: 'wordsAdd' }">單字新增</router-link></li>
+                                    </ul>
+                                </li>
+                                <li :class="{ 'active': activeIndex === 1 }">
+                                    <router-link :to="{ name: 'articles' }">文章</router-link>
+                                </li>
+                                <li :class="{ 'active': activeIndex === 2 }">
+                                    <router-link :to="{ name: 'categories' }">
+                                        <div class="dropdown-container">
+                                            類別
+                                            <CaretDownOutlined />
+                                        </div>
+                                    </router-link>
+                                    <ul class="dropdown">
+                                        <li><router-link :to="{ name: 'categories' }">類別列表</router-link></li>
+                                        <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
+                                    </ul>
+                                </li>
+                                <li :class="{ 'active': activeIndex === 3 }">
+                                    <router-link :to="{ name: 'tags' }">
+                                        <div class="dropdown-container">
+                                            標籤
+                                            <CaretDownOutlined />
+                                        </div>
+                                    </router-link>
+                                    <ul class="dropdown">
+                                        <li><router-link :to="{ name: 'tags' }">標籤列表</router-link></li>
+                                        <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
+                                    </ul>
+                                </li>
+                                <li :class="{ 'active': activeIndex === 4 }">
+                                    <router-link :to="{ name: 'wordsGroups' }">群組</router-link>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="header__right">
+                            <ul class="header__right__widget">
+                                <li><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-7">
-                    <nav class="header__menu" >
-                        <ul class="nav-menu" :class="$theme">
-                            <li :class="{ 'active': activeIndex === 0 }">
-                                <router-link :to="{ name: 'wordsGrid' }">
-                                    <div class="dropdown-container">
-                                        單字
-                                        <CaretDownOutlined />
-                                    </div>
-                                </router-link>
-                                <ul class="dropdown">
-                                    <li><router-link :to="{ name: 'wordsGrid' }">單字總覽</router-link></li>
-                                    <li><router-link :to="{ name: 'words' }">單字表</router-link></li>
-                                    <li><router-link :to="{ name: 'wordsAdd' }">單字新增</router-link></li>
-                                </ul>
-                            </li>
-                            <li :class="{ 'active': activeIndex === 1 }">
-                                <router-link :to="{ name: 'articles' }">文章</router-link>
-                            </li>
-                            <li :class="{ 'active': activeIndex === 2 }">
-                                <router-link :to="{ name: 'categories' }">
-                                    <div class="dropdown-container">
-                                        類別
-                                        <CaretDownOutlined />
-                                    </div>
-                                </router-link>
-                                <ul class="dropdown">
-                                    <li><router-link :to="{ name: 'categories' }">類別列表</router-link></li>
-                                    <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
-                                </ul>
-                            </li>
-                            <li :class="{ 'active': activeIndex === 3 }">
-                                <router-link :to="{ name: 'tags' }">
-                                    <div class="dropdown-container">
-                                        標籤
-                                        <CaretDownOutlined />
-                                    </div>
-                                </router-link>
-                                <ul class="dropdown">
-                                    <li><router-link :to="{ name: 'tags' }">標籤列表</router-link></li>
-                                    <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
-                                </ul>
-                            </li>
-                            <li :class="{ 'active': activeIndex === 4 }">
-                                <router-link :to="{ name: 'wordsGroups' }">群組</router-link>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__right">
-                        <ul class="header__right__widget">
-                            <li><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></li>
-                        </ul>
-                    </div>
+                <div class="canvas__open">
+                    <span @click="this.drawerVisible = true">
+                        <font-awesome-icon :icon="['fas', 'bars']" />
+                    </span>
                 </div>
             </div>
-            <div class="canvas__open">
-                <font-awesome-icon :icon="['fas', 'bars']" />
+        </header>
+    </div>
+    <div class="drawer-theme" ref="navDrawer" :class="$theme">
+        <a-drawer
+            :getContainer = "()=>$refs.navDrawer"
+            :width="230"
+            placement="left"
+            :closable="false"
+            :visible="this.drawerVisible"
+            @close="this.drawerVisible = false"
+        >
+        <template #title>
+            <div class="drawer__logo">
+                <router-link :to="{ name: 'home' }">
+                    <img :src="require('@/assets/logo.png')" />
+                </router-link>
             </div>
-        </div>
-    </header>
-</div>
+        </template>
+        <NavDrawerView />
+        </a-drawer>
+    </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { ref } from 'vue'
 import { CaretDownOutlined } from '@ant-design/icons-vue'
+import NavDrawerView from '@/views/NavDrawerView.vue'
+
 export default {
   name: 'HeaderView',
   components: {
-    CaretDownOutlined
+    CaretDownOutlined,
+    NavDrawerView
   },
   computed: {
     ...mapState('Theme', ['$theme'])
@@ -125,9 +149,11 @@ export default {
   },
   setup () {
     const activeIndex = ref(2)
+    const drawerVisible = ref(false)
 
     return {
-      activeIndex
+      activeIndex,
+      drawerVisible
     }
   }
 }
@@ -135,6 +161,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 /*---------------------
     Header
 -----------------------*/
@@ -159,6 +186,28 @@ export default {
     display: inline-block;
 }
 
+.drawer__logo{
+    padding-bottom: 4px;
+}
+
+.drawer__logo a {
+    display: inline-block;
+}
+
+/*---------------------
+    Nav Menu
+-----------------------*/
+.nav-menu {
+  li a {
+    font-size: 15px;
+    text-transform: uppercase;
+    font-weight: 500;
+    display: block;
+    padding: 2px 0;
+    position: relative;
+    text-decoration: none;
+  }
+}
 /*---------------------
     Header Menu
 -----------------------*/

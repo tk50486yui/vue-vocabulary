@@ -58,30 +58,31 @@
             </a-radio-group>
           </span>
           ）
+          <a-checkbox-group
+            v-model:value="choiceArray"
+            :options="choiceArrayOptions"
+            @change="setFilterItems()"
+          >
+            <template #label="{value}">
+              <span class="icon-theme" :class="$theme">
+                <div class="choice-container">
+                <template v-if="value === 'ws_is_important'">
+                  <span class="icon-heart">
+                    <a class="choice-heart"><HeartFilled /></a>
+                  </span>
+                </template>
+                <template v-if="value === 'ws_is_common'">
+                  <span class="icon-star">
+                    <a class="choice-star"><StarFilled /></a>
+                  </span>
+                </template>
+                </div>
+              </span>
+            </template>
+          </a-checkbox-group>
         </span>
-        <a-checkbox-group
-          v-model:value="choiceArray"
-          :options="choiceArrayOptions"
-          @change="setFilterItems()"
-        >
-          <template #label="{value}">
-            <span class="icon-theme" :class="$theme">
-              <div class="choice-container">
-              <template v-if="value === 'ws_is_important'">
-                <span class="icon-heart">
-                  <a class="choice-heart"><HeartFilled /></a>
-                </span>
-              </template>
-              <template v-if="value === 'ws_is_common'">
-                <span class="icon-star">
-                  <a class="choice-star"><StarFilled /></a>
-                </span>
-              </template>
-              </div>
-            </span>
-          </template>
-        </a-checkbox-group>
         <p></p>
+        <!-- 第四層 show -->
         <span class="checkbox-theme" :class="$theme">
           顯示項目：
           <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
@@ -101,7 +102,7 @@
           </a-checkbox>
         </span>
         <p></p>
-        <!-- 第四層  words groups add -->
+        <!-- 第五層  words groups add -->
         <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
             新增單字組別
@@ -115,16 +116,17 @@
             </template>
           </template>
         </a-button>
+        <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-3" @click="onDrawerShow()"/>
         <!-- 主頁面 card -->
         <a-spin :spinning="ReadySpinning">
           <div class="list-card-theme" :class="this.$theme" ref="listCard">
             <a-list :data-source="this.filterWordsResult" :pagination="pagination"
-                :grid="{ gutter: 8, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3, xxxl: 4 }"
+                :grid="{ gutter: 10, xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3, xxxl: 3 }"
             >
               <!-- header -->
               <template #header>
                 <span class="select-theme" :class="$theme">
-                  每頁顯示：
+                  每頁：
                   <a-select
                     ref="select"
                     v-model:value="selectPageSize"
@@ -153,7 +155,7 @@
                   <span style="padding-left: 6px;">
                     <template v-if="this.$keyword != '' && this.$filters.length > 0">
                       <span style="padding-right: 6px;">
-                        搜尋條件：
+                        關鍵字：
                         <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
                           ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
                         </template>
@@ -164,7 +166,7 @@
                     </template>
                     <template v-else>
                       <span style="padding-right: 6px;">
-                        搜尋條件：無
+                        關鍵字：無
                       </span>
                     </template>
                     共  {{ this.filterWordsResult.length }} 筆
@@ -177,9 +179,12 @@
                 </span>
               </template>
               <!-- main -->
-              <template #renderItem="{ item }">
+              <p></p>
+              <template #renderItem="{ item, index }">
               <a-list-item>
-                <p></p>
+                <template v-if="[0, 1, 2].includes(index) && $desktop">
+                  <p></p>
+                </template>
                 <a-card>
                   <!-- cate_name -->
                   <template #title>
@@ -291,7 +296,7 @@
                       <p></p>
                       <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
                         <a @click="handleTagsLink(subItem.ts_id)">
-                          <a-tag class="tag-align" color="green"> {{ subItem.ts_name }} </a-tag>
+                          <a-tag class="tag-align" color="pink"> {{ subItem.ts_name }} </a-tag>
                         </a>
                       </template>
                     </template>
@@ -303,6 +308,19 @@
           </div>
         </a-spin>
     </template>
+    <!-- drawer words add -->
+    <div class="drawer-theme" ref="wordsDrawer" :class="$theme">
+      <a-drawer
+          :getContainer = "()=>$refs.wordsDrawer"
+          placement="left"
+          :width="this.drawerWidth"
+          :visible="this.drawerVisible"
+          @close="this.drawerVisible = false"
+        >
+          <WordsAddView />
+      </a-drawer>
+    </div>
+
 </template>
 
 <script>
@@ -312,6 +330,8 @@ import { message } from 'ant-design-vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import DeleteBtn from '@/components/button/DeleteBtn.vue'
+import WordsAddView from '@/views/WordsAddView.vue'
+import PlusBtn from '@/components/button/PlusBtn.vue'
 
 export default {
   name: 'WordsGridView',
@@ -319,7 +339,9 @@ export default {
     StarFilled,
     HeartFilled,
     DeleteBtn,
-    TagsTreeSelect
+    PlusBtn,
+    TagsTreeSelect,
+    WordsAddView
   },
   computed: {
     filterWordsResult () {
@@ -347,7 +369,10 @@ export default {
     ...mapState('Views', ['$WordsGrid']),
     ...mapState('Views', ['$WordsGroupsView']),
     ...mapState('Views', ['$WordsGroupsDetailsView']),
-    ...mapState('Theme', ['$theme'])
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$desktop']),
+    ...mapState('Screen', ['$tablet']),
+    ...mapState('Screen', ['$mobile'])
   },
   methods: {
     ...mapActions('WordsStore', ['fetch']),
@@ -480,6 +505,16 @@ export default {
         this.checkboxShow = true
         this.checkboxBtn = true
       }
+    },
+    // drawer
+    onDrawerShow () {
+      this.setDrawerStyle()
+      this.drawerVisible = true
+    },
+    setDrawerStyle () {
+      this.drawerWidth = this.drawerWidthMap[
+        this.$desktop ? 'desktop' : this.$tablet ? 'tablet' : this.$mobile ? 'mobile' : 'desktop'
+      ]
     }
   },
   async created () {
@@ -528,6 +563,15 @@ export default {
         this.checkboxShow = false
         this.checkboxBtn = false
       }
+    },
+    '$desktop' (val) {
+      this.setDrawerStyle()
+    },
+    '$tablet' (val) {
+      this.setDrawerStyle()
+    },
+    '$mobile' (val) {
+      this.setDrawerStyle()
     }
   },
   setup () {
@@ -540,6 +584,14 @@ export default {
     const dataSize = ref(0)
     const checkboxShow = ref(false)
     const checkboxBtn = ref(false)
+    const drawerVisible = ref(false)
+    const drawerWidth = ref(500)
+    const drawerWidthMap = {
+      desktop: 500,
+      tablet: 400,
+      mobile: 300
+    }
+
     const pagination = reactive({
       onChange: page => {
         currentPage.value = page
@@ -584,6 +636,9 @@ export default {
       selectPageSize,
       currentPage,
       dataSize,
+      drawerVisible,
+      drawerWidth,
+      drawerWidthMap,
       filterItemsState,
       ...toRefs(filterItemsState),
       isItemsState,
@@ -640,4 +695,5 @@ export default {
 .tag-align {
   margin-top: 6px;
 }
+
 </style>

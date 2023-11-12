@@ -1,18 +1,24 @@
 <template>
-    <button type="button" class="btn btn-dark btn-outline-light btn-sm float-end me-md-1">
-        <PlusCircleFilled />
+    <button type="button" class="button-container">
+      <font-awesome-icon :icon="['fas', 'plus']" />
     </button>
 </template>
 
 <script>
-import { PlusCircleFilled } from '@ant-design/icons-vue'
 export default {
   name: 'PlusBtn',
   props: {
     spin: Boolean
   },
   components: {
-    PlusCircleFilled
+
   }
 }
 </script>
+<style lang="scss" scoped>
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

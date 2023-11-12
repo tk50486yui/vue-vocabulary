@@ -3,8 +3,8 @@
     <div class="section-title">
       <h4>單字表</h4>
     </div>
-    <div class="select-theme" :class="this.$theme">
-      每頁顯示：
+    <div class="select-theme" :class="$theme">
+      每頁：
       <a-select
           ref="select"
           v-model:value="selectPageSize"
@@ -32,7 +32,7 @@
           <a-select-option value="1500">極高</a-select-option>
       </a-select>
     </div>
-    <div class="table-theme" :class="this.$theme">
+    <div class="table-theme" :class="$theme">
       <a-table :dataSource="this.wordsArray"
         :columns="columns"
         :scroll="{ y: TablescrollY, x: 850 }"
@@ -41,7 +41,7 @@
       >
         <!-- Table header -->
         <template #title>
-          <RefreshBtn class="button-container" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
+          <RefreshBtn class="btn btn-info btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
         </template>
         <!-- Table expanded -->
         <template #expandedRowRender="{ record }">
@@ -91,7 +91,7 @@
           </template>
           <template v-else-if="column.dataIndex === 'common'">
             <!-- Icon Star Heart -->
-            <span class="icon-theme" :class="this.$theme">
+            <span class="icon-theme" :class="$theme">
               <template v-if="record.ws_is_common">
                 <span class="icon-star">
                   <a @click="onUpdateCommon(record.id, record)"><StarFilled /></a>
@@ -323,17 +323,12 @@ export default {
   background: #17b0f7;
   content: "";
 }
+
 .highlight {
   background-color: rgb(255, 192, 105);
   padding: 0px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8px
-}
 .button-edit-container {
   display: flex;
   justify-content: space-between;
@@ -357,10 +352,5 @@ export default {
 }
 .icon-star-false{
   padding-right: 4px;
-}
-
-.button-delete{
-  color:rgb(231, 121, 121);
-  padding-left: 6px;
 }
 </style>
