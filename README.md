@@ -11,7 +11,7 @@
 ----
 ## Vue 3.2.3
 
-使用 vue-cli 建立，搭配 vue-router 及 vuex 進行開發，並使用 eslint 規範。
+使用 vue-cli 建立，搭配 vue-router 及 vuex 進行開發，並使用 eslint 設定。
 
 
 ----
