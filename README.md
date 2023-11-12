@@ -1,12 +1,12 @@
-# VueProject
+# vue-vocabulary
 
 使用 Vue 進行頁面設計。
 
 搭配後端：
 
-[Laravel 版本](https://github.com/tk50486yui/laravel-project.git)
+[Laravel 版本](https://github.com/tk50486yui/laravel-vocabulary.git)
 
-[Slim 版本](https://github.com/tk50486yui/SlimProject.git)
+[Slim 版本](https://github.com/tk50486yui/slim-vocabulary.git)
 
 ----
 ## Vue 3.2.3
