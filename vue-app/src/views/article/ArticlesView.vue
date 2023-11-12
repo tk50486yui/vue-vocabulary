@@ -188,26 +188,7 @@
             <template #tab>
               <font-awesome-icon :icon="['fas', 'plus']" />
             </template>
-            <a-form
-              ref="formRef"
-              :model="formState"
-              :validate-messages="validateMsg"
-              name="articlesform"
-              @finish="onFinish">
-              <a-form-item class="input-theme" :class="this.$theme" :name="['article', 'arti_title']" :rules="[{ required: true }]">
-                <a-input  v-model:value="formState.article.arti_title"  placeholder="輸入標題" allow-clear />
-              </a-form-item>
-              <p></p>
-              <a-form-item :name="['article', 'arti_content']">
-                <div class="article-editor" :class="this.$theme">
-                  <ckeditor v-model="formState.article.arti_content" :editor="editor" :config="articleEditor.Config" />
-                </div>
-              </a-form-item>
-              <p></p>
-              <a-form-item>
-                <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
-              </a-form-item>
-            </a-form>
+            <ArticlesAddView />
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -217,15 +198,15 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive, onMounted, h } from 'vue'
-import { message } from 'ant-design-vue'
+import { ref, reactive, h } from 'vue'
 import { LoadingOutlined } from '@ant-design/icons-vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import ArticlesAddView from '@/views/article/ArticlesAddView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 export default {
   name: 'ArticlesView',
   components: {
+    ArticlesAddView,
     TagsTreeSelect
   },
   computed: {
@@ -247,9 +228,6 @@ export default {
   methods: {
     ...mapActions('ArticlesStore', ['fetch']),
     ...mapActions('ArticlesStore', {
-      addArticle: 'add'
-    }),
-    ...mapActions('ArticlesStore', {
       updateArticle: 'update'
     }),
     ...mapActions('Search', ['updateKeyword']),
@@ -262,16 +240,6 @@ export default {
         this.spinning = true
         await new Promise(resolve => setTimeout(resolve, 400))
         this.spinning = false
-      } catch (error) {}
-    },
-    async onFinish (values) {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addArticle(values.article)
-        await this.fetch()
-        this.formRef.resetFields()
-        window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {}
     },
     // articles tiltle
@@ -359,27 +327,6 @@ export default {
     const tagsArray = ref([])
     const tagsOperator = ref('or')
 
-    const formRef = ref()
-    const formState = reactive({
-      article: {}
-    })
-
-    const { articleForm } = mapGetters('ArticlesStore', ['articleForm'])
-
-    const articleEditor = reactive({
-      id: '',
-      arti_title: '',
-      arti_content: '',
-      Config: {
-        autoGrow: true,
-        placeholder: '請輸入文章...'
-      }
-    })
-
-    onMounted(() => {
-      formState.article = { ...articleForm }
-    })
-
     const expandContent = reactive([{
       id: '',
       expand: false
@@ -401,10 +348,6 @@ export default {
       position: 'top'
     })
 
-    const validateMsg = {
-      required: ''
-    }
-
     return {
       Ready,
       AfterReady,
@@ -418,13 +361,7 @@ export default {
       showContent,
       expandContent,
       tagsArray,
-      tagsOperator,
-      articleEditor,
-      editor: ClassicEditor,
-      formRef,
-      formState,
-      articleForm,
-      validateMsg
+      tagsOperator
     }
   }
 }
@@ -455,13 +392,6 @@ export default {
 .article-date{
   padding-top: 18px;
   font-size:12px;
-}
-
-.button-container {
-display: flex;
-justify-content: center;
-align-items: center;
-margin-bottom: 8px
 }
 
 </style>
