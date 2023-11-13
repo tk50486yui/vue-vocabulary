@@ -13,9 +13,6 @@
         <!-- 上方搜尋列 -->
         <SearchView />
 
-        <!-- 分隔線 -->
-        <a-divider class="divider-theme" />
-
         <!-- 下方顯示頁面 -->
         <div class="row">
 
@@ -125,11 +122,6 @@ export default {
 .spad{
   padding-top: 10px;
   padding-bottom: 50px;
-}
-
-.divider-theme {
-  height: 2px;
-  background: #515959
 }
 
 @media only screen and (min-width: 1200px) {

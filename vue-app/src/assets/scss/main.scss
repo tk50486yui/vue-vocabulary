@@ -6,10 +6,6 @@ $keyword-color:#ff7866; // 關鍵字顏色
 $category-keyword-color:rgb(92, 247, 102); // 類別關鍵字顏色
 $edit-icon-color: #6A6AFF;
 
-.test-color {
-  background: #56646f;
-}
-
 .main-body {  
   &.dark {
     background: var(--body-background);
@@ -26,6 +22,43 @@ $edit-icon-color: #6A6AFF;
     color: var(--head-text); 
   }
   &.light { 
+    color: var(--head-text);
+  } 
+}
+
+.back-link-theme{  
+  a{
+    font-size: 24px;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    margin-right: 18px;
+  }
+  .link-separator {
+    margin-right: 10px;
+    margin-left: -5px;
+    position: relative;
+    display: inline-block;
+  }
+  &.dark a{
+    color: var(--back-link-text); 
+  }
+  &.light a{
+    color: var(--back-link-text);
+  } 
+
+  &.dark a:hover{
+    color: var(--link-text-hover); 
+  }
+  &.light a:hover{
+    color: var(--link-text-hover);
+  } 
+  
+   
+  &.dark {
+    color: var(--head-text); 
+  }
+  &.light {
     color: var(--head-text);
   } 
 }
@@ -334,6 +367,14 @@ $edit-icon-color: #6A6AFF;
     -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
     box-shadow: 0px 5px 10px rgba(230, 9, 9, 0.1);
   }  
+  
+
+  &.dark :deep(.header__right .header__right__widget li){
+    color: var(--head-text); 
+  }
+  &.light :deep(.header__right .header__right__widget li){ 
+    color: var(--head-text); 
+  }
 
   &.dark :deep(.canvas__open){
     color: var(--head-text); 

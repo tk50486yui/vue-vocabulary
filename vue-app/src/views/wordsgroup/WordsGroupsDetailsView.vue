@@ -1,23 +1,28 @@
 <template>
     <template v-if="Ready">
-        <h5>
-            <router-link :to="{ name: 'wordsGroups' }"> 返回 </router-link>
-             > {{ this.wordsGroup.wg_name }}
-        </h5>
+        <span class="back-link-theme" :class="$theme">
+          <router-link :to="{ name: 'wordsGroups' }"> 返回 </router-link>
+          <span class="link-separator h5">
+            <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs"/>
+          </span>
+          <span class="h4">
+            {{ this.wordsGroup.wg_name }}
+          </span>
+        </span>
         <div class="d-flex justify-content-end">
-            <EditOutlined class="button-edit " :class="this.$theme" @click="onEdit()"/>
+            <EditOutlined class="button-edit " :class="$theme" @click="onEdit()"/>
         </div>
         <p></p>
-        <div class="list-theme" :class="this.$theme">
+        <div class="list-theme" :class="$theme">
             <a-list
                 item-layout="horizontal"
                 :data-source="this.wordsGroup.details"
             >
-            <template #renderItem="{ item }">
+            <template #renderItem="{ item, index }">
                 <a-list-item>
                 <a-list-item-meta>
                     <template #description>
-                        {{ item.ws_id}}. {{ item.ws_name}}
+                        {{ index + 1}}. {{ item.ws_name}}
                     </template>
                 </a-list-item-meta>
                 </a-list-item>

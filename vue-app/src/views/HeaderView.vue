@@ -62,15 +62,22 @@
                     <div class="col-lg-3">
                         <div class="header__right">
                             <ul class="header__right__widget">
-                                <li><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></li>
+                                <li>
+                                    <span @click="setSearchShow()">
+                                        <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                                    </span>
+                                </li>
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="canvas__open">
-                    <span @click="this.drawerVisible = true">
-                        <font-awesome-icon :icon="['fas', 'bars']" />
-                    </span>
+                    <div class="canvas__open">
+                        <span style="padding-right:6px" @click="this.drawerVisible = true">
+                            <font-awesome-icon :icon="['fas', 'bars']" />
+                        </span>
+                        <span @click="setSearchShow()">
+                            <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                        </span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -96,7 +103,7 @@
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { ref } from 'vue'
 import { CaretDownOutlined } from '@ant-design/icons-vue'
 import NavDrawerView from '@/views/NavDrawerView.vue'
@@ -108,11 +115,16 @@ export default {
     NavDrawerView
   },
   computed: {
-    ...mapState('Theme', ['$theme'])
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Search', ['$searchShow'])
   },
   methods: {
+    ...mapActions('Search', ['updateSearchShow']),
     async created () {
       this.setActive()
+    },
+    setSearchShow () {
+      this.updateSearchShow(!this.$searchShow)
     },
     setActive () {
       const { name } = this.$route
@@ -369,7 +381,7 @@ export default {
         font-size: 22px;
         color: #222;
         height: 35px;
-        width: 35px;
+        width: 90px;
         line-height: 35px;
         text-align: center;
         border: 1px solid #323232;
@@ -385,6 +397,7 @@ export default {
     .header__right {
         display: none;
     }
+
 }
 /* Wide Mobile = 480px */
 @media only screen and (max-width: 767px) {
@@ -409,5 +422,6 @@ export default {
     .header__right {
         display: none;
     }
+
 }
 </style>

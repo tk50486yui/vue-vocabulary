@@ -51,8 +51,8 @@
         </a-form-item>
         <p></p>
         <a-form-item>
-          <a-button type="primary" html-type="submit">儲存</a-button>
-          <a-button style="margin-left: 10px" @click="resetForm" danger>清空</a-button>
+          <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
+          <a-button class="btn btn-danger btn-outline-light btn-sm float-end" @click="resetForm">重置</a-button>
         </a-form-item>
       </a-form>
     </template>

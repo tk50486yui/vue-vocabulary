@@ -1,4 +1,5 @@
 const state = {
+  $searchShow: false,
   $keyword: '',
   $searchClass: '',
   $filters: ['ws_name'],
@@ -7,6 +8,9 @@ const state = {
 }
 
 const actions = {
+  updateSearchShow ({ commit }, searchShow) {
+    commit('setSearchShow', searchShow)
+  },
   updateKeyword ({ commit }, keyword) {
     commit('setKeyword', keyword)
   },
@@ -25,6 +29,9 @@ const actions = {
 }
 
 const mutations = {
+  setSearchShow (state, searchShow) {
+    state.$searchShow = searchShow
+  },
   setKeyword (state, keyword) {
     state.$keyword = keyword
   },

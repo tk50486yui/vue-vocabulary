@@ -1,12 +1,12 @@
 <template>
     <button type="button" class="button-container">
-      <font-awesome-icon :icon="['fas', 'plus']" />
+      <font-awesome-icon :icon="['fas', 'chevron-left']" />
     </button>
 </template>
 
 <script>
 export default {
-  name: 'PlusBtn'
+  name: 'LeftBtn'
 }
 </script>
 <style lang="scss" scoped>

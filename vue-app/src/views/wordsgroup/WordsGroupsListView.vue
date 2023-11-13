@@ -6,7 +6,7 @@
         </div>
         <!-- 上層 -->
         <div class="select-theme" :class="this.$theme">
-            每頁顯示：
+            每頁：
             <a-select
                 ref="select"
                 v-model:value="selectPageSize"

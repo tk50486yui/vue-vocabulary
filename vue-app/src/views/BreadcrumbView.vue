@@ -10,7 +10,7 @@
                                 <font-awesome-icon :icon="['fas', 'house']" />  首頁
                             </router-link>
                         </span>
-                        <template v-if="!this.activeHome">
+                        <template v-if="!this.activeHome && this.activeRoute != ''">
                             <span class="breadcrumb-separator">
                                 <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs"/>
                             </span>

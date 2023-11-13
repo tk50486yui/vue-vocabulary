@@ -3,116 +3,122 @@
         <a-back-top />
         <div class="section-title">
           <h4>單字總覽</h4>
+          <a class="float-end text-warning" @click="this.filterShow = !this.filterShow">
+            <font-awesome-icon :icon="['fas', 'filter']" />
+          </a>
         </div>
-        <!-- 第一層 tags select -->
-        <a-input-group>
-          <a-row :gutter="4">
-            <a-col :span="18">
-              <TagsTreeSelect
-                size="small"
-                ref="TagsTreeSelect"
-                placeholder="以標籤過濾資料"
-                style="width: 100%"
-                v-model:value="tagsArray"
-                :treeDefaultExpandedKeys="tagsArray"
-                :field-names="{
-                    children: 'children',
-                    label: 'ts_name',
-                    value: 'id',
-                    key: 'id'}"
-                @change="handleTagsChange()"
-                multiple
-              />
-            </a-col>
-            <a-col :span="2">
-              <template v-if="$filtersTags.length > 0">
-                <a-button type="primary" size="small" shape="round" @click="onResetTags()" danger>重置標籤</a-button>
+        <!-- 過濾器 -->
+        <template v-if="this.filterShow">
+          <!-- 第一層 tags select -->
+          <a-input-group>
+            <a-row :gutter="4">
+              <a-col :span="18">
+                <TagsTreeSelect
+                  size="small"
+                  ref="TagsTreeSelect"
+                  placeholder="以標籤過濾資料"
+                  style="width: 100%"
+                  v-model:value="tagsArray"
+                  :treeDefaultExpandedKeys="tagsArray"
+                  :field-names="{
+                      children: 'children',
+                      label: 'ts_name',
+                      value: 'id',
+                      key: 'id'}"
+                  @change="handleTagsChange()"
+                  multiple
+                />
+              </a-col>
+              <a-col :span="2">
+                <template v-if="$filtersTags.length > 0">
+                  <a-button type="primary" size="small" shape="round" @click="onResetTags()" danger>重置標籤</a-button>
+                </template>
+              </a-col>
+            </a-row>
+          </a-input-group>
+          <p></p>
+          <!-- 第二層 tags filter -->
+          <span>
+            標籤：
+            （
+            <span class="radio-theme" :class="$theme">
+              <a-radio-group v-model:value="tagsOperator" @change="setFilterItems()">
+                <a-radio value="or">OR</a-radio>
+                <a-radio value="and">AND</a-radio>
+                <a-radio value="none">NONE</a-radio>
+              </a-radio-group>
+            </span>
+            ）
+          </span>
+          <p></p>
+          <!-- 第三層 heart star -->
+          <span>
+            標記：
+            （
+            <span class="radio-theme" :class="$theme">
+              <a-radio-group v-model:value="choiceOperator" @change="setFilterItems()">
+                <a-radio value="or">OR</a-radio>
+                <a-radio value="and">AND</a-radio>
+                <a-radio value="none">NONE</a-radio>
+              </a-radio-group>
+            </span>
+            ）
+            <a-checkbox-group
+              v-model:value="choiceArray"
+              :options="choiceArrayOptions"
+              @change="setFilterItems()"
+            >
+              <template #label="{value}">
+                <span class="icon-theme" :class="$theme">
+                  <div class="choice-container">
+                  <template v-if="value === 'ws_is_important'">
+                    <span class="icon-heart">
+                      <a class="choice-heart"><HeartFilled /></a>
+                    </span>
+                  </template>
+                  <template v-if="value === 'ws_is_common'">
+                    <span class="icon-star">
+                      <a class="choice-star"><StarFilled /></a>
+                    </span>
+                  </template>
+                  </div>
+                </span>
               </template>
-            </a-col>
-          </a-row>
-        </a-input-group>
-        <p></p>
-        <!-- 第二層 tags filter -->
-        <span>
-          標籤：
-          （
-          <span class="radio-theme" :class="$theme">
-            <a-radio-group v-model:value="tagsOperator" @change="setFilterItems()">
-              <a-radio value="or">OR</a-radio>
-              <a-radio value="and">AND</a-radio>
-              <a-radio value="none">NONE</a-radio>
-            </a-radio-group>
+            </a-checkbox-group>
           </span>
-          ）
-        </span>
-        <p></p>
-        <!-- 第三層 heart star -->
-        <span>
-          標記：
-          （
-          <span class="radio-theme" :class="$theme">
-            <a-radio-group v-model:value="choiceOperator" @change="setFilterItems()">
-              <a-radio value="or">OR</a-radio>
-              <a-radio value="and">AND</a-radio>
-              <a-radio value="none">NONE</a-radio>
-            </a-radio-group>
+          <p></p>
+          <!-- 第四層 show -->
+          <span class="checkbox-theme" :class="$theme">
+            顯示項目：
+            <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
+              假名
+            </a-checkbox>
+            <a-checkbox v-model:checked="isDefinition" @change="setItemShow()">
+              中譯
+            </a-checkbox>
+            <a-checkbox v-model:checked="isSlogan" @change="setItemShow()">
+              短句
+            </a-checkbox>
+            <a-checkbox v-model:checked="isCate" @change="setItemShow()">
+              類別
+            </a-checkbox>
+            <a-checkbox v-model:checked="isTag" @change="setItemShow()">
+              標籤
+            </a-checkbox>
           </span>
-          ）
-          <a-checkbox-group
-            v-model:value="choiceArray"
-            :options="choiceArrayOptions"
-            @change="setFilterItems()"
-          >
-            <template #label="{value}">
-              <span class="icon-theme" :class="$theme">
-                <div class="choice-container">
-                <template v-if="value === 'ws_is_important'">
-                  <span class="icon-heart">
-                    <a class="choice-heart"><HeartFilled /></a>
-                  </span>
-                </template>
-                <template v-if="value === 'ws_is_common'">
-                  <span class="icon-star">
-                    <a class="choice-star"><StarFilled /></a>
-                  </span>
-                </template>
-                </div>
-              </span>
-            </template>
-          </a-checkbox-group>
-        </span>
-        <p></p>
-        <!-- 第四層 show -->
-        <span class="checkbox-theme" :class="$theme">
-          顯示項目：
-          <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
-            假名
-          </a-checkbox>
-          <a-checkbox v-model:checked="isDefinition" @change="setItemShow()">
-            中譯
-          </a-checkbox>
-          <a-checkbox v-model:checked="isSlogan" @change="setItemShow()">
-            短句
-          </a-checkbox>
-          <a-checkbox v-model:checked="isCate" @change="setItemShow()">
-            類別
-          </a-checkbox>
-          <a-checkbox v-model:checked="isTag" @change="setItemShow()">
-            標籤
-          </a-checkbox>
-        </span>
-        <p></p>
-        <!-- 第五層  words groups add -->
-        <a-button type="primary" size="small" shape="round" @click="clickGroupAdd()" :disabled="btnDisibled">
+          <p></p>
+        </template>
+        <!-- groups add -->
+        <a-button class="btn btn-dark btn-outline-light btn-sm rounded" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
-            新增單字組別
+            建立單詞組別
           </template>
           <template v-else>
             <template v-if="this.$WordsGroupsView.groupArray.length === 0">
-              請勾選單字或點擊取消
+              請勾選單詞或點擊取消
             </template>
             <template v-else>
-              請繼續勾選單字
+              請繼續勾選單詞
             </template>
           </template>
         </a-button>
@@ -578,6 +584,7 @@ export default {
     const Ready = ref(false)
     const AfterReady = ref(false)
     const ReadySpinning = ref(false)
+    const filterShow = ref(true)
     const tagsArray = ref([])
     const selectPageSize = ref('20')
     const currentPage = ref(1)
@@ -628,6 +635,7 @@ export default {
       Ready,
       AfterReady,
       ReadySpinning,
+      filterShow,
       tagsArray,
       choiceArrayOptions,
       checkboxShow,

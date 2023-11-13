@@ -41,7 +41,7 @@
       >
         <!-- Table header -->
         <template #title>
-          <RefreshBtn class="btn btn-info btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
+          <RefreshBtn class="btn btn-info btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
         </template>
         <!-- Table expanded -->
         <template #expandedRowRender="{ record }">

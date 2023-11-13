@@ -7,7 +7,6 @@
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
           <!-- tab 1 -->
           <a-tab-pane key="1" tab="全部">
-            <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
             <div class="table-theme" :class="$theme">
               <a-table :dataSource="this.categoriesArray"
                 :columns="columns"
@@ -15,6 +14,10 @@
                 :loading="TableLoading[0]"
                 :indentSize="12"
               >
+                <!-- header -->
+                <template #title>
+                  <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
+                </template>
                 <template #bodyCell="{ column, text, record }">
                   <template v-if="['cate_name'].includes(column.dataIndex)">
                     <template v-if="editTableData[record.id]">
@@ -58,13 +61,16 @@
           </a-tab-pane>
           <!-- tab 2 -->
           <a-tab-pane key="2" tab="近期">
-            <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-3" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
             <div class="table-theme" :class="$theme">
               <a-table :dataSource="this.recentCategoriesArray"
                 :columns="columns"
                 :scroll="{ y: 600 }"
                 :loading="TableLoading[1]"
               >
+                <!-- header -->
+                <template #title>
+                  <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
+                </template>
                 <template #bodyCell="{ column, text, record }">
                   <template v-if="['cate_name'].includes(column.dataIndex)">
                     <template v-if="editTableData2[record.id]">

@@ -1,10 +1,18 @@
 <template>
   <template v-if="Ready">
       <a-back-top />
+      <span class="back-link-theme" :class="$theme">
+        <router-link :to="{ name: 'wordsGrid' }" @click="setGridState()">
+           返回
+        </router-link>
+        <span class="link-separator h5">
+          <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs"/>
+        </span>
+        <span class="h4">
+          {{ word.ws_name }}
+        </span>
+      </span>
       <div class="descriptions-theme" :class="$theme">
-          <h5><router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> 返回 </router-link>
-              #{{  word.id }}
-          </h5>
           <div class="d-flex justify-content-end">
             <EditOutlined class="button-edit " :class="$theme" @click="onEdit()"/>
           </div>

@@ -2,7 +2,7 @@
   <div>
     <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
       <h4>詞組類別</h4>
-      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-1" @click="visible=true"/>
+      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" @click="visible=true"/>
     </div>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->

@@ -1,12 +1,20 @@
 <template>
     <template v-if="Ready">
         <a-back-top />
-        <div class="descriptions-theme" :class="this.$theme">
-            <h5>
-              <router-link :to="{ name: 'articles' }" @click="setGridState()"> 返回 </router-link>
-            </h5>
+        <span class="back-link-theme" :class="$theme">
+          <router-link :to="{ name: 'articles' }" @click="setGridState()">
+            返回
+          </router-link>
+          <span class="link-separator h5">
+            <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs"/>
+          </span>
+          <span class="h4">
+            {{ article.arti_title }}
+          </span>
+        </span>
+        <div class="descriptions-theme" :class="$theme">
             <div class="d-flex justify-content-end">
-              <EditOutlined class="button-edit " :class="this.$theme" @click="onEdit()"/>
+              <EditOutlined class="button-edit " :class="$theme" @click="onEdit()"/>
             </div>
             <p></p>
             <div class="article-theme">
@@ -14,7 +22,7 @@
               <!-- title -->
               <div class="article-title">
                 <template v-if="editShow">
-                  <div class="input-theme" :class="this.$theme">
+                  <div class="input-theme" :class="$theme">
                       <a-input
                           v-model:value="formState.article.arti_title"
                           size="large"
