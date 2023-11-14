@@ -92,7 +92,19 @@
                 </template>
                 <template v-else>
                   <template v-for="(item, index) in article.articles_tags.values"  :key="item.ts_id">
-                    <a-tag color="orange" style="font-size: 18px;"> {{ item.ts_name }} </a-tag>
+                    <template v-if="item.tc_color && item.tc_background && item.tc_border">
+                      <a-tag class="tag-align" :style="
+                            'background:' + item.tc_background
+                            + ';color:'+ item.tc_color
+                            +';border-color:'+ item.tc_border">
+                        {{ item.ts_name }}
+                      </a-tag>
+                    </template>
+                    <template v-else>
+                      <a-tag class="tag-align" color="default">
+                        {{ item.ts_name }}
+                      </a-tag>
+                    </template>
                     <template v-if="index != article.articles_tags.values.length && (index/5) == 1">
                       <br>
                     </template>
@@ -104,8 +116,8 @@
             <template v-if="editShow">
               <p></p>
               <div>
-                <a-button type="primary" @click="onEditFinish()">儲存</a-button>
-                <a-button style="margin-left: 10px" @click="onEditCancel()" danger>取消</a-button>
+                <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onEditFinish()">儲存</a-button>
+                <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px" @click="onEditCancel()">取消</a-button>
               </div>
             </template>
             <template v-else>

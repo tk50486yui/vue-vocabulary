@@ -4,6 +4,8 @@ import router from '@/router/route.js'
 import { store } from '@/stores/store.js'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import installFontAwesomeIcon from '@/plugins/fontawesome/fontawesome-icon.js'
@@ -48,6 +50,7 @@ window.addEventListener('error', function onError (e) {
 document.body.style.background = '#111111'
 
 app.use(Antd)
+app.use(ElementPlus)
 app.use(router)
 app.use(store)
 app.use(CKEditor)

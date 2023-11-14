@@ -160,7 +160,19 @@
               </template>
               <template v-else>
                 <template v-for="(item, index) in word.words_tags.values"  :key="item.ts_id">
-                  <a-tag color="green"> {{ item.ts_name }} </a-tag>
+                  <template v-if="item.tc_color && item.tc_background && item.tc_border">
+                    <a-tag class="tag-align" :style="
+                          'background:' + item.tc_background
+                          + ';color:'+ item.tc_color
+                          +';border-color:'+ item.tc_border">
+                      {{ item.ts_name }}
+                    </a-tag>
+                  </template>
+                  <template v-else>
+                    <a-tag class="tag-align" color="default">
+                      {{ item.ts_name }}
+                    </a-tag>
+                  </template>
                   <template v-if="index != word.words_tags.values.length && (index/5) == 1">
                     <br>
                   </template>
@@ -170,8 +182,8 @@
           </a-descriptions>
             <p></p>
             <template v-if="editShow">
-              <a-button type="primary" @click="onEditFinish()">儲存</a-button>
-              <a-button style="margin-left: 10px" @click="onEditCancel()" danger>取消</a-button>
+              <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onEditFinish()">儲存</a-button>
+              <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px" @click="onEditCancel()">取消</a-button>
             </template>
             <template v-else>
               <DeleteBtn @confirm="onDelete(this.wordId)" />

@@ -18,28 +18,10 @@
                 <router-link :to="{ name: 'articles' }">文章</router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'categories' }">
-                    <div class="dropdown-container">
-                        類別
-                        <CaretDownOutlined />
-                    </div>
-                </router-link>
-                <ul class="dropdown">
-                    <li><router-link :to="{ name: 'categories' }">類別列表</router-link></li>
-                    <li><router-link :to="{ name: 'categoriesDrag' }">類別順序</router-link></li>
-                </ul>
+                <router-link :to="{ name: 'categories' }">類別</router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'tags' }">
-                    <div class="dropdown-container">
-                        標籤
-                        <CaretDownOutlined />
-                    </div>
-                </router-link>
-                <ul class="dropdown">
-                    <li><router-link :to="{ name: 'tags' }">標籤列表</router-link></li>
-                    <li><router-link :to="{ name: 'tagsDrag' }">標籤順序</router-link></li>
-                </ul>
+                <router-link :to="{ name: 'tags' }">標籤</router-link>
             </li>
             <li>
                 <router-link :to="{ name: 'wordsGroups' }">群組</router-link>

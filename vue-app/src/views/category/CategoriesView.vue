@@ -19,6 +19,7 @@
                   <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">
+                  <!-- cate_name -->
                   <template v-if="['cate_name'].includes(column.dataIndex)">
                     <template v-if="editTableData[record.id]">
                         <div class="button-edit-container">
@@ -43,6 +44,7 @@
                        </div>
                     </template>
                   </template>
+                  <!-- cate_parent_id -->
                   <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                     <template v-if="column.dataIndex === 'cate_parent_id'">
                       <template v-if="editTableData[record.id]">
@@ -52,6 +54,9 @@
                           :defaultValue="editTableData[record.id]['cate_parent_id']"
                           :treeDefaultExpandedKeys="[editTableData[record.id]['cate_parent_id']]"
                         />
+                      </template>
+                      <template v-else>
+                        {{ record.cate_parent_name }}
                       </template>
                     </template>
                   </template>
@@ -72,27 +77,38 @@
                   <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">
+                  <!-- cate_name -->
                   <template v-if="['cate_name'].includes(column.dataIndex)">
                     <template v-if="editTableData2[record.id]">
-                      <a-input v-model:value="editTableData2[record.id][column.dataIndex]"
-                        style="margin: -5px 0"/>
+                      <div class="button-edit-container">
+                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 2)"/>
+                        <CloseOutlined class="button-edit-close" @click="cancel(record, 2)"/>
+                        <a-input v-model:value="editTableData2[record.id][column.dataIndex]"
+                          style="margin: -5px 0"/>
+                      </div>
                     </template>
                     <template v-else>
                       <div class="column-container">
+                          <EditOutlined class="button-edit2" @click="edit(record, 2)" />
                           {{ text }}
                           <DeleteBtn @confirm="onDelete(record.id)"/>
                         </div>
                     </template>
                   </template>
-                  <template v-else-if="column.dataIndex === 'operation'">
-                    <template v-if="editTableData2[record.id]">
-                      <div class="button-edit-container">
-                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 2)"/>
-                        <CloseOutlined class="button-edit-close" @click="cancel(record, 2)"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <EditOutlined class="button-edit2" @click="edit(record, 2)" />
+                   <!-- cate_parent_id -->
+                   <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
+                    <template v-if="column.dataIndex === 'cate_parent_id'">
+                      <template v-if="editTableData2[record.id]">
+                        <CategoriesTreeSelect size="small" placeholder="選擇父類別"
+                          :dropdownMatchSelectWidth="false" style="width: 100%"
+                          v-model:value="editTableData2[record.id]['cate_parent_id']"
+                          :defaultValue="editTableData2[record.id]['cate_parent_id']"
+                          :treeDefaultExpandedKeys="[editTableData2[record.id]['cate_parent_id']]"
+                        />
+                      </template>
+                      <template v-else>
+                        {{ record.cate_parent_name }}
+                      </template>
                     </template>
                   </template>
                 </template>
@@ -101,6 +117,13 @@
           </a-tab-pane>
           <!-- tab 3 -->
           <a-tab-pane key="3">
+            <template #tab>
+              <font-awesome-icon :icon="['fas', 'sort']" />
+            </template>
+            <CategoriesDragView />
+          </a-tab-pane>
+          <!-- tab 4 -->
+          <a-tab-pane key="4">
             <template #tab>
               <font-awesome-icon :icon="['fas', 'plus']" />
             </template>
@@ -119,6 +142,7 @@ import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vu
 import { cloneDeep } from 'lodash-es'
 import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
+import CategoriesDragView from '@/views/category/CategoriesDragView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
@@ -131,6 +155,7 @@ export default {
     DeleteBtn,
     RefreshBtn,
     CategoriesAddView,
+    CategoriesDragView,
     CategoriesTreeSelect
   },
   computed: {
@@ -156,6 +181,7 @@ export default {
           this.editDataSource = this.recentCategoriesArray
         } else if (index === 1) {
           await this.fetchRecent()
+          this.editDataSource = this.recentCategoriesArray
         }
         this.SyncOutlinedSpin[index] = false
         this.TableLoading[index] = false
@@ -193,8 +219,8 @@ export default {
   },
   setup () {
     const Ready = ref(false)
-    const TableLoading = ref([false, false, false])
-    const SyncOutlinedSpin = ref([false, false, false])
+    const TableLoading = ref([false, false])
+    const SyncOutlinedSpin = ref([false, false])
     const activeTab = ref('1')
     const editDataSource = ref()
     const editTableData = reactive({})
@@ -232,7 +258,11 @@ export default {
       },
       {
         dataIndex: 'cate_name',
-        width: '90%'
+        width: '60%'
+      },
+      {
+        dataIndex: 'cate_parent_id',
+        width: '30%'
       }
     ]
 
@@ -287,6 +317,7 @@ export default {
 .button-edit2{
   display: flex;
   justify-content: center;
+  padding-right: 6px;
   color:#6A6AFF;
 }
 .button-edit-check{

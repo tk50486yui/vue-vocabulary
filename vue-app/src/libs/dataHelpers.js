@@ -1,4 +1,4 @@
-/* 添加名為"value"的key 並指定以哪個key當作"value"的值 */
+// 添加名為"value"的key 並指定以哪個key當作"value"的值
 export function addValueKey (data, nameKey) {
   const newData = JSON.parse(JSON.stringify(data))
 

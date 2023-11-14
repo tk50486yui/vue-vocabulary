@@ -3,15 +3,16 @@
     <div class="section-title">
       <h4>單字表</h4>
     </div>
-    <div class="select-theme" :class="$theme">
+    <div class="select-theme" :class="$theme" ref="selectMod">
       每頁：
       <a-select
           ref="select"
+          :getPopupContainer="()=>this.$refs.selectMod"
           v-model:value="selectPageSize"
           size="small"
           style="width: 80px"
           @change="handlePageSize()"
-          >
+        >
           <a-select-option value="10">10 筆</a-select-option>
           <a-select-option value="20">20 筆</a-select-option>
           <a-select-option value="50">50 筆</a-select-option>
@@ -20,11 +21,12 @@
       </a-select>
       <span style="padding-left: 8px;">表格高度：</span>
       <a-select
+          :getPopupContainer="()=>this.$refs.selectMod"
           v-model:value="selectTablescrollY"
           size="small"
           style="width: 80px"
           @change="handleTableScrollY()"
-          >
+        >
           <a-select-option value="400">極低</a-select-option>
           <a-select-option value="600">低</a-select-option>
           <a-select-option value="800">適中</a-select-option>
@@ -33,7 +35,8 @@
       </a-select>
     </div>
     <div class="table-theme" :class="$theme">
-      <a-table :dataSource="this.wordsArray"
+      <a-table
+        :dataSource="this.wordsArray"
         :columns="columns"
         :scroll="{ y: TablescrollY, x: 850 }"
         :loading="TableLoading"

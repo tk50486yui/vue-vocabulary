@@ -176,7 +176,27 @@ $edit-icon-color: #6A6AFF;
     color: var(--head-text)
   } 
 
-  /** Dropdown 下拉樣式 **/
+  &.dark :deep(.ant-select-item){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+
+  &.light :deep(.ant-select-item){
+    background: var(--input-background);
+    color: var(--head-text)
+  }   
+
+  &.dark :deep(.ant-select-item-option-selected){
+    color: var(--input-background);
+    background: var(--head-text);  
+  }
+
+  &.light :deep(.ant-select-item-option-selected){
+    color: var( --input-background);
+    background: var(--head-text);  
+  } 
+
+  /** Dropdown 下拉樣式  Tree **/
   &.dark :deep(.ant-select-tree) {
     background: var(--select-background);
     color: var(--select-text)

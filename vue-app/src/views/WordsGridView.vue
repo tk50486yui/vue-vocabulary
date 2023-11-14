@@ -31,7 +31,7 @@
               </a-col>
               <a-col :span="2">
                 <template v-if="$filtersTags.length > 0">
-                  <a-button type="primary" size="small" shape="round" @click="onResetTags()" danger>重置標籤</a-button>
+                  <XmarkBtn @click="onResetTags()" />
                 </template>
               </a-col>
             </a-row>
@@ -131,10 +131,11 @@
             >
               <!-- header -->
               <template #header>
-                <span class="select-theme" :class="$theme">
+                <span class="select-theme" :class="$theme" ref="selectMod">
                   每頁：
                   <a-select
                     ref="select"
+                    :getPopupContainer="()=>this.$refs.selectMod"
                     v-model:value="selectPageSize"
                     size="small"
                     style="width: 80px"
@@ -149,11 +150,12 @@
                   <span style="padding-left: 6px;">當前：</span>
                     <a-select
                       ref="selectCurrent"
+                      :getPopupContainer="()=>this.$refs.selectMod"
                       v-model:value="currentPage"
                       size="small"
                       style="width: 80px"
                       @change="setPaginationCurrent()"
-                      >
+                    >
                       <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
                         <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                       </template>
@@ -179,7 +181,7 @@
                   </span>
                   <span style="padding-left: 6px;">
                     <template v-if="this.$keyword != ''">
-                      <a-button type="primary" size="small" shape="round" @click="onResetSearch()" danger>清空搜尋</a-button>
+                      <XmarkBtn @click="onResetSearch()" />
                     </template>
                   </span>
                 </span>
@@ -302,7 +304,19 @@
                       <p></p>
                       <template v-for="(subItem, index) in item.words_tags.values"  :key="index">
                         <a @click="handleTagsLink(subItem.ts_id)">
-                          <a-tag class="tag-align" color="pink"> {{ subItem.ts_name }} </a-tag>
+                          <template v-if="subItem.tc_color && subItem.tc_background && subItem.tc_border">
+                            <a-tag class="tag-align" :style="
+                                  'background:' + subItem.tc_background
+                                  + ';color:'+ subItem.tc_color
+                                  +';border-color:'+ subItem.tc_border">
+                              {{ subItem.ts_name }}
+                            </a-tag>
+                          </template>
+                          <template v-else>
+                            <a-tag class="tag-align" color="default">
+                              {{ subItem.ts_name }}
+                            </a-tag>
+                          </template>
                         </a>
                       </template>
                     </template>
@@ -335,9 +349,10 @@ import { ref, reactive, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
 import WordsAddView from '@/views/WordsAddView.vue'
 import PlusBtn from '@/components/button/PlusBtn.vue'
+import DeleteBtn from '@/components/button/DeleteBtn.vue'
+import XmarkBtn from '@/components/button/XmarkBtn.vue'
 
 export default {
   name: 'WordsGridView',
@@ -346,6 +361,7 @@ export default {
     HeartFilled,
     DeleteBtn,
     PlusBtn,
+    XmarkBtn,
     TagsTreeSelect,
     WordsAddView
   },

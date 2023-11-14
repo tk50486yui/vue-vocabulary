@@ -75,14 +75,8 @@ export default {
         case 'categories':
           this.activeRoute = '類別列表'
           break
-        case 'categoriesDrag':
-          this.activeRoute = '類別順序調整'
-          break
         case 'tags':
           this.activeRoute = '標籤列表'
-          break
-        case 'tagsDrag':
-          this.activeRoute = '標籤順序調整'
           break
         case 'wordsGroups':
           this.activeRoute = '群組列表'

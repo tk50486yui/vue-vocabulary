@@ -10,6 +10,7 @@ const state = {
     ts_parent_id: '',
     ts_level: '',
     ts_order: '',
+    tc_id: '',
     ts_description: ''
   },
   recentTags: []

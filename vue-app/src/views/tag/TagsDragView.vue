@@ -1,26 +1,23 @@
 <template>
     <template v-if="ready">
       <a-spin :spinning="spinning">
-        <div class="section-title" :class="this.$theme">
-          <h4>標籤順序調整</h4>
-        </div>
-        <div class="draggable-tree-theme" :class="this.$theme">
+        <div class="draggable-tree-theme" :class="$theme">
           <a-tree
-          draggable
-          block-node
-          :tree-data="dropData"
-          @drop="onDrop"
-          :field-names="{
-              children: 'children',
-              title: 'ts_name',
-              key: 'id'}"
+            draggable
+            block-node
+            :tree-data="dropData"
+            @drop="onDrop"
+            :field-names="{
+                children: 'children',
+                title: 'ts_name',
+                key: 'id'}"
           />
         </div>
       </a-spin>
       <p></p>
       <div>
-        <a-button type="primary" @click="onFinish(tagsForm)" :disabled="saveDisabled">儲存</a-button>
-        <a-button style="margin-left: 10px" @click="onReset()" danger>還原</a-button>
+        <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onFinish(tagsForm)" :disabled="saveDisabled">儲存</a-button>
+        <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px" @click="onReset()">還原</a-button>
       </div>
     </template>
   </template>
@@ -79,7 +76,6 @@ export default ({
     const spinning = ref(false)
     /* 只允許排序同個父節點 */
     const onDrop = info => {
-      console.log(info)
       const currentId = info.dragNode.id
       const currentParentId = info.dragNode.cate_parent_id
       const dropToGap = info.dropToGap
@@ -149,19 +145,5 @@ export default ({
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
-.section-title {
-  margin-bottom: 16px;
-}
-
-.section-title h4:after {
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  height: 2px;
-  width: 70px;
-  background: #f6aaf1;
-  content: "";
-}
 
 </style>

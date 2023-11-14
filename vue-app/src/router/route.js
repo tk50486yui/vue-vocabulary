@@ -8,9 +8,7 @@ import ArticlesContentView from '@/views/article/ArticlesContentView.vue'
 import WordsGroupsListView from '@/views/wordsgroup/WordsGroupsListView.vue'
 import WordsGroupsDetailsView from '@/views/wordsgroup/WordsGroupsDetailsView.vue'
 import TagsView from '@/views/tag/TagsView'
-import TagsDragView from '@/views/tag/TagsDragView.vue'
 import CategoriesView from '@/views/category/CategoriesView.vue'
-import CategoriesDragView from '@/views/category/CategoriesDragView.vue'
 
 const routes = [
   {
@@ -19,9 +17,24 @@ const routes = [
     component: WordsGridView
   },
   {
+    path: '/wordsgrid',
+    name: 'wordsGrid',
+    component: WordsGridView
+  },
+  {
+    path: '/words',
+    name: 'words',
+    component: WordsView
+  },
+  {
     path: '/wordsadd',
     name: 'wordsAdd',
     component: WordsAddView
+  },
+  {
+    path: '/word/details/:id',
+    name: 'wordDetails',
+    component: WordDetailsView
   },
   {
     path: '/articles',
@@ -39,19 +52,9 @@ const routes = [
     component: TagsView
   },
   {
-    path: '/tagsdrag',
-    name: 'tagsDrag',
-    component: TagsDragView
-  },
-  {
     path: '/categories',
     name: 'categories',
     component: CategoriesView
-  },
-  {
-    path: '/categoriesdrag',
-    name: 'categoriesDrag',
-    component: CategoriesDragView
   },
   {
     path: '/wordsgroups',
@@ -62,26 +65,6 @@ const routes = [
     path: '/wordsgroups/details/:id',
     name: 'wordsGroupsDetails',
     component: WordsGroupsDetailsView
-  },
-  {
-    path: '/words',
-    name: 'words',
-    component: WordsView
-  },
-  {
-    path: '/wordsgrid',
-    name: 'wordsGrid',
-    component: WordsGridView
-  },
-  {
-    path: '/word/details/:id',
-    name: 'wordDetails',
-    component: WordDetailsView
-  },
-  {
-    path: '/words/category/:cateID',
-    name: 'wordsByCateID',
-    component: WordsView
   }
 ]
 

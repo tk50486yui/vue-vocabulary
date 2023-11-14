@@ -1,8 +1,8 @@
 <template>
     <div class="toggle-theme" :class="$theme">
       <a-radio-group v-model:value="sideGroup">
-          <a-radio-button value="1">類別</a-radio-button>
-          <a-radio-button value="2">標籤</a-radio-button>
+          <a-radio-button value="1">標籤</a-radio-button>
+          <a-radio-button value="2">類別</a-radio-button>
           <template v-if="updateNow === false">
           <a-badge :count="this.$WordsGroupsView.groupArray.length" color="magenta">
               <a-radio-button value="3">群組</a-radio-button>
@@ -18,10 +18,10 @@
     <p></p>
     <keep-alive>
       <template v-if="sideGroup === '1'">
-          <CategoriesMenuView />
+        <TagsMenuView />
       </template>
       <template v-else-if="sideGroup === '2'">
-          <TagsMenuView />
+        <CategoriesMenuView />
       </template>
       <template v-else-if="sideGroup === '3'">
           <WordsGroupsView/>

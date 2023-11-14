@@ -31,7 +31,7 @@
                   </a-col>
                   <a-col :span="2">
                     <template v-if="tagsArray.length > 0">
-                      <a-button type="primary" size="small" shape="round" @click="tagsArray = []" danger>重置標籤</a-button>
+                      <XmarkBtn @click="tagsArray = []" />
                     </template>
                   </a-col>
                 </a-row>
@@ -52,10 +52,11 @@
               </span>
               <p></p>
             <div class="filter-block d-flex">
-              <div class="select-theme" :class="$theme">
+              <div class="select-theme" :class="$theme" ref="selectMod">
                   <span class="span-text">每頁：</span>
                   <a-select
                       ref="select"
+                      :getPopupContainer="()=>this.$refs.selectMod"
                       v-model:value="selectPageSize"
                       size="small"
                       style="width: 80px"
@@ -71,6 +72,7 @@
                   <span class="span-text" style="padding-left: 6px;">當前：</span>
                   <a-select
                       ref="selectCurrent"
+                      :getPopupContainer="()=>this.$refs.selectMod"
                       v-model:value="currentPage"
                       size="small"
                       style="width: 80px"
@@ -86,7 +88,7 @@
                   <span class="span-text" style="padding-left: 6px;">
                     <template v-if="this.$keyword != '' && this.$filters.length > 0">
                         <span style="padding-right: 6px;">
-                            關鍵字：` {{ this.$keyword }} `
+                            關鍵字：`<span class="keyword-text">{{ this.$keyword }}</span> `
                         </span>
                     </template>
                     <template v-else>
@@ -98,7 +100,7 @@
                   </span>
                   <span style="padding-left: 12px;">
                     <template v-if="this.$keyword != ''">
-                      <a-button type="primary" size="small" shape="round" @click="onResetSearch()" danger>清除搜尋</a-button>
+                      <XmarkBtn @click="onResetSearch()" />
                     </template>
                   </span>
                   <p></p>
@@ -147,30 +149,42 @@
                     <template v-else>
                       <a class="list-link" @click="Expand"></a>
                     </template>
-                    <br>
-                    <span class="article-date">
-                      <template v-if="this.$keyword != '' && this.$filters.includes('created_at') && item.created_at.includes(this.$keyword)">
-                        建立時間：
-                        <template v-for="(char, index) in splitTitle(item.created_at, this.$keyword)" :key="index + char">
-                          <span v-if="char === this.$keyword" class="keyword-text">
-                            {{ char }}
-                          </span>
-                          <span v-else>
-                            {{ char }}
-                          </span>
+                    <template v-if="showContent">
+                      <br>
+                      <span class="article-date">
+                        <template v-if="this.$keyword != '' && this.$filters.includes('created_at') && item.created_at.includes(this.$keyword)">
+                          <template v-for="(char, index) in splitTitle(item.created_at, this.$keyword)" :key="index + char">
+                            <span v-if="char === this.$keyword" class="keyword-text">
+                              {{ char }}
+                            </span>
+                            <span v-else>
+                              {{ char }}
+                            </span>
+                          </template>
                         </template>
-                      </template>
-                      <template v-else>
-                        <span class="article-date">建立時間： {{ item.created_at }}</span>
-                      </template>
-                    </span>
+                        <template v-else>
+                          <span class="article-date">{{ item.created_at }}</span>
+                        </template>
+                      </span>
+                    </template>
                     <!-- 下方 -->
                     <template #actions>
-                      <template v-if="item.articles_tags.values != null && item.articles_tags.values != ''"></template>
+                      <template v-if="item.articles_tags.values != null && item.articles_tags.values.length > 0">
                         <span v-for="(tag, index) in item.articles_tags.values" :key="tag.ts_id + index">
-                          #{{ tag.ts_name }}
+                          <template v-if="tag.tc_color && tag.tc_background && tag.tc_border">
+                            <a-tag :style="'background:' + tag.tc_background
+                                  + ';color:'+ tag.tc_color
+                                  +';border-color:'+ tag.tc_border">
+                              {{ tag.ts_name }}
+                            </a-tag>
+                          </template>
+                          <template v-else>
+                            <a-tag color="default">
+                              {{ tag.ts_name }}
+                            </a-tag>
+                          </template>
                         </span>
-                      <template v-if="item.articles_tags.values != null && item.articles_tags.values != ''"></template>
+                      </template>
                     </template>
                   </a-list-item>
                 </template>
@@ -202,12 +216,14 @@ import { ref, reactive, h } from 'vue'
 import { LoadingOutlined } from '@ant-design/icons-vue'
 import ArticlesAddView from '@/views/article/ArticlesAddView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import XmarkBtn from '@/components/button/XmarkBtn.vue'
 
 export default {
   name: 'ArticlesView',
   components: {
     ArticlesAddView,
-    TagsTreeSelect
+    TagsTreeSelect,
+    XmarkBtn
   },
   computed: {
     filterdResult () {
