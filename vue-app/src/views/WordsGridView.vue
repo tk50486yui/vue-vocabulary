@@ -29,9 +29,9 @@
                   multiple
                 />
               </a-col>
-              <a-col :span="2">
+              <a-col :span="2" class="d-flex align-items-center">
                 <template v-if="$filtersTags.length > 0">
-                  <CloseBtn @click="onResetTags()"/>
+                  <CloseBtn class="d-flex align-items-center" @click="onResetTags()"/>
                 </template>
               </a-col>
             </a-row>
@@ -39,39 +39,51 @@
           <p></p>
           <!-- 第二層 tags filter -->
           <span>
-            標籤：<OperatorRadio v-model:value="tagsOperator" @change="setFilterItems()" />
+            <el-tag effect="dark" type="warning" :color="labelColor" round>
+            標籤條件
+            </el-tag>
+            <span style="margin-left: 8px;">
+              <OperatorRadio v-model:value="tagsOperator" @change="setFilterItems()" />
+            </span>
           </span>
           <p></p>
           <!-- 第三層 heart star -->
           <span>
-            標記：<OperatorRadio v-model:value="choiceOperator" @change="setFilterItems()" />
-            <a-checkbox-group
-              v-model:value="choiceArray"
-              :options="choiceArrayOptions"
-              @change="setFilterItems()"
-            >
-              <template #label="{value}">
-                <span class="icon-theme" :class="$theme">
-                  <div class="choice-container">
-                  <template v-if="value === 'ws_is_important'">
-                    <span class="icon-heart">
-                      <a class="choice-heart"><HeartFilled /></a>
-                    </span>
-                  </template>
-                  <template v-if="value === 'ws_is_common'">
-                    <span class="icon-star">
-                      <a class="choice-star"><StarFilled /></a>
-                    </span>
-                  </template>
-                  </div>
-                </span>
-              </template>
-            </a-checkbox-group>
+            <el-tag effect="dark" type="warning" :color="labelColor" round>
+            標記條件
+            </el-tag>
+            <span style="margin-left: 8px;">
+              <OperatorRadio v-model:value="choiceOperator" @change="setFilterItems()" />
+              <a-checkbox-group
+                v-model:value="choiceArray"
+                :options="choiceArrayOptions"
+                @change="setFilterItems()"
+              >
+                <template #label="{value}">
+                  <span class="icon-theme" :class="$theme">
+                    <div class="choice-container">
+                    <template v-if="value === 'ws_is_important'">
+                      <span class="icon-heart">
+                        <a class="choice-heart"><HeartFilled /></a>
+                      </span>
+                    </template>
+                    <template v-if="value === 'ws_is_common'">
+                      <span class="icon-star">
+                        <a class="choice-star"><StarFilled /></a>
+                      </span>
+                    </template>
+                    </div>
+                  </span>
+                </template>
+              </a-checkbox-group>
+            </span>
           </span>
           <p></p>
           <!-- 第四層 show -->
-          <span class="checkbox-theme" :class="$theme">
-            顯示項目：
+          <el-tag effect="dark" type="warning" :color="labelColor" round>
+            顯示項目
+          </el-tag>
+          <span class="checkbox-theme" style="margin-left: 8px;" :class="$theme">
             <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
               假名
             </a-checkbox>
@@ -113,7 +125,7 @@
             >
               <!-- card header -->
               <template #header>
-                <div class="select-theme pagination-style" :class="$theme" ref="selectMod">
+                <div class="select-theme d-flex align-items-center" :class="$theme" ref="selectMod">
                   每頁：
                   <a-select
                     :getPopupContainer="()=>this.$refs.selectMod"
@@ -140,28 +152,30 @@
                       <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                     </template>
                   </a-select>
-                  <template v-if="this.$keyword != '' && this.$filters.length > 0">
-                    <span style="padding-left: 8px;">
+                  <span style="margin-left: 8px">
+                    <el-tag class="d-flex align-items-center" effect="dark" size = "small" type="success" color="black" round>
                       關鍵字：
-                      <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
+                      <template v-if="this.$keyword != '' && this.$filters.length > 0">
+                        <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
                         ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
+                        </template>
+                        <template v-else>
+                          ` <span class="keyword-text">{{ this.$keyword }} </span>`
+                        </template>
                       </template>
                       <template v-else>
-                        ` <span class="keyword-text">{{ this.$keyword }} </span>`
+                        無
                       </template>
-                    </span>
-                  </template>
-                  <template v-else>
-                    <span style="margin-left: 8px">
-                      關鍵字：無
-                    </span>
-                  </template>
+                    </el-tag>
+                  </span>
                   <span style="margin-left: 8px">
-                    共  {{ this.filterWordsResult.length }} 筆
+                    <el-tag class="d-flex align-items-center" effect="dark" size = "small" color="black" round>
+                      共 {{ this.filterWordsResult.length }} 筆
+                    </el-tag>
                   </span>
                   <span style="margin-left: 6px;">
                     <template v-if="this.$keyword != ''">
-                      <CloseBtn @click="onResetSearch()"/>
+                      <CloseBtn class="d-flex align-items-center" @click="onResetSearch()"/>
                     </template>
                   </span>
                 </div>
@@ -568,6 +582,7 @@ export default {
     const checkboxShow = ref(false)
     const checkboxBtn = ref(false)
     const drawerVisible = ref(false)
+    const labelColor = ref('rgba(59, 39, 12, 1)')
 
     const pagination = reactive({
       onChange: page => {
@@ -615,6 +630,7 @@ export default {
       currentPage,
       dataSize,
       drawerVisible,
+      labelColor,
       filterItemsState,
       ...toRefs(filterItemsState),
       isItemsState,

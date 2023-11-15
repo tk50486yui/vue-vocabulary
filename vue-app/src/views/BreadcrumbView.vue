@@ -18,13 +18,22 @@
                                 {{  this.activeRoute }}
                             </span>
                         </template>
-                        <div class="breadcrumb-switch">
+                        <div class="breadcrumb-switch switch-theme" :class="$theme">
                             <a-switch
-                            :checked="this.$theme === 'dark'"
-                            checked-children="深色主題"
-                            un-checked-children="亮色主題"
-                            @change="changeTheme"
-                            />
+                              :checked="$theme === 'dark'"
+                              @change="changeTheme"
+                              >
+                              <template #checkedChildren>
+                                <span class="d-flex align-items-center">
+                                <el-icon><el-Moon /></el-icon>
+                                </span>
+                              </template>
+                              <template #unCheckedChildren>
+                                <span class="d-flex align-items-center">
+                                  <el-icon><el-Sunny /></el-icon>
+                                </span>
+                              </template>
+                            </a-switch>
                         </div>
                     </div>
                 </div>
@@ -61,16 +70,12 @@ export default {
           this.activeRoute = '單字表'
           break
         case 'wordsGrid':
+        case 'wordDetails':
           this.activeRoute = '單字總覽'
           break
-        case 'wordDetails':
-          this.activeRoute = '單字詳細說明'
-          break
         case 'articles':
-          this.activeRoute = '文章總覽'
-          break
         case 'articlesContent':
-          this.activeRoute = '文章內容'
+          this.activeRoute = '文章總覽'
           break
         case 'categories':
           this.activeRoute = '類別列表'

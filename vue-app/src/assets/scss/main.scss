@@ -162,6 +162,21 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
+    Switch
+-----------------------*/
+.switch-theme{ 
+    &.dark :deep(.ant-switch-checked){
+      background: var(--switch-background);   
+    }      
+    &.light :deep(.ant-switch){
+      background: var(--switch-background);     
+    }
+  
+}
+
+
+
+/*---------------------
     Select
 -----------------------*/
 .select-theme {

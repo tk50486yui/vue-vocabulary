@@ -75,6 +75,7 @@
               >
                 <!-- header -->
                 <template #title>
+                  <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible=true"/>
                   <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">

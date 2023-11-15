@@ -52,6 +52,13 @@ export default {
   },
   methods: {
   },
+  watch: {
+    updateNow (val) {
+      if (val) {
+        this.sideGroup = '3'
+      }
+    }
+  },
   setup () {
     const sideGroup = ref('1')
     const groupCount = ref('1')
