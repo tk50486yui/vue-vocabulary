@@ -38,7 +38,7 @@
           </a-input-group>
           <p></p>
           <!-- 第二層 tags filter -->
-          <span>
+          <span class="d-flex align-items-center">
             <el-tag effect="dark" type="warning" :color="labelColor" round>
             標籤條件
             </el-tag>
@@ -48,7 +48,7 @@
           </span>
           <p></p>
           <!-- 第三層 heart star -->
-          <span>
+          <span class="d-flex align-items-center">
             <el-tag effect="dark" type="warning" :color="labelColor" round>
             標記條件
             </el-tag>
@@ -80,32 +80,34 @@
           </span>
           <p></p>
           <!-- 第四層 show -->
-          <el-tag effect="dark" type="warning" :color="labelColor" round>
-            顯示項目
-          </el-tag>
-          <span class="checkbox-theme" style="margin-left: 8px;" :class="$theme">
-            <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
-              假名
-            </a-checkbox>
-            <a-checkbox v-model:checked="isDefinition" @change="setItemShow()">
-              中譯
-            </a-checkbox>
-            <a-checkbox v-model:checked="isSlogan" @change="setItemShow()">
-              短句
-            </a-checkbox>
-            <a-checkbox v-model:checked="isCate" @change="setItemShow()">
-              類別
-            </a-checkbox>
-            <a-checkbox v-model:checked="isTag" @change="setItemShow()">
-              標籤
-            </a-checkbox>
+          <span class="d-flex align-items-center">
+            <el-tag effect="dark" type="warning" :color="labelColor" round>
+              顯示項目
+            </el-tag>
+            <span class="checkbox-theme" style="margin-left: 8px;" :class="$theme">
+              <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
+                假名
+              </a-checkbox>
+              <a-checkbox v-model:checked="isDefinition" @change="setItemShow()">
+                中譯
+              </a-checkbox>
+              <a-checkbox v-model:checked="isSlogan" @change="setItemShow()">
+                短句
+              </a-checkbox>
+              <a-checkbox v-model:checked="isCate" @change="setItemShow()">
+                類別
+              </a-checkbox>
+              <a-checkbox v-model:checked="isTag" @change="setItemShow()">
+                標籤
+              </a-checkbox>
+            </span>
           </span>
           <p></p>
         </template>
         <!-- groups add -->
         <a-button class="btn btn-dark btn-outline-light btn-sm rounded" @click="clickGroupAdd()" :disabled="btnDisibled">
           <template v-if="checkboxShow === false">
-            建立單詞組別
+            <font-awesome-icon :icon="['fas', 'plus']" /> 單詞群組
           </template>
           <template v-else>
             <template v-if="this.$WordsGroupsView.groupArray.length === 0">
@@ -152,32 +154,33 @@
                       <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                     </template>
                   </a-select>
-                  <span style="margin-left: 8px">
-                    <el-tag class="d-flex align-items-center" effect="dark" size = "small" type="success" color="black" round>
-                      關鍵字：
-                      <template v-if="this.$keyword != '' && this.$filters.length > 0">
-                        <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
-                        ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
+                    <span style="margin-left: 8px">
+                      <el-tag class="d-flex align-items-center" effect="dark" size = "small" type="success" color="black" round>
+                        關鍵字：
+                        <template v-if="this.$keyword != '' && this.$filters.length > 0">
+                          <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
+                          ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
+                          </template>
+                          <template v-else>
+                            ` <span class="keyword-text">{{ this.$keyword }} </span>`
+                          </template>
                         </template>
                         <template v-else>
-                          ` <span class="keyword-text">{{ this.$keyword }} </span>`
+                          無
                         </template>
+                      </el-tag>
+                    </span>
+                    <span style="margin-left: 8px">
+                      <el-tag class="d-flex align-items-center" effect="dark" size = "small" color="black" round>
+                        共 {{ this.filterWordsResult.length }} 筆
+                      </el-tag>
+                    </span>
+                    <span style="margin-left: 6px;">
+                      <template v-if="this.$keyword != ''">
+                        <CloseBtn class="d-flex align-items-center" @click="onResetSearch()"/>
                       </template>
-                      <template v-else>
-                        無
-                      </template>
-                    </el-tag>
-                  </span>
-                  <span style="margin-left: 8px">
-                    <el-tag class="d-flex align-items-center" effect="dark" size = "small" color="black" round>
-                      共 {{ this.filterWordsResult.length }} 筆
-                    </el-tag>
-                  </span>
-                  <span style="margin-left: 6px;">
-                    <template v-if="this.$keyword != ''">
-                      <CloseBtn class="d-flex align-items-center" @click="onResetSearch()"/>
-                    </template>
-                  </span>
+                    </span>
+
                 </div>
               </template>
               <!-- card main -->

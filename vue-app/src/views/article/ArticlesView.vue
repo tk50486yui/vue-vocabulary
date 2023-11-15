@@ -38,7 +38,7 @@
               </a-input-group>
               <p></p>
               <!-- 第二層 tags filter -->
-              <span class="tab-body-text">
+              <span class="tab-body-text d-flex align-items-center">
                 <el-tag effect="dark" type="warning" :color="labelColor" round>
                 標籤條件
                 </el-tag>

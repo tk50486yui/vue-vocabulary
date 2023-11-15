@@ -17,12 +17,12 @@
         <div class="row">
 
           <!-- 左側 -->
-          <div class="col-lg-3 col-md-3">
+          <div class="col-lg-3">
             <SideMenuView />
           </div>
 
           <!-- 右側 -->
-          <div class="col-lg-9 col-md-9">
+          <div class="col-lg-9">
             <router-view></router-view>
           </div>
 
