@@ -1,5 +1,5 @@
 import api from '@/api/api.js'
-import openNotification from '@/components/notification/openNotification.js'
+import globalNotify from '@/components/notification/globalNotify.js'
 
 // 請求攔截
 api.interceptors.request.use(
@@ -19,13 +19,13 @@ api.interceptors.response.use(
           response.config.method === 'put' ||
           response.config.method === 'patch' ||
           response.config.method === 'delete') {
-        openNotification(response)
+        globalNotify(response)
       }
     }
     return response
   },
   (error) => {
-    openNotification(error.response)
+    globalNotify(error.response)
     return Promise.reject(error)
   }
 )

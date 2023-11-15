@@ -22,12 +22,12 @@ export default {
   },
 
   async updateCommon (id, data) {
-    const response = await api.patch(`/words/common/${id}`, data)
+    const response = await api.patch(`/words/common/${id}`, data, { tagType: 'star' })
     return response.data
   },
 
   async updateImportant (id, data) {
-    const response = await api.patch(`/words/important/${id}`, data)
+    const response = await api.patch(`/words/important/${id}`, data, { tagType: 'heart' })
     return response.data
   },
 

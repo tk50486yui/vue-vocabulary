@@ -23,8 +23,8 @@
           <a-input  v-model:value="formState.category.cate_name"  placeholder="類別名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
-          <a-button class="btn btn-primary btn-outline-light btn-sm" :loading="confirmLoading" html-type="submit">儲存</a-button>
-          <a-button class="btn btn-danger btn-outline-light btn-sm float-end" @click="resetForm">重置</a-button>
+          <a-button class="btn btn-primary btn-outline-light btn-sm float-end" :loading="confirmLoading" html-type="submit">儲存</a-button>
+          <a-button class="btn btn-danger btn-outline-light btn-sm " @click="resetForm">重置</a-button>
         </a-form-item>
     </a-form>
 </template>

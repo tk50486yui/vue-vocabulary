@@ -16,6 +16,7 @@
               >
                 <!-- header -->
                 <template #title>
+                  <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible=true"/>
                   <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">
@@ -122,16 +123,11 @@
             </template>
             <CategoriesDragView />
           </a-tab-pane>
-          <!-- tab 4 -->
-          <a-tab-pane key="4">
-            <template #tab>
-              <font-awesome-icon :icon="['fas', 'plus']" />
-            </template>
-            <CategoriesAddView />
-          </a-tab-pane>
         </a-tabs>
       </div>
   </template>
+  <!-- Modal-->
+  <CategoriesModalView v-model:visible="visible"/>
 </template>
 
 <script>
@@ -140,11 +136,10 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
-import RefreshBtn from '@/components/button/RefreshBtn.vue'
-import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
 import CategoriesDragView from '@/views/category/CategoriesDragView.vue'
+import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
+import { PlusBtn, RefreshBtn, DeleteBtn } from '@/components/button'
 
 export default {
   name: 'CategoriesView',
@@ -152,10 +147,11 @@ export default {
     EditOutlined,
     CheckOutlined,
     CloseOutlined,
+    PlusBtn,
     DeleteBtn,
     RefreshBtn,
-    CategoriesAddView,
     CategoriesDragView,
+    CategoriesModalView,
     CategoriesTreeSelect
   },
   computed: {
@@ -221,6 +217,7 @@ export default {
     const Ready = ref(false)
     const TableLoading = ref([false, false])
     const SyncOutlinedSpin = ref([false, false])
+    const visible = ref(false)
     const activeTab = ref('1')
     const editDataSource = ref()
     const editTableData = reactive({})
@@ -271,6 +268,7 @@ export default {
       TableLoading,
       SyncOutlinedSpin,
       columns,
+      visible,
       activeTab,
       editDataSource,
       editTableData,

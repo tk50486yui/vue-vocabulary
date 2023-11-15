@@ -44,6 +44,7 @@
       >
         <!-- Table header -->
         <template #title>
+          <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="onDrawerShow()"/>
           <RefreshBtn class="btn btn-info btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin"  @click="refreshTable"/>
         </template>
         <!-- Table expanded -->
@@ -121,6 +122,12 @@
       </a-table>
     </div>
   </template>
+  <!-- drawer words add -->
+  <WordsDrawerView
+      ref="wordsDrawer"
+      :visible="this.drawerVisible"
+      @close="this.drawerVisible = false"
+  />
 </template>
 
 <script>
@@ -129,8 +136,8 @@ import { ref, reactive } from 'vue'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
-import RefreshBtn from '@/components/button/RefreshBtn.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
+import { PlusBtn, DeleteBtn, RefreshBtn } from '@/components/button'
+import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
@@ -141,8 +148,10 @@ export default {
     CloseOutlined,
     StarFilled,
     HeartFilled,
+    PlusBtn,
     DeleteBtn,
     RefreshBtn,
+    WordsDrawerView,
     CategoriesTreeSelect
   },
   computed: {
@@ -213,6 +222,11 @@ export default {
     },
     handleTableScrollY () {
       this.TablescrollY = Number(this.selectTablescrollY)
+    },
+    // drawer
+    onDrawerShow () {
+      this.$refs.wordsDrawer.setDrawerStyle()
+      this.drawerVisible = true
     }
   },
   async created () {
@@ -228,6 +242,7 @@ export default {
     const SyncOutlinedSpin = ref(false)
     const editDataSource = ref()
     const editTableData = reactive({})
+    const drawerVisible = ref(false)
     const TablescrollY = ref(400)
     const selectTablescrollY = ref('400')
     const selectPageSize = ref('10')
@@ -295,6 +310,7 @@ export default {
       Ready,
       TableLoading,
       SyncOutlinedSpin,
+      drawerVisible,
       columns,
       TablescrollY,
       selectTablescrollY,

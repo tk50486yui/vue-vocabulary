@@ -16,6 +16,7 @@
               >
                 <!-- header -->
                 <template #title>
+                  <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible=true"/>
                   <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">
@@ -117,6 +118,7 @@
               >
                 <!-- header -->
                 <template #title>
+                  <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible=true"/>
                   <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[1]"  @click="refreshTable(1)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">
@@ -214,13 +216,6 @@
           <!-- tab 4 -->
           <a-tab-pane key="4">
             <template #tab>
-              <font-awesome-icon :icon="['fas', 'plus']" />
-            </template>
-            <TagsAddView />
-          </a-tab-pane>
-          <!-- tab 5 -->
-          <a-tab-pane key="5">
-            <template #tab>
               <font-awesome-icon :icon="['fas', 'palette']" />
             </template>
             <TagsColorView />
@@ -228,21 +223,22 @@
         </a-tabs>
       </div>
   </template>
+  <!-- Modal -->
+  <TagsModalView v-model:visible="visible"/>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { RefreshBtn, DeleteBtn, PlusBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
-import TagsAddView from '@/views/tag/TagsAddView.vue'
 import TagsDragView from '@/views/tag/TagsDragView.vue'
+import TagsModalView from '@/views/tag/TagsModalView.vue'
 import TagsColorView from '@/views/tag/TagsColorView.vue'
 import TagsColorSelect from '@/components/select/TagsColorSelect.vue'
-import RefreshBtn from '@/components/button/RefreshBtn.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'TagsView',
@@ -252,8 +248,9 @@ export default {
     CloseOutlined,
     DeleteBtn,
     RefreshBtn,
+    PlusBtn,
     TagsDragView,
-    TagsAddView,
+    TagsModalView,
     TagsColorView,
     TagsColorSelect,
     TagsTreeSelect
@@ -336,6 +333,7 @@ export default {
     const Ready = ref(false)
     const TableLoading = ref([false, false])
     const SyncOutlinedSpin = ref([false, false])
+    const visible = ref(false)
     const activeTab = ref('1')
     const editDataSource = ref()
     const editTableData = reactive({})
@@ -389,6 +387,7 @@ export default {
       Ready,
       TableLoading,
       SyncOutlinedSpin,
+      visible,
       columns,
       activeTab,
       editDataSource,

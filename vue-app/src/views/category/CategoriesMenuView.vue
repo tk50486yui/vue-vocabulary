@@ -45,31 +45,21 @@
   </div>
   <p></p>
   <!-- Modal  -->
-  <div class="menu-modal" ref="cateMod" :class="$theme">
-    <a-modal v-model:visible="visible" :footer="null" :getContainer = '()=>$refs.cateMod'>
-      <template #title >
-        <span class="section-title" :class="$theme">
-          <h4>新增分類</h4>
-        </span>
-      </template>
-      <p></p>
-      <CategoriesAddView />
-    </a-modal>
-  </div>
+  <CategoriesModalView v-model:visible="visible"/>
 </template>
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import PlusBtn from '@/components/button/PlusBtn.vue'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
-import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
+import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 
 export default {
   name: 'CategoriesMenuView',
   components: {
     TreeCategoriesMenu,
     PlusBtn,
-    CategoriesAddView
+    CategoriesModalView
   },
   computed: {
     ...mapGetters('CategoriesStore', ['categories']),

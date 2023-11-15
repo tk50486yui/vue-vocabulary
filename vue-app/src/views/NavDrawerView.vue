@@ -18,10 +18,10 @@
                 <router-link :to="{ name: 'articles' }">文章</router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'categories' }">類別</router-link>
+                <router-link :to="{ name: 'tags' }">標籤</router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'tags' }">標籤</router-link>
+                <router-link :to="{ name: 'categories' }">類別</router-link>
             </li>
             <li>
                 <router-link :to="{ name: 'wordsGroups' }">群組</router-link>

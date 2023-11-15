@@ -58,17 +58,8 @@
   </div>
   <p></p>
   <!-- Modal  -->
-  <div class="menu-modal" ref="tagMod" :class="$theme">
-    <a-modal v-model:visible="visible" :footer="null" :getContainer = '()=>$refs.tagMod'>
-      <template #title >
-        <span class="section-title" :class="$theme">
-          <h4>新增標籤</h4>
-        </span>
-      </template>
-      <p></p>
-      <TagsAddView />
-    </a-modal>
-  </div>
+  <TagsModalView v-model:visible="visible" />
+
 </template>
 
 <script>
@@ -77,7 +68,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import { CheckOutlined } from '@ant-design/icons-vue'
 import PlusBtn from '@/components/button/PlusBtn.vue'
-import TagsAddView from '@/views/tag/TagsAddView.vue'
+import TagsModalView from '@/views/tag/TagsModalView.vue'
 
 export default {
   name: 'TagsMenuView',
@@ -85,7 +76,7 @@ export default {
     TreeTagsMenu,
     CheckOutlined,
     PlusBtn,
-    TagsAddView
+    TagsModalView
   },
   computed: {
     ...mapGetters('TagsStore', ['tags']),
@@ -115,8 +106,10 @@ export default {
   },
   async created () {
     try {
+      this.spinning = true
       await this.fetch()
       await this.fetchRecent()
+      this.spinning = false
       this.selectedKeys = this.noChildrenArray
     } catch (error) {}
   },

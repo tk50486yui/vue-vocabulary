@@ -30,10 +30,10 @@
                                     <router-link :to="{ name: 'articles' }">文章</router-link>
                                 </li>
                                 <li :class="{ 'active': activeIndex === 2 }">
-                                    <router-link :to="{ name: 'categories' }">類別</router-link>
+                                    <router-link :to="{ name: 'tags' }">標籤</router-link>
                                 </li>
                                 <li :class="{ 'active': activeIndex === 3 }">
-                                    <router-link :to="{ name: 'tags' }">標籤</router-link>
+                                    <router-link :to="{ name: 'categories' }">類別</router-link>
                                 </li>
                                 <li :class="{ 'active': activeIndex === 4 }">
                                     <router-link :to="{ name: 'wordsGroups' }">群組</router-link>
@@ -53,11 +53,11 @@
                         </div>
                     </div>
                     <div class="canvas__open">
-                        <span style="padding-right:6px" @click="this.drawerVisible = true">
-                            <font-awesome-icon :icon="['fas', 'bars']" />
-                        </span>
-                        <span @click="setSearchShow()">
+                        <span style="margin-right:16px" @click="setSearchShow()">
                             <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                        </span>
+                        <span  @click="this.drawerVisible = true">
+                            <font-awesome-icon :icon="['fas', 'bars']" />
                         </span>
                     </div>
                 </div>
@@ -119,10 +119,10 @@ export default {
         case 'articles':
           this.activeIndex = 1
           break
-        case 'categories':
+        case 'tags':
           this.activeIndex = 2
           break
-        case 'tags':
+        case 'categories':
           this.activeIndex = 3
           break
         case 'wordsGroups':
@@ -386,7 +386,7 @@ export default {
         font-size: 22px;
         color: #222;
         height: 35px;
-        width: 35px;
+        width: 90px;
         line-height: 35px;
         text-align: center;
         border: 1px solid #323232;

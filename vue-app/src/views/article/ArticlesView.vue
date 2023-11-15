@@ -31,7 +31,7 @@
                   </a-col>
                   <a-col :span="2">
                     <template v-if="tagsArray.length > 0">
-                      <XmarkBtn @click="tagsArray = []" />
+                      <CloseBtn @click="tagsArray = []" />
                     </template>
                   </a-col>
                 </a-row>
@@ -39,23 +39,13 @@
               <p></p>
               <!-- 第二層 tags filter -->
               <span class="tab-body-text">
-                標籤：
-                （
-                <span class="radio-theme" :class="$theme">
-                  <a-radio-group v-model:value="tagsOperator">
-                    <a-radio value="or">OR</a-radio>
-                    <a-radio value="and">AND</a-radio>
-                    <a-radio value="none">NONE</a-radio>
-                  </a-radio-group>
-                </span>
-                ）
+                標籤：<OperatorRadio v-model:value="tagsOperator"/>
               </span>
               <p></p>
-            <div class="filter-block d-flex">
+            <span>
               <div class="select-theme" :class="$theme" ref="selectMod">
                   <span class="span-text">每頁：</span>
                   <a-select
-                      ref="select"
                       :getPopupContainer="()=>this.$refs.selectMod"
                       v-model:value="selectPageSize"
                       size="small"
@@ -69,7 +59,7 @@
                       <a-select-option value="100">100 筆</a-select-option>
                       <a-select-option :value="this.articles.length">全部</a-select-option>
                   </a-select>
-                  <span class="span-text" style="padding-left: 6px;">當前：</span>
+                  <span class="span-text" style="margin-left: 8px">當前：</span>
                   <a-select
                       ref="selectCurrent"
                       :getPopupContainer="()=>this.$refs.selectMod"
@@ -82,30 +72,28 @@
                         <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                       </template>
                   </a-select>
-                  <span class="span-text" style="padding-left: 6px;">
+                  <span class="span-text" style="margin-left: 8px">
                     顯示內容：<a-switch v-model:checked="showContent" size="small" />
                   </span>
-                  <span class="span-text" style="padding-left: 6px;">
+                  <span class="span-text" style="margin-left: 8px">
                     <template v-if="this.$keyword != '' && this.$filters.length > 0">
-                        <span style="padding-right: 6px;">
-                            關鍵字：`<span class="keyword-text">{{ this.$keyword }}</span> `
-                        </span>
+                      關鍵字：`<span class="keyword-text">{{ this.$keyword }}</span> `
                     </template>
                     <template v-else>
-                        <span style="padding-right: 6px;">
-                            關鍵字：無
-                        </span>
+                      關鍵字：無
                     </template>
-                  共  {{ this.filterdResult.length }} 筆
+                    <span style="margin-left: 8px">
+                      共  {{ this.filterdResult.length }} 筆
+                    </span>
                   </span>
-                  <span style="padding-left: 12px;">
+                  <span style="margin-left: 6px">
                     <template v-if="this.$keyword != ''">
-                      <XmarkBtn @click="onResetSearch()" />
+                      <CloseBtn @click="onResetSearch()" />
                     </template>
                   </span>
                   <p></p>
               </div>
-            </div>
+            </span>
             <!-- 文章列表 -->
             <div class="article-list-theme" :class="$theme">
               <a-list :data-source="this.filterdResult"
@@ -216,14 +204,16 @@ import { ref, reactive, h } from 'vue'
 import { LoadingOutlined } from '@ant-design/icons-vue'
 import ArticlesAddView from '@/views/article/ArticlesAddView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import XmarkBtn from '@/components/button/XmarkBtn.vue'
+import OperatorRadio from '@/components/radio/OperatorRadio.vue'
+import { CloseBtn } from '@/components/button'
 
 export default {
   name: 'ArticlesView',
   components: {
     ArticlesAddView,
     TagsTreeSelect,
-    XmarkBtn
+    OperatorRadio,
+    CloseBtn
   },
   computed: {
     filterdResult () {
@@ -400,9 +390,6 @@ export default {
 }
 .keyword-text{
     color:$keyword-color;
-}
-.filter-block{
-  padding-bottom: 6px;
 }
 
 .article-date{

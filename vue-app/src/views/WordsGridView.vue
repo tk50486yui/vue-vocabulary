@@ -31,7 +31,7 @@
               </a-col>
               <a-col :span="2">
                 <template v-if="$filtersTags.length > 0">
-                  <XmarkBtn @click="onResetTags()" />
+                  <CloseBtn @click="onResetTags()"/>
                 </template>
               </a-col>
             </a-row>
@@ -39,30 +39,12 @@
           <p></p>
           <!-- 第二層 tags filter -->
           <span>
-            標籤：
-            （
-            <span class="radio-theme" :class="$theme">
-              <a-radio-group v-model:value="tagsOperator" @change="setFilterItems()">
-                <a-radio value="or">OR</a-radio>
-                <a-radio value="and">AND</a-radio>
-                <a-radio value="none">NONE</a-radio>
-              </a-radio-group>
-            </span>
-            ）
+            標籤：<OperatorRadio v-model:value="tagsOperator" @change="setFilterItems()" />
           </span>
           <p></p>
           <!-- 第三層 heart star -->
           <span>
-            標記：
-            （
-            <span class="radio-theme" :class="$theme">
-              <a-radio-group v-model:value="choiceOperator" @change="setFilterItems()">
-                <a-radio value="or">OR</a-radio>
-                <a-radio value="and">AND</a-radio>
-                <a-radio value="none">NONE</a-radio>
-              </a-radio-group>
-            </span>
-            ）
+            標記：<OperatorRadio v-model:value="choiceOperator" @change="setFilterItems()" />
             <a-checkbox-group
               v-model:value="choiceArray"
               :options="choiceArrayOptions"
@@ -129,64 +111,62 @@
             <a-list :data-source="this.filterWordsResult" :pagination="pagination"
                 :grid="{ gutter: 10, xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3, xxxl: 3 }"
             >
-              <!-- header -->
+              <!-- card header -->
               <template #header>
-                <span class="select-theme" :class="$theme" ref="selectMod">
+                <div class="select-theme pagination-style" :class="$theme" ref="selectMod">
                   每頁：
                   <a-select
-                    ref="select"
                     :getPopupContainer="()=>this.$refs.selectMod"
                     v-model:value="selectPageSize"
                     size="small"
                     style="width: 80px"
                     @change="setPageSize()"
-                    >
+                  >
                     <a-select-option value="10">10 筆</a-select-option>
                     <a-select-option value="20">20 筆</a-select-option>
                     <a-select-option value="50">50 筆</a-select-option>
                     <a-select-option value="100">100 筆</a-select-option>
                     <a-select-option :value="this.words.length">全部</a-select-option>
                   </a-select>
-                  <span style="padding-left: 6px;">當前：</span>
-                    <a-select
-                      ref="selectCurrent"
-                      :getPopupContainer="()=>this.$refs.selectMod"
-                      v-model:value="currentPage"
-                      size="small"
-                      style="width: 80px"
-                      @change="setPaginationCurrent()"
-                    >
-                      <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
-                        <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                  <span style="margin-left: 8px">當前：</span>
+                  <a-select
+                    :getPopupContainer="()=>this.$refs.selectMod"
+                    v-model:value="currentPage"
+                    size="small"
+                    style="width: 80px"
+                    @change="setPaginationCurrent()"
+                  >
+                    <template v-for="index in Math.ceil(this.words.length/this.selectPageSize)" :key="index">
+                      <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                    </template>
+                  </a-select>
+                  <template v-if="this.$keyword != '' && this.$filters.length > 0">
+                    <span style="padding-left: 8px;">
+                      關鍵字：
+                      <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
+                        ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
                       </template>
-                    </a-select>
-                  <span style="padding-left: 6px;">
-                    <template v-if="this.$keyword != '' && this.$filters.length > 0">
-                      <span style="padding-right: 6px;">
-                        關鍵字：
-                        <template v-if="this.$filters.length === 1 &&  this.$filters.includes('cate_name')">
-                          ` <span class="category-keyword-text">{{ this.$keyword }} </span>`
-                        </template>
-                        <template v-else>
-                          ` <span class="keyword-text">{{ this.$keyword }} </span>`
-                        </template>
-                      </span>
-                    </template>
-                    <template v-else>
-                      <span style="padding-right: 6px;">
-                        關鍵字：無
-                      </span>
-                    </template>
+                      <template v-else>
+                        ` <span class="keyword-text">{{ this.$keyword }} </span>`
+                      </template>
+                    </span>
+                  </template>
+                  <template v-else>
+                    <span style="margin-left: 8px">
+                      關鍵字：無
+                    </span>
+                  </template>
+                  <span style="margin-left: 8px">
                     共  {{ this.filterWordsResult.length }} 筆
                   </span>
-                  <span style="padding-left: 6px;">
+                  <span style="margin-left: 6px;">
                     <template v-if="this.$keyword != ''">
-                      <XmarkBtn @click="onResetSearch()" />
+                      <CloseBtn @click="onResetSearch()"/>
                     </template>
                   </span>
-                </span>
+                </div>
               </template>
-              <!-- main -->
+              <!-- card main -->
               <p></p>
               <template #renderItem="{ item, index }">
               <a-list-item>
@@ -329,41 +309,35 @@
         </a-spin>
     </template>
     <!-- drawer words add -->
-    <div class="drawer-theme" ref="wordsDrawer" :class="$theme">
-      <a-drawer
-          :getContainer = "()=>$refs.wordsDrawer"
-          placement="left"
-          :width="this.drawerWidth"
-          :visible="this.drawerVisible"
-          @close="this.drawerVisible = false"
-        >
-          <WordsAddView />
-      </a-drawer>
-    </div>
+    <WordsDrawerView
+      ref="wordsDrawer"
+      :visible="this.drawerVisible"
+      @close="this.drawerVisible = false"
+    />
 
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
 import { ref, reactive, toRefs } from 'vue'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
+import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
+import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import WordsAddView from '@/views/WordsAddView.vue'
-import PlusBtn from '@/components/button/PlusBtn.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
-import XmarkBtn from '@/components/button/XmarkBtn.vue'
+import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 
 export default {
   name: 'WordsGridView',
   components: {
+    WordsDrawerView,
+    TagsTreeSelect,
     StarFilled,
     HeartFilled,
-    DeleteBtn,
     PlusBtn,
-    XmarkBtn,
-    TagsTreeSelect,
-    WordsAddView
+    DeleteBtn,
+    CloseBtn,
+    OperatorRadio
   },
   computed: {
     filterWordsResult () {
@@ -530,13 +504,8 @@ export default {
     },
     // drawer
     onDrawerShow () {
-      this.setDrawerStyle()
+      this.$refs.wordsDrawer.setDrawerStyle()
       this.drawerVisible = true
-    },
-    setDrawerStyle () {
-      this.drawerWidth = this.drawerWidthMap[
-        this.$desktop ? 'desktop' : this.$tablet ? 'tablet' : this.$mobile ? 'mobile' : 'desktop'
-      ]
     }
   },
   async created () {
@@ -585,15 +554,6 @@ export default {
         this.checkboxShow = false
         this.checkboxBtn = false
       }
-    },
-    '$desktop' (val) {
-      this.setDrawerStyle()
-    },
-    '$tablet' (val) {
-      this.setDrawerStyle()
-    },
-    '$mobile' (val) {
-      this.setDrawerStyle()
     }
   },
   setup () {
@@ -608,12 +568,6 @@ export default {
     const checkboxShow = ref(false)
     const checkboxBtn = ref(false)
     const drawerVisible = ref(false)
-    const drawerWidth = ref(500)
-    const drawerWidthMap = {
-      desktop: 500,
-      tablet: 400,
-      mobile: 300
-    }
 
     const pagination = reactive({
       onChange: page => {
@@ -661,8 +615,6 @@ export default {
       currentPage,
       dataSize,
       drawerVisible,
-      drawerWidth,
-      drawerWidthMap,
       filterItemsState,
       ...toRefs(filterItemsState),
       isItemsState,
@@ -688,6 +640,7 @@ export default {
   background: #17b0f7;
   content: "";
 }
+
 .keyword-text{
     color:$keyword-color;
 }
