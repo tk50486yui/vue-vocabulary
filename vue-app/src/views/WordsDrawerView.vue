@@ -24,9 +24,7 @@ export default {
   },
   computed: {
     ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$desktop']),
-    ...mapState('Screen', ['$tablet']),
-    ...mapState('Screen', ['$mobile'])
+    ...mapState('Screen', ['$desktop', '$tablet', '$mobile'])
   },
   methods: {
     // drawer

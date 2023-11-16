@@ -79,11 +79,9 @@ export default {
     TagsModalView
   },
   computed: {
-    ...mapGetters('TagsStore', ['tags']),
-    ...mapGetters('TagsStore', ['recentTagsArray']),
+    ...mapGetters('TagsStore', ['tags', 'recentTagsArray']),
+    ...mapState('Search', ['$filtersTags', '$filtersTagsState']),
     ...mapState('Theme', ['$theme']),
-    ...mapState('Search', ['$filtersTags']),
-    ...mapState('Search', ['$filtersTagsState']),
     hasChildrenArray () {
       return this.recentTagsArray.filter(tag => tag.children.length > 0)
     },
@@ -92,10 +90,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Search', ['updateSearchClass']),
-    ...mapActions('Search', ['pushFiltersTags']),
-    ...mapActions('TagsStore', ['fetch']),
-    ...mapActions('TagsStore', ['fetchRecent']),
+    ...mapActions('TagsStore', ['fetch', 'fetchRecent']),
+    ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
     async handleTagsFilter (id) {
       await this.pushFiltersTags(id)
       this.updateSearchClass('word')

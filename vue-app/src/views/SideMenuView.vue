@@ -46,11 +46,8 @@ export default {
     updateNow () {
       return this.$WordsGroupsDetailsView.updateNow
     },
-    ...mapState('Views', ['$WordsGroupsView']),
-    ...mapState('Views', ['$WordsGroupsDetailsView']),
+    ...mapState('Views', ['$WordsGroupsView', '$WordsGroupsDetailsView']),
     ...mapState('Theme', ['$theme'])
-  },
-  methods: {
   },
   watch: {
     updateNow (val) {
@@ -61,10 +58,9 @@ export default {
   },
   setup () {
     const sideGroup = ref('1')
-    const groupCount = ref('1')
+
     return {
-      sideGroup,
-      groupCount
+      sideGroup
     }
   }
 }

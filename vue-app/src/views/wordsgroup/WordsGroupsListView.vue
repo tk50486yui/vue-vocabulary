@@ -5,7 +5,7 @@
           <h4>單字群組列表</h4>
         </div>
         <!-- 上層 -->
-        <div class="select-theme" :class="this.$theme">
+        <div class="select-theme" :class="$theme">
             每頁：
             <a-select
                 ref="select"
@@ -38,7 +38,7 @@
             </span>
         </div>
         <p></p>
-        <div class="list-theme" :class="this.$theme">
+        <div class="list-theme" :class="$theme">
             <a-list
                 item-layout="horizontal"
                 :data-source="this.wordsGroups"

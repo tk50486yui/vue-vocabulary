@@ -60,11 +60,6 @@ export default {
     DeleteBtn
   },
   computed: {
-    ...mapGetters('WordsGroupsStore', ['wordsGroups']),
-    ...mapGetters('WordsGroupsStore', ['wordsGroupsById']),
-    ...mapState('Views', ['$WordsGroupsView']),
-    ...mapState('Views', ['$WordsGroupsDetailsView']),
-    ...mapState('Theme', ['$theme']),
     wgId () {
       return this.$route.params.id
     },
@@ -73,13 +68,24 @@ export default {
     },
     editShow () {
       return this.$WordsGroupsDetailsView.updateNow
-    }
+    },
+    ...mapGetters('WordsGroupsStore', ['wordsGroups', 'wordsGroupsById']),
+    ...mapState('Views', ['$WordsGroupsView', '$WordsGroupsDetailsView']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('WordsGroupsStore', ['fetch']),
-    ...mapActions('WordsGroupsStore', ['deleteById']),
-    ...mapActions('Views', ['updateWordsGroupsView']),
-    ...mapActions('Views', ['updateWordsGroupsDetailsView']),
+    ...mapActions('WordsGroupsStore', ['fetch', 'deleteById']),
+    ...mapActions('WordsGroupsStore', []),
+    ...mapActions('Views', ['updateWordsGroupsView', 'updateWordsGroupsDetailsView']),
+    async onDelete (id) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+        this.$router.push({ name: 'wordsGroupsList' })
+      } catch (error) {}
+    },
     onEdit () {
       if (this.editShow === false) {
         this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: true })
@@ -104,16 +110,6 @@ export default {
       this.wordsGroup.details.forEach(item => {
         this.updateWordsGroupsView({ variable: 'groupArray', data: { ws_id: item.ws_id, ws_name: item.ws_name, checked: true } })
       })
-    },
-    async onDelete (id) {
-      try {
-        console.log(id)
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-        await this.fetch()
-        this.$router.push({ name: 'wordsGroupsList' })
-      } catch (error) {}
     }
   },
   async created () {

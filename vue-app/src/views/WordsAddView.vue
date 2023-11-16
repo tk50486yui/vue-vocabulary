@@ -75,15 +75,12 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('WordsStore', ['fetch']),
-    ...mapActions('WordsStore', {
-      addWord: 'add'
-    }),
+    ...mapActions('WordsStore', ['fetch', 'add']),
     async onFinish (values) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addWord(this.formState.word)
+        await this.add(this.formState.word)
         await this.fetch()
         this.resetForm()
         window.scrollTo({ top: 100, behavior: 'smooth' })

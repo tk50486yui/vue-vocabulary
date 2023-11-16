@@ -44,11 +44,7 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetch']),
-    ...mapActions('CategoriesStore', ['fetchRecent']),
-    ...mapActions('CategoriesStore', {
-      addCategory: 'add'
-    }),
+    ...mapActions('CategoriesStore', ['fetch', 'fetchRecent', 'add']),
     async onFinish () {
       try {
         this.confirmLoading = true

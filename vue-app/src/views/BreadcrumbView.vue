@@ -56,9 +56,6 @@ export default {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
     },
-    async created () {
-      this.getCurrentRoute()
-    },
     getCurrentRoute () {
       const { name } = this.$route
       this.activeHome = false
@@ -95,6 +92,9 @@ export default {
           break
       }
     }
+  },
+  async created () {
+    this.getCurrentRoute()
   },
   watch: {
     $route: function (val) {

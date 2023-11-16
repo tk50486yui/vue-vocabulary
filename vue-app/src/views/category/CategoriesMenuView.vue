@@ -66,10 +66,8 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('Search', ['updateKeyword']),
-    ...mapActions('Search', ['updateFilters']),
-    ...mapActions('Search', ['updateSearchClass']),
     ...mapActions('CategoriesStore', ['fetch']),
+    ...mapActions('Search', ['updateKeyword', 'updateFilters', 'updateSearchClass']),
     async refresh () {
       try {
         this.SyncOutlinedSpin = true

@@ -55,13 +55,11 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'SearchView',
   computed: {
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Search', ['$searchShow'])
+    ...mapState('Search', ['$searchShow']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('Search', ['updateKeyword']),
-    ...mapActions('Search', ['updateSearchClass']),
-    ...mapActions('Search', ['updateFilters']),
+    ...mapActions('Search', ['updateKeyword', 'updateSearchClass', 'updateFilters']),
     onSearch () {
       this.onWordChecked()
       this.onArticleChecked()

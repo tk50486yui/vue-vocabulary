@@ -136,11 +136,11 @@ import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { PlusBtn, RefreshBtn, DeleteBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
 import CategoriesDragView from '@/views/category/CategoriesDragView.vue'
 import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
-import { PlusBtn, RefreshBtn, DeleteBtn } from '@/components/button'
 
 export default {
   name: 'CategoriesView',
@@ -156,18 +156,11 @@ export default {
     CategoriesTreeSelect
   },
   computed: {
-    ...mapGetters('CategoriesStore', ['categoriesArray']),
-    ...mapGetters('CategoriesStore', ['recentCategoriesArray']),
-    ...mapGetters('CategoriesStore', ['categoriesEditArray']),
+    ...mapGetters('CategoriesStore', ['categoriesArray', 'recentCategoriesArray', 'categoriesEditArray']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetch']),
-    ...mapActions('CategoriesStore', ['fetchRecent']),
-    ...mapActions('CategoriesStore', {
-      updateCategory: 'update'
-    }),
-    ...mapActions('CategoriesStore', ['deleteById']),
+    ...mapActions('CategoriesStore', ['fetch', 'fetchRecent', 'update', 'deleteById']),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -189,7 +182,7 @@ export default {
         const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateCategory({ id: editData.id, data: editData })
+        await this.update({ id: editData.id, data: editData })
         await this.fetch()
         await this.fetchRecent()
         this.editDataSource = this.recentCategoriesArray

@@ -256,19 +256,12 @@ export default {
     TagsTreeSelect
   },
   computed: {
-    ...mapGetters('TagsStore', ['tagsArray']),
-    ...mapGetters('TagsStore', ['recentTagsArray']),
-    ...mapGetters('TagsStore', ['tagsEditArray']),
+    ...mapGetters('TagsStore', ['tagsArray', 'recentTagsArray', 'tagsEditArray']),
     ...mapGetters('TagsColorStore', ['tagsColor']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch']),
-    ...mapActions('TagsStore', ['fetchRecent']),
-    ...mapActions('TagsStore', {
-      updateTag: 'update'
-    }),
-    ...mapActions('TagsStore', ['deleteById']),
+    ...mapActions('TagsStore', ['fetch', 'fetchRecent', 'update', 'deleteById']),
     async refreshTable (index) {
       try {
         this.SyncOutlinedSpin[index] = true
@@ -290,7 +283,7 @@ export default {
         const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateTag({ id: editData.id, data: editData })
+        await this.update({ id: editData.id, data: editData })
         await this.fetch()
         await this.fetchRecent()
         this.editDataSource = this.recentTagsArray
@@ -299,13 +292,11 @@ export default {
     },
     async onDelete (id) {
       try {
-        console.log(this.editTableData2[id])
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
         await this.fetch()
         await this.fetchRecent()
-        console.log(this.editTableData2[id])
       } catch (error) {}
     },
     handleColorSelectChange (value, record) {

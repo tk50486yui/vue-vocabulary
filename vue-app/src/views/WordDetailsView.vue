@@ -213,17 +213,16 @@ export default {
     TagsTreeSelect
   },
   computed: {
-    ...mapGetters('WordsStore', ['wordById']),
-    ...mapState('Views', ['$WordsGrid']),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$mobile']),
-    ...mapState('Screen', ['$tablet']),
     wordId () {
       return this.$route.params.id
     },
     word () {
       return this.wordById(this.wordId)
-    }
+    },
+    ...mapGetters('WordsStore', ['wordById']),
+    ...mapState('Views', ['$WordsGrid']),
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$tablet', '$mobile'])
   },
   watch: {
     $mobile: function (val) {
@@ -234,17 +233,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('WordsStore', ['fetch']),
-    ...mapActions('WordsStore', {
-      updateWord: 'update'
-    }),
-    ...mapActions('WordsStore', {
-      updateCommon: 'updateCommon'
-    }),
-    ...mapActions('WordsStore', {
-      updateImportant: 'updateImportant'
-    }),
-    ...mapActions('WordsStore', ['deleteById']),
+    ...mapActions('WordsStore', ['fetch', 'update', 'updateCommon', 'updateImportant', 'deleteById']),
     ...mapActions('Views', ['updateWordsGrid']),
     onEdit () {
       this.editShow = !this.editShow
@@ -254,7 +243,7 @@ export default {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateWord({ id: this.formState.word.id, data: this.formState.word })
+        await this.update({ id: this.formState.word.id, data: this.formState.word })
         await this.fetch()
         this.onEditCancel()
       } catch (error) {}
@@ -335,7 +324,8 @@ export default {
     const wordEditor = reactive({
       Config: {
         autoGrow: true,
-        placeholder: '請輸入說明例句...'
+        placeholder: '請為單字添加說明或解釋...',
+        toolbar: ['bold', 'italic', '|', 'link', 'MediaEmbed']
       }
     })
 

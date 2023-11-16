@@ -33,17 +33,14 @@ export default ({
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch']),
-    ...mapActions('TagsStore', {
-      updateTagsOrder: 'updateOrder'
-    }),
+    ...mapActions('TagsStore', ['fetch', 'updateOrder']),
     async onFinish (values) {
       try {
         const tagsArray = Object.values(values).filter(item => item !== null && typeof item === 'object')
         this.spinning = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateTagsOrder(tagsArray)
+        await this.updateOrder(tagsArray)
         await this.fetch()
         this.dropData = this.tags
         this.tagsForm.splice(0, this.tagsForm.length)

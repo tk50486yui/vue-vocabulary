@@ -39,11 +39,6 @@ export default {
   },
   computed: {
     ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-
-  },
-  setup () {
   }
 }
 </script>

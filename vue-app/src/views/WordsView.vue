@@ -162,13 +162,7 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('WordsStore', ['fetch']),
-    ...mapActions('WordsStore', {
-      updateWord: 'update'
-    }),
-    ...mapActions('WordsStore', ['updateCommon']),
-    ...mapActions('WordsStore', ['updateImportant']),
-    ...mapActions('WordsStore', ['deleteById']),
+    ...mapActions('WordsStore', ['fetch', 'update', 'updateCommon', 'updateImportant', 'deleteById']),
     async refreshTable () {
       try {
         this.SyncOutlinedSpin = true
@@ -185,7 +179,7 @@ export default {
         const editData = await this.save(record)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateWord({ id: editData.id, data: editData })
+        await this.update({ id: editData.id, data: editData })
         await this.fetch()
         this.editDataSource = this.wordsArray
         this.cancel(record)
@@ -207,7 +201,6 @@ export default {
     },
     async onDelete (id) {
       try {
-        console.log(id)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)

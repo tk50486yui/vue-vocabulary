@@ -340,9 +340,9 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
+import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 
 export default {
   name: 'WordsGridView',
@@ -373,32 +373,16 @@ export default {
     btnDisibled () {
       return this.$WordsGroupsDetailsView.updateNow || this.checkboxBtn
     },
-    ...mapGetters('WordsStore', ['words']),
-    ...mapGetters('WordsStore', ['filterWords']),
-    ...mapState('Search', ['$keyword']),
-    ...mapState('Search', ['$searchClass']),
-    ...mapState('Search', ['$filters']),
-    ...mapState('Search', ['$filtersTags']),
-    ...mapState('Views', ['$WordsGrid']),
-    ...mapState('Views', ['$WordsGroupsView']),
-    ...mapState('Views', ['$WordsGroupsDetailsView']),
+    ...mapGetters('WordsStore', ['words', 'filterWords']),
+    ...mapState('Search', ['$keyword', '$searchClass', '$filters', '$filtersTags']),
+    ...mapState('Views', ['$WordsGrid', '$WordsGroupsView', '$WordsGroupsDetailsView']),
     ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$desktop']),
-    ...mapState('Screen', ['$tablet']),
-    ...mapState('Screen', ['$mobile'])
+    ...mapState('Screen', ['$desktop'])
   },
   methods: {
-    ...mapActions('WordsStore', ['fetch']),
-    ...mapActions('WordsStore', ['updateCommon']),
-    ...mapActions('WordsStore', ['updateImportant']),
-    ...mapActions('WordsStore', ['deleteById']),
-    ...mapActions('Search', ['updateKeyword']),
-    ...mapActions('Search', ['updateFilters']),
-    ...mapActions('Search', ['updateFiltersTags']),
-    ...mapActions('Search', ['pushFiltersTags']),
-    ...mapActions('Search', ['updateSearchClass']),
-    ...mapActions('Views', ['updateWordsGrid']),
-    ...mapActions('Views', ['updateWordsGroupsView']),
+    ...mapActions('WordsStore', ['fetch', 'updateCommon', 'updateImportant', 'deleteById']),
+    ...mapActions('Search', ['updateKeyword', 'updateFilters', 'updateFiltersTags', 'pushFiltersTags', 'updateSearchClass']),
+    ...mapActions('Views', ['updateWordsGrid', 'updateWordsGroupsView']),
     // ---- actions ----
     async onUpdateCommon (id, data) {
       try {

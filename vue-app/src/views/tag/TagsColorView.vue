@@ -98,10 +98,7 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsColorStore', ['fetch']),
-    ...mapActions('TagsColorStore', ['add']),
-    ...mapActions('TagsColorStore', ['update']),
-    ...mapActions('TagsColorStore', ['deleteById']),
+    ...mapActions('TagsColorStore', ['fetch', 'add', 'update', 'deleteById']),
     async onFinish () {
       try {
         this.formState.tagColor.tc_color = this.selectedColor

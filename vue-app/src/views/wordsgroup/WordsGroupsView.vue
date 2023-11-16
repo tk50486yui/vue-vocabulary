@@ -80,30 +80,22 @@ export default {
     updateNow () {
       return this.$WordsGroupsDetailsView.updateNow
     },
-    ...mapState('Views', ['$WordsGroupsView']),
-    ...mapState('Views', ['$WordsGroupsDetailsView']),
-    ...mapState('Theme', ['$theme']),
     wordsCount () {
       return this.$WordsGroupsView.groupArray.length
-    }
+    },
+    ...mapState('Views', ['$WordsGroupsView', '$WordsGroupsDetailsView']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('WordsGroupsStore', ['fetch']),
-    ...mapActions('WordsGroupsStore', {
-      addWordsGroup: 'add'
-    }),
-    ...mapActions('WordsGroupsStore', {
-      updateWordsGroup: 'update'
-    }),
-    ...mapActions('Views', ['updateWordsGroupsView']),
-    ...mapActions('Views', ['updateWordsGroupsDetailsView']),
+    ...mapActions('WordsGroupsStore', ['fetch', 'add', 'update']),
+    ...mapActions('Views', ['updateWordsGroupsView', 'updateWordsGroupsDetailsView']),
     async onSave () {
       try {
         const wordsIdArray = this.$WordsGroupsView.groupArray.map(item => item.ws_id)
         this.formState.wordsGroup.words_groups_details = wordsIdArray
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addWordsGroup(this.formState.wordsGroup)
+        await this.add(this.formState.wordsGroup)
         await this.fetch()
         this.clearCheckbox()
         this.$router.push({ name: 'wordsGroupsList' })
@@ -115,7 +107,7 @@ export default {
       const editId = this.$WordsGroupsView.id
       message.loading({ content: 'Loading..', duration: 1 })
       await new Promise(resolve => setTimeout(resolve, 1000))
-      await this.updateWordsGroup({ id: editId, data: this.formState.wordsGroup })
+      await this.update({ id: editId, data: this.formState.wordsGroup })
       await this.fetch()
       this.clearCheckbox()
       this.$router.push({ name: 'wordsGroupsDetails', params: { id: editId } })
@@ -134,9 +126,6 @@ export default {
     try {
       this.Ready = true
     } catch (error) {}
-  },
-  activated () {
-
   },
   watch: {
     'formState.wordsGroup.wg_name' (val) {

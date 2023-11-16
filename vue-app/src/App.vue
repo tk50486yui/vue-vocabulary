@@ -58,31 +58,17 @@ export default {
     ...mapState('Screen', ['$mobile'])
   },
   methods: {
-    ...mapActions('Screen', ['updateMobile']),
-    ...mapActions('Screen', ['updateTablet']),
-    ...mapActions('Screen', ['updateDesktop'])
+    ...mapActions('Screen', ['updateDesktop', 'updateTablet', 'updateMobile'])
   },
   watch: {
     isScreenSmall: function (val) {
-      if (val) {
-        this.updateMobile(true)
-      } else {
-        this.updateMobile(false)
-      }
+      this.updateMobile(!!val)
     },
     isScreenMedium: function (val) {
-      if (val) {
-        this.updateTablet(true)
-      } else {
-        this.updateTablet(false)
-      }
+      this.updateTablet(!!val)
     },
     isScreenLarge: function (val) {
-      if (val) {
-        this.updateDesktop(true)
-      } else {
-        this.updateDesktop(false)
-      }
+      this.updateDesktop(!!val)
     }
   },
   setup () {

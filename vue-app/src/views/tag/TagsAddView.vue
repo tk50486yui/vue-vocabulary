@@ -81,17 +81,13 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch']),
-    ...mapActions('TagsStore', ['fetchRecent']),
-    ...mapActions('TagsStore', {
-      addTag: 'add'
-    }),
+    ...mapActions('TagsStore', ['fetch', 'fetchRecent', 'add']),
     async onFinish () {
       try {
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addTag(this.formState.tag)
+        await this.add(this.formState.tag)
         await this.fetch()
         await this.fetchRecent()
         this.resetForm()

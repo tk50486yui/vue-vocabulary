@@ -85,8 +85,8 @@
     </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
 import { ref } from 'vue'
+import { mapState, mapActions } from 'vuex'
 import { CaretDownOutlined } from '@ant-design/icons-vue'
 import NavDrawerView from '@/views/NavDrawerView.vue'
 
@@ -97,14 +97,11 @@ export default {
     NavDrawerView
   },
   computed: {
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Search', ['$searchShow'])
+    ...mapState('Search', ['$searchShow']),
+    ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('Search', ['updateSearchShow']),
-    async created () {
-      this.setActive()
-    },
     setSearchShow () {
       this.updateSearchShow(!this.$searchShow)
     },
@@ -133,6 +130,9 @@ export default {
           break
       }
     }
+  },
+  async created () {
+    this.setActive()
   },
   watch: {
     $route: function (val) {

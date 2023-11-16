@@ -22,29 +22,23 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive, onMounted } from 'vue'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
   name: 'ArticlesAddView',
-  components: {
-
-  },
   computed: {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('ArticlesStore', ['fetch']),
-    ...mapActions('ArticlesStore', {
-      addArticle: 'add'
-    }),
+    ...mapActions('ArticlesStore', ['fetch', 'add']),
     async onFinish (values) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addArticle(values.article)
+        await this.add(values.article)
         await this.fetch()
         this.formRef.resetFields()
         window.scrollTo({ top: 100, behavior: 'smooth' })
@@ -65,7 +59,7 @@ export default {
       arti_content: '',
       Config: {
         autoGrow: true,
-        placeholder: '請輸入文章...'
+        placeholder: '請輸入文章內容...'
       }
     })
 

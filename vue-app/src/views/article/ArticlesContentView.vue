@@ -132,10 +132,10 @@ import { ref, reactive, onMounted } from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import { EditOutlined } from '@ant-design/icons-vue'
+import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'ArticlesContentView',
@@ -146,36 +146,40 @@ export default {
     TagsTreeSelect
   },
   computed: {
-    ...mapGetters('ArticlesStore', ['articleById']),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$mobile']),
-    ...mapState('Screen', ['$tablet']),
     articleId () {
       return this.$route.params.id
     },
     article () {
       return this.articleById(this.articleId)
-    }
+    },
+    ...mapGetters('ArticlesStore', ['articleById']),
+    ...mapState('Theme', ['$theme']),
+    ...mapState('Screen', ['$tablet', '$mobile'])
   },
   methods: {
-    ...mapActions('ArticlesStore', ['fetch']),
-    ...mapActions('ArticlesStore', {
-      updateArticle: 'update'
-    }),
+    ...mapActions('ArticlesStore', ['fetch', 'update', 'deleteById']),
     ...mapActions('Views', ['updateArticlesView']),
-    ...mapActions('ArticlesStore', ['deleteById']),
-    onEdit () {
-      this.editShow = !this.editShow
-      this.formState.article = Object.assign({}, this.formState.article, this.article)
-    },
     async onEditFinish () {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateArticle({ id: this.formState.article.id, data: this.formState.article })
+        await this.update({ id: this.formState.article.id, data: this.formState.article })
         await this.fetch()
         this.onEditCancel()
       } catch (error) {}
+    },
+    async onDelete (id) {
+      try {
+        message.loading({ content: 'Loading..', duration: 1 })
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await this.deleteById(id)
+        await this.fetch()
+        this.$router.push({ name: 'articles' })
+      } catch (error) {}
+    },
+    onEdit () {
+      this.editShow = !this.editShow
+      this.formState.article = Object.assign({}, this.formState.article, this.article)
     },
     onEditCancel () {
       if (this.editShow) {
@@ -186,15 +190,6 @@ export default {
           window.scrollTo({ top: 160, behavior: 'auto' })
         })
       }
-    },
-    async onDelete (id) {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-        await this.fetch()
-        this.$router.push({ name: 'articles' })
-      } catch (error) {}
     },
     handleCategoriesSelectChange (value) {
       this.formState.article.cate_id = typeof value !== 'undefined' ? value : null
@@ -231,10 +226,7 @@ export default {
     const articleEditor = reactive({
       Config: {
         autoGrow: true,
-        placeholder: '尚無內容',
-        toolbar: {
-          items: ['heading', '|', 'bold', 'italic', 'link', 'undo', 'redo']
-        }
+        placeholder: '尚無內容'
       }
     })
 

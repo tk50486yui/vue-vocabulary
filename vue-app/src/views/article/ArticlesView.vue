@@ -233,24 +233,15 @@ export default {
         this.$keyword, this.$filters, this.tagsArray, this.tagsOperator
       )
     },
-    ...mapGetters('ArticlesStore', ['articles']),
-    ...mapGetters('ArticlesStore', ['filterArticles']),
-    ...mapState('Search', ['$keyword']),
-    ...mapState('Search', ['$searchClass']),
-    ...mapState('Search', ['$filters']),
+    ...mapGetters('ArticlesStore', ['articles', 'filterArticles']),
+    ...mapState('Search', ['$keyword', '$searchClass', '$filters']),
     ...mapState('Views', ['$ArticlesView']),
     ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$tablet']),
-    ...mapState('Screen', ['$mobile'])
+    ...mapState('Screen', ['$tablet', '$mobile'])
   },
   methods: {
     ...mapActions('ArticlesStore', ['fetch']),
-    ...mapActions('ArticlesStore', {
-      updateArticle: 'update'
-    }),
-    ...mapActions('Search', ['updateKeyword']),
-    ...mapActions('Search', ['updateFilters']),
-    ...mapActions('Search', ['updateSearchClass']),
+    ...mapActions('Search', ['updateKeyword', 'updateFilters', 'updateSearchClass']),
     ...mapActions('Views', ['updateArticlesView']),
     // actions
     async refreshArticles () {
