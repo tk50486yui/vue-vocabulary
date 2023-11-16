@@ -1,5 +1,5 @@
 <template>
-    <div class="select-theme" :class="this.$theme" ref="selectMod">
+    <div class="select-theme" :class="$theme" ref="selectMod">
         <a-tree-select
           :getPopupContainer="()=>this.$refs.selectMod"
           v-bind="$attrs"

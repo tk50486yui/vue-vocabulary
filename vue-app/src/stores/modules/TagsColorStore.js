@@ -32,14 +32,17 @@ const actions = {
 
   async add ({ commit, dispatch }, data) {
     await TagsColorRepo.add(data)
+    await dispatch('fetch')
   },
 
-  async update ({ commit }, { id, data }) {
+  async update ({ commit, dispatch }, { id, data }) {
     await TagsColorRepo.update(id, data)
+    await dispatch('fetch')
   },
 
-  async deleteById ({ commit }, id) {
+  async deleteById ({ commit, dispatch }, id) {
     await TagsColorRepo.deleteById(id)
+    await dispatch('fetch')
   }
 
 }

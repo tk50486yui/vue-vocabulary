@@ -65,17 +65,15 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { PlusBtn } from '@/components/button'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
-import { CheckOutlined } from '@ant-design/icons-vue'
-import PlusBtn from '@/components/button/PlusBtn.vue'
 import TagsModalView from '@/views/tag/TagsModalView.vue'
 
 export default {
   name: 'TagsMenuView',
   components: {
-    TreeTagsMenu,
-    CheckOutlined,
     PlusBtn,
+    TreeTagsMenu,
     TagsModalView
   },
   computed: {

@@ -4,7 +4,6 @@
     <div class="section-title">
       <h4>文章總覽</h4>
     </div>
-    <a-spin :indicator="indicator" :spinning="spinning">
       <div class="tab-theme" :class="$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
           <!-- tab 1 -->
@@ -116,7 +115,7 @@
                     <a-list-item-meta>
                       <!-- 頭像 -->
                       <template #avatar>
-                        <a-avatar :src="require('@/assets/img/avatar.png')" />
+                        <a-avatar :src="avatar" />
                       </template>
                       <!-- 標題 -->
                       <template #title>
@@ -206,18 +205,17 @@
           </a-tab-pane>
         </a-tabs>
       </div>
-    </a-spin>
   </template>
 </template>
 
 <script>
+import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { ref, reactive, h } from 'vue'
-import { LoadingOutlined } from '@ant-design/icons-vue'
+import { CloseBtn } from '@/components/button'
 import ArticlesAddView from '@/views/article/ArticlesAddView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import OperatorRadio from '@/components/radio/OperatorRadio.vue'
-import { CloseBtn } from '@/components/button'
+import avatar from '@/assets/img/avatar.png'
 
 export default {
   name: 'ArticlesView',
@@ -243,14 +241,6 @@ export default {
     ...mapActions('ArticlesStore', ['fetch']),
     ...mapActions('Search', ['updateKeyword', 'updateFilters', 'updateSearchClass']),
     ...mapActions('Views', ['updateArticlesView']),
-    // actions
-    async refreshArticles () {
-      try {
-        this.spinning = true
-        await new Promise(resolve => setTimeout(resolve, 400))
-        this.spinning = false
-      } catch (error) {}
-    },
     // articles tiltle
     splitTitle (title, keyword) {
       const regex = new RegExp(`(${keyword})`, 'i')
@@ -315,19 +305,11 @@ export default {
           }
         })
       }
-    },
-    $keyword (newVal) {
-      if (newVal) {
-        this.$nextTick(() => {
-          this.refreshArticles()
-        })
-      }
     }
   },
   setup () {
     const Ready = ref(false)
     const AfterReady = ref(false)
-    const spinning = ref(false)
     const activeTab = ref('1')
     const tabPosition = ref('top')
     const selectPageSize = ref('3')
@@ -342,13 +324,6 @@ export default {
       expand: false
     }])
 
-    const indicator = h(LoadingOutlined, {
-      style: {
-        fontSize: '48px'
-      },
-      spin: false
-    })
-
     const pagination = reactive({
       onChange: page => {
         currentPage.value = page
@@ -361,8 +336,7 @@ export default {
     return {
       Ready,
       AfterReady,
-      spinning,
-      indicator,
+      avatar,
       tabPosition,
       activeTab,
       selectPageSize,

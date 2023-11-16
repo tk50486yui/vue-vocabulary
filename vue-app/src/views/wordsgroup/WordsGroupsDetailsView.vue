@@ -1,5 +1,5 @@
 <template>
-    <template v-if="Ready">
+    <template v-if="Ready && this.wordsGroup">
         <span class="back-link-theme" :class="$theme">
           <router-link :to="{ name: 'wordsGroups' }"> 返回 </router-link>
           <span class="link-separator h5">
@@ -50,13 +50,11 @@
 import { ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined } from '@ant-design/icons-vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
+import { DeleteBtn } from '@/components/button'
 
 export default {
   name: 'WordsGroupsDetailsView',
   components: {
-    EditOutlined,
     DeleteBtn
   },
   computed: {
@@ -64,7 +62,7 @@ export default {
       return this.$route.params.id
     },
     wordsGroup () {
-      return this.wordsGroupsById(this.wgId)
+      return this.wordsGroupsById(this.wgId) || null
     },
     editShow () {
       return this.$WordsGroupsDetailsView.updateNow
@@ -75,15 +73,13 @@ export default {
   },
   methods: {
     ...mapActions('WordsGroupsStore', ['fetch', 'deleteById']),
-    ...mapActions('WordsGroupsStore', []),
     ...mapActions('Views', ['updateWordsGroupsView', 'updateWordsGroupsDetailsView']),
     async onDelete (id) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
-        await this.fetch()
-        this.$router.push({ name: 'wordsGroupsList' })
+        this.$router.push({ name: 'wordsGroups' })
       } catch (error) {}
     },
     onEdit () {

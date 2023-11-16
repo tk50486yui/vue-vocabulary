@@ -74,18 +74,26 @@ const actions = {
 
   async add ({ commit, dispatch }, data) {
     await CategoriesRepo.add(data)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   },
 
-  async update ({ commit }, { id, data }) {
+  async update ({ commit, dispatch }, { id, data }) {
     await CategoriesRepo.update(id, data)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   },
 
-  async updateOrder ({ commit }, data) {
+  async updateOrder ({ commit, dispatch }, data) {
     await CategoriesRepo.updateOrder(data)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   },
 
-  async deleteById ({ commit }, id) {
+  async deleteById ({ commit, dispatch }, id) {
     await CategoriesRepo.deleteById(id)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   }
 
 }

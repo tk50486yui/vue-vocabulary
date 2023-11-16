@@ -97,14 +97,17 @@ const actions = {
 
   async add ({ commit, dispatch }, data) {
     await ArticlesRepo.add(data)
+    await dispatch('fetch')
   },
 
   async update ({ commit, dispatch }, { id, data }) {
     await ArticlesRepo.update(id, data)
+    await dispatch('fetch')
   },
 
-  async deleteById ({ commit }, id) {
+  async deleteById ({ commit, dispatch }, id) {
     await ArticlesRepo.deleteById(id)
+    await dispatch('fetch')
   }
 }
 

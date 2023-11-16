@@ -24,20 +24,15 @@
 
 <script>
 import { mapActions } from 'vuex'
-import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
+
 export default {
   name: 'TreeCategoriesMenu',
   props: {
     data: Object,
     parentId: String
   },
-  components: {
-    TreeCategoriesMenu
-  },
   methods: {
-    ...mapActions('Search', ['updateKeyword']),
-    ...mapActions('Search', ['updateFilters']),
-    ...mapActions('Search', ['updateSearchClass']),
+    ...mapActions('Search', ['updateKeyword', 'updateFilters', 'updateSearchClass']),
     async handleCategoryFilter (cateName) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
@@ -47,8 +42,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.card-router-link {
-  display: inline !important;
-}
-</style>

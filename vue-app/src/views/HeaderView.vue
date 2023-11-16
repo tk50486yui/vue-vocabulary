@@ -6,7 +6,7 @@
                     <div class="col-xl-3 col-lg-2">
                         <div class="header__logo">
                             <router-link :to="{ name: 'home' }">
-                                <img :src="require('@/assets/logo.png')" />
+                                <img :src="logo" />
                             </router-link>
                         </div>
                     </div>
@@ -87,13 +87,12 @@
 <script>
 import { ref } from 'vue'
 import { mapState, mapActions } from 'vuex'
-import { CaretDownOutlined } from '@ant-design/icons-vue'
 import NavDrawerView from '@/views/NavDrawerView.vue'
+import logo from '@/assets/logo.png'
 
 export default {
   name: 'HeaderView',
   components: {
-    CaretDownOutlined,
     NavDrawerView
   },
   computed: {
@@ -123,6 +122,7 @@ export default {
           this.activeIndex = 3
           break
         case 'wordsGroups':
+        case 'wordsGroupsDetails':
           this.activeIndex = 4
           break
         default:
@@ -145,7 +145,8 @@ export default {
 
     return {
       activeIndex,
-      drawerVisible
+      drawerVisible,
+      logo
     }
   }
 }

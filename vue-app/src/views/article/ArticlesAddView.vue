@@ -1,23 +1,24 @@
 <template>
-     <a-form
-        ref="formRef"
-        :model="formState"
-        :validate-messages="validateMsg"
-        name="articlesform"
-        @finish="onFinish">
-        <a-form-item class="input-theme" :class="$theme" :name="['article', 'arti_title']" :rules="[{ required: true }]">
-            <a-input  v-model:value="formState.article.arti_title"  placeholder="輸入標題" allow-clear />
-        </a-form-item>
-        <p></p>
-        <a-form-item :name="['article', 'arti_content']">
-            <div class="article-editor" :class="$theme">
-            <ckeditor v-model="formState.article.arti_content" :editor="editor" :config="articleEditor.Config" />
-            </div>
-        </a-form-item>
-        <p></p>
-        <a-form-item>
-            <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
-        </a-form-item>
+    <a-form
+      ref="formRef"
+      :model="formState"
+      :validate-messages="validateMsg"
+      name="articlesform"
+      @finish="onFinish"
+    >
+      <a-form-item class="input-theme" :class="$theme" :name="['article', 'arti_title']" :rules="[{ required: true }]">
+          <a-input  v-model:value="formState.article.arti_title"  placeholder="輸入標題" allow-clear />
+      </a-form-item>
+      <p></p>
+      <a-form-item :name="['article', 'arti_content']">
+          <div class="article-editor" :class="$theme">
+          <ckeditor v-model="formState.article.arti_content" :editor="editor" :config="articleEditor.Config" />
+          </div>
+      </a-form-item>
+      <p></p>
+      <a-form-item>
+          <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
+      </a-form-item>
     </a-form>
 </template>
 
@@ -33,13 +34,12 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('ArticlesStore', ['fetch', 'add']),
+    ...mapActions('ArticlesStore', ['add']),
     async onFinish (values) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.add(values.article)
-        await this.fetch()
         this.formRef.resetFields()
         window.scrollTo({ top: 100, behavior: 'smooth' })
       } catch (error) {}

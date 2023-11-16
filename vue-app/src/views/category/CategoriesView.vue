@@ -5,10 +5,11 @@
       </div>
       <div class="tab-theme" :class="$theme">
         <a-tabs v-model:activeKey="activeTab" type="card" tab-position="top">
-          <!-- tab 1 -->
-          <a-tab-pane key="1" tab="全部">
+          <!-- tab 0 -->
+          <a-tab-pane key="0" tab="全部">
             <div class="table-theme" :class="$theme">
-              <a-table :dataSource="this.categoriesArray"
+              <a-table
+                :dataSource="this.categoriesArray"
                 :columns="columns"
                 :scroll="{ y: 600, x: 400 }"
                 :loading="TableLoading[0]"
@@ -22,24 +23,22 @@
                 <template #bodyCell="{ column, text, record }">
                   <!-- cate_name -->
                   <template v-if="['cate_name'].includes(column.dataIndex)">
-                    <template v-if="editTableData[record.id]">
+                    <template v-if="editTableData[0][record.id]">
                         <div class="button-edit-container">
-                          <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)"/>
-                          <CloseOutlined class="button-edit-close" @click="cancel(record, 1)"/>
-                          <a-input v-model:value="editTableData[record.id][column.dataIndex]"
+                          <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 0)"/>
+                          <CloseOutlined class="button-edit-close" @click="cancel(record, 0)"/>
+                          <a-input v-model:value="editTableData[0][record.id][column.dataIndex]"
                           style="margin: -5px 0"/>
                         </div>
                     </template>
                     <template v-else>
                         <div class="column-container">
-                          <template v-if="column.dataIndex === 'cate_name' && record.children.length > 0">
-                            <EditOutlined class="button-edit" @click="edit(record, 1)" />
-                            {{ text }} （{{ record.children.length }}）
-                            <DeleteBtn @confirm="onDelete(record.id)"/>
-                          </template>
-                          <template v-else>
-                            <EditOutlined class="button-edit" @click="edit(record, 1)" />
+                          <template v-if="column.dataIndex === 'cate_name'">
+                            <EditOutlined class="button-edit" @click="edit(record, 0, recentCategoriesArray)" />
                             {{ text }}
+                            <template v-if="record.children.length > 0">
+                              （{{ record.children.length }}）
+                            </template>
                             <DeleteBtn @confirm="onDelete(record.id)"/>
                           </template>
                        </div>
@@ -48,12 +47,12 @@
                   <!-- cate_parent_id -->
                   <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                     <template v-if="column.dataIndex === 'cate_parent_id'">
-                      <template v-if="editTableData[record.id]">
+                      <template v-if="editTableData[0][record.id]">
                         <CategoriesTreeSelect size="small" placeholder="選擇父類別"
                           :dropdownMatchSelectWidth="false" style="width: 100%"
-                          v-model:value="editTableData[record.id]['cate_parent_id']"
-                          :defaultValue="editTableData[record.id]['cate_parent_id']"
-                          :treeDefaultExpandedKeys="[editTableData[record.id]['cate_parent_id']]"
+                          v-model:value="editTableData[0][record.id]['cate_parent_id']"
+                          :defaultValue="editTableData[0][record.id]['cate_parent_id']"
+                          :treeDefaultExpandedKeys="[editTableData[0][record.id]['cate_parent_id']]"
                         />
                       </template>
                       <template v-else>
@@ -65,10 +64,11 @@
               </a-table>
             </div>
           </a-tab-pane>
-          <!-- tab 2 -->
-          <a-tab-pane key="2" tab="近期">
+          <!-- tab 1 -->
+          <a-tab-pane key="1" tab="近期">
             <div class="table-theme" :class="$theme">
-              <a-table :dataSource="this.recentCategoriesArray"
+              <a-table
+                :dataSource="this.recentCategoriesArray"
                 :columns="columns"
                 :scroll="{ y: 600 }"
                 :loading="TableLoading[1]"
@@ -81,17 +81,17 @@
                 <template #bodyCell="{ column, text, record }">
                   <!-- cate_name -->
                   <template v-if="['cate_name'].includes(column.dataIndex)">
-                    <template v-if="editTableData2[record.id]">
+                    <template v-if="editTableData[1][record.id]">
                       <div class="button-edit-container">
-                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 2)"/>
-                        <CloseOutlined class="button-edit-close" @click="cancel(record, 2)"/>
-                        <a-input v-model:value="editTableData2[record.id][column.dataIndex]"
+                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)"/>
+                        <CloseOutlined class="button-edit-close" @click="cancel(record, 1)"/>
+                        <a-input v-model:value="editTableData[1][record.id][column.dataIndex]"
                           style="margin: -5px 0"/>
                       </div>
                     </template>
                     <template v-else>
                       <div class="column-container">
-                          <EditOutlined class="button-edit2" @click="edit(record, 2)" />
+                          <EditOutlined class="button-edit2" @click="edit(record, 1, recentCategoriesArray)" />
                           {{ text }}
                           <DeleteBtn @confirm="onDelete(record.id)"/>
                         </div>
@@ -100,12 +100,12 @@
                    <!-- cate_parent_id -->
                    <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                     <template v-if="column.dataIndex === 'cate_parent_id'">
-                      <template v-if="editTableData2[record.id]">
+                      <template v-if="editTableData[1][record.id]">
                         <CategoriesTreeSelect size="small" placeholder="選擇父類別"
                           :dropdownMatchSelectWidth="false" style="width: 100%"
-                          v-model:value="editTableData2[record.id]['cate_parent_id']"
-                          :defaultValue="editTableData2[record.id]['cate_parent_id']"
-                          :treeDefaultExpandedKeys="[editTableData2[record.id]['cate_parent_id']]"
+                          v-model:value="editTableData[1][record.id]['cate_parent_id']"
+                          :defaultValue="editTableData[1][record.id]['cate_parent_id']"
+                          :treeDefaultExpandedKeys="[editTableData[1][record.id]['cate_parent_id']]"
                         />
                       </template>
                       <template v-else>
@@ -117,12 +117,12 @@
               </a-table>
             </div>
           </a-tab-pane>
-          <!-- tab 3 -->
-          <a-tab-pane key="3">
+          <!-- tab 2 -->
+          <a-tab-pane key="2">
             <template #tab>
               <font-awesome-icon :icon="['fas', 'sort']" />
             </template>
-            <CategoriesDragView />
+            <CategoriesSortView />
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -135,46 +135,40 @@
 import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { PlusBtn, RefreshBtn, DeleteBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
-import CategoriesDragView from '@/views/category/CategoriesDragView.vue'
 import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
+import CategoriesSortView from '@/views/category/CategoriesSortView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
   name: 'CategoriesView',
   components: {
-    EditOutlined,
-    CheckOutlined,
-    CloseOutlined,
     PlusBtn,
     DeleteBtn,
     RefreshBtn,
-    CategoriesDragView,
     CategoriesModalView,
+    CategoriesSortView,
     CategoriesTreeSelect
   },
   computed: {
-    ...mapGetters('CategoriesStore', ['categoriesArray', 'recentCategoriesArray', 'categoriesEditArray']),
+    ...mapGetters('CategoriesStore', ['categoriesArray', 'recentCategoriesArray']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('CategoriesStore', ['fetch', 'fetchRecent', 'update', 'deleteById']),
-    async refreshTable (index) {
+    async refreshTable (tab) {
       try {
-        this.SyncOutlinedSpin[index] = true
-        this.TableLoading[index] = true
+        this.SyncOutlinedSpin[tab] = true
+        this.TableLoading[tab] = true
         await new Promise(resolve => setTimeout(resolve, 100))
-        if (index === 0) {
+        if (tab === 0) {
           await this.fetch()
-          this.editDataSource = this.recentCategoriesArray
-        } else if (index === 1) {
+        } else if (tab === 1) {
           await this.fetchRecent()
-          this.editDataSource = this.recentCategoriesArray
         }
-        this.SyncOutlinedSpin[index] = false
-        this.TableLoading[index] = false
+        this.SyncOutlinedSpin[tab] = false
+        this.TableLoading[tab] = false
       } catch (error) {}
     },
     async onEditFinish (record, tab) {
@@ -183,9 +177,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
-        await this.fetch()
-        await this.fetchRecent()
-        this.editDataSource = this.recentCategoriesArray
         this.cancel(record, tab)
       } catch (error) {}
     },
@@ -194,8 +185,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
-        await this.fetch()
-        await this.fetchRecent()
       } catch (error) {}
     }
   },
@@ -203,7 +192,6 @@ export default {
     try {
       await this.fetch()
       await this.fetchRecent()
-      this.editDataSource = this.recentCategoriesArray
       this.Ready = true
     } catch (error) {}
   },
@@ -212,44 +200,33 @@ export default {
     const TableLoading = ref([false, false])
     const SyncOutlinedSpin = ref([false, false])
     const visible = ref(false)
-    const activeTab = ref('1')
-    const editDataSource = ref()
-    const editTableData = reactive({})
-    const editTableData2 = reactive({})
+    const activeTab = ref('0')
+    const editTableData = reactive({
+      0: {},
+      1: {}
+    })
 
-    const edit = (record, tab) => {
-      if (tab === 1) {
-        editTableData[record.id] = cloneDeep(editDataSource.value.filter(item => record.id === item.id)[0])
-      } else {
-        editTableData2[record.id] = cloneDeep(editDataSource.value.filter(item => record.id === item.id)[0])
-      }
+    const edit = (record, tab, editDataSource) => {
+      editTableData[tab][record.id] = cloneDeep(editDataSource.filter(item => record.id === item.id)[0])
     }
 
     const save = async (record, tab) => {
-      if (tab === 1) {
-        return editTableData[record.id]
-      } else {
-        return editTableData2[record.id]
-      }
+      return editTableData[tab][record.id]
     }
 
     const cancel = (record, tab) => {
-      if (tab === 1) {
-        delete editTableData[record.id]
-      } else {
-        delete editTableData2[record.id]
-      }
+      delete editTableData[tab][record.id]
     }
 
     const columns = [
       {
         dataIndex: 'operation',
-        width: '10%',
+        width: '7%',
         fixed: true
       },
       {
         dataIndex: 'cate_name',
-        width: '60%'
+        width: '63%'
       },
       {
         dataIndex: 'cate_parent_id',
@@ -264,9 +241,7 @@ export default {
       columns,
       visible,
       activeTab,
-      editDataSource,
       editTableData,
-      editTableData2,
       edit,
       save,
       cancel

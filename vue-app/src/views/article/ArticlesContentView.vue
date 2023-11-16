@@ -1,5 +1,5 @@
 <template>
-    <template v-if="Ready">
+    <template v-if="Ready && this.article">
         <a-back-top />
         <span class="back-link-theme" :class="$theme">
           <router-link :to="{ name: 'articles' }" @click="setGridState()">
@@ -44,7 +44,7 @@
               <div class="article-content">
                 <template v-if="editShow">
                   <div class="article-editor" :class="this.$theme">
-                    <ckeditor v-model="formState.article.arti_content" :editor="editor" :config="articleEditor.Config" />
+                    <ckeditor v-model="arti_content" :editor="editor" :config="articleEditor.Config" />
                   </div>
                 </template>
                 <template v-else>
@@ -131,7 +131,6 @@
 import { ref, reactive, onMounted } from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined } from '@ant-design/icons-vue'
 import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
@@ -140,7 +139,6 @@ import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 export default {
   name: 'ArticlesContentView',
   components: {
-    EditOutlined,
     DeleteBtn,
     CategoriesTreeSelect,
     TagsTreeSelect
@@ -150,7 +148,15 @@ export default {
       return this.$route.params.id
     },
     article () {
-      return this.articleById(this.articleId)
+      return this.articleById(this.articleId) || null
+    },
+    arti_content: {
+      get () {
+        return this.article.arti_content || ''
+      },
+      set (value) {
+        this.formState.article.arti_content = value
+      }
     },
     ...mapGetters('ArticlesStore', ['articleById']),
     ...mapState('Theme', ['$theme']),
@@ -164,7 +170,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.update({ id: this.formState.article.id, data: this.formState.article })
-        await this.fetch()
         this.onEditCancel()
       } catch (error) {}
     },
@@ -173,7 +178,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
-        await this.fetch()
         this.$router.push({ name: 'articles' })
       } catch (error) {}
     },

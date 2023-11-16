@@ -137,22 +137,27 @@ const actions = {
 
   async add ({ commit, dispatch }, data) {
     await WordsRepo.add(data)
+    await dispatch('fetch')
   },
 
   async update ({ commit, dispatch }, { id, data }) {
     await WordsRepo.update(id, data)
+    await dispatch('fetch')
   },
 
   async updateCommon ({ commit, dispatch }, { id, data }) {
     await WordsRepo.updateCommon(id, data)
+    await dispatch('fetch')
   },
 
   async  updateImportant ({ commit, dispatch }, { id, data }) {
     await WordsRepo.updateImportant(id, data)
+    await dispatch('fetch')
   },
 
-  async deleteById ({ commit }, id) {
+  async deleteById ({ commit, dispatch }, id) {
     await WordsRepo.deleteById(id)
+    await dispatch('fetch')
   }
 
 }

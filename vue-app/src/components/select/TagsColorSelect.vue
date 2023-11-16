@@ -23,7 +23,6 @@
     </div>
 </template>
 <script>
-import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
@@ -39,28 +38,6 @@ export default {
   },
   async created () {
     await this.fetch()
-  },
-  setup () {
-    const searchValue = ref('')
-    const treeLine = ref(true)
-    const showLeafIcon = ref(false)
-    const options = ref(
-      [
-        {
-          id: 'jack2',
-          tc_color: 'Jack'
-        },
-        {
-          id: 'lucy2',
-          tc_color: 'Lucy'
-        }]
-    )
-    return {
-      options,
-      searchValue,
-      treeLine,
-      showLeafIcon
-    }
   }
 }
 </script>

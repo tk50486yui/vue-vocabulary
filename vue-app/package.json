@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^38.1.0",
@@ -16,32 +16,26 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
+    "@vitejs/plugin-vue": "^4.5.0",
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
-    "ckeditor5-custom-build": "file:../custom/ckeditor5-custom-38.1.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.4.2",
+    "vite": "^5.0.0",
     "vue": "^3.2.47",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "^5.0.6",
-    "@vue/cli-service": "~5.0.0",
     "@vue/eslint-config-standard": "^6.1.0",
-    "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.7.1",
     "sass": "^1.62.1",
-    "sass-loader": "^13.3.0"
+    "unplugin-vue-components": "^0.25.2"
   },
   "eslintConfig": {
     "root": true,
@@ -52,10 +46,6 @@
       "plugin:vue/vue3-essential",
       "@vue/standard"
     ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser",
-      "requireConfigFile": false
-    },
     "rules": {}
   },
   "browserslist": [

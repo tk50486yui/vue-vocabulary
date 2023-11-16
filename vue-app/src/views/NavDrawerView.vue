@@ -31,12 +31,9 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { CaretDownOutlined } from '@ant-design/icons-vue'
 export default {
   name: 'NavDrawerView',
-  components: {
-    CaretDownOutlined
-  },
+
   computed: {
     ...mapState('Theme', ['$theme'])
   }

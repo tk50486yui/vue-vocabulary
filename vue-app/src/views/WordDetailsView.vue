@@ -1,5 +1,5 @@
 <template>
-  <template v-if="Ready">
+  <template v-if="Ready && word">
       <a-back-top />
       <span class="back-link-theme" :class="$theme">
         <router-link :to="{ name: 'wordsGrid' }" @click="setGridState()">
@@ -133,7 +133,7 @@
             <a-descriptions-item label="例句說明">
               <template v-if="editShow">
                 <div class="article-editor" :class="$theme">
-                  <ckeditor v-model="formState.word.ws_description" :editor="editor" :config="wordEditor.Config" />
+                  <ckeditor v-model="ws_description" :editor="editor" :config="wordEditor.Config" />
                 </div>
               </template>
               <template v-else>
@@ -196,18 +196,14 @@
 import { ref, reactive, onMounted } from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
+import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import DeleteBtn from '@/components/button/DeleteBtn.vue'
 
 export default {
   name: 'WordDetailsView',
   components: {
-    EditOutlined,
-    StarFilled,
-    HeartFilled,
     DeleteBtn,
     CategoriesTreeSelect,
     TagsTreeSelect
@@ -217,36 +213,35 @@ export default {
       return this.$route.params.id
     },
     word () {
-      return this.wordById(this.wordId)
+      return this.wordById(this.wordId) || null
+    },
+    ws_description: {
+      get () {
+        return this.formState.word.ws_description || ''
+      },
+      set (value) {
+        this.formState.word.ws_description = value
+      }
     },
     ...mapGetters('WordsStore', ['wordById']),
     ...mapState('Views', ['$WordsGrid']),
     ...mapState('Theme', ['$theme']),
     ...mapState('Screen', ['$tablet', '$mobile'])
   },
-  watch: {
-    $mobile: function (val) {
-      this.changeDescriptionsLayout(val)
-    },
-    $tablet: function (val) {
-      this.changeDescriptionsLayout(val)
-    }
-  },
   methods: {
     ...mapActions('WordsStore', ['fetch', 'update', 'updateCommon', 'updateImportant', 'deleteById']),
     ...mapActions('Views', ['updateWordsGrid']),
-    onEdit () {
-      this.editShow = !this.editShow
-      this.formState.word = Object.assign({}, this.formState.word, this.word)
-    },
     async onEditFinish () {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.update({ id: this.formState.word.id, data: this.formState.word })
-        await this.fetch()
         this.onEditCancel()
       } catch (error) {}
+    },
+    onEdit () {
+      this.editShow = !this.editShow
+      this.formState.word = Object.assign({}, this.formState.word, this.word)
     },
     onEditCancel () {
       if (this.editShow) {
@@ -262,14 +257,12 @@ export default {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-        await this.fetch()
       } catch (error) {}
     },
     async onUpdateImportant (id, data) {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-        await this.fetch()
       } catch (error) {}
     },
     async onDelete (id) {
@@ -277,7 +270,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
-        await this.fetch()
         this.$router.push({ name: 'wordsGrid' })
       } catch (error) {}
     },
@@ -306,6 +298,14 @@ export default {
       this.Ready = true
     } catch (error) {}
   },
+  watch: {
+    $mobile (val) {
+      this.changeDescriptionsLayout(val)
+    },
+    $tablet (val) {
+      this.changeDescriptionsLayout(val)
+    }
+  },
   setup () {
     const Ready = ref(false)
     const descriptionsLayout = ref('horizontal')
@@ -324,8 +324,7 @@ export default {
     const wordEditor = reactive({
       Config: {
         autoGrow: true,
-        placeholder: '請為單字添加說明或解釋...',
-        toolbar: ['bold', 'italic', '|', 'link', 'MediaEmbed']
+        placeholder: '請為單字添加註釋或說明...'
       }
     })
 

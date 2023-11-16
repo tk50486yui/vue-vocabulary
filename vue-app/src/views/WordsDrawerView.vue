@@ -39,13 +39,13 @@ export default {
     }
   },
   watch: {
-    '$desktop' (val) {
+    $desktop (val) {
       this.setDrawerStyle()
     },
-    '$tablet' (val) {
+    $tablet (val) {
       this.setDrawerStyle()
     },
-    '$mobile' (val) {
+    $mobile (val) {
       this.setDrawerStyle()
     }
   },

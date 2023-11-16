@@ -77,18 +77,26 @@ const actions = {
 
   async add ({ commit, dispatch }, data) {
     await TagsRepo.add(data)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   },
 
-  async update ({ commit }, { id, data }) {
+  async update ({ commit, dispatch }, { id, data }) {
     await TagsRepo.update(id, data)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   },
 
-  async updateOrder ({ commit }, data) {
+  async updateOrder ({ commit, dispatch }, data) {
     await TagsRepo.updateOrder(data)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   },
 
-  async deleteById ({ commit }, id) {
+  async deleteById ({ commit, dispatch }, id) {
     await TagsRepo.deleteById(id)
+    await dispatch('fetch')
+    await dispatch('fetchRecent')
   }
 
 }

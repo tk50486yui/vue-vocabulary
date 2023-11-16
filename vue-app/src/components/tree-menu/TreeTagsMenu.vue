@@ -34,24 +34,18 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
-import { CheckOutlined } from '@ant-design/icons-vue'
+
 export default {
   name: 'TreeTagsMenu',
   props: {
     data: Object,
     parentId: String
   },
-  components: {
-    TreeTagsMenu,
-    CheckOutlined
-  },
   computed: {
     ...mapState('Search', ['$filtersTags'])
   },
   methods: {
-    ...mapActions('Search', ['updateSearchClass']),
-    ...mapActions('Search', ['pushFiltersTags']),
+    ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
     async handleTagsFilter (id) {
       await this.pushFiltersTags(id)
       this.updateSearchClass('word')
@@ -63,7 +57,6 @@ export default {
 }
 </script>
 <style scoped>
-
 .dropdown-container{
   display: flex;
   align-items: center;

@@ -59,11 +59,11 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
 import { ref, reactive } from 'vue'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import { message } from 'ant-design-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import TagsColorSelect from '@/components/select/TagsColorSelect.vue'
-import { message } from 'ant-design-vue'
 
 export default {
   name: 'TagsAddView',
@@ -81,15 +81,13 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch', 'fetchRecent', 'add']),
+    ...mapActions('TagsStore', ['add']),
     async onFinish () {
       try {
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.add(this.formState.tag)
-        await this.fetch()
-        await this.fetchRecent()
         this.resetForm()
         this.confirmLoading = false
       } catch (error) {}

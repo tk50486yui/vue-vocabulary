@@ -338,7 +338,6 @@
 import { ref, reactive, toRefs } from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
-import { StarFilled, HeartFilled } from '@ant-design/icons-vue'
 import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
 import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
@@ -349,8 +348,6 @@ export default {
   components: {
     WordsDrawerView,
     TagsTreeSelect,
-    StarFilled,
-    HeartFilled,
     PlusBtn,
     DeleteBtn,
     CloseBtn,
@@ -388,14 +385,12 @@ export default {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-        await this.fetch()
       } catch (error) {}
     },
     async onUpdateImportant (id, data) {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-        await this.fetch()
       } catch (error) {}
     },
     async onDelete (id) {
@@ -403,7 +398,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
-        await this.fetch()
       } catch (error) {}
     },
     // ---- filter ----

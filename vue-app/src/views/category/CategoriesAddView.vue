@@ -19,7 +19,7 @@
               key: 'id'}"
         />
         <p></p>
-        <a-form-item class="input-theme" :class="this.$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
+        <a-form-item class="input-theme" :class="$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
           <a-input  v-model:value="formState.category.cate_name"  placeholder="類別名" :auto-size="{ minRows: 3}" allow-clear />
         </a-form-item>
         <a-form-item>
@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
-import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+import { mapActions, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
+import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
   name: 'CategoriesAddView',
@@ -44,20 +44,16 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('CategoriesStore', ['fetch', 'fetchRecent', 'add']),
+    ...mapActions('CategoriesStore', ['add']),
     async onFinish () {
       try {
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.addCategory(this.formState.category)
-        await this.fetch()
-        await this.fetchRecent()
+        await this.add(this.formState.category)
         this.resetForm()
         this.confirmLoading = false
-      } catch (error) {
-        this.confirmLoading = false
-      }
+      } catch (error) {}
     },
     handleTreeSelectChange (value) {
       this.formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null
@@ -70,7 +66,6 @@ export default {
   setup () {
     const confirmLoading = ref(false)
     const formRef = ref()
-
     const formState = reactive({
       category: {}
     })

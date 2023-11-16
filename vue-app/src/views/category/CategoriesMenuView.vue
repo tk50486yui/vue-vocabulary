@@ -50,15 +50,15 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import PlusBtn from '@/components/button/PlusBtn.vue'
+import { PlusBtn } from '@/components/button'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 
 export default {
   name: 'CategoriesMenuView',
   components: {
-    TreeCategoriesMenu,
     PlusBtn,
+    TreeCategoriesMenu,
     CategoriesModalView
   },
   computed: {

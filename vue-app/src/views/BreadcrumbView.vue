@@ -81,10 +81,8 @@ export default {
           this.activeRoute = '標籤列表'
           break
         case 'wordsGroups':
-          this.activeRoute = '群組列表'
-          break
         case 'wordsGroupsDetails':
-          this.activeRoute = '群組詳細說明'
+          this.activeRoute = '群組列表'
           break
         default:
           this.activeRoute = ''

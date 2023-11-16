@@ -1,7 +1,7 @@
 <template>
     <template v-if="ready">
       <a-spin :spinning="spinning">
-        <div class="draggable-tree-theme" :class="$theme">
+        <div class="draggable-tree-theme" :class="this.$theme">
           <a-tree
             draggable
             block-node
@@ -9,14 +9,14 @@
             @drop="onDrop"
             :field-names="{
                 children: 'children',
-                title: 'ts_name',
+                title: 'cate_name',
                 key: 'id'}"
           />
         </div>
       </a-spin>
       <p></p>
       <div>
-        <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onFinish(tagsForm)" :disabled="saveDisabled">儲存</a-button>
+        <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onFinish(categoriesForm)" :disabled="saveDisabled">儲存</a-button>
         <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px" @click="onReset()">還原</a-button>
       </div>
     </template>
@@ -26,24 +26,24 @@ import { ref, reactive } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 
-export default ({
-  name: 'TagsDragView',
+export default {
+  name: 'CategoriesSortView',
   computed: {
-    ...mapGetters('TagsStore', ['tags']),
+    ...mapGetters('CategoriesStore', ['categories']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {
-    ...mapActions('TagsStore', ['fetch', 'updateOrder']),
+    ...mapActions('CategoriesStore', ['fetch', 'updateOrder']),
     async onFinish (values) {
       try {
-        const tagsArray = Object.values(values).filter(item => item !== null && typeof item === 'object')
+        const categoriesArray = Object.values(values).filter(item => item !== null && typeof item === 'object')
         this.spinning = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
-        await this.updateOrder(tagsArray)
+        await this.updateOrder(categoriesArray)
         await this.fetch()
-        this.dropData = this.tags
-        this.tagsForm.splice(0, this.tagsForm.length)
+        this.dropData = this.categories
+        this.categoriesForm.splice(0, this.categoriesForm.length)
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {}
@@ -53,8 +53,8 @@ export default ({
         this.spinning = true
         await new Promise(resolve => setTimeout(resolve, 500))
         await this.fetch()
-        this.dropData = this.tags
-        this.tagsForm.splice(0, this.tagsForm.length)
+        this.dropData = this.categories
+        this.categoriesForm.splice(0, this.categoriesForm.length)
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {}
@@ -62,16 +62,16 @@ export default ({
   },
   async created () {
     await this.fetch()
-    this.dropData = this.tags
+    this.dropData = this.categories
     this.ready = true
   },
   setup () {
     const ready = ref(false)
     const dropData = ref([])
-    const tagsForm = reactive([])
+    const categoriesForm = reactive([])
     const saveDisabled = ref(true)
     const spinning = ref(false)
-    /* 只允許排序同個父節點 */
+    // 只允許排序同個父節點
     const onDrop = info => {
       const currentId = info.dragNode.id
       const currentParentId = info.dragNode.cate_parent_id
@@ -79,7 +79,6 @@ export default ({
       const targetParentId = info.node.cate_parent_id
       // dropToGap === true 為同一層的情況
       if ((currentParentId !== targetParentId) && (dropToGap === true)) {
-        console.log('parent of inconsistency')
         return
       }
       if (currentId) {
@@ -117,11 +116,11 @@ export default ({
         currentArray.splice(newNode, 0, element)
         currentArray = currentArray.map((item, index) => ({ ...item, index }))
         currentArray.forEach((item, index) => {
-          if (!tagsForm[item.id]) {
-            tagsForm[item.id] = {}
+          if (!categoriesForm[item.id]) {
+            categoriesForm[item.id] = {}
           }
-          tagsForm[item.id].id = item.id
-          tagsForm[item.id].ts_order = index
+          categoriesForm[item.id].id = item.id
+          categoriesForm[item.id].cate_order = index
           // console.log(`Index: ${index}, Data:`, item.cate_name, ' ' + item.id)
         })
         saveDisabled.value = false
@@ -132,13 +131,13 @@ export default ({
     return {
       ready,
       dropData,
-      tagsForm,
+      categoriesForm,
       saveDisabled,
       spinning,
       onDrop
     }
   }
-})
+}
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';

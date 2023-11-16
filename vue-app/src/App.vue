@@ -41,8 +41,8 @@ import { mapState, mapActions } from 'vuex'
 import HeaderView from '@/views/HeaderView.vue'
 import SearchView from '@/views/SearchView.vue'
 import BreadcrumbView from '@/views/BreadcrumbView.vue'
-import FooterView from '@/views/FooterView.vue'
 import SideMenuView from '@/views/SideMenuView.vue'
+import FooterView from '@/views/FooterView.vue'
 
 export default {
   name: 'App',

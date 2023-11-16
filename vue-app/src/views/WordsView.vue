@@ -89,7 +89,7 @@
                 </div>
               </template>
               <template v-else>
-                <EditOutlined class="button-edit" @click="edit(record)" />
+                <EditOutlined class="button-edit" @click="edit(record, wordsArray)" />
               </template>
             </div>
           </template>
@@ -131,23 +131,17 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
 import { ref, reactive } from 'vue'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
-import { EditOutlined, CheckOutlined, CloseOutlined, StarFilled, HeartFilled } from '@ant-design/icons-vue'
-import { cloneDeep } from 'lodash-es'
 import { PlusBtn, DeleteBtn, RefreshBtn } from '@/components/button'
+import { cloneDeep } from 'lodash-es'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 
 export default {
   name: 'WordsView',
   components: {
-    EditOutlined,
-    CheckOutlined,
-    CloseOutlined,
-    StarFilled,
-    HeartFilled,
     PlusBtn,
     DeleteBtn,
     RefreshBtn,
@@ -155,9 +149,6 @@ export default {
     CategoriesTreeSelect
   },
   computed: {
-    cateID () {
-      return this.$route.params.cateID
-    },
     ...mapGetters('WordsStore', ['wordsArray']),
     ...mapState('Theme', ['$theme'])
   },
@@ -171,7 +162,6 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.TableLoading = false
-        this.editDataSource = this.wordsArray
       } catch (error) {}
     },
     async onEditFinish (record) {
@@ -180,8 +170,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
-        await this.fetch()
-        this.editDataSource = this.wordsArray
         this.cancel(record)
       } catch (error) {}
     },
@@ -189,14 +177,12 @@ export default {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-        await this.fetch()
       } catch (error) {}
     },
     async onUpdateImportant (id, data) {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-        await this.fetch()
       } catch (error) {}
     },
     async onDelete (id) {
@@ -204,7 +190,6 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.deleteById(id)
-        await this.fetch()
       } catch (error) {}
     },
     handleCategoriesSelectChange (currentData) {
@@ -225,7 +210,6 @@ export default {
   async created () {
     try {
       await this.fetch()
-      this.editDataSource = this.wordsArray
       this.Ready = true
     } catch (error) {}
   },
@@ -233,7 +217,6 @@ export default {
     const Ready = ref(false)
     const TableLoading = ref(false)
     const SyncOutlinedSpin = ref(false)
-    const editDataSource = ref()
     const editTableData = reactive({})
     const drawerVisible = ref(false)
     const TablescrollY = ref(400)
@@ -244,8 +227,8 @@ export default {
       position: ['topLEFT', 'bottomLeft'],
       showSizeChanger: false
     })
-    const edit = record => {
-      editTableData[record.key] = cloneDeep(editDataSource.value.filter(item => record.key === item.key)[0])
+    const edit = (record, editDataSource) => {
+      editTableData[record.key] = cloneDeep(editDataSource.filter(item => record.key === item.key)[0])
     }
 
     const cancel = record => {
@@ -309,7 +292,6 @@ export default {
       selectTablescrollY,
       selectPageSize,
       pagination,
-      editDataSource,
       editTableData,
       edit,
       save,

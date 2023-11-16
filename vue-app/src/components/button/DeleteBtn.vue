@@ -9,12 +9,8 @@
 </template>
 
 <script>
-import { DeleteFilled } from '@ant-design/icons-vue'
 export default {
-  name: 'DeleteBtn',
-  components: {
-    DeleteFilled
-  }
+  name: 'DeleteBtn'
 }
 </script>
 <style lang="scss" scoped>

@@ -1,9 +1,9 @@
 <template>
     <template v-if="Ready">
-      <div class="section-title" :class="this.$theme">
+      <div class="section-title" :class="$theme">
         <h4>單字組別</h4>
       </div>
-      <div class="list-theme" :class="this.$theme">
+      <div class="list-theme" :class="$theme">
         <!-- list -->
         <a-list
           item-layout="horizontal"
@@ -32,7 +32,7 @@
       </div>
       <!-- save button -->
       <template v-if="this.wordsCount > 0 && updateNow === false">
-        <div class="input-theme" :class="this.$theme" style="padding-bottom: 12px;">
+        <div class="input-theme" :class="$theme" style="padding-bottom: 12px;">
           <a-input
             v-model:value="formState.wordsGroup.wg_name"
             placeholder="組別名稱"
@@ -69,13 +69,9 @@
 import { ref, reactive, onMounted } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
-import { DeleteOutlined } from '@ant-design/icons-vue'
 
 export default {
   name: 'WordsGroupsView',
-  components: {
-    DeleteOutlined
-  },
   computed: {
     updateNow () {
       return this.$WordsGroupsDetailsView.updateNow
@@ -96,9 +92,8 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.add(this.formState.wordsGroup)
-        await this.fetch()
         this.clearCheckbox()
-        this.$router.push({ name: 'wordsGroupsList' })
+        this.$router.push({ name: 'wordsGroups' })
       } catch (error) {}
     },
     async onEditSave () {
@@ -108,7 +103,6 @@ export default {
       message.loading({ content: 'Loading..', duration: 1 })
       await new Promise(resolve => setTimeout(resolve, 1000))
       await this.update({ id: editId, data: this.formState.wordsGroup })
-      await this.fetch()
       this.clearCheckbox()
       this.$router.push({ name: 'wordsGroupsDetails', params: { id: editId } })
     },
@@ -132,6 +126,11 @@ export default {
       if (val == null || val === '' || this.wordsCount === 0) {
         this.saveDisabled = true
       } else {
+        this.saveDisabled = false
+      }
+    },
+    wordsCount (val) {
+      if (val > 0 && this.formState.wordsGroup.wg_name) {
         this.saveDisabled = false
       }
     },
