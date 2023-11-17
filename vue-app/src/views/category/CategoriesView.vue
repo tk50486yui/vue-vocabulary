@@ -13,12 +13,12 @@
                 :columns="columns"
                 :scroll="{ y: 600, x: 400 }"
                 :loading="TableLoading[0]"
-                :indentSize="12"
+                expandRowByClick
               >
                 <!-- header -->
                 <template #title>
-                  <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible=true"/>
-                  <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
+                  <PlusBtn class="btn btn-primary btn-outline-light float-end me-md-2" @click="visible=true"/>
+                  <RefreshBtn class="btn btn-secondary btn-outline-light float-end me-md-2" :spin="SyncOutlinedSpin[0]"  @click="refreshTable(0)"/>
                 </template>
                 <template #bodyCell="{ column, text, record }">
                   <!-- cate_name -->
@@ -34,6 +34,9 @@
                     <template v-else>
                         <div class="column-container">
                           <template v-if="column.dataIndex === 'cate_name'">
+                            <template v-if="record.parents && record.parents > 0">
+                              <span style="margin-left: 8px;"></span>
+                            </template>
                             <EditOutlined class="button-edit" @click="edit(record, 0, recentCategoriesArray)" />
                             {{ text }}
                             <template v-if="record.children.length > 0">
@@ -128,7 +131,7 @@
       </div>
   </template>
   <!-- Modal-->
-  <CategoriesModalView v-model:visible="visible"/>
+  <CategoriesModalView v-model:open="visible"/>
 </template>
 
 <script>
@@ -222,15 +225,17 @@ export default {
       {
         dataIndex: 'operation',
         width: '7%',
-        fixed: true
+        colSpan: 0
       },
       {
         dataIndex: 'cate_name',
-        width: '63%'
+        width: '63%',
+        colSpan: 0
       },
       {
         dataIndex: 'cate_parent_id',
-        width: '30%'
+        width: '30%',
+        colSpan: 0
       }
     ]
 

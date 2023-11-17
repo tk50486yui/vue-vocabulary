@@ -65,9 +65,8 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Table
 -----------------------*/
-.table-theme {    
+.table-theme {     
   
-  /* table */
   &.dark :deep(.ant-table){
     background: var(--table-background);
     color: var(--table-text);    
@@ -76,7 +75,7 @@ $edit-icon-color: #6A6AFF;
     background: var(--table-background);
     color: var(--table-text);
   } 
-  /* cell */
+  // cell 
   &.dark :deep(.ant-table-cell){
     background: var(--table-background);
     color: var(--table-text);
@@ -84,9 +83,18 @@ $edit-icon-color: #6A6AFF;
   }
   &.light :deep(.ant-table-cell){
     background: var(--table-background);
-    color: var(--table-text);    
+    color: var(--table-text);
   }   
-  /* cell input */
+  // cell hover  
+  &.dark :deep(.ant-table-row:hover .ant-table-cell) {
+    background: var(--table-cell-hover);
+  }
+
+  &.light :deep(.ant-table-row:hover .ant-table-cell) {
+    background: var(--table-cell-hover);
+  } 
+
+  // cell input 
   &.dark :deep(.ant-table-cell .ant-input){
     background: var(--input-background);
     color: var(--head-text)
@@ -95,7 +103,7 @@ $edit-icon-color: #6A6AFF;
     background: var(--input-background);
     color: var(--head-text) 
   } 
-  /* scroll */
+  // scroll 
   &.dark{
     scrollbar-color: var(--table-scrollbar);
   } 
@@ -107,11 +115,32 @@ $edit-icon-color: #6A6AFF;
   &.dark :deep(.ant-table-row-expand-icon){
     background: var(--table-expand-icon);
   }  
-  /* pagination */
-  &.dark :deep(.ant-pagination-item-active){   
+  //  table pagination  
+  &.dark :deep(.ant-pagination-item){
     color:var(--pagination-text);
     background: var(--pagination-background);
-    border-color: var(--pagination-border);    
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text);
+    background: var(--pagination-background-hover);
+    border-color: var(--pagination-background-active);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
   
 }
@@ -129,6 +158,17 @@ $edit-icon-color: #6A6AFF;
     background: var(--input-background);
     color: var(--head-text)
   }
+
+  &.dark :deep(.ant-input::placeholder ){   
+    color: var(--placeholder-text)
+  }
+
+  &.light :deep(.ant-input::placeholder ){   
+    color: var(--placeholder-text)
+  }
+
+  
+   
 
   &.dark :deep(.ant-input-affix-wrapper){
     background: var(--input-background);
@@ -174,8 +214,6 @@ $edit-icon-color: #6A6AFF;
   
 }
 
-
-
 /*---------------------
     Select
 -----------------------*/
@@ -209,6 +247,16 @@ $edit-icon-color: #6A6AFF;
     color: var( --input-background);
     background: var(--head-text);  
   } 
+
+  // placeholder
+  &.dark :deep(.ant-select-selection-placeholder){
+    color: var(--placeholder-text);   
+  }
+
+  &.light :deep(.ant-select-selection-placeholder){
+    color: var(--placeholder-text);
+  } 
+  
 
   /** Dropdown 下拉樣式  Tree **/
   &.dark :deep(.ant-select-tree) {
@@ -250,6 +298,10 @@ $edit-icon-color: #6A6AFF;
   &.dark :deep(.ant-select-selection-overflow .ant-select-selection-item){
     background: var(--select-selected-item-background);  
   }
+  // 選中加入時的字體顏色
+  &.dark :deep(.ant-select-selection-item){
+    color:var(--head-text);
+  } 
   &.dark :deep(.anticon-close){ 
     color: var(--input-clear-icon)
   }
@@ -387,53 +439,6 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-    Header (唯一)
------------------------*/
-.header {
-  &.dark {
-    background: var(--head-background);
-    -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
-    box-shadow: 0px 5px 10px rgba(230, 9, 9, 0.1); 
-  }
-
-  &.light {
-    background: var(--head-background);
-    -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
-    box-shadow: 0px 5px 10px rgba(230, 9, 9, 0.1);
-  }  
-  
-
-  &.dark :deep(.header__right .header__right__widget li){
-    color: var(--head-text); 
-  }
-  &.light :deep(.header__right .header__right__widget li){ 
-    color: var(--head-text); 
-  }
-
-  &.dark :deep(.canvas__open){
-    color: var(--head-text); 
-  }
-  &.light :deep(.canvas__open){ 
-    color: var(--head-text); 
-  }
-
-  
-}
-
-/*---------------------
-    Navbar (唯一)
------------------------*/
-.nav-menu {
-  &.dark li a {
-    color: var(--head-text);    
-  }
-
-  &.light li a {
-    color: var(--head-text);   
-  }
-} 
-
-/*---------------------
     Drawer
 -----------------------*/
 .drawer-theme{  
@@ -517,48 +522,6 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-    Breadcrumb (唯一)
------------------------*/
-.breadcrumb-theme {
-  &.dark {
-    background: var(--body-background);    
-  }
-  &.light {
-    background: var(--body-background);    
-  }   
-}
-
-.breadcrumb-links{  
-  &.dark {
-    background: var(--body-background); 
-  }
-  &.light {
-    background: var(--body-background);
-  }  
-  
-  &.dark a {
-    color: var(--head-text); 
-  }
-  &.light a {
-    color: var(--head-text); 
-  }
-
-  &.dark span {
-    color: var(--breadcrumb-text); 
-  }
-  &.light span {
-    color: var(--breadcrumb-text); 
-  }
-
-  &.dark span.active{
-    color: var( --breadcrumb-text-active); 
-  } 
-  &.light span.active{
-    color: var( --breadcrumb-text-active); 
-  } 
-}
-
-/*---------------------
     Spad
 -----------------------*/
 .spad { 
@@ -574,7 +537,7 @@ $edit-icon-color: #6A6AFF;
     List Card
 -----------------------*/
 .list-card-theme { 
-  /* background  */
+  // background 
   &.dark :deep(.ant-card-head){
     background: var(--table-background);  
     color: var(--table-text);
@@ -585,12 +548,12 @@ $edit-icon-color: #6A6AFF;
     color: var(--table-text);
   }
 
-  /* card header */
+  // card header
   &.dark :deep(.ant-list-header){
     color: var(--table-text);
   } 
   
-  /* card title */
+  // card title 
   &.dark :deep(.ant-card-head-title a){    
     color: var(--card-link-text);
     text-decoration: none;   
@@ -599,7 +562,7 @@ $edit-icon-color: #6A6AFF;
     color: var(--card-link-text-hover);
   }
 
-  /* card body */
+  // card body 
   &.dark :deep(.ant-card-body a){    
     color: var(--link-text);
     text-decoration: none;   
@@ -609,11 +572,32 @@ $edit-icon-color: #6A6AFF;
     color: var(--link-text-hover);
   } 
 
-  /* card pagination */
-  &.dark :deep(.ant-pagination-item-active){   
+  // card pagination
+  &.dark :deep(.ant-pagination-item){
     color:var(--pagination-text);
     background: var(--pagination-background);
-    border-color: var(--pagination-border);    
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text);
+    background: var(--pagination-background-hover);
+    border-color: var(--pagination-background-active);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
 
   :deep(.ant-pagination) {      
@@ -621,7 +605,7 @@ $edit-icon-color: #6A6AFF;
   } 
 }
 
-/*    icon    */
+// icon
 .icon-theme{
   &.dark {
     @include icon-colors(dark);
@@ -675,12 +659,33 @@ $edit-icon-color: #6A6AFF;
     color: var(--article-date-text);   
   }
 
-  /* card pagination */
-  &.dark :deep(.ant-pagination-item-active){   
+  // card pagination 
+  &.dark :deep(.ant-pagination-item){
     color:var(--pagination-text);
     background: var(--pagination-background);
-    border-color: var(--pagination-border);    
-  }  
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text);
+    background: var(--pagination-background-hover);
+    border-color: var(--pagination-background-active);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
 }
 
 /*---------------------
@@ -699,7 +704,7 @@ $edit-icon-color: #6A6AFF;
     color: var(--table-text);
   }
   
-  /* a */
+  // a 
   &.dark :deep(a){    
     text-decoration: none;
   }
@@ -711,11 +716,32 @@ $edit-icon-color: #6A6AFF;
     color: var(--list-link-text-hover);
   }  
 
-  /* pagination */
-  &.dark :deep(.ant-pagination-item-active){   
+  // list pagination 
+  &.dark :deep(.ant-pagination-item){
     color:var(--pagination-text);
     background: var(--pagination-background);
-    border-color: var(--pagination-border);    
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text);
+    background: var(--pagination-background-hover);
+    border-color: var(--pagination-background-active);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
 }
 
@@ -803,7 +829,7 @@ $edit-icon-color: #6A6AFF;
 }
 
 /*---------------------
-    SideMenu
+    section-title
 -----------------------*/
 .section-title { 
   h4 {
@@ -910,43 +936,4 @@ $edit-icon-color: #6A6AFF;
     color : var(--menu-text-hover)
   }
 
-}
-
-/*---------------------
-    Footer (唯一)
------------------------*/
-.footer {   
-  margin-top: 360px;  
- 
-  &.dark {
-    background: var(--body-background); 
-  }
-  &.light {
-    background: var(--body-background);
-  } 
-}
-
-.footer__copyright__text {  
-  border-top: 1px solid #e1e1e1;
-  padding: 18px 0 25px;
-  text-align: center;  
-  
-  &.dark {
-    background: var(--body-background); 
-    color:var(--head-text);
-  }
-  &.light {
-    background: var(--body-background);
-    color:var(--head-text);
-  } 
- 
-}
-
-.footer__copyright__text{
-  &.dark a {   
-    color:var(--footer-a-text);
-  }
-  &.light a {       
-    color:var(--footer-a-text);
-  }  
 }

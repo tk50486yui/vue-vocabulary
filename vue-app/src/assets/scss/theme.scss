@@ -4,11 +4,13 @@
 .dark  {  
 
     --input-background: #131120;
+
     --select-background:#111111;
     --select-text:#51ee0d;
     --select-selected-text:rgb(22, 95, 56);
     --select-selected-item-background:rgb(207, 63, 125);
-    --input-clear-icon:rgb(243, 239, 239);
+    --placeholder-text:rgba(255, 255, 255, 0.46);
+    --input-clear-icon:rgb(243, 239, 239); 
     --input-validate:#d46958;
     
     --radio-button-text:#fff;
@@ -47,10 +49,14 @@
     --card-link-text-hover:#f2fec6; 
 
     --edit-icon:#54f88b;
-
-    --pagination-text:#e1fff0;
-    --pagination-background:#29b3e9;
+    
     --pagination-border:#fff;  
+    --pagination-background:rgba(255, 249, 249, 0.98);    
+    --pagination-text:#1a0303;
+    --pagination-background-hover:rgba(255, 249, 249, 0.98);
+    --pagination-link-disabled:rgba(255, 249, 249, 0.98);
+    --pagination-background-active:#29b3e9;
+    --pagination-text-active:#e1fff0;  
     
     --table-background:rgba(27, 29, 30, 1);
     --table-text:rgb(241, 243, 245);
@@ -58,6 +64,8 @@
     --table-expand-icon:#26140e;
     --table-scrollbar:#454a4d #202324;
     --table-scrollbar-shadow:0 1px 0 1px #202324;
+    --table-cell-hover:rgba(244, 30, 98, 0.155);
+       
     
     --collapse-head-background:#122929;
     --collapse-background:#081521;
@@ -106,6 +114,8 @@
     --select-background:#fffefe;
     --select-text:#111111;
 
+    --placeholder-text:rgba(255, 255, 255, 0.46);
+
     --head-background:#f9f5f5;
     --body-background:#f7f8fa;
 
@@ -123,6 +133,7 @@
 
     --table-background:rgb(250, 251, 251);
     --table-text:rgb(1, 6, 10);
+    --table-cell-hover:rgba(36, 17, 17, 0.152);
 
     --switch-background:rgb(251, 255, 0);
 

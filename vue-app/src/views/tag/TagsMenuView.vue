@@ -58,7 +58,7 @@
   </div>
   <p></p>
   <!-- Modal  -->
-  <TagsModalView v-model:visible="visible" />
+  <TagsModalView v-model:open="visible" />
 
 </template>
 

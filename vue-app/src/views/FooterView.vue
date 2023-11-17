@@ -36,4 +36,43 @@ export default {
 .footer__copyright__text a:hover {
     color: #ca1515;
 }
+/*---------------------
+    Footer Theme
+-----------------------*/
+.footer {
+  margin-top: 360px;
+
+  &.dark {
+    background: var(--body-background);
+  }
+  &.light {
+    background: var(--body-background);
+  }
+}
+
+.footer__copyright__text {
+  border-top: 1px solid #e1e1e1;
+  padding: 18px 0 25px;
+  text-align: center;
+
+  &.dark {
+    background: var(--body-background);
+    color:var(--head-text);
+  }
+  &.light {
+    background: var(--body-background);
+    color:var(--head-text);
+  }
+
+}
+
+.footer__copyright__text{
+  &.dark a {
+    color:var(--footer-a-text);
+  }
+  &.light a {
+    color:var(--footer-a-text);
+  }
+}
+
 </style>

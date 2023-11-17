@@ -32,7 +32,7 @@
                 :dataSource="this.tagsColorArray"
                 :columns="columns"
                 :scroll="{ y: 600 }"
-                :indentSize="20"
+                :showHeader="false"
             >
             <template #bodyCell="{ column, record }">
               <template v-if="['id', 'tc_color', 'tc_background', 'tc_border'].includes(column.dataIndex)">
@@ -122,9 +122,9 @@ export default {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise(resolve => setTimeout(resolve, 1000))
         await this.add(this.formState.tagColor)
-        this.selectedBackground = 'rgb(43, 17, 24)'
-        this.selectedColor = 'rgb(255, 214, 214)'
-        this.selectedBorder = 'rgb(215, 128, 150)'
+        this.selectedBackground = 'rgba(0, 0, 0, 1)'
+        this.selectedColor = 'rgba(248, 246, 246, 1)'
+        this.selectedBorder = 'rgba(245, 241, 241, 1)'
         this.confirmLoading = false
       } catch (error) {}
     },
@@ -176,9 +176,9 @@ export default {
     const Ready = ref(false)
     const editTableData = reactive({})
     const confirmLoading = ref(false)
-    const selectedBackground = ref('rgb(43, 17, 24)')
-    const selectedColor = ref('rgb(255, 214, 214)')
-    const selectedBorder = ref('rgb(215, 128, 150)')
+    const selectedBackground = ref('rgba(0, 0, 0, 1)')
+    const selectedColor = ref('rgba(248, 246, 246, 1)')
+    const selectedBorder = ref('rgba(245, 241, 241, 1)')
     const formState = reactive({
       tagColor: {}
     })
@@ -199,15 +199,17 @@ export default {
       {
         dataIndex: 'operation',
         width: '10%',
-        fixed: true
+        colSpan: 0
       },
       {
         dataIndex: 'id',
-        width: '10%'
+        width: '10%',
+        colSpan: 0
       },
       {
         dataIndex: 'tc_color',
-        width: '80%'
+        width: '80%',
+        colSpan: 0
       }
     ]
 

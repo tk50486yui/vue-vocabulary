@@ -1,6 +1,5 @@
 <template>
     <template v-if="Ready">
-      <a-back-top />
       <div class="section-title">
         <h4>新增單字</h4>
       </div>

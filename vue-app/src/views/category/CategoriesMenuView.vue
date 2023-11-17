@@ -45,7 +45,7 @@
   </div>
   <p></p>
   <!-- Modal  -->
-  <CategoriesModalView v-model:visible="visible"/>
+  <CategoriesModalView v-model:open="visible"/>
 </template>
 <script>
 import { ref } from 'vue'

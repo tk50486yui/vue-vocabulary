@@ -1,6 +1,5 @@
 <template>
   <template v-if="Ready">
-    <a-back-top />
     <div class="section-title">
       <h4>文章總覽</h4>
     </div>
@@ -178,7 +177,7 @@
                             </a-tag>
                           </template>
                           <template v-else>
-                            <a-tag color="default">
+                            <a-tag color="default" style="color:#fff">
                               {{ tag.ts_name }}
                             </a-tag>
                           </template>

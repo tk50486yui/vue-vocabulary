@@ -13,7 +13,7 @@
                 :columns="columns"
                 :scroll="{ y: 600, x: 400 }"
                 :loading="TableLoading[0]"
-                :indentSize="12"
+                expandRowByClick
               >
                 <!-- header -->
                 <template #title>
@@ -34,6 +34,9 @@
                     <template v-else>
                       <div class="column-container">
                         <template v-if="column.dataIndex === 'ts_name'">
+                          <template v-if="record.parents && record.parents > 0">
+                            <span style="margin-left: 8px;"></span>
+                          </template>
                           <EditOutlined class="button-edit" @click="edit(record, 0, recentTagsArray)" />
                           {{ text }}
                           <template v-if="record.children.length > 0">
@@ -68,7 +71,7 @@
                           </a-tag>
                         </template>
                         <template v-else>
-                          <a-tag color="default">
+                          <a-tag color="default" style="color:#fff">
                             {{ record.ts_name }}
                           </a-tag>
                         </template>
@@ -175,7 +178,7 @@
                           </a-tag>
                         </template>
                         <template v-else>
-                          <a-tag color="default">
+                          <a-tag color="default" style="color:#fff">
                             {{ record.ts_name }}
                           </a-tag>
                         </template>
@@ -241,7 +244,7 @@
       </div>
   </template>
   <!-- Modal -->
-  <TagsModalView v-model:visible="visible"/>
+  <TagsModalView v-model:open="visible"/>
 </template>
 
 <script>
@@ -352,23 +355,27 @@ export default {
       {
         dataIndex: 'operation',
         width: '7%',
-        fixed: true
+        colSpan: 0
       },
       {
         dataIndex: 'ts_name',
-        width: '28%'
+        width: '28%',
+        colSpan: 0
       },
       {
         dataIndex: 'tc_show',
-        width: '20%'
+        width: '20%',
+        colSpan: 0
       },
       {
         dataIndex: 'tc_color',
-        width: '20%'
+        width: '20%',
+        colSpan: 0
       },
       {
         dataIndex: 'ts_parent_id',
-        width: '25%'
+        width: '25%',
+        colSpan: 0
       }
     ]
 

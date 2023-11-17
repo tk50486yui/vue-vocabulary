@@ -24,14 +24,10 @@
                               @change="changeTheme"
                               >
                               <template #checkedChildren>
-                                <span class="d-flex align-items-center">
                                 <el-icon><el-Moon /></el-icon>
-                                </span>
                               </template>
                               <template #unCheckedChildren>
-                                <span class="d-flex align-items-center">
                                   <el-icon><el-Sunny /></el-icon>
-                                </span>
                               </template>
                             </a-switch>
                         </div>
@@ -167,6 +163,48 @@ export default {
     -webkit-transform: scale(0);
     -ms-transform: scale(0);
     transform: scale(0);
+}
+
+/*---------------------
+    Breadcrumb Theme
+-----------------------*/
+.breadcrumb-theme {
+  &.dark {
+    background: var(--body-background);
+  }
+  &.light {
+    background: var(--body-background);
+  }
+}
+
+.breadcrumb-links{
+  &.dark {
+    background: var(--body-background);
+  }
+  &.light {
+    background: var(--body-background);
+  }
+
+  &.dark a {
+    color: var(--head-text);
+  }
+  &.light a {
+    color: var(--head-text);
+  }
+
+  &.dark span {
+    color: var(--breadcrumb-text);
+  }
+  &.light span {
+    color: var(--breadcrumb-text);
+  }
+
+  &.dark span.active{
+    color: var( --breadcrumb-text-active);
+  }
+  &.light span.active{
+    color: var( --breadcrumb-text-active);
+  }
 }
 
 </style>

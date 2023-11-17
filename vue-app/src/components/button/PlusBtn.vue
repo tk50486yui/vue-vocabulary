@@ -1,7 +1,7 @@
 <template>
-    <button type="button" class="button-container">
+    <a-button size="small" class="button-container">
       <font-awesome-icon :icon="['fas', 'plus']" />
-    </button>
+    </a-button>
 </template>
 
 <script>

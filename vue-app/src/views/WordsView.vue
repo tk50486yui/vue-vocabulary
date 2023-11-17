@@ -125,7 +125,7 @@
   <!-- drawer words add -->
   <WordsDrawerView
       ref="wordsDrawer"
-      :visible="this.drawerVisible"
+      :open="this.drawerVisible"
       @close="this.drawerVisible = false"
   />
 </template>
@@ -242,8 +242,7 @@ export default {
     const columns = [
       {
         dataIndex: 'operation',
-        width: '8%',
-        fixed: true
+        width: '8%'
       },
       {
         title: '類別',

@@ -1,7 +1,7 @@
 <template>
-    <button type="button" class="button-container">
-        <SyncOutlined :spin="spin"/>
-    </button>
+    <a-button size="small" class="button-container">
+      <SyncOutlined :spin="spin"/>
+  </a-button>
 </template>
 
 <script>

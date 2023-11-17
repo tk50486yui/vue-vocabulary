@@ -405,4 +405,49 @@ export default {
     }
 
 }
+
+/*---------------------
+    Header Theme
+-----------------------*/
+.header {
+  &.dark {
+    background: var(--head-background);
+    -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
+    box-shadow: 0px 5px 10px rgba(230, 9, 9, 0.1);
+  }
+
+  &.light {
+    background: var(--head-background);
+    -webkit-box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
+    box-shadow: 0px 5px 10px rgba(230, 9, 9, 0.1);
+  }
+
+  &.dark :deep(.header__right .header__right__widget li){
+    color: var(--head-text);
+  }
+  &.light :deep(.header__right .header__right__widget li){
+    color: var(--head-text);
+  }
+
+  &.dark :deep(.canvas__open){
+    color: var(--head-text);
+  }
+  &.light :deep(.canvas__open){
+    color: var(--head-text);
+  }
+
+}
+
+/*---------------------
+    Navbar Theme
+-----------------------*/
+.nav-menu {
+  &.dark li a {
+    color: var(--head-text);
+  }
+
+  &.light li a {
+    color: var(--head-text);
+  }
+}
 </style>

@@ -1,6 +1,5 @@
 <template>
     <template v-if="Ready && this.article">
-        <a-back-top />
         <span class="back-link-theme" :class="$theme">
           <router-link :to="{ name: 'articles' }" @click="setGridState()">
             返回
@@ -101,7 +100,7 @@
                       </a-tag>
                     </template>
                     <template v-else>
-                      <a-tag class="tag-align" color="default">
+                      <a-tag class="tag-align" color="default" style="color:#fff">
                         {{ item.ts_name }}
                       </a-tag>
                     </template>

@@ -13,16 +13,20 @@
                   </a-radio-group>
               </div>
           </div>
-          <div class="col-lg-8 col-md-12 d-flex justify-content-start">
-              <div class="input-theme input-search" :class="$theme">
+          <div class="col-lg-8 col-md-12">
+            <div class="input-theme input-search" :class="$theme">
               <a-input-search
                   v-model:value="searchValue"
                   placeholder="搜尋"
                   @search="onSearch"
                   size="large"
                   allow-clear
-              />
-              </div>
+              >
+              <template #enterButton>
+                <a-button><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></a-button>
+              </template>
+            </a-input-search>
+            </div>
           </div>
       </div>
       <!-- 搜尋條件 checkbox -->

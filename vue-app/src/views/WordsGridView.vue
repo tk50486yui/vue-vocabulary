@@ -1,6 +1,5 @@
 <template>
     <template v-if="Ready">
-        <a-back-top />
         <div class="section-title">
           <h4>單字總覽</h4>
           <a class="float-end text-warning" @click="this.filterShow = !this.filterShow">
@@ -121,9 +120,11 @@
         <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-3" @click="onDrawerShow()"/>
         <!-- 主頁面 card -->
         <a-spin :spinning="ReadySpinning">
-          <div class="list-card-theme" :class="this.$theme" ref="listCard">
-            <a-list :data-source="this.filterWordsResult" :pagination="pagination"
-                :grid="{ gutter: 10, xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3, xxxl: 3 }"
+          <div class="list-card-theme" :class="$theme" ref="listCard">
+            <a-list
+                :data-source="this.filterWordsResult"
+                :pagination="pagination"
+                :grid="{ gutter: 0, xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3, xxxl: 3 }"
             >
               <!-- card header -->
               <template #header>
@@ -310,7 +311,7 @@
                             </a-tag>
                           </template>
                           <template v-else>
-                            <a-tag class="tag-align" color="default">
+                            <a-tag class="tag-align" color="default" style="color:#fff">
                               {{ subItem.ts_name }}
                             </a-tag>
                           </template>
@@ -328,7 +329,7 @@
     <!-- drawer words add -->
     <WordsDrawerView
       ref="wordsDrawer"
-      :visible="this.drawerVisible"
+      :open="this.drawerVisible"
       @close="this.drawerVisible = false"
     />
 

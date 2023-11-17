@@ -1,6 +1,5 @@
 <template>
     <template v-if="Ready">
-        <a-back-top />
         <div class="section-title">
           <h4>單字群組列表</h4>
         </div>
