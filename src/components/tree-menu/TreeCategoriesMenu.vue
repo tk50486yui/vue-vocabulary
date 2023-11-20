@@ -5,7 +5,7 @@
         <a-sub-menu :key="item.id" :title="item.cate_name">
           <template #title>
             <a @click="handleCategoryFilter(item.cate_name)">
-              {{ item.cate_name }}
+              {{ item.cate_name }}（{{ item.children.length }}）
             </a>
           </template>
           <TreeCategoriesMenu :data="item"></TreeCategoriesMenu>

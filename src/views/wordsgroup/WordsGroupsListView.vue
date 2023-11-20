@@ -4,62 +4,38 @@
       <h4>單字群組列表</h4>
     </div>
     <!-- 上層 -->
-    <div class="select-theme" :class="$theme">
+    <div class="select-theme" :class="$theme" ref="selectMod">
       每頁：
-      <a-select
-        ref="select"
-        v-model:value="selectPageSize"
-        size="small"
-        style="width: 80px"
-        @change="handlePageSize()"
-      >
+      <a-select v-model:value="selectPageSize" :getPopupContainer="() => $refs.selectMod" size="small" style="width: 80px"
+        @change="handlePageSize()">
         <a-select-option value="5">5 筆</a-select-option>
         <a-select-option value="10">10 筆</a-select-option>
         <a-select-option value="20">20 筆</a-select-option>
         <a-select-option value="50">50 筆</a-select-option>
         <a-select-option value="100">100 筆</a-select-option>
-        <a-select-option :value="this.wordsGroups.length">全部</a-select-option>
+        <a-select-option :value="wordsGroups.length">全部</a-select-option>
       </a-select>
       <span style="padding-left: 6px">當前：</span>
-      <a-select
-        ref="selectCurrent"
-        v-model:value="currentPage"
-        size="small"
-        style="width: 80px"
-        @change="handleCurrentPage()"
-      >
-        <template
-          v-for="index in Math.ceil(
-            this.wordsGroups.length / this.selectPageSize
-          )"
-          :key="index"
-        >
+      <a-select v-model:value="currentPage" :getPopupContainer="() => $refs.selectMod" size="small" style="width: 80px"
+        @change="handleCurrentPage()">
+        <template v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))" :key="index">
           <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
         </template>
       </a-select>
       <span style="padding-left: 6px">
-        共 {{ this.wordsGroups.length }} 筆
+        共 {{ wordsGroups.length }} 筆
       </span>
     </div>
     <p></p>
     <div class="list-theme" :class="$theme">
-      <a-list
-        item-layout="horizontal"
-        :data-source="this.wordsGroups"
-        :pagination="pagination"
-      >
+      <a-list item-layout="horizontal" :data-source="wordsGroups" :pagination="pagination">
         <template #renderItem="{ item, index }">
           <a-list-item>
             <a-list-item-meta>
               <template #description>
                 <span class="list-link">
                   {{ index + 1 }}.
-                  <router-link
-                    :to="{
-                      name: 'wordsGroupsDetails',
-                      params: { id: item.id }
-                    }"
-                  >
+                  <router-link :to="{ name: 'wordsGroupsDetails', params: { id: item.id } }">
                     {{ item.wg_name }}
                   </router-link>
                   ( {{ item.details.length }} )
@@ -70,7 +46,7 @@
         </template>
         <template #footer>
           <span class="span-text">
-            共 {{ this.wordsGroups.length }} 筆 單字
+            共 {{ wordsGroups.length }} 筆
           </span>
         </template>
       </a-list>
@@ -103,7 +79,7 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   setup() {
     const Ready = ref(false)
@@ -130,6 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 12px;
 }

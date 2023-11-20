@@ -2,33 +2,19 @@
   <template v-if="ready">
     <a-spin :spinning="spinning">
       <div class="draggable-tree-theme" :class="$theme">
-        <a-tree
-          draggable
-          block-node
-          :tree-data="dropData"
-          @drop="onDrop"
-          :field-names="{
-            children: 'children',
-            title: 'ts_name',
-            key: 'id'
-          }"
-        />
+        <a-tree draggable block-node :tree-data="dropData" @drop="onDrop" :field-names="{
+          children: 'children',
+          title: 'ts_name',
+          key: 'id'
+        }" />
       </div>
     </a-spin>
     <p></p>
     <div>
-      <a-button
-        class="btn btn-primary btn-outline-light btn-sm"
-        @click="onFinish(tagsForm)"
-        :disabled="saveDisabled"
-        >儲存</a-button
-      >
-      <a-button
-        class="btn btn-danger btn-outline-light btn-sm"
-        style="margin-left: 10px"
-        @click="onReset()"
-        >還原</a-button
-      >
+      <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onFinish(tagsForm)" :disabled="saveDisabled">
+        儲存
+      </a-button>
+      <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px" @click="onReset()">還原</a-button>
     </div>
   </template>
 </template>
@@ -52,13 +38,13 @@ export default {
         )
         this.spinning = true
         message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        await new Promise((resolve) => setTimeout(resolve, 800))
         await this.updateOrder(tagsArray)
         this.dropData = this.tags
         this.tagsForm.splice(0, this.tagsForm.length)
         this.spinning = false
         this.saveDisabled = true
-      } catch (error) {}
+      } catch (error) { }
     },
     async onReset() {
       try {
@@ -69,7 +55,7 @@ export default {
         this.tagsForm.splice(0, this.tagsForm.length)
         this.spinning = false
         this.saveDisabled = true
-      } catch (error) {}
+      } catch (error) { }
     }
   },
   async created() {

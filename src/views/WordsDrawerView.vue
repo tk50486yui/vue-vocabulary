@@ -1,12 +1,7 @@
 <template>
   <!-- drawer words add -->
   <div class="drawer-theme" ref="wordsDrawer" :class="$theme">
-    <a-drawer
-      :getContainer="() => $refs.wordsDrawer"
-      v-bind="$attrs"
-      placement="left"
-      :width="this.drawerWidth"
-    >
+    <a-drawer :getContainer="() => $refs.wordsDrawer" v-bind="$attrs" placement="left" :width="drawerWidth">
       <WordsAddView />
     </a-drawer>
   </div>
@@ -35,13 +30,13 @@ export default {
     setDrawerStyle() {
       this.drawerWidth =
         this.drawerWidthMap[
-          this.$desktop
-            ? 'desktop'
-            : this.$tablet
-              ? 'tablet'
-              : this.$mobile
-                ? 'mobile'
-                : 'desktop'
+        this.$desktop
+          ? 'desktop'
+          : this.$tablet
+            ? 'tablet'
+            : this.$mobile
+              ? 'mobile'
+              : 'desktop'
         ]
     }
   },

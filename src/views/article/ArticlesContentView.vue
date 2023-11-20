@@ -1,5 +1,5 @@
 <template>
-  <template v-if="Ready && this.article">
+  <template v-if="Ready && article">
     <span class="back-link-theme" :class="$theme">
       <router-link :to="{ name: 'articles' }" @click="setGridState()">
         返回
@@ -22,12 +22,8 @@
         <div class="article-title">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
-              <a-input
-                v-model:value="formState.article.arti_title"
-                size="large"
-                style="width: 450px; background-color: transparent"
-                :bordered="false"
-              />
+              <a-input v-model:value="formState.article.arti_title" size="large"
+                style="width: 450px; background-color: transparent" :bordered="false" />
             </div>
           </template>
           <template v-else>
@@ -42,12 +38,8 @@
         <!-- content -->
         <div class="article-content">
           <template v-if="editShow">
-            <div class="article-editor" :class="this.$theme">
-              <ckeditor
-                v-model="arti_content"
-                :editor="editor"
-                :config="articleEditor.Config"
-              />
+            <div class="article-editor" :class="$theme">
+              <ckeditor v-model="arti_content" :editor="editor" :config="articleEditor.Config" />
             </div>
           </template>
           <template v-else>
@@ -57,22 +49,13 @@
 
         <div class="article-category">
           <template v-if="editShow">
-            <CategoriesTreeSelect
-              size="large"
-              ref="CategoriesTreeSelect"
-              placeholder="選擇分類"
-              :dropdownMatchSelectWidth="false"
-              style="width: 100%"
-              v-model:value="formState.article.cate_id"
-              :defaultValue="article.cate_id"
-              :treeDefaultExpandedKeys="[article.cate_id]"
-              @change="handleCategoriesSelectChange"
-            />
+            <CategoriesTreeSelect size="large" ref="CategoriesTreeSelect" placeholder="選擇分類"
+              :dropdownMatchSelectWidth="false" style="width: 100%" v-model:value="formState.article.cate_id"
+              :defaultValue="article.cate_id" :treeDefaultExpandedKeys="[article.cate_id]"
+              @change="handleCategoriesSelectChange" />
           </template>
           <template v-else>
-            <template
-              v-if="article.cate_name != null && article.cate_name != ''"
-            >
+            <template v-if="article.cate_name != null && article.cate_name != ''">
               主題分類：<span class="span-category">{{
                 article.cate_name
               }}</span>
@@ -84,42 +67,26 @@
         </div>
         <div class="article-tag">
           <template v-if="editShow">
-            <TagsTreeSelect
-              size="large"
-              ref="TagsTreeSelect"
-              placeholder="添加標籤"
-              style="width: 100%"
+            <TagsTreeSelect size="large" ref="TagsTreeSelect" placeholder="添加標籤" style="width: 100%"
               v-model:value="formState.article.articles_tags.array"
-              :treeDefaultExpandedKeys="formState.article.articles_tags.array"
-              @change="handleTagsSelectChange"
+              :treeDefaultExpandedKeys="formState.article.articles_tags.array" @change="handleTagsSelectChange"
               :field-names="{
                 children: 'children',
                 label: 'ts_name',
                 value: 'id',
                 key: 'id'
-              }"
-              multiple
-            />
+              }" multiple />
           </template>
           <template v-else>
-            <template
-              v-for="(item, index) in article.articles_tags.values"
-              :key="item.ts_id"
-            >
-              <template
-                v-if="item.tc_color && item.tc_background && item.tc_border"
-              >
-                <a-tag
-                  class="tag-align"
-                  :style="
-                    'background:' +
-                    item.tc_background +
-                    ';color:' +
-                    item.tc_color +
-                    ';border-color:' +
-                    item.tc_border
-                  "
-                >
+            <template v-for="(item, index) in article.articles_tags.values" :key="item.ts_id">
+              <template v-if="item.tc_color && item.tc_background && item.tc_border">
+                <a-tag class="tag-align" :style="'background:' +
+                  item.tc_background +
+                  ';color:' +
+                  item.tc_color +
+                  ';border-color:' +
+                  item.tc_border
+                  ">
                   {{ item.ts_name }}
                 </a-tag>
               </template>
@@ -128,11 +95,8 @@
                   {{ item.ts_name }}
                 </a-tag>
               </template>
-              <template
-                v-if="
-                  index != article.articles_tags.values.length && index / 5 == 1
-                "
-              >
+              <template v-if="index != article.articles_tags.values.length && index / 5 == 1
+                ">
                 <br />
               </template>
             </template>
@@ -143,21 +107,13 @@
       <template v-if="editShow">
         <p></p>
         <div>
-          <a-button
-            class="btn btn-primary btn-outline-light btn-sm"
-            @click="onEditFinish()"
-            >儲存</a-button
-          >
-          <a-button
-            class="btn btn-danger btn-outline-light btn-sm"
-            style="margin-left: 10px"
-            @click="onEditCancel()"
-            >取消</a-button
-          >
+          <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onEditFinish()">儲存</a-button>
+          <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px"
+            @click="onEditCancel()">取消</a-button>
         </div>
       </template>
       <template v-else>
-        <DeleteBtn @confirm="onDelete(this.articleId)" />
+        <DeleteBtn @confirm="onDelete(articleId)" />
       </template>
     </div>
   </template>
@@ -210,7 +166,7 @@ export default {
           data: this.formState.article
         })
         this.onEditCancel()
-      } catch (error) {}
+      } catch (error) { }
     },
     async onDelete(id) {
       try {
@@ -218,7 +174,7 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
         this.$router.push({ name: 'articles' })
-      } catch (error) {}
+      } catch (error) { }
     },
     onEdit() {
       this.editShow = !this.editShow
@@ -255,8 +211,10 @@ export default {
     try {
       window.scrollTo({ top: 120, behavior: 'instant' })
       await this.fetch()
+      console.log(this.article)
+      console.log(this.articleId)
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   setup() {
     const Ready = ref(false)
@@ -298,6 +256,7 @@ export default {
   width: 100%;
   overflow-x: auto;
 }
+
 .article-category {
   padding-left: 12px;
   padding-right: 12px;
@@ -311,10 +270,12 @@ export default {
 .article-title {
   padding-left: 12px;
 }
+
 .article-title span {
   font-size: 24px;
   font-weight: bolder;
 }
+
 .article-content {
   padding-left: 12px;
   padding-right: 12px;
@@ -335,6 +296,7 @@ export default {
   &.dark {
     color: var(--edit-icon);
   }
+
   &.light {
     color: var(--edit-icon);
   }

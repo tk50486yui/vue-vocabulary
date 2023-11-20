@@ -1,12 +1,12 @@
 <template>
-  <template v-if="Ready && this.wordsGroup">
+  <template v-if="Ready && wordsGroup">
     <span class="back-link-theme" :class="$theme">
       <router-link :to="{ name: 'wordsGroups' }"> 返回 </router-link>
       <span class="link-separator h5">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
       <span class="h4">
-        {{ this.wordsGroup.wg_name }}
+        {{ wordsGroup.wg_name }}
       </span>
     </span>
     <div class="d-flex justify-content-end">
@@ -14,7 +14,7 @@
     </div>
     <p></p>
     <div class="list-theme" :class="$theme">
-      <a-list item-layout="horizontal" :data-source="this.wordsGroup.details">
+      <a-list item-layout="horizontal" :data-source="wordsGroup.details">
         <template #renderItem="{ item, index }">
           <a-list-item>
             <a-list-item-meta>
@@ -26,15 +26,15 @@
         </template>
         <template #footer>
           <span class="span-text">
-            <template v-if="this.wordsGroup.details.length === 0">
+            <template v-if="wordsGroup.details.length === 0">
               尚無單字
               <p></p>
-              <DeleteBtn @confirm="onDelete(this.wgId)" />
+              <DeleteBtn @confirm="onDelete(wgId)" />
             </template>
             <template v-else>
-              共 {{ this.wordsGroup.details.length }} 筆 單字
+              共 {{ wordsGroup.details.length }} 筆 單字
               <p></p>
-              <DeleteBtn @confirm="onDelete(this.wgId)" />
+              <DeleteBtn @confirm="onDelete(wgId)" />
             </template>
           </span>
         </template>
@@ -80,7 +80,7 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
         this.$router.push({ name: 'wordsGroups' })
-      } catch (error) {}
+      } catch (error) { }
     },
     onEdit() {
       if (this.editShow === false) {
@@ -131,7 +131,7 @@ export default {
       window.scrollTo({ top: 120, behavior: 'instant' })
       await this.fetch()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   setup() {
     const Ready = ref(false)
@@ -149,6 +149,7 @@ export default {
   &.dark {
     color: var(--edit-icon);
   }
+
   &.light {
     color: var(--edit-icon);
   }

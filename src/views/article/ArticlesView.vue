@@ -4,11 +4,7 @@
       <h4>文章總覽</h4>
     </div>
     <div class="tab-theme" :class="$theme">
-      <a-tabs
-        v-model:activeKey="activeTab"
-        type="card"
-        :tab-position="tabPosition"
-      >
+      <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="全部">
           <!-- 篩選 選擇 搜索列表 -->
@@ -16,28 +12,17 @@
           <a-input-group>
             <a-row :gutter="4">
               <a-col :span="18">
-                <TagsTreeSelect
-                  size="small"
-                  ref="TagsTreeSelect"
-                  placeholder="以標籤過濾資料"
-                  style="width: 100%"
-                  v-model:value="tagsArray"
-                  :treeDefaultExpandedKeys="tagsArray"
-                  :field-names="{
+                <TagsTreeSelect size="small" ref="TagsTreeSelect" placeholder="以標籤過濾資料" style="width: 100%"
+                  v-model:value="tagsArray" :treeDefaultExpandedKeys="tagsArray" :field-names="{
                     children: 'children',
                     label: 'ts_name',
                     value: 'id',
                     key: 'id'
-                  }"
-                  multiple
-                />
+                  }" multiple />
               </a-col>
               <a-col :span="2" class="d-flex align-items-center">
                 <template v-if="tagsArray.length > 0">
-                  <CloseBtn
-                    class="d-flex align-items-center"
-                    @click="tagsArray = []"
-                  />
+                  <CloseBtn class="d-flex align-items-center" @click="tagsArray = []" />
                 </template>
               </a-col>
             </a-row>
@@ -54,47 +39,22 @@
           </span>
           <p></p>
 
-          <div
-            class="select-theme d-flex align-items-center"
-            style="margin-bottom: 8px"
-            :class="$theme"
-            ref="selectMod"
-          >
+          <div class="select-theme d-flex align-items-center" style="margin-bottom: 8px" :class="$theme" ref="selectMod">
             <span class="span-text">每頁：</span>
-            <a-select
-              :getPopupContainer="() => this.$refs.selectMod"
-              v-model:value="selectPageSize"
-              size="small"
-              style="width: 80px"
-              @change="setPageSize()"
-            >
+            <a-select v-model:value="selectPageSize" :getPopupContainer="() => $refs.selectMod" size="small"
+              style="width:80px" @change="setPageSize()">
               <a-select-option value="3">3 筆</a-select-option>
               <a-select-option value="10">10 筆</a-select-option>
               <a-select-option value="20">20 筆</a-select-option>
               <a-select-option value="50">50 筆</a-select-option>
               <a-select-option value="100">100 筆</a-select-option>
-              <a-select-option :value="this.articles.length"
-                >全部</a-select-option
-              >
+              <a-select-option :value="articles.length">全部</a-select-option>
             </a-select>
             <span class="span-text" style="margin-left: 8px">當前：</span>
-            <a-select
-              ref="selectCurrent"
-              :getPopupContainer="() => this.$refs.selectMod"
-              v-model:value="currentPage"
-              size="small"
-              style="width: 80px"
-              @change="setCurrentPage()"
-            >
-              <template
-                v-for="index in Math.ceil(
-                  this.articles.length / this.selectPageSize
-                )"
-                :key="index"
-              >
-                <a-select-option :value="index"
-                  >第 {{ index }} 頁</a-select-option
-                >
+            <a-select v-model:value="currentPage" :getPopupContainer="() => $refs.selectMod" size="small"
+              style="width: 80px" @change="setCurrentPage()">
+              <template v-for="index in Math.ceil(articles.length / Number(selectPageSize))" :key="index">
+                <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
               </template>
             </a-select>
             <span class="span-text" style="margin-left: 8px">
@@ -104,52 +64,28 @@
               </el-tag>
             </span>
             <span style="margin-left: 8px">
-              <el-tag
-                class="d-flex align-items-center"
-                effect="dark"
-                size="small"
-                type="success"
-                color="black"
-                round
-              >
+              <el-tag class="d-flex align-items-center" effect="dark" size="small" type="success" color="black" round>
                 關鍵字：
-                <template
-                  v-if="this.$keyword != '' && this.$filters.length > 0"
-                >
-                  `<span class="keyword-text">{{ this.$keyword }}</span> `
+                <template v-if="$keyword != '' && $filters.length > 0">
+                  `<span class="keyword-text">{{ $keyword }}</span> `
                 </template>
                 <template v-else> 無 </template>
               </el-tag>
             </span>
             <span style="margin-left: 8px">
-              <el-tag
-                class="d-flex align-items-center"
-                effect="dark"
-                size="small"
-                color="black"
-                round
-              >
-                共 {{ this.filterdResult.length }} 筆
+              <el-tag class="d-flex align-items-center" effect="dark" size="small" color="black" round>
+                共 {{ filterdResult.length }} 筆
               </el-tag>
             </span>
             <span style="margin-left: 6px">
-              <template v-if="this.$keyword != ''">
-                <CloseBtn
-                  class="d-flex align-items-center"
-                  @click="onResetSearch()"
-                />
+              <template v-if="$keyword != ''">
+                <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
               </template>
             </span>
           </div>
           <!-- 文章列表 -->
           <div class="article-list-theme" :class="$theme">
-            <a-list
-              :data-source="this.filterdResult"
-              :pagination="pagination"
-              item-layout="vertical"
-              size="large"
-              bordered
-            >
+            <a-list :data-source="filterdResult" :pagination="pagination" item-layout="vertical" size="large" bordered>
               <template #renderItem="{ item }">
                 <a-list-item key="item.arti_title">
                   <!-- 上方 -->
@@ -160,34 +96,18 @@
                     </template>
                     <!-- 標題 -->
                     <template #title>
-                      <span class="span-text h5" style="white-space: pre"
-                        >#{{ item.id }}&nbsp;</span
-                      >
-                      <template
-                        v-if="
-                          this.$keyword != '' &&
-                          this.$filters.includes('arti_title') &&
-                          item.arti_title.includes(this.$keyword)
-                        "
-                      >
-                        <router-link
-                          :to="{
-                            name: 'articlesContent',
-                            params: { id: item.id }
-                          }"
-                        >
+                      <span class="span-text h5" style="white-space: pre">#{{ item.id }}&nbsp;</span>
+                      <template v-if="$keyword != '' &&
+                        $filters.includes('arti_title') &&
+                        item.arti_title.includes($keyword)
+                        ">
+                        <router-link :to="{ name: 'articlesContent', params: { id: item.id } }">
                           <span class="title-link h5">
-                            <template
-                              v-for="(char, index) in splitTitle(
-                                item.arti_title,
-                                this.$keyword
-                              )"
-                              :key="index + char"
-                            >
-                              <span
-                                v-if="char === this.$keyword"
-                                class="keyword-text"
-                              >
+                            <template v-for="(char, index) in splitTitle(
+                              item.arti_title,
+                              $keyword
+                            )" :key="index + char">
+                              <span v-if="char === $keyword" class="keyword-text">
                                 {{ char }}
                               </span>
                               <span v-else>
@@ -198,15 +118,8 @@
                         </router-link>
                       </template>
                       <template v-else>
-                        <router-link
-                          :to="{
-                            name: 'articlesContent',
-                            params: { id: item.id }
-                          }"
-                        >
-                          <span class="title-link h5">{{
-                            item.arti_title
-                          }}</span>
+                        <router-link :to="{ name: 'articlesContent', params: { id: item.id } }">
+                          <span class="title-link h5">{{ item.arti_title }}</span>
                         </router-link>
                       </template>
                     </template>
@@ -216,29 +129,20 @@
                     <div v-html="item.arti_content"></div>
                   </template>
                   <template v-else>
-                    <a class="list-link" @click="Expand"></a>
+                    <a class="list-link"></a>
                   </template>
                   <template v-if="showContent">
                     <br />
                     <span class="article-date">
-                      <template
-                        v-if="
-                          this.$keyword != '' &&
-                          this.$filters.includes('created_at') &&
-                          item.created_at.includes(this.$keyword)
-                        "
-                      >
-                        <template
-                          v-for="(char, index) in splitTitle(
-                            item.created_at,
-                            this.$keyword
-                          )"
-                          :key="index + char"
-                        >
-                          <span
-                            v-if="char === this.$keyword"
-                            class="keyword-text"
-                          >
+                      <template v-if="$keyword != '' &&
+                        $filters.includes('created_at') &&
+                        item.created_at.includes($keyword)
+                        ">
+                        <template v-for="(char, index) in splitTitle(
+                          item.created_at,
+                          $keyword
+                        )" :key="index + char">
+                          <span v-if="char === $keyword" class="keyword-text">
                             {{ char }}
                           </span>
                           <span v-else>
@@ -253,31 +157,19 @@
                   </template>
                   <!-- 下方 -->
                   <template #actions>
-                    <template
-                      v-if="
-                        item.articles_tags.values != null &&
-                        item.articles_tags.values.length > 0
-                      "
-                    >
-                      <span
-                        v-for="(tag, index) in item.articles_tags.values"
-                        :key="tag.ts_id + index"
-                      >
-                        <template
-                          v-if="
-                            tag.tc_color && tag.tc_background && tag.tc_border
-                          "
-                        >
-                          <a-tag
-                            :style="
-                              'background:' +
-                              tag.tc_background +
-                              ';color:' +
-                              tag.tc_color +
-                              ';border-color:' +
-                              tag.tc_border
-                            "
-                          >
+                    <template v-if="item.articles_tags.values != null &&
+                      item.articles_tags.values.length > 0
+                      ">
+                      <span v-for="(tag, index) in item.articles_tags.values" :key="tag.ts_id + index">
+                        <template v-if="tag.tc_color && tag.tc_background && tag.tc_border
+                          ">
+                          <a-tag :style="'background:' +
+                            tag.tc_background +
+                            ';color:' +
+                            tag.tc_color +
+                            ';border-color:' +
+                            tag.tc_border
+                            ">
                             {{ tag.ts_name }}
                           </a-tag>
                         </template>
@@ -294,7 +186,7 @@
               <!-- 最底部 -->
               <template #footer>
                 <span class="span-text">
-                  共 {{ this.filterdResult.length }} 筆
+                  共 {{ filterdResult.length }} 筆
                 </span>
               </template>
             </a-list>
@@ -400,7 +292,7 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   beforeRouteLeave(to, from, next) {
     this.setContentClick()
@@ -479,6 +371,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 12px;
 }
@@ -492,6 +385,7 @@ export default {
   background: #ffb348;
   content: '';
 }
+
 .keyword-text {
   color: $keyword-color;
 }

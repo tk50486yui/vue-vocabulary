@@ -4,14 +4,9 @@
     <template v-if="$searchShow">
       <div>
         <div class="row">
-          <div
-            class="col-lg-4 col-md-12 d-flex justify-content-lg-end justify-content-md-start align-items-center"
-          >
+          <div class="col-lg-4 col-md-12 d-flex justify-content-lg-end justify-content-md-start align-items-center">
             <div class="radio-button-theme" :class="$theme">
-              <a-radio-group
-                v-model:value="searchRadio"
-                @change="onSearchRadio()"
-              >
+              <a-radio-group v-model:value="searchRadio" @change="onSearchRadio()">
                 <a-radio-button value="word">單字</a-radio-button>
                 <a-radio-button value="article">文章</a-radio-button>
               </a-radio-group>
@@ -19,17 +14,9 @@
           </div>
           <div class="col-lg-8 col-md-12">
             <div class="input-theme input-search" :class="$theme">
-              <a-input-search
-                v-model:value="searchValue"
-                placeholder="搜尋"
-                @search="onSearch"
-                size="large"
-                allow-clear
-              >
+              <a-input-search v-model:value="searchValue" placeholder="搜尋" @search="onSearch" size="large" allow-clear>
                 <template #enterButton>
-                  <a-button
-                    ><font-awesome-icon :icon="['fas', 'magnifying-glass']"
-                  /></a-button>
+                  <a-button><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></a-button>
                 </template>
               </a-input-search>
             </div>
@@ -38,22 +25,15 @@
         <!-- 搜尋條件 checkbox -->
         <div class="row">
           <div class="col d-flex justify-content-center align-items-center">
-            <template v-if="this.searchRadio == 'word'">
+            <template v-if="searchRadio == 'word'">
               <div class="checkbox-theme checkbox-group" :class="$theme">
-                <a-checkbox-group
-                  v-model:value="wordCheckbox"
-                  :options="wordOptions"
-                  @change="onWordChecked()"
-                />
+                <a-checkbox-group v-model:value="wordCheckbox" :options="wordOptions" @change="onWordChecked()" />
               </div>
             </template>
             <template v-else>
               <div class="checkbox-theme checkbox-group" :class="$theme">
-                <a-checkbox-group
-                  v-model:value="articleCheckbox"
-                  :options="articleOptions"
-                  @change="onArticleChecked()"
-                />
+                <a-checkbox-group v-model:value="articleCheckbox" :options="articleOptions"
+                  @change="onArticleChecked()" />
               </div>
             </template>
           </div>
@@ -160,9 +140,11 @@ export default {
   height: 2px;
   background: #515959;
 }
+
 .input-search {
   width: 500px;
 }
+
 @media only screen and (max-width: 1400px) {
   .input-search {
     width: 560px;
@@ -177,6 +159,7 @@ export default {
     padding-top: 8px;
   }
 }
+
 @media only screen and (max-width: 720px) {
   .input-search {
     width: 450px;
@@ -184,6 +167,7 @@ export default {
     padding-top: 8px;
   }
 }
+
 @media only screen and (max-width: 480px) {
   .input-search {
     width: 280px;

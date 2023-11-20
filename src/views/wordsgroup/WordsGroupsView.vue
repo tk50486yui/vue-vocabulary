@@ -5,18 +5,12 @@
     </div>
     <div class="list-theme" :class="$theme">
       <!-- list -->
-      <a-list
-        item-layout="horizontal"
-        :data-source="this.$WordsGroupsView.groupArray"
-      >
+      <a-list item-layout="horizontal" :data-source="$WordsGroupsView.groupArray">
         <template #renderItem="{ item, index }">
           <a-list-item>
             <template #actions>
               <span class="button-container">
-                <DeleteOutlined
-                  class="button-remove"
-                  @click="onRemove(item.ws_id, item.ws_name)"
-                />
+                <DeleteOutlined class="button-remove" @click="onRemove(item.ws_id, item.ws_name)" />
               </span>
             </template>
             <a-list-item-meta>
@@ -27,70 +21,30 @@
           </a-list-item>
         </template>
         <template #footer>
-          <span class="span-text"> 共 {{ this.wordsCount }} 筆 單字 </span>
+          <span class="span-text"> 共 {{ wordsCount }} 筆 單字 </span>
         </template>
       </a-list>
     </div>
     <!-- save button -->
-    <template v-if="this.wordsCount > 0 && updateNow === false">
+    <template v-if="wordsCount > 0 && updateNow === false">
       <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
-        <a-input
-          v-model:value="formState.wordsGroup.wg_name"
-          placeholder="組別名稱"
-          allow-clear
-        />
+        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
       </div>
-      <a-button
-        type="primary"
-        size="small"
-        shape="round"
-        @click="onSave()"
-        :disabled="saveDisabled"
-        >儲存</a-button
-      >
+      <a-button type="primary" size="small" shape="round" @click="onSave()" :disabled="saveDisabled">儲存</a-button>
       <span style="padding-left: 6px">
-        <a-popconfirm
-          title="確定要清空嗎？"
-          ok-text="是"
-          cancel-text="否"
-          @confirm="clearCheckbox()"
-        >
-          <a-button type="primary" size="small" shape="round" danger
-            >清空</a-button
-          >
+        <a-popconfirm title="確定要清空嗎？" ok-text="是" cancel-text="否" @confirm="clearCheckbox()">
+          <a-button type="primary" size="small" shape="round" danger>清空</a-button>
         </a-popconfirm>
       </span>
     </template>
     <template v-else-if="updateNow">
-      <div
-        class="input-theme"
-        :class="this.$theme"
-        style="padding-bottom: 12px"
-      >
-        <a-input
-          v-model:value="formState.wordsGroup.wg_name"
-          placeholder="組別名稱"
-          allow-clear
-        />
+      <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
+        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
       </div>
-      <a-button
-        type="primary"
-        size="small"
-        shape="round"
-        @click="onEditSave()"
-        :disabled="saveDisabled"
-        >儲存編輯</a-button
-      >
+      <a-button type="primary" size="small" shape="round" @click="onEditSave()" :disabled="saveDisabled">儲存編輯</a-button>
       <span style="padding-left: 6px">
-        <a-popconfirm
-          title="確定要取消編輯嗎？"
-          ok-text="是"
-          cancel-text="否"
-          @confirm="clearCheckbox()"
-        >
-          <a-button type="primary" size="small" shape="round" danger
-            >取消編輯</a-button
-          >
+        <a-popconfirm title="確定要取消編輯嗎？" ok-text="是" cancel-text="否" @confirm="clearCheckbox()">
+          <a-button type="primary" size="small" shape="round" danger>取消編輯</a-button>
         </a-popconfirm>
       </span>
     </template>
@@ -131,7 +85,7 @@ export default {
         await this.add(this.formState.wordsGroup)
         this.clearCheckbox()
         this.$router.push({ name: 'wordsGroups' })
-      } catch (error) {}
+      } catch (error) { }
     },
     async onEditSave() {
       const wordsIdArray = this.$WordsGroupsView.groupArray.map(
@@ -164,7 +118,7 @@ export default {
   async created() {
     try {
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   watch: {
     'formState.wordsGroup.wg_name'(val) {
@@ -239,6 +193,7 @@ export default {
   display: flex;
   align-items: center;
 }
+
 .button-remove {
   color: #ea0000;
   margin-bottom: auto;

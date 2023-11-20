@@ -16,12 +16,8 @@
         <EditOutlined class="button-edit" :class="$theme" @click="onEdit()" />
       </div>
       <p></p>
-      <a-descriptions
-        bordered
-        :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }"
-        :layout="descriptionsLayout"
-        class="table-container"
-      >
+      <a-descriptions bordered :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" :layout="descriptionsLayout"
+        class="table-container">
         <a-descriptions-item label="單字名稱">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
@@ -34,9 +30,7 @@
                 {{ word.ws_name }}
               </span>
               <span class="copy-icon">
-                <a-typography-paragraph
-                  :copyable="{ text: word.ws_name }"
-                ></a-typography-paragraph>
+                <a-typography-paragraph :copyable="{ text: word.ws_name }"></a-typography-paragraph>
               </span>
             </div>
           </template>
@@ -44,18 +38,12 @@
         <a-descriptions-item label="假名 / 發音">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
-              <a-input
-                v-model:value="formState.word.ws_pronunciation"
-                allow-clear
-              />
+              <a-input v-model:value="formState.word.ws_pronunciation" allow-clear />
             </div>
           </template>
           <template v-else>
-            <template
-              v-if="
-                word.ws_pronunciation == null || word.ws_pronunciation == ''
-              "
-            >
+            <template v-if="word.ws_pronunciation == null || word.ws_pronunciation == ''
+              ">
               {{ word.ws_pronunciation }}
             </template>
             <template v-else>
@@ -64,9 +52,7 @@
                   {{ word.ws_pronunciation }}
                 </span>
                 <span class="copy-icon">
-                  <a-typography-paragraph
-                    :copyable="{ text: word.ws_pronunciation }"
-                  ></a-typography-paragraph>
+                  <a-typography-paragraph :copyable="{ text: word.ws_pronunciation }"></a-typography-paragraph>
                 </span>
               </div>
             </template>
@@ -75,10 +61,7 @@
         <a-descriptions-item label="中文定義">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
-              <a-input
-                v-model:value="formState.word.ws_definition"
-                allow-clear
-              />
+              <a-input v-model:value="formState.word.ws_definition" allow-clear />
             </div>
           </template>
           <template v-else>
@@ -87,17 +70,10 @@
         </a-descriptions-item>
         <a-descriptions-item label="主題分類">
           <template v-if="editShow">
-            <CategoriesTreeSelect
-              size="small"
-              ref="CategoriesTreeSelect"
-              placeholder="選擇分類"
-              :dropdownMatchSelectWidth="false"
-              style="width: 100%"
-              v-model:value="formState.word.cate_id"
-              :defaultValue="word.cate_id"
-              :treeDefaultExpandedKeys="[word.cate_id]"
-              @change="handleCategoriesSelectChange"
-            />
+            <CategoriesTreeSelect size="small" ref="CategoriesTreeSelect" placeholder="選擇分類"
+              :dropdownMatchSelectWidth="false" style="width: 100%" v-model:value="formState.word.cate_id"
+              :defaultValue="word.cate_id" :treeDefaultExpandedKeys="[word.cate_id]"
+              @change="handleCategoriesSelectChange" />
           </template>
           <template v-else>
             {{ word.cate_name }}
@@ -117,22 +93,30 @@
           <span class="icon-theme" :class="$theme">
             <template v-if="word.ws_is_common">
               <span class="icon-star">
-                <a @click="onUpdateCommon(word.id, word)"><StarFilled /></a>
+                <a @click="onUpdateCommon(word.id, word)">
+                  <StarFilled />
+                </a>
               </span>
             </template>
             <template v-else>
               <span class="icon-star-false">
-                <a @click="onUpdateCommon(word.id, word)"><StarFilled /></a>
+                <a @click="onUpdateCommon(word.id, word)">
+                  <StarFilled />
+                </a>
               </span>
             </template>
             <template v-if="word.ws_is_important">
               <span class="icon-heart">
-                <a @click="onUpdateImportant(word.id, word)"><HeartFilled /></a>
+                <a @click="onUpdateImportant(word.id, word)">
+                  <HeartFilled />
+                </a>
               </span>
             </template>
             <template v-else>
               <span class="icon-heart-false">
-                <a @click="onUpdateImportant(word.id, word)"><HeartFilled /></a>
+                <a @click="onUpdateImportant(word.id, word)">
+                  <HeartFilled />
+                </a>
               </span>
             </template>
           </span>
@@ -140,11 +124,7 @@
         <a-descriptions-item label="例句說明">
           <template v-if="editShow">
             <div class="article-editor" :class="$theme">
-              <ckeditor
-                v-model="ws_description"
-                :editor="editor"
-                :config="wordEditor.Config"
-              />
+              <ckeditor v-model="ws_description" :editor="editor" :config="wordEditor.Config" />
             </div>
           </template>
           <template v-else>
@@ -153,42 +133,25 @@
         </a-descriptions-item>
         <a-descriptions-item label="標籤">
           <template v-if="editShow">
-            <TagsTreeSelect
-              size="large"
-              ref="TagsTreeSelect"
-              placeholder="添加標籤"
-              style="width: 100%"
-              v-model:value="formState.word.words_tags.array"
-              :treeDefaultExpandedKeys="formState.word.words_tags.array"
-              @change="handleTagsSelectChange"
-              :field-names="{
+            <TagsTreeSelect size="large" ref="TagsTreeSelect" placeholder="添加標籤" style="width: 100%"
+              v-model:value="formState.word.words_tags.array" :treeDefaultExpandedKeys="formState.word.words_tags.array"
+              @change="handleTagsSelectChange" :field-names="{
                 children: 'children',
                 label: 'ts_name',
                 value: 'id',
                 key: 'id'
-              }"
-              multiple
-            />
+              }" multiple />
           </template>
           <template v-else>
-            <template
-              v-for="(item, index) in word.words_tags.values"
-              :key="item.ts_id"
-            >
-              <template
-                v-if="item.tc_color && item.tc_background && item.tc_border"
-              >
-                <a-tag
-                  class="tag-align"
-                  :style="
-                    'background:' +
-                    item.tc_background +
-                    ';color:' +
-                    item.tc_color +
-                    ';border-color:' +
-                    item.tc_border
-                  "
-                >
+            <template v-for="(item, index) in word.words_tags.values" :key="item.ts_id">
+              <template v-if="item.tc_color && item.tc_background && item.tc_border">
+                <a-tag class="tag-align" :style="'background:' +
+                  item.tc_background +
+                  ';color:' +
+                  item.tc_color +
+                  ';border-color:' +
+                  item.tc_border
+                  ">
                   {{ item.ts_name }}
                 </a-tag>
               </template>
@@ -197,9 +160,7 @@
                   {{ item.ts_name }}
                 </a-tag>
               </template>
-              <template
-                v-if="index != word.words_tags.values.length && index / 5 == 1"
-              >
+              <template v-if="index != word.words_tags.values.length && index / 5 == 1">
                 <br />
               </template>
             </template>
@@ -208,20 +169,12 @@
       </a-descriptions>
       <p></p>
       <template v-if="editShow">
-        <a-button
-          class="btn btn-primary btn-outline-light btn-sm"
-          @click="onEditFinish()"
-          >儲存</a-button
-        >
-        <a-button
-          class="btn btn-danger btn-outline-light btn-sm"
-          style="margin-left: 10px"
-          @click="onEditCancel()"
-          >取消</a-button
-        >
+        <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onEditFinish()">儲存</a-button>
+        <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px"
+          @click="onEditCancel()">取消</a-button>
       </template>
       <template v-else>
-        <DeleteBtn @confirm="onDelete(this.wordId)" />
+        <DeleteBtn @confirm="onDelete(wordId)" />
       </template>
     </div>
   </template>
@@ -281,7 +234,7 @@ export default {
           data: this.formState.word
         })
         this.onEditCancel()
-      } catch (error) {}
+      } catch (error) { }
     },
     onEdit() {
       this.editShow = !this.editShow
@@ -301,13 +254,13 @@ export default {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-      } catch (error) {}
+      } catch (error) { }
     },
     async onUpdateImportant(id, data) {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-      } catch (error) {}
+      } catch (error) { }
     },
     async onDelete(id) {
       try {
@@ -315,7 +268,7 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
         this.$router.push({ name: 'wordsGrid' })
-      } catch (error) {}
+      } catch (error) { }
     },
     handleCategoriesSelectChange(value) {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
@@ -341,7 +294,7 @@ export default {
       window.scrollTo({ top: 120, behavior: 'instant' })
       await this.fetch()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   watch: {
     $mobile(val) {
@@ -393,33 +346,41 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .table-container {
   width: 100%;
   overflow-x: auto;
 }
+
 .button-edit {
   &.dark {
     color: var(--edit-icon);
   }
+
   &.light {
     color: var(--edit-icon);
   }
 }
+
 .copy-icon {
   padding-top: 5px;
 }
+
 .icon-star {
   padding-left: 2px;
   padding-right: 8px;
 }
+
 .icon-star-false {
   padding-left: 2px;
   padding-right: 8px;
 }
+
 .descriptions-theme {
   :deep(.ant-descriptions-item-content) {
     width: 80%;
   }
+
   :deep(.ant-descriptions-bordered .ant-descriptions-item-label) {
     width: 20%;
   }

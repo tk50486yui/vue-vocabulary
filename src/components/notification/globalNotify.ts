@@ -1,5 +1,5 @@
 import { ElNotification, ElMessage } from 'element-plus'
-import { messageMap } from './messageMap.js'
+import { messageMap } from './messageMap.ts'
 
 function globalNotify(response) {
   let type = ''

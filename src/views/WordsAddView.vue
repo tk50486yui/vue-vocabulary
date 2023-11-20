@@ -4,105 +4,45 @@
       <h4>新增單字</h4>
     </div>
     <p></p>
-    <a-form
-      ref="formRef"
-      :model="formState"
-      v-bind="layout"
-      :validate-messages="validateMsg"
-      name="wordform"
-      @finish="onFinish"
-    >
+    <a-form ref="formRef" :model="formState" v-bind="layout" :validate-messages="validateMsg" name="wordform"
+      @finish="onFinish">
       <a-form-item :name="['word', 'cate_id']">
-        <CategoriesTreeSelect
-          placeholder="詞語主題分類"
-          size="large"
-          ref="CategoriesTreeSelect"
-          v-model:value="formState.word.cate_id"
-          @change="handleCategoriesSelectChange"
-        />
+        <CategoriesTreeSelect placeholder="詞語主題分類" size="large" ref="CategoriesTreeSelect"
+          v-model:value="formState.word.cate_id" @change="handleCategoriesSelectChange" />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="this.$theme"
-        :name="['word', 'ws_name']"
-        :rules="[{ required: true }]"
-      >
-        <a-textarea
-          v-model:value="formState.word.ws_name"
-          placeholder="輸入單字"
-          :auto-size="{ minRows: 3 }"
-          allow-clear
-        />
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_name']" :rules="[{ required: true }]">
+        <a-textarea v-model:value="formState.word.ws_name" placeholder="輸入單字" :auto-size="{ minRows: 3 }" allow-clear />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="this.$theme"
-        :name="['word', 'ws_pronunciation']"
-      >
-        <a-textarea
-          v-model:value="formState.word.ws_pronunciation"
-          placeholder="假名 / 發音"
-          :auto-size="{ minRows: 2 }"
-          allow-clear
-        />
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_pronunciation']">
+        <a-textarea v-model:value="formState.word.ws_pronunciation" placeholder="假名 / 發音" :auto-size="{ minRows: 2 }"
+          allow-clear />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="this.$theme"
-        :name="['word', 'ws_definition']"
-      >
-        <a-textarea
-          v-model:value="formState.word.ws_definition"
-          placeholder="中文定義"
-          :auto-size="{ minRows: 3 }"
-          allow-clear
-        />
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_definition']">
+        <a-textarea v-model:value="formState.word.ws_definition" placeholder="中文定義" :auto-size="{ minRows: 3 }"
+          allow-clear />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="this.$theme"
-        :name="['word', 'ws_slogan']"
-      >
-        <a-textarea
-          v-model:value="formState.word.ws_slogan"
-          placeholder="標誌性短句"
-          :auto-size="{ minRows: 2 }"
-          allow-clear
-        />
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_slogan']">
+        <a-textarea v-model:value="formState.word.ws_slogan" placeholder="標誌性短句" :auto-size="{ minRows: 2 }"
+          allow-clear />
       </a-form-item>
       <p></p>
       <a-form-item>
-        <TagsTreeSelect
-          placeholder="添加標籤"
-          size="large"
-          ref="TagsTreeSelect"
-          v-model:value="formState.word.words_tags.array"
-          @change="handleTagsSelectChange"
-          :field-names="{
+        <TagsTreeSelect placeholder="添加標籤" size="large" ref="TagsTreeSelect"
+          v-model:value="formState.word.words_tags.array" @change="handleTagsSelectChange" :field-names="{
             children: 'children',
             label: 'ts_name',
             value: 'id',
             key: 'id'
-          }"
-          multiple
-        />
+          }" multiple />
       </a-form-item>
       <p></p>
       <a-form-item>
-        <a-button
-          class="btn btn-primary btn-outline-light btn-sm"
-          html-type="submit"
-          >儲存</a-button
-        >
-        <a-button
-          class="btn btn-danger btn-outline-light btn-sm float-end"
-          @click="resetForm"
-          >重置</a-button
-        >
+        <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
+        <a-button class="btn btn-danger btn-outline-light btn-sm float-end" @click="resetForm">重置</a-button>
       </a-form-item>
     </a-form>
   </template>
@@ -133,7 +73,7 @@ export default {
         await this.add(this.formState.word)
         this.resetForm()
         window.scrollTo({ top: 100, behavior: 'smooth' })
-      } catch (error) {}
+      } catch (error) { }
     },
     handleCategoriesSelectChange(value) {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
@@ -189,6 +129,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 8px;
 }

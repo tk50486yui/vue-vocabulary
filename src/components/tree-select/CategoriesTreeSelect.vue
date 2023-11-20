@@ -1,33 +1,19 @@
 <template>
   <div class="select-theme" :class="$theme" ref="selectMod">
-    <a-tree-select
-      :getPopupContainer="() => this.$refs.selectMod"
-      v-bind="$attrs"
-      v-model:searchValue="searchValue"
-      show-search
-      allow-clear
-      :tree-line="treeLine && { showLeafIcon }"
-      :tree-data="this.categoriesTransformed"
-      :field-names="{
+    <a-tree-select :getPopupContainer="() => $refs.selectMod" v-bind="$attrs" v-model:searchValue="searchValue"
+      show-search allow-clear :tree-line="treeLine && { showLeafIcon }" :tree-data="categories" :field-names="{
         children: 'children',
         label: 'cate_name',
         value: 'id',
         key: 'id'
-      }"
-    >
+      }">
       <template #title="{ value: val, cate_name }">
         <b v-if="val === 1" style="color: #08c">{{ val }}</b>
         <template v-else>
-          <template
-            v-for="(fragment, i) in cate_name
-              .toString()
-              .split(new RegExp(`(?<=${searchValue})|(?=${searchValue})`, 'i'))"
-          >
-            <span
-              v-if="fragment.toLowerCase() === searchValue.toLowerCase()"
-              :key="i"
-              style="color: #08c"
-            >
+          <template v-for="(fragment, i) in cate_name
+            .toString()
+            .split(new RegExp(`(?<=${searchValue})|(?=${searchValue})`, 'i'))">
+            <span v-if="fragment.toLowerCase() === searchValue.toLowerCase()" :key="i" style="color: #08c">
               {{ fragment }}
             </span>
             <template v-else>{{ fragment }}</template>
@@ -43,7 +29,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('CategoriesStore', ['categoriesTransformed']),
+    ...mapGetters('CategoriesStore', ['categories']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {

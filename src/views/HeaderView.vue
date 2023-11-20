@@ -22,17 +22,13 @@
                   </router-link>
                   <ul class="dropdown">
                     <li>
-                      <router-link :to="{ name: 'wordsGrid' }"
-                        >單字總覽</router-link
-                      >
+                      <router-link :to="{ name: 'wordsGrid' }">單字總覽</router-link>
                     </li>
                     <li>
                       <router-link :to="{ name: 'words' }">單字表</router-link>
                     </li>
                     <li>
-                      <router-link :to="{ name: 'wordsAdd' }"
-                        >單字新增</router-link
-                      >
+                      <router-link :to="{ name: 'wordsAdd' }">單字新增</router-link>
                     </li>
                   </ul>
                 </li>
@@ -66,7 +62,7 @@
             <span style="margin-right: 16px" @click="setSearchShow()">
               <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
             </span>
-            <span @click="this.drawerVisible = true">
+            <span @click="drawerVisible = true">
               <font-awesome-icon :icon="['fas', 'bars']" />
             </span>
           </div>
@@ -75,14 +71,8 @@
     </header>
   </div>
   <div class="drawer-theme" ref="navDrawer" :class="$theme">
-    <a-drawer
-      :getContainer="() => $refs.navDrawer"
-      :width="230"
-      placement="left"
-      :closable="false"
-      :visible="this.drawerVisible"
-      @close="this.drawerVisible = false"
-    >
+    <a-drawer :getContainer="() => $refs.navDrawer" :width="230" placement="left" :closable="false"
+      :visible="drawerVisible" @close="drawerVisible = false">
       <template #title>
         <div class="drawer__logo">
           <router-link :to="{ name: 'home' }">
@@ -212,6 +202,7 @@ export default {
     text-decoration: none;
   }
 }
+
 /*---------------------
     Header Menu
 -----------------------*/
@@ -225,6 +216,7 @@ export default {
   margin-right: 40px;
   position: relative;
 }
+
 .header__menu ul li.active a:after {
   -webkit-transform: scale(1);
   -ms-transform: scale(1);
@@ -303,6 +295,7 @@ export default {
   text-align: right;
   padding: 30px 0 27px;
 }
+
 .header__right__widget {
   display: inline-block;
 }
@@ -354,6 +347,7 @@ export default {
   .header__menu ul li {
     margin-right: 20px;
   }
+
   .header {
     padding: 0 30px;
   }
@@ -383,13 +377,16 @@ export default {
     right: 15px;
     top: 24px;
   }
+
   .header__menu {
     display: none;
   }
+
   .header__right {
     display: none;
   }
 }
+
 /* Wide Mobile = 480px */
 @media only screen and (max-width: 767px) {
   .canvas__open {
@@ -407,9 +404,11 @@ export default {
     right: 15px;
     top: 24px;
   }
+
   .header__menu {
     display: none;
   }
+
   .header__right {
     display: none;
   }
@@ -434,6 +433,7 @@ export default {
   &.dark :deep(.header__right .header__right__widget li) {
     color: var(--head-text);
   }
+
   &.light :deep(.header__right .header__right__widget li) {
     color: var(--head-text);
   }
@@ -441,6 +441,7 @@ export default {
   &.dark :deep(.canvas__open) {
     color: var(--head-text);
   }
+
   &.light :deep(.canvas__open) {
     color: var(--head-text);
   }

@@ -1,14 +1,8 @@
 <template>
   <div>
-    <div
-      class="section-title d-flex justify-content-between align-items-center"
-      :class="$theme"
-    >
+    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
       <h4>詞組類別</h4>
-      <PlusBtn
-        class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-        @click="visible = true"
-      />
+      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" @click="visible = true" />
     </div>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
@@ -26,7 +20,7 @@
                     <a-sub-menu :key="data.id">
                       <template #title>
                         <a @click="handleCategoryFilter(data.cate_name)">
-                          {{ data.cate_name }}
+                          {{ data.cate_name }}（{{ data.children.length }}）
                         </a>
                       </template>
                       <TreeCategoriesMenu :data="data" />
@@ -86,7 +80,7 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.spinning = false
-      } catch (error) {}
+      } catch (error) { }
     },
     async handleCategoryFilter(cateName) {
       this.updateSearchClass('word')

@@ -29,6 +29,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 8px;
 }

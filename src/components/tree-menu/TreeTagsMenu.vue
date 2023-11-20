@@ -6,12 +6,9 @@
           <template #title>
             <a @click="handleTagsFilter(item.id)" style="display: inline-block">
               <span class="dropdown-container">
-                {{ item.ts_name }}
-                <template v-if="this.$filtersTags.includes(item.id)">
-                  <CheckOutlined
-                    :style="{ 'font-size': '10px' }"
-                    :rotate="10"
-                  />
+                {{ item.ts_name }} （{{ item.children.length }}）
+                <template v-if="$filtersTags.includes(item.id)">
+                  <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
                 </template>
               </span>
             </a>
@@ -24,7 +21,7 @@
           <a @click="handleTagsFilter(item.id)" style="display: inline-block">
             <span class="dropdown-container">
               # {{ item.ts_name }}
-              <template v-if="this.$filtersTags.includes(item.id)">
+              <template v-if="$filtersTags.includes(item.id)">
                 <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
               </template>
             </span>
@@ -64,6 +61,7 @@ export default {
   display: flex;
   align-items: center;
 }
+
 .card-router-link {
   display: inline !important;
 }

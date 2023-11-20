@@ -3,67 +3,37 @@
     <!-- 上層 顏色新增 -->
     <div class="demo-color-block">
       <span class="demonstration">
-        <a-tag
-          :style="
-            'background:' +
-            this.selectedBackground +
-            ';color:' +
-            this.selectedColor +
-            ';border-color:' +
-            this.selectedBorder
-          "
-        >
+        <a-tag :style="'background:' +
+          selectedBackground +
+          ';color:' +
+          selectedColor +
+          ';border-color:' +
+          selectedBorder
+          ">
           With default value
         </a-tag>
       </span>
       <span class="main-body" :class="$theme">
         背景：
-        <el-color-picker
-          @active-change="activeBackground"
-          size="large"
-          v-model="this.selectedBackground"
-          show-alpha
-        />
+        <el-color-picker @active-change="activeBackground" size="large" v-model="selectedBackground" show-alpha />
         文字：
-        <el-color-picker
-          @active-change="activeColor"
-          size="large"
-          v-model="this.selectedColor"
-          show-alpha
-        />
+        <el-color-picker @active-change="activeColor" size="large" v-model="selectedColor" show-alpha />
         邊框：
-        <el-color-picker
-          @active-change="activeBorder"
-          size="large"
-          v-model="this.selectedBorder"
-          show-alpha
-        />
+        <el-color-picker @active-change="activeBorder" size="large" v-model="selectedBorder" show-alpha />
       </span>
-      <a-button
-        class="btn btn-primary btn-outline-light btn-sm button-add"
-        @click="onFinish"
-        :loading="confirmLoading"
-      >
+      <a-button class="btn btn-primary btn-outline-light btn-sm button-add" @click="onFinish" :loading="confirmLoading">
         儲存顏色
       </a-button>
     </div>
     <p></p>
     <!-- 主表格 顏色 -->
     <div class="table-theme" :class="$theme">
-      <a-table
-        :dataSource="this.tagsColorArray"
-        :columns="columns"
-        :scroll="{ y: 600 }"
-        :showHeader="false"
-      >
+      <a-table :dataSource="tagsColorArray" :columns="columns" :scroll="{ y: 600 }" :showHeader="false">
         <template #bodyCell="{ column, record }">
-          <template
-            v-if="
-              ['id', 'tc_color', 'tc_background', 'tc_border'].includes(
-                column.dataIndex
-              )
-            "
-          >
+          <template v-if="['id', 'tc_color', 'tc_background', 'tc_border'].includes(
+            column.dataIndex
+          )
+            ">
             <!-- id -->
             <template v-if="column.dataIndex === 'id'">
               <template v-if="editTableData[record.id]">
@@ -77,55 +47,35 @@
             <template v-else-if="column.dataIndex === 'tc_color'">
               <template v-if="editTableData[record.id]">
                 <div>
-                  <a-tag
-                    :style="
-                      'background:' +
-                      editTableData[record.id]['tc_background'] +
-                      ';color:' +
-                      editTableData[record.id]['tc_color'] +
-                      ';border-color:' +
-                      editTableData[record.id]['tc_border']
-                    "
-                  >
+                  <a-tag :style="'background:' +
+                    editTableData[record.id]['tc_background'] +
+                    ';color:' +
+                    editTableData[record.id]['tc_color'] +
+                    ';border-color:' +
+                    editTableData[record.id]['tc_border']
+                    ">
                     With default value
                   </a-tag>
                   背景：
-                  <el-color-picker
-                    @active-change="
-                      (value) => activeBackground(value, record.id)
-                    "
-                    size="large"
-                    v-model="editTableData[record.id]['tc_background']"
-                    show-alpha
-                  />
+                  <el-color-picker @active-change="(value) => activeBackground(value, record.id)
+                    " size="large" v-model="editTableData[record.id]['tc_background']" show-alpha />
                   文字：
-                  <el-color-picker
-                    @active-change="(value) => activeColor(value, record.id)"
-                    size="large"
-                    v-model="editTableData[record.id]['tc_color']"
-                    show-alpha
-                  />
+                  <el-color-picker @active-change="(value) => activeColor(value, record.id)" size="large"
+                    v-model="editTableData[record.id]['tc_color']" show-alpha />
                   邊框：
-                  <el-color-picker
-                    @active-change="(value) => activeBorder(value, record.id)"
-                    size="large"
-                    v-model="editTableData[record.id]['tc_border']"
-                    show-alpha
-                  />
+                  <el-color-picker @active-change="(value) => activeBorder(value, record.id)" size="large"
+                    v-model="editTableData[record.id]['tc_border']" show-alpha />
                 </div>
               </template>
               <template v-else>
                 <div class="column-container">
-                  <a-tag
-                    :style="
-                      'background:' +
-                      record.tc_background +
-                      ';color:' +
-                      record.tc_color +
-                      ';border-color:' +
-                      record.tc_border
-                    "
-                  >
+                  <a-tag :style="'background:' +
+                    record.tc_background +
+                    ';color:' +
+                    record.tc_color +
+                    ';border-color:' +
+                    record.tc_border
+                    ">
                     With default value
                   </a-tag>
                   <DeleteBtn @confirm="onDelete(record.id)" />
@@ -135,21 +85,12 @@
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <template v-if="editTableData[record.id]">
-              <CheckOutlined
-                class="button-edit-check"
-                @click="onEditFinish(record)"
-              />
-              <CloseOutlined
-                class="button-edit-close"
-                @click="cancel(record)"
-              />
+              <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
+              <CloseOutlined class="button-edit-close" @click="cancel(record)" />
             </template>
             <template v-else>
               <div class="column-container">
-                <EditOutlined
-                  class="button-edit"
-                  @click="edit(record, tagsColorArray)"
-                />
+                <EditOutlined class="button-edit" @click="edit(record, tagsColorArray)" />
               </div>
             </template>
           </template>
@@ -190,7 +131,7 @@ export default {
         this.selectedColor = 'rgba(248, 246, 246, 1)'
         this.selectedBorder = 'rgba(245, 241, 241, 1)'
         this.confirmLoading = false
-      } catch (error) {}
+      } catch (error) { }
     },
     async onEditFinish(record) {
       try {
@@ -199,14 +140,14 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
         this.cancel(record)
-      } catch (error) {}
+      } catch (error) { }
     },
     async onDelete(id) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) {}
+      } catch (error) { }
     },
     activeBackground(value, id) {
       if (id) {
@@ -234,7 +175,7 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   setup() {
     const Ready = ref(false)
@@ -304,6 +245,7 @@ export default {
   align-items: center;
   margin-bottom: 16px;
 }
+
 .demo-color-block .demonstration {
   margin-right: 16px;
 }

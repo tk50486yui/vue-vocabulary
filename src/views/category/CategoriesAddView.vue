@@ -1,51 +1,21 @@
 <template>
-  <a-form
-    ref="formRef"
-    :model="formState"
-    :validate-messages="validateMsg"
-    @finish="onFinish"
-  >
+  <a-form ref="formRef" :model="formState" :validate-messages="validateMsg" @finish="onFinish">
     <p></p>
-    <CategoriesTreeSelect
-      placeholder="選擇類別層級"
-      size="large"
-      ref="treeSelect"
-      v-model:value="formState.category.cate_parent_id"
-      @chnage="handleTreeSelectChange"
-      style="width: 100%"
-      :field-names="{
+    <CategoriesTreeSelect placeholder="選擇類別層級" size="large" ref="treeSelect"
+      v-model:value="formState.category.cate_parent_id" @chnage="handleTreeSelectChange" style="width: 100%" :field-names="{
         children: 'children',
         label: 'cate_name',
         value: 'id',
         key: 'id'
-      }"
-    />
+      }" />
     <p></p>
-    <a-form-item
-      class="input-theme"
-      :class="$theme"
-      :name="['category', 'cate_name']"
-      :rules="[{ required: true }]"
-    >
-      <a-input
-        v-model:value="formState.category.cate_name"
-        placeholder="類別名"
-        :auto-size="{ minRows: 3 }"
-        allow-clear
-      />
+    <a-form-item class="input-theme" :class="$theme" :name="['category', 'cate_name']" :rules="[{ required: true }]">
+      <a-input v-model:value="formState.category.cate_name" placeholder="類別名" :auto-size="{ minRows: 3 }" allow-clear />
     </a-form-item>
     <a-form-item>
-      <a-button
-        class="btn btn-primary btn-outline-light btn-sm float-end"
-        :loading="confirmLoading"
-        html-type="submit"
-        >儲存</a-button
-      >
-      <a-button
-        class="btn btn-danger btn-outline-light btn-sm"
-        @click="resetForm"
-        >重置</a-button
-      >
+      <a-button class="btn btn-primary btn-outline-light btn-sm float-end" :loading="confirmLoading"
+        html-type="submit">儲存</a-button>
+      <a-button class="btn btn-danger btn-outline-light btn-sm" @click="resetForm">重置</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -74,7 +44,7 @@ export default {
         await this.add(this.formState.category)
         this.resetForm()
         this.confirmLoading = false
-      } catch (error) {}
+      } catch (error) { }
     },
     handleTreeSelectChange(value) {
       this.formState.category.cate_parent_id =

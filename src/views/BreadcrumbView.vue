@@ -10,12 +10,12 @@
                 <font-awesome-icon :icon="['fas', 'house']" /> 首頁
               </router-link>
             </span>
-            <template v-if="!this.activeHome && this.activeRoute != ''">
+            <template v-if="!activeHome && activeRoute != ''">
               <span class="breadcrumb-separator">
                 <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
               </span>
               <span class="active">
-                {{ this.activeRoute }}
+                {{ activeRoute }}
               </span>
             </template>
             <div class="breadcrumb-switch switch-theme" :class="$theme">
@@ -109,9 +109,11 @@ export default {
 .breadcrumb-theme {
   padding-top: 35px;
 }
+
 .breadcrumb-links {
   display: flex;
 }
+
 .breadcrumb-links a {
   font-size: 15px;
   font-weight: 500;
@@ -120,6 +122,7 @@ export default {
   position: relative;
   text-decoration: none;
 }
+
 .breadcrumb-links a i {
   margin-right: 5px;
 }
@@ -130,12 +133,14 @@ export default {
   position: relative;
   display: inline-block;
 }
+
 .breadcrumb-separator font-awesome-icon {
   position: absolute;
   right: -4px;
   top: 50%;
   transform: translateY(-50%);
 }
+
 .breadcrumb-switch {
   margin-left: auto;
 }
@@ -169,6 +174,7 @@ export default {
   &.dark {
     background: var(--body-background);
   }
+
   &.light {
     background: var(--body-background);
   }
@@ -178,6 +184,7 @@ export default {
   &.dark {
     background: var(--body-background);
   }
+
   &.light {
     background: var(--body-background);
   }
@@ -185,6 +192,7 @@ export default {
   &.dark a {
     color: var(--head-text);
   }
+
   &.light a {
     color: var(--head-text);
   }
@@ -192,6 +200,7 @@ export default {
   &.dark span {
     color: var(--breadcrumb-text);
   }
+
   &.light span {
     color: var(--breadcrumb-text);
   }
@@ -199,8 +208,8 @@ export default {
   &.dark span.active {
     color: var(--breadcrumb-text-active);
   }
+
   &.light span.active {
     color: var(--breadcrumb-text-active);
   }
-}
-</style>
+}</style>

@@ -4,10 +4,7 @@
       <a-radio-button value="1">標籤</a-radio-button>
       <a-radio-button value="2">類別</a-radio-button>
       <template v-if="updateNow === false">
-        <a-badge
-          :count="this.$WordsGroupsView.groupArray.length"
-          color="magenta"
-        >
+        <a-badge :count="$WordsGroupsView.groupArray.length" color="magenta">
           <a-radio-button value="3">群組</a-radio-button>
         </a-badge>
       </template>

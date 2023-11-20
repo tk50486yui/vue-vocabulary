@@ -30,5 +30,3 @@ export const messageMap = {
     default: 'Internal server error.'
   }
 }
-
-export const silent = ['heart', 'star']

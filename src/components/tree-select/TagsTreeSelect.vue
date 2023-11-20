@@ -1,27 +1,14 @@
 <template>
   <div class="select-theme" :class="$theme" ref="selectMod">
-    <a-tree-select
-      :getPopupContainer="() => this.$refs.selectMod"
-      v-bind="$attrs"
-      v-model:searchValue="searchValue"
-      show-search
-      allow-clear
-      :tree-line="treeLine && { showLeafIcon }"
-      :tree-data="this.tagsTransformed"
-    >
+    <a-tree-select :getPopupContainer="() => $refs.selectMod" v-bind="$attrs" v-model:searchValue="searchValue"
+      show-search allow-clear :tree-line="treeLine && { showLeafIcon }" :tree-data="tags">
       <template #title="{ value: val, ts_name }">
         <b v-if="val === 1" style="color: #08c">{{ val }}</b>
         <template v-else>
-          <template
-            v-for="(fragment, i) in ts_name
-              .toString()
-              .split(new RegExp(`(?<=${searchValue})|(?=${searchValue})`, 'i'))"
-          >
-            <span
-              v-if="fragment.toLowerCase() === searchValue.toLowerCase()"
-              :key="i"
-              style="color: #08c"
-            >
+          <template v-for="(fragment, i) in ts_name
+            .toString()
+            .split(new RegExp(`(?<=${searchValue})|(?=${searchValue})`, 'i'))">
+            <span v-if="fragment.toLowerCase() === searchValue.toLowerCase()" :key="i" style="color: #08c">
               {{ fragment }}
             </span>
             <template v-else>{{ fragment }}</template>
@@ -37,7 +24,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('TagsStore', ['tagsTransformed']),
+    ...mapGetters('TagsStore', ['tags']),
     ...mapState('Theme', ['$theme'])
   },
   methods: {

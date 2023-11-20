@@ -8,44 +8,23 @@
         <!-- tab 0 -->
         <a-tab-pane key="0" tab="全部">
           <div class="table-theme" :class="$theme">
-            <a-table
-              :dataSource="this.categoriesArray"
-              :columns="columns"
-              :scroll="{ y: 600, x: 400 }"
-              :loading="TableLoading[0]"
-              expandRowByClick
-            >
+            <a-table :dataSource="categoriesArray" :columns="columns" :scroll="{ y: 600, x: 400 }"
+              :loading="TableLoading[0]" expandRowByClick>
               <!-- header -->
               <template #title>
-                <PlusBtn
-                  class="btn btn-primary btn-outline-light float-end me-md-2"
-                  @click="visible = true"
-                />
-                <RefreshBtn
-                  class="btn btn-secondary btn-outline-light float-end me-md-2"
-                  :spin="SyncOutlinedSpin[0]"
-                  @click="refreshTable(0)"
-                />
+                <PlusBtn class="btn btn-primary btn-outline-light float-end me-md-2" @click="visible = true" />
+                <RefreshBtn class="btn btn-secondary btn-outline-light float-end me-md-2" :spin="SyncOutlinedSpin[0]"
+                  @click="refreshTable(0)" />
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- cate_name -->
                 <template v-if="['cate_name'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
                     <div class="button-edit-container">
-                      <CheckOutlined
-                        class="button-edit-check"
-                        @click="onEditFinish(record, 0)"
-                      />
-                      <CloseOutlined
-                        class="button-edit-close"
-                        @click="cancel(record, 0)"
-                      />
-                      <a-input
-                        v-model:value="
-                          editTableData[0][record.id][column.dataIndex]
-                        "
-                        style="margin: -5px 0"
-                      />
+                      <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 0)" />
+                      <CloseOutlined class="button-edit-close" @click="cancel(record, 0)" />
+                      <a-input v-model:value="editTableData[0][record.id][column.dataIndex]
+                        " style="margin: -5px 0" />
                     </div>
                   </template>
                   <template v-else>
@@ -54,10 +33,7 @@
                         <template v-if="record.parents && record.parents > 0">
                           <span style="margin-left: 8px"></span>
                         </template>
-                        <EditOutlined
-                          class="button-edit"
-                          @click="edit(record, 0, recentCategoriesArray)"
-                        />
+                        <EditOutlined class="button-edit" @click="edit(record, 0, recentCategoriesArray)" />
                         {{ text }}
                         <template v-if="record.children.length > 0">
                           （{{ record.children.length }}）
@@ -68,26 +44,15 @@
                   </template>
                 </template>
                 <!-- cate_parent_id -->
-                <template
-                  v-else-if="['cate_parent_id'].includes(column.dataIndex)"
-                >
+                <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'cate_parent_id'">
                     <template v-if="editTableData[0][record.id]">
-                      <CategoriesTreeSelect
-                        size="small"
-                        placeholder="選擇父類別"
-                        :dropdownMatchSelectWidth="false"
-                        style="width: 100%"
-                        v-model:value="
-                          editTableData[0][record.id]['cate_parent_id']
-                        "
-                        :defaultValue="
-                          editTableData[0][record.id]['cate_parent_id']
-                        "
-                        :treeDefaultExpandedKeys="[
-                          editTableData[0][record.id]['cate_parent_id']
-                        ]"
-                      />
+                      <CategoriesTreeSelect size="small" placeholder="選擇父類別" :dropdownMatchSelectWidth="false"
+                        style="width: 100%" v-model:value="editTableData[0][record.id]['cate_parent_id']
+                          " :defaultValue="editTableData[0][record.id]['cate_parent_id']
+    " :treeDefaultExpandedKeys="[
+    editTableData[0][record.id]['cate_parent_id']
+  ]" />
                     </template>
                     <template v-else>
                       {{ record.cate_parent_name }}
@@ -101,77 +66,43 @@
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="近期">
           <div class="table-theme" :class="$theme">
-            <a-table
-              :dataSource="this.recentCategoriesArray"
-              :columns="columns"
-              :scroll="{ y: 600 }"
-              :loading="TableLoading[1]"
-            >
+            <a-table :dataSource="recentCategoriesArray" :columns="columns" :scroll="{ y: 600 }"
+              :loading="TableLoading[1]">
               <!-- header -->
               <template #title>
-                <PlusBtn
-                  class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
-                  @click="visible = true"
-                />
-                <RefreshBtn
-                  class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-                  :spin="SyncOutlinedSpin[1]"
-                  @click="refreshTable(1)"
-                />
+                <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible = true" />
+                <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+                  :spin="SyncOutlinedSpin[1]" @click="refreshTable(1)" />
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- cate_name -->
                 <template v-if="['cate_name'].includes(column.dataIndex)">
                   <template v-if="editTableData[1][record.id]">
                     <div class="button-edit-container">
-                      <CheckOutlined
-                        class="button-edit-check"
-                        @click="onEditFinish(record, 1)"
-                      />
-                      <CloseOutlined
-                        class="button-edit-close"
-                        @click="cancel(record, 1)"
-                      />
-                      <a-input
-                        v-model:value="
-                          editTableData[1][record.id][column.dataIndex]
-                        "
-                        style="margin: -5px 0"
-                      />
+                      <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)" />
+                      <CloseOutlined class="button-edit-close" @click="cancel(record, 1)" />
+                      <a-input v-model:value="editTableData[1][record.id][column.dataIndex]
+                        " style="margin: -5px 0" />
                     </div>
                   </template>
                   <template v-else>
                     <div class="column-container">
-                      <EditOutlined
-                        class="button-edit2"
-                        @click="edit(record, 1, recentCategoriesArray)"
-                      />
+                      <EditOutlined class="button-edit2" @click="edit(record, 1, recentCategoriesArray)" />
                       {{ text }}
                       <DeleteBtn @confirm="onDelete(record.id)" />
                     </div>
                   </template>
                 </template>
                 <!-- cate_parent_id -->
-                <template
-                  v-else-if="['cate_parent_id'].includes(column.dataIndex)"
-                >
+                <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'cate_parent_id'">
                     <template v-if="editTableData[1][record.id]">
-                      <CategoriesTreeSelect
-                        size="small"
-                        placeholder="選擇父類別"
-                        :dropdownMatchSelectWidth="false"
-                        style="width: 100%"
-                        v-model:value="
-                          editTableData[1][record.id]['cate_parent_id']
-                        "
-                        :defaultValue="
-                          editTableData[1][record.id]['cate_parent_id']
-                        "
-                        :treeDefaultExpandedKeys="[
-                          editTableData[1][record.id]['cate_parent_id']
-                        ]"
-                      />
+                      <CategoriesTreeSelect size="small" placeholder="選擇父類別" :dropdownMatchSelectWidth="false"
+                        style="width: 100%" v-model:value="editTableData[1][record.id]['cate_parent_id']
+                          " :defaultValue="editTableData[1][record.id]['cate_parent_id']
+    " :treeDefaultExpandedKeys="[
+    editTableData[1][record.id]['cate_parent_id']
+  ]" />
                     </template>
                     <template v-else>
                       {{ record.cate_parent_name }}
@@ -242,7 +173,7 @@ export default {
         }
         this.SyncOutlinedSpin[tab] = false
         this.TableLoading[tab] = false
-      } catch (error) {}
+      } catch (error) { }
     },
     async onEditFinish(record, tab) {
       try {
@@ -251,14 +182,14 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
         this.cancel(record, tab)
-      } catch (error) {}
+      } catch (error) { }
     },
     async onDelete(id) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) {}
+      } catch (error) { }
     }
   },
   async created() {
@@ -266,7 +197,7 @@ export default {
       await this.fetch()
       await this.fetchRecent()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   setup() {
     const Ready = ref(false)
@@ -329,6 +260,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 8px;
 }
@@ -358,16 +290,19 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 .button-edit2 {
   display: flex;
   justify-content: center;
   padding-right: 6px;
   color: #6a6aff;
 }
+
 .button-edit-check {
   margin-right: 10px;
   color: #00db00;
 }
+
 .button-edit-close {
   margin-left: auto;
   color: #ea0000;

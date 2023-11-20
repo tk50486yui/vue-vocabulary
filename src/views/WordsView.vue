@@ -5,28 +5,17 @@
     </div>
     <div class="select-theme" :class="$theme" ref="selectMod">
       每頁：
-      <a-select
-        ref="select"
-        :getPopupContainer="() => this.$refs.selectMod"
-        v-model:value="selectPageSize"
-        size="small"
-        style="width: 80px"
-        @change="handlePageSize()"
-      >
+      <a-select v-model:value="selectPageSize" ref="select" :getPopupContainer="() => $refs.selectMod" size="small"
+        style="width: 80px" @change="handlePageSize()">
         <a-select-option value="10">10 筆</a-select-option>
         <a-select-option value="20">20 筆</a-select-option>
         <a-select-option value="50">50 筆</a-select-option>
         <a-select-option value="100">100 筆</a-select-option>
-        <a-select-option :value="this.wordsArray.length">全部</a-select-option>
+        <a-select-option :value="wordsArray.length">全部</a-select-option>
       </a-select>
       <span style="padding-left: 8px">表格高度：</span>
-      <a-select
-        :getPopupContainer="() => this.$refs.selectMod"
-        v-model:value="selectTablescrollY"
-        size="small"
-        style="width: 80px"
-        @change="handleTableScrollY()"
-      >
+      <a-select v-model:value="selectTablescrollY" :getPopupContainer="() => $refs.selectMod" size="small"
+        style="width: 80px" @change="handleTableScrollY()">
         <a-select-option value="400">極低</a-select-option>
         <a-select-option value="600">低</a-select-option>
         <a-select-option value="800">適中</a-select-option>
@@ -35,31 +24,18 @@
       </a-select>
     </div>
     <div class="table-theme" :class="$theme">
-      <a-table
-        :dataSource="this.wordsArray"
-        :columns="columns"
-        :scroll="{ y: TablescrollY, x: 850 }"
-        :loading="TableLoading"
-        :pagination="pagination"
-      >
+      <a-table :dataSource="wordsArray" :columns="columns" :scroll="{ y: TablescrollY, x: 850 }" :loading="TableLoading"
+        :pagination="pagination">
         <!-- Table header -->
         <template #title>
-          <PlusBtn
-            class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
-            @click="onDrawerShow()"
-          />
-          <RefreshBtn
-            class="btn btn-info btn-outline-light btn-sm float-end me-md-2"
-            :spin="SyncOutlinedSpin"
-            @click="refreshTable"
-          />
+          <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="onDrawerShow()" />
+          <RefreshBtn class="btn btn-info btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin"
+            @click="refreshTable" />
         </template>
         <!-- Table expanded -->
         <template #expandedRowRender="{ record }">
           <p style="margin: 0">
-            <a-typography-paragraph
-              :copyable="{ text: record.ws_name }"
-            ></a-typography-paragraph>
+            <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
           </p>
           <p></p>
           <DeleteBtn @confirm="onDelete(record.id)" />
@@ -68,42 +44,24 @@
         </template>
         <!-- Table body -->
         <template #bodyCell="{ column, text, record }">
-          <template
-            v-if="
-              [
-                'ws_name',
-                'ws_pronunciation',
-                'ws_definition',
-                'cate_name'
-              ].includes(column.dataIndex)
-            "
-          >
+          <template v-if="[
+            'ws_name',
+            'ws_pronunciation',
+            'ws_definition',
+            'cate_name'
+          ].includes(column.dataIndex)
+            ">
             <div>
-              <template
-                v-if="
-                  editTableData[record.key] && column.dataIndex === 'cate_name'
-                "
-              >
-                <CategoriesTreeSelect
-                  size="small"
-                  placeholder="選擇"
-                  :dropdownMatchSelectWidth="false"
-                  style="width: 100%"
+              <template v-if="editTableData[record.key] && column.dataIndex === 'cate_name'
+                ">
+                <CategoriesTreeSelect size="small" placeholder="選擇" :dropdownMatchSelectWidth="false" style="width: 100%"
                   v-model:value="editTableData[record.key]['cate_id']"
                   :defaultValue="editTableData[record.key]['cate_id']"
-                  :treeDefaultExpandedKeys="[
-                    editTableData[record.key]['cate_id']
-                  ]"
-                  @change="
-                    handleCategoriesSelectChange(editTableData[record.key])
-                  "
-                />
+                  :treeDefaultExpandedKeys="[editTableData[record.key]['cate_id']]"
+                  @change="handleCategoriesSelectChange(editTableData[record.key])" />
               </template>
               <template v-else-if="editTableData[record.key]">
-                <a-input
-                  v-model:value="editTableData[record.key][column.dataIndex]"
-                  style="margin: -5px 0"
-                />
+                <a-input v-model:value="editTableData[record.key][column.dataIndex]" style="margin: -5px 0" />
               </template>
               <template v-else>{{ text }}</template>
             </div>
@@ -113,21 +71,12 @@
             <div>
               <template v-if="editTableData[record.key]">
                 <div class="button-edit-container">
-                  <CheckOutlined
-                    class="button-edit-check"
-                    @click="onEditFinish(record)"
-                  />
-                  <CloseOutlined
-                    class="button-edit-close"
-                    @click="cancel(record)"
-                  />
+                  <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
+                  <CloseOutlined class="button-edit-close" @click="cancel(record)" />
                 </div>
               </template>
               <template v-else>
-                <EditOutlined
-                  class="button-edit"
-                  @click="edit(record, wordsArray)"
-                />
+                <EditOutlined class="button-edit" @click="edit(record, wordsArray)" />
               </template>
             </div>
           </template>
@@ -136,30 +85,30 @@
             <span class="icon-theme" :class="$theme">
               <template v-if="record.ws_is_common">
                 <span class="icon-star">
-                  <a @click="onUpdateCommon(record.id, record)"
-                    ><StarFilled
-                  /></a>
+                  <a @click="onUpdateCommon(record.id, record)">
+                    <StarFilled />
+                  </a>
                 </span>
               </template>
               <template v-else>
                 <span class="icon-star-false">
-                  <a @click="onUpdateCommon(record.id, record)"
-                    ><StarFilled
-                  /></a>
+                  <a @click="onUpdateCommon(record.id, record)">
+                    <StarFilled />
+                  </a>
                 </span>
               </template>
               <template v-if="record.ws_is_important">
                 <span class="icon-heart">
-                  <a @click="onUpdateImportant(record.id, record)"
-                    ><HeartFilled
-                  /></a>
+                  <a @click="onUpdateImportant(record.id, record)">
+                    <HeartFilled />
+                  </a>
                 </span>
               </template>
               <template v-else>
                 <span class="icon-heart-false">
-                  <a @click="onUpdateImportant(record.id, record)"
-                    ><HeartFilled
-                  /></a>
+                  <a @click="onUpdateImportant(record.id, record)">
+                    <HeartFilled />
+                  </a>
                 </span>
               </template>
             </span>
@@ -169,11 +118,7 @@
     </div>
   </template>
   <!-- drawer words add -->
-  <WordsDrawerView
-    ref="wordsDrawer"
-    :open="this.drawerVisible"
-    @close="this.drawerVisible = false"
-  />
+  <WordsDrawerView ref="wordsDrawer" :open="drawerVisible" @close="drawerVisible = false" />
 </template>
 
 <script>
@@ -214,7 +159,7 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.TableLoading = false
-      } catch (error) {}
+      } catch (error) { }
     },
     async onEditFinish(record) {
       try {
@@ -223,26 +168,26 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
         this.cancel(record)
-      } catch (error) {}
+      } catch (error) { }
     },
     async onUpdateCommon(id, data) {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-      } catch (error) {}
+      } catch (error) { }
     },
     async onUpdateImportant(id, data) {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-      } catch (error) {}
+      } catch (error) { }
     },
     async onDelete(id) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) {}
+      } catch (error) { }
     },
     handleCategoriesSelectChange(currentData) {
       currentData.cate_id =
@@ -264,7 +209,7 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) {}
+    } catch (error) { }
   },
   setup() {
     const Ready = ref(false)
@@ -358,6 +303,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 12px;
 }
@@ -382,22 +328,27 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 .button-edit {
   display: flex;
   justify-content: center;
   color: $edit-icon-color;
 }
+
 .button-edit-check {
   margin-right: 10px;
   color: #00db00;
 }
+
 .button-edit-close {
   margin-left: auto;
   color: #ea0000;
 }
+
 .icon-star {
   padding-right: 4px;
 }
+
 .icon-star-false {
   padding-right: 4px;
 }
