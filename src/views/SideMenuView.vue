@@ -28,14 +28,14 @@
     </template>
   </keep-alive>
 </template>
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapState } from 'vuex'
 import CategoriesMenuView from '@/views/category/CategoriesMenuView.vue'
 import TagsMenuView from '@/views/tag/TagsMenuView.vue'
 import WordsGroupsView from '@/views/wordsgroup/WordsGroupsView.vue'
 
-export default {
+export default defineComponent({
   name: 'SideMenuView',
   components: {
     CategoriesMenuView,
@@ -50,7 +50,7 @@ export default {
     ...mapState('Theme', ['$theme'])
   },
   watch: {
-    updateNow(val) {
+    updateNow(val: boolean) {
       if (val) {
         this.sideGroup = '3'
       }
@@ -63,7 +63,7 @@ export default {
       sideGroup
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

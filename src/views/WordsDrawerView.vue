@@ -1,18 +1,23 @@
 <template>
   <!-- drawer words add -->
   <div class="drawer-theme" ref="wordsDrawer" :class="$theme">
-    <a-drawer :getContainer="() => $refs.wordsDrawer" v-bind="$attrs" placement="left" :width="drawerWidth">
+    <a-drawer
+      :getContainer="() => $refs.wordsDrawer"
+      v-bind="$attrs"
+      placement="left"
+      :width="drawerWidth"
+    >
       <WordsAddView />
     </a-drawer>
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapState } from 'vuex'
 import WordsAddView from '@/views/WordsAddView.vue'
 
-export default {
+export default defineComponent({
   name: 'WordsDrawerView',
   components: {
     WordsAddView
@@ -23,31 +28,30 @@ export default {
   },
   methods: {
     // drawer
-    onDrawerShow() {
+    onDrawerShow(): void {
       this.setDrawerStyle()
-      this.drawerVisible = true
     },
-    setDrawerStyle() {
+    setDrawerStyle(): void {
       this.drawerWidth =
         this.drawerWidthMap[
-        this.$desktop
-          ? 'desktop'
-          : this.$tablet
-            ? 'tablet'
-            : this.$mobile
-              ? 'mobile'
-              : 'desktop'
+          this.$desktop
+            ? 'desktop'
+            : this.$tablet
+              ? 'tablet'
+              : this.$mobile
+                ? 'mobile'
+                : 'desktop'
         ]
     }
   },
   watch: {
-    $desktop(val) {
+    $desktop() {
       this.setDrawerStyle()
     },
-    $tablet(val) {
+    $tablet() {
       this.setDrawerStyle()
     },
-    $mobile(val) {
+    $mobile() {
       this.setDrawerStyle()
     }
   },
@@ -64,7 +68,7 @@ export default {
       drawerWidthMap
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

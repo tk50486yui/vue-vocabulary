@@ -31,7 +31,7 @@ const actions = {
 
   async update(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: TagsColor }
+    { id, data }: { id: number; data: TagsColor }
   ) {
     await TagsColorRepo.update(id, data)
     await dispatch('fetch')

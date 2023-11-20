@@ -8,23 +8,44 @@
         <!-- tab 0 -->
         <a-tab-pane key="0" tab="全部">
           <div class="table-theme" :class="$theme">
-            <a-table :dataSource="tagsArray" :columns="columns" :scroll="{ y: 600, x: 400 }" :loading="TableLoading[0]"
-              expandRowByClick>
+            <a-table
+              :dataSource="tagsArray"
+              :columns="columns"
+              :scroll="{ y: 600, x: 400 }"
+              :loading="TableLoading[0]"
+              expandRowByClick
+            >
               <!-- header -->
               <template #title>
-                <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible = true" />
-                <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-                  :spin="SyncOutlinedSpin[0]" @click="refreshTable(0)" />
+                <PlusBtn
+                  class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
+                  @click="visible = true"
+                />
+                <RefreshBtn
+                  class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+                  :spin="SyncOutlinedSpin[0]"
+                  @click="refreshTable(0)"
+                />
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- ts_name -->
                 <template v-if="['ts_name'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
                     <div class="button-edit-container">
-                      <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 0)" />
-                      <CloseOutlined class="button-edit-close" @click="cancel(record, 0)" />
-                      <a-input v-model:value="editTableData[0][record.id][column.dataIndex]
-                        " style="margin: -5px 0" />
+                      <CheckOutlined
+                        class="button-edit-check"
+                        @click="onEditFinish(record, 0)"
+                      />
+                      <CloseOutlined
+                        class="button-edit-close"
+                        @click="cancel(record, 0)"
+                      />
+                      <a-input
+                        v-model:value="
+                          editTableData[0][record.id][column.dataIndex]
+                        "
+                        style="margin: -5px 0"
+                      />
                     </div>
                   </template>
                   <template v-else>
@@ -33,7 +54,10 @@
                         <template v-if="record.parents && record.parents > 0">
                           <span style="margin-left: 8px"></span>
                         </template>
-                        <EditOutlined class="button-edit" @click="edit(record, 0, recentTagsArray)" />
+                        <EditOutlined
+                          class="button-edit"
+                          @click="edit(record, 0, recentTagsArray)"
+                        />
                         {{ text }}
                         <template v-if="record.children.length > 0">
                           （{{ record.children.length }}）
@@ -46,30 +70,42 @@
                 <!-- tc_color show-->
                 <template v-else-if="['tc_show'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
-                    <div style="display: flex; align-items: center; width: 100%">
-                      <a-tag :style="'background:' +
-                        editTableData[0][record.id]['tc_background'] +
-                        ';color:' +
-                        editTableData[0][record.id]['tc_color'] +
-                        ';border-color:' +
-                        editTableData[0][record.id]['tc_border']
-                        " style="flex: 1; margin-right: 8px">
+                    <div
+                      style="display: flex; align-items: center; width: 100%"
+                    >
+                      <a-tag
+                        :style="
+                          'background:' +
+                          editTableData[0][record.id]['tc_background'] +
+                          ';color:' +
+                          editTableData[0][record.id]['tc_color'] +
+                          ';border-color:' +
+                          editTableData[0][record.id]['tc_border']
+                        "
+                        style="flex: 1; margin-right: 8px"
+                      >
                         {{ editTableData[0][record.id]['ts_name'] }}
                       </a-tag>
                     </div>
                   </template>
                   <template v-else>
-                    <template v-if="record.tc_color &&
-                      record.tc_background &&
-                      record.tc_border
-                      ">
-                      <a-tag :style="'background:' +
-                        record.tc_background +
-                        ';color:' +
-                        record.tc_color +
-                        ';border-color:' +
+                    <template
+                      v-if="
+                        record.tc_color &&
+                        record.tc_background &&
                         record.tc_border
-                        ">
+                      "
+                    >
+                      <a-tag
+                        :style="
+                          'background:' +
+                          record.tc_background +
+                          ';color:' +
+                          record.tc_color +
+                          ';border-color:' +
+                          record.tc_border
+                        "
+                      >
                         {{ record.ts_name }}
                       </a-tag>
                     </template>
@@ -83,14 +119,22 @@
                 <!-- tc_color select -->
                 <template v-else-if="['tc_color'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
-                    <div style="display: flex; align-items: center; width: 100%">
-                      <TagsColorSelect size="small" style="width: 100%; flex: 2" placeholder="選擇標籤顏色"
-                        v-model:value="editTableData[0][record.id]['tc_id']" @change="(value) =>
-                          handleColorSelectChange(
-                            value,
-                            editTableData[0][record.id]
-                          )
-                          " />
+                    <div
+                      style="display: flex; align-items: center; width: 100%"
+                    >
+                      <TagsColorSelect
+                        size="small"
+                        style="width: 100%; flex: 2"
+                        placeholder="選擇標籤顏色"
+                        v-model:value="editTableData[0][record.id]['tc_id']"
+                        @change="
+                          (value) =>
+                            handleColorSelectChange(
+                              value,
+                              editTableData[0][record.id]
+                            )
+                        "
+                      />
                     </div>
                   </template>
                   <template v-else>
@@ -98,20 +142,32 @@
                   </template>
                 </template>
                 <!-- ts_parent_id -->
-                <template v-else-if="['ts_parent_id'].includes(column.dataIndex)">
+                <template
+                  v-else-if="['ts_parent_id'].includes(column.dataIndex)"
+                >
                   <template v-if="column.dataIndex === 'ts_parent_id'">
                     <template v-if="editTableData[0][record.id]">
-                      <TagsTreeSelect size="small" placeholder="選擇父類別" :dropdownMatchSelectWidth="false"
-                        style="width: 100%" v-model:value="editTableData[0][record.id]['ts_parent_id']
-                          " :defaultValue="editTableData[0][record.id]['ts_parent_id']
-    " :treeDefaultExpandedKeys="[
-    editTableData[0][record.id]['ts_parent_id']
-  ]" :field-names="{
-  children: 'children',
-  label: 'ts_name',
-  value: 'id',
-  key: 'id'
-}" />
+                      <TagsTreeSelect
+                        size="small"
+                        placeholder="選擇父類別"
+                        :dropdownMatchSelectWidth="false"
+                        style="width: 100%"
+                        v-model:value="
+                          editTableData[0][record.id]['ts_parent_id']
+                        "
+                        :defaultValue="
+                          editTableData[0][record.id]['ts_parent_id']
+                        "
+                        :treeDefaultExpandedKeys="[
+                          editTableData[0][record.id]['ts_parent_id']
+                        ]"
+                        :field-names="{
+                          children: 'children',
+                          label: 'ts_name',
+                          value: 'id',
+                          key: 'id'
+                        }"
+                      />
                     </template>
                     <template v-else>
                       {{ record.ts_parent_name }}
@@ -125,12 +181,23 @@
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="近期">
           <div class="table-theme" :class="$theme">
-            <a-table :dataSource="recentTagsArray" :columns="columns" :scroll="{ y: 600 }" :loading="TableLoading[1]">
+            <a-table
+              :dataSource="recentTagsArray"
+              :columns="columns"
+              :scroll="{ y: 600 }"
+              :loading="TableLoading[1]"
+            >
               <!-- header -->
               <template #title>
-                <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="visible = true" />
-                <RefreshBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-                  :spin="SyncOutlinedSpin[1]" @click="refreshTable(1)" />
+                <PlusBtn
+                  class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
+                  @click="visible = true"
+                />
+                <RefreshBtn
+                  class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+                  :spin="SyncOutlinedSpin[1]"
+                  @click="refreshTable(1)"
+                />
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- ts_name -->
@@ -138,15 +205,28 @@
                   <div>
                     <template v-if="editTableData[1][record.id]">
                       <div class="button-edit-container">
-                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)" />
-                        <CloseOutlined class="button-edit-close" @click="cancel(record, 1)" />
-                        <a-input v-model:value="editTableData[1][record.id][column.dataIndex]
-                          " style="margin: -5px 0" />
+                        <CheckOutlined
+                          class="button-edit-check"
+                          @click="onEditFinish(record, 1)"
+                        />
+                        <CloseOutlined
+                          class="button-edit-close"
+                          @click="cancel(record, 1)"
+                        />
+                        <a-input
+                          v-model:value="
+                            editTableData[1][record.id][column.dataIndex]
+                          "
+                          style="margin: -5px 0"
+                        />
                       </div>
                     </template>
                     <template v-else>
                       <div class="column-container">
-                        <EditOutlined class="button-edit2" @click="edit(record, 1, recentTagsArray)" />
+                        <EditOutlined
+                          class="button-edit2"
+                          @click="edit(record, 1, recentTagsArray)"
+                        />
                         {{ text }}
                         <DeleteBtn @confirm="onDelete(record.id)" />
                       </div>
@@ -156,30 +236,42 @@
                 <!-- tc_color show-->
                 <template v-else-if="['tc_show'].includes(column.dataIndex)">
                   <template v-if="editTableData[1][record.id]">
-                    <div style="display: flex; align-items: center; width: 100%">
-                      <a-tag :style="'background:' +
-                        editTableData[1][record.id]['tc_background'] +
-                        ';color:' +
-                        editTableData[1][record.id]['tc_color'] +
-                        ';border-color:' +
-                        editTableData[1][record.id]['tc_border']
-                        " style="flex: 1; margin-right: 8px">
+                    <div
+                      style="display: flex; align-items: center; width: 100%"
+                    >
+                      <a-tag
+                        :style="
+                          'background:' +
+                          editTableData[1][record.id]['tc_background'] +
+                          ';color:' +
+                          editTableData[1][record.id]['tc_color'] +
+                          ';border-color:' +
+                          editTableData[1][record.id]['tc_border']
+                        "
+                        style="flex: 1; margin-right: 8px"
+                      >
                         {{ editTableData[1][record.id]['ts_name'] }}
                       </a-tag>
                     </div>
                   </template>
                   <template v-else>
-                    <template v-if="record.tc_color &&
-                      record.tc_background &&
-                      record.tc_border
-                      ">
-                      <a-tag :style="'background:' +
-                        record.tc_background +
-                        ';color:' +
-                        record.tc_color +
-                        ';border-color:' +
+                    <template
+                      v-if="
+                        record.tc_color &&
+                        record.tc_background &&
                         record.tc_border
-                        ">
+                      "
+                    >
+                      <a-tag
+                        :style="
+                          'background:' +
+                          record.tc_background +
+                          ';color:' +
+                          record.tc_color +
+                          ';border-color:' +
+                          record.tc_border
+                        "
+                      >
                         {{ record.ts_name }}
                       </a-tag>
                     </template>
@@ -193,14 +285,22 @@
                 <!-- tc_color select -->
                 <template v-else-if="['tc_color'].includes(column.dataIndex)">
                   <template v-if="editTableData[1][record.id]">
-                    <div style="display: flex; align-items: center; width: 100%">
-                      <TagsColorSelect size="small" style="width: 100%; flex: 2" placeholder="選擇標籤顏色"
-                        v-model:value="editTableData[1][record.id]['tc_id']" @change="(value) =>
-                          handleColorSelectChange(
-                            value,
-                            editTableData[1][record.id]
-                          )
-                          " />
+                    <div
+                      style="display: flex; align-items: center; width: 100%"
+                    >
+                      <TagsColorSelect
+                        v-model:value="editTableData[1][record.id]['tc_id']"
+                        placeholder="選擇標籤顏色"
+                        @change="
+                          (value: number) =>
+                            handleColorSelectChange(
+                              value,
+                              editTableData[1][record.id]
+                            )
+                        "
+                        size="small"
+                        style="width: 100%; flex: 2"
+                      />
                     </div>
                   </template>
                   <template v-else>
@@ -208,20 +308,32 @@
                   </template>
                 </template>
                 <!-- ts_parent_id -->
-                <template v-else-if="['ts_parent_id'].includes(column.dataIndex)">
+                <template
+                  v-else-if="['ts_parent_id'].includes(column.dataIndex)"
+                >
                   <template v-if="column.dataIndex === 'ts_parent_id'">
                     <template v-if="editTableData[1][record.id]">
-                      <TagsTreeSelect size="small" placeholder="選擇父類別" :dropdownMatchSelectWidth="false"
-                        style="width: 100%" v-model:value="editTableData[1][record.id]['ts_parent_id']
-                          " :defaultValue="editTableData[1][record.id]['ts_parent_id']
-    " :treeDefaultExpandedKeys="[
-    editTableData[1][record.id]['ts_parent_id']
-  ]" :field-names="{
-  children: 'children',
-  label: 'ts_name',
-  value: 'id',
-  key: 'id'
-}" />
+                      <TagsTreeSelect
+                        size="small"
+                        placeholder="選擇父類別"
+                        :dropdownMatchSelectWidth="false"
+                        style="width: 100%"
+                        v-model:value="
+                          editTableData[1][record.id]['ts_parent_id']
+                        "
+                        :defaultValue="
+                          editTableData[1][record.id]['ts_parent_id']
+                        "
+                        :treeDefaultExpandedKeys="[
+                          editTableData[1][record.id]['ts_parent_id']
+                        ]"
+                        :field-names="{
+                          children: 'children',
+                          label: 'ts_name',
+                          value: 'id',
+                          key: 'id'
+                        }"
+                      />
                     </template>
                     <template v-else>
                       {{ record.ts_parent_name }}
@@ -253,8 +365,8 @@
   <TagsModalView v-model:open="visible" />
 </template>
 
-<script>
-import { ref, reactive } from 'vue'
+<script lang="ts">
+import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { RefreshBtn, DeleteBtn, PlusBtn } from '@/components/button'
@@ -264,8 +376,11 @@ import TagsSortView from '@/views/tag/TagsSortView.vue'
 import TagsColorView from '@/views/tag/TagsColorView.vue'
 import TagsColorSelect from '@/components/select/TagsColorSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import type { UnwrapRef } from 'vue'
+import { Tag } from '@/interfaces/Tags.ts'
+import { TagsColor } from '@/interfaces/TagsColor.ts'
 
-export default {
+export default defineComponent({
   name: 'TagsView',
   components: {
     DeleteBtn,
@@ -289,7 +404,7 @@ export default {
       'update',
       'deleteById'
     ]),
-    async refreshTable(tab) {
+    async refreshTable(tab: number) {
       try {
         this.SyncOutlinedSpin[tab] = true
         this.TableLoading[tab] = true
@@ -301,28 +416,34 @@ export default {
         }
         this.SyncOutlinedSpin[tab] = false
         this.TableLoading[tab] = false
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onEditFinish(record, tab) {
+    async onEditFinish(record: Tag, tab: number) {
       try {
         const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
         this.cancel(record, tab)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onDelete(id) {
+    async onDelete(id: number) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    handleColorSelectChange(value, record) {
+    handleColorSelectChange(value: number, record: Tag) {
       if (value) {
         const newVar = this.tagsColor.find(
-          (tagColor) => parseInt(tagColor.id) === parseInt(value)
+          (tagColor: TagsColor) => tagColor.id === value
         )
         record.tc_background = newVar.tc_background
         record.tc_color = newVar.tc_color
@@ -339,7 +460,9 @@ export default {
       await this.fetch()
       await this.fetchRecent()
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   setup() {
     const Ready = ref(false)
@@ -347,22 +470,22 @@ export default {
     const SyncOutlinedSpin = ref([false, false])
     const visible = ref(false)
     const activeTab = ref('0')
-    const editTableData = reactive({
-      0: {},
-      1: {}
+    const editTableData: UnwrapRef<Record<number, Tag[]>> = reactive({
+      0: {} as Tag[],
+      1: {} as Tag[]
     })
 
-    const edit = (record, tab, editDataSource) => {
+    const edit = (record: Tag, tab: number, editDataSource: Tag[]) => {
       editTableData[tab][record.id] = cloneDeep(
         editDataSource.filter((item) => record.id === item.id)[0]
       )
     }
 
-    const save = async (record, tab) => {
+    const save = async (record: Tag, tab: number) => {
       return editTableData[tab][record.id]
     }
 
-    const cancel = (record, tab) => {
+    const cancel = (record: Tag, tab: number) => {
       delete editTableData[tab][record.id]
     }
 
@@ -407,7 +530,7 @@ export default {
       cancel
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

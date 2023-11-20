@@ -33,15 +33,16 @@
     </ul>
   </nav>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
-export default {
+export default defineComponent({
   name: 'NavDrawerView',
 
   computed: {
     ...mapState('Theme', ['$theme'])
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -50,6 +51,7 @@ export default {
 .drawer__menu ul li {
   list-style: none;
 }
+
 .drawer__menu {
   li a {
     font-size: 15px;

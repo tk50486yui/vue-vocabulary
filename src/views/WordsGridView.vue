@@ -12,17 +12,29 @@
       <a-input-group>
         <a-row :gutter="4">
           <a-col :span="18">
-            <TagsTreeSelect size="small" ref="TagsTreeSelect" placeholder="以標籤過濾資料" style="width: 100%"
-              v-model:value="tagsArray" :treeDefaultExpandedKeys="tagsArray" :field-names="{
+            <TagsTreeSelect
+              size="small"
+              ref="TagsTreeSelect"
+              placeholder="以標籤過濾資料"
+              style="width: 100%"
+              v-model:value="tagsArray"
+              :treeDefaultExpandedKeys="tagsArray"
+              :field-names="{
                 children: 'children',
                 label: 'ts_name',
                 value: 'id',
                 key: 'id'
-              }" @change="handleTagsChange()" multiple />
+              }"
+              @change="handleTagsChange()"
+              multiple
+            />
           </a-col>
           <a-col :span="2" class="d-flex align-items-center">
             <template v-if="$filtersTags.length > 0">
-              <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
+              <CloseBtn
+                class="d-flex align-items-center"
+                @click="onResetTags()"
+              />
             </template>
           </a-col>
         </a-row>
@@ -34,7 +46,10 @@
           標籤條件
         </el-tag>
         <span style="margin-left: 8px">
-          <OperatorRadio v-model:value="tagsOperator" @change="setFilterItems()" />
+          <OperatorRadio
+            v-model:value="tagsOperator"
+            @change="setFilterItems()"
+          />
         </span>
       </span>
       <p></p>
@@ -44,8 +59,15 @@
           標記條件
         </el-tag>
         <span style="margin-left: 8px">
-          <OperatorRadio v-model:value="choiceOperator" @change="setFilterItems()" />
-          <a-checkbox-group v-model:value="choiceArray" :options="choiceArrayOptions" @change="setFilterItems()">
+          <OperatorRadio
+            v-model:value="choiceOperator"
+            @change="setFilterItems()"
+          />
+          <a-checkbox-group
+            v-model:value="choiceArray"
+            :options="choiceArrayOptions"
+            @change="setFilterItems()"
+          >
             <template #label="{ value }">
               <span class="icon-theme" :class="$theme">
                 <div class="choice-container">
@@ -96,7 +118,11 @@
       <p></p>
     </template>
     <!-- groups add -->
-    <a-button class="btn btn-dark btn-outline-light btn-sm rounded" @click="clickGroupAdd()" :disabled="btnDisibled">
+    <a-button
+      class="btn btn-dark btn-outline-light btn-sm rounded"
+      @click="clickGroupAdd()"
+      :disabled="btnDisibled"
+    >
       <template v-if="checkboxShow === false">
         <font-awesome-icon :icon="['fas', 'plus']" /> 單詞群組
       </template>
@@ -107,18 +133,42 @@
         <template v-else> 請繼續勾選單詞 </template>
       </template>
     </a-button>
-    <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-3" @click="onDrawerShow()" />
+    <PlusBtn
+      class="btn btn-primary btn-outline-light btn-sm float-end me-md-3"
+      @click="onDrawerShow()"
+    />
     <!-- 主頁面 card -->
     <a-spin :spinning="ReadySpinning">
       <div class="list-card-theme" :class="$theme" ref="listCard">
-        <a-list :data-source="filterWordsResult" :pagination="pagination"
-          :grid="{ gutter: 0, xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3, xxxl: 3 }">
+        <a-list
+          :data-source="filterWordsResult"
+          :pagination="pagination"
+          :grid="{
+            gutter: 0,
+            xs: 1,
+            sm: 1,
+            md: 2,
+            lg: 3,
+            xl: 3,
+            xxl: 3,
+            xxxl: 3
+          }"
+        >
           <!-- card header -->
           <template #header>
-            <div class="select-theme d-flex align-items-center" :class="$theme" ref="selectMod">
+            <div
+              class="select-theme d-flex align-items-center"
+              :class="$theme"
+              ref="selectMod"
+            >
               每頁：
-              <a-select v-model:value="selectPageSize" :getPopupContainer="() => $refs.selectMod" size="small"
-                style="width: 80px" @change="setPageSize()">
+              <a-select
+                v-model:value="selectPageSize"
+                :getPopupContainer="() => $refs.selectMod"
+                size="small"
+                style="width: 80px"
+                @change="setPageSize()"
+              >
                 <a-select-option value="10">10 筆</a-select-option>
                 <a-select-option value="20">20 筆</a-select-option>
                 <a-select-option value="50">50 筆</a-select-option>
@@ -126,18 +176,43 @@
                 <a-select-option :value="words.length">全部</a-select-option>
               </a-select>
               <span style="margin-left: 8px">當前：</span>
-              <a-select v-model:value="currentPage" :getPopupContainer="() => $refs.selectMod" size="small"
-                style="width: 80px" @change="setPaginationCurrent()">
-                <template v-for="index in Math.ceil(words.length / Number(selectPageSize))" :key="index">
-                  <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+              <a-select
+                v-model:value="currentPage"
+                :getPopupContainer="() => $refs.selectMod"
+                size="small"
+                style="width: 80px"
+                @change="setPaginationCurrent()"
+              >
+                <template
+                  v-for="index in Math.ceil(
+                    words.length / Number(selectPageSize)
+                  )"
+                  :key="index"
+                >
+                  <a-select-option :value="index"
+                    >第 {{ index }} 頁</a-select-option
+                  >
                 </template>
               </a-select>
               <span style="margin-left: 8px">
-                <el-tag class="d-flex align-items-center" effect="dark" size="small" type="success" color="black" round>
+                <el-tag
+                  class="d-flex align-items-center"
+                  effect="dark"
+                  size="small"
+                  type="success"
+                  color="black"
+                  round
+                >
                   關鍵字：
                   <template v-if="$keyword != '' && $filters.length > 0">
-                    <template v-if="$filters.length === 1 && $filters.includes('cate_name')">
-                      ` <span class="category-keyword-text">{{ $keyword }} </span>`
+                    <template
+                      v-if="
+                        $filters.length === 1 && $filters.includes('cate_name')
+                      "
+                    >
+                      `
+                      <span class="category-keyword-text">{{ $keyword }} </span
+                      >`
                     </template>
                     <template v-else>
                       ` <span class="keyword-text">{{ $keyword }} </span>`
@@ -147,13 +222,22 @@
                 </el-tag>
               </span>
               <span style="margin-left: 8px">
-                <el-tag class="d-flex align-items-center" effect="dark" size="small" color="black" round>
+                <el-tag
+                  class="d-flex align-items-center"
+                  effect="dark"
+                  size="small"
+                  color="black"
+                  round
+                >
                   共 {{ filterWordsResult.length }} 筆
                 </el-tag>
               </span>
               <span style="margin-left: 6px">
                 <template v-if="$keyword != ''">
-                  <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
+                  <CloseBtn
+                    class="d-flex align-items-center"
+                    @click="onResetSearch()"
+                  />
                 </template>
               </span>
             </div>
@@ -169,17 +253,29 @@
                 <!-- cate_name -->
                 <template #title>
                   <template v-if="isCate">
-                    <template v-if="item.cate_name == null || item.cate_name == ''">
+                    <template
+                      v-if="item.cate_name == null || item.cate_name == ''"
+                    >
                       --
                     </template>
                     <template v-else>
-                      <template v-if="$keyword != '' &&
-                        $filters.includes('cate_name') &&
-                        item.cate_name.includes($keyword)
-                        ">
+                      <template
+                        v-if="
+                          $keyword != '' &&
+                          $filters.includes('cate_name') &&
+                          item.cate_name.includes($keyword)
+                        "
+                      >
                         <a @click="handleCategoryFilter(item.cate_name)">
-                          <template v-for="(char, index) in item.cate_name" :key="char + index">
-                            <span :class="{ 'category-keyword-text': $keyword.includes(char) }">
+                          <template
+                            v-for="(char, index) in item.cate_name"
+                            :key="char + index"
+                          >
+                            <span
+                              :class="{
+                                'category-keyword-text': $keyword.includes(char)
+                              }"
+                            >
                               {{ char }}
                             </span>
                           </template>
@@ -194,11 +290,16 @@
                   </template>
                 </template>
                 <!-- checkbox -->
-                <template v-if="$WordsGroupsDetailsView.updateNow === true ||
-                  checkboxShow === true
-                  ">
-                  <a-checkbox v-model:checked="checkboxArray[item.id]"
-                    @change="changeCheckbox(item.id, item.ws_name)"></a-checkbox>
+                <template
+                  v-if="
+                    $WordsGroupsDetailsView.updateNow === true ||
+                    checkboxShow === true
+                  "
+                >
+                  <a-checkbox
+                    v-model:checked="checkboxArray[item.id]"
+                    @change="changeCheckbox(item.id, item.ws_name)"
+                  ></a-checkbox>
                   <p></p>
                 </template>
                 <!-- Icon Star Heart -->
@@ -237,31 +338,62 @@
                 </span>
                 <p></p>
                 <!-- ws_name -->
-                <template v-if="$keyword != '' && $filters.includes('ws_name') && item.ws_name.includes($keyword)">
-                  <router-link :to="{ name: 'wordDetails', params: { id: item.id } }" @click="setDetailsClick()">
-                    <template v-for="(char, index) in item.ws_name" :key="char + index">
-                      <span :class="{ 'keyword-text': $keyword.includes(char) }">
+                <template
+                  v-if="
+                    $keyword != '' &&
+                    $filters.includes('ws_name') &&
+                    item.ws_name.includes($keyword)
+                  "
+                >
+                  <router-link
+                    :to="{ name: 'wordDetails', params: { id: item.id } }"
+                    @click="setDetailsClick()"
+                  >
+                    <template
+                      v-for="(char, index) in item.ws_name"
+                      :key="char + index"
+                    >
+                      <span
+                        :class="{ 'keyword-text': $keyword.includes(char) }"
+                      >
                         {{ char }}
                       </span>
                     </template>
                   </router-link>
                 </template>
                 <template v-else>
-                  <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
+                  <router-link
+                    :to="{ name: 'wordDetails', params: { id: item.id } }"
+                  >
                     {{ item.ws_name }}
                   </router-link>
                 </template>
                 <!-- ws_pronunciation -->
                 <template v-if="isPronunciation">
                   <p></p>
-                  <template v-if="item.ws_pronunciation == null || item.ws_pronunciation == ''">
+                  <template
+                    v-if="
+                      item.ws_pronunciation == null ||
+                      item.ws_pronunciation == ''
+                    "
+                  >
                     <br />
                   </template>
                   <template v-else>
-                    <template v-if="$keyword != '' && $filters.includes('ws_pronunciation') &&
-                      item.ws_pronunciation.includes($keyword)">
-                      <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
-                        <span :class="{ 'keyword-text': $keyword.includes(char) }">
+                    <template
+                      v-if="
+                        $keyword != '' &&
+                        $filters.includes('ws_pronunciation') &&
+                        item.ws_pronunciation.includes($keyword)
+                      "
+                    >
+                      <template
+                        v-for="(char, index) in item.ws_pronunciation"
+                        :key="char + index"
+                      >
+                        <span
+                          :class="{ 'keyword-text': $keyword.includes(char) }"
+                        >
                           {{ char }}
                         </span>
                       </template>
@@ -274,17 +406,28 @@
                 <!-- ws_definition -->
                 <template v-if="isDefinition">
                   <p></p>
-                  <template v-if="item.ws_definition == null || item.ws_definition == ''
-                    ">
+                  <template
+                    v-if="
+                      item.ws_definition == null || item.ws_definition == ''
+                    "
+                  >
                     <br />
                   </template>
                   <template v-else>
-                    <template v-if="$keyword != '' &&
-                      $filters.includes('ws_definition') &&
-                      item.ws_definition.includes($keyword)
-                      ">
-                      <template v-for="(char, index) in item.ws_definition" :key="char + index">
-                        <span :class="{ 'keyword-text': $keyword.includes(char) }">
+                    <template
+                      v-if="
+                        $keyword != '' &&
+                        $filters.includes('ws_definition') &&
+                        item.ws_definition.includes($keyword)
+                      "
+                    >
+                      <template
+                        v-for="(char, index) in item.ws_definition"
+                        :key="char + index"
+                      >
+                        <span
+                          :class="{ 'keyword-text': $keyword.includes(char) }"
+                        >
                           {{ char }}
                         </span>
                       </template>
@@ -296,28 +439,54 @@
                 </template>
                 <!-- ws_slogan -->
                 <template v-if="isSlogan">
-                  <template v-if="item.ws_slogan != null && item.ws_slogan != ''">
+                  <template
+                    v-if="item.ws_slogan != null && item.ws_slogan != ''"
+                  >
                     <p></p>
                     {{ item.ws_slogan }}
                   </template>
                 </template>
                 <!-- tags -->
                 <template v-if="isTag">
-                  <template v-if="item.words_tags.values != null &&
-                    item.words_tags.values.length > 0
-                    ">
+                  <template
+                    v-if="
+                      item.words_tags.values != null &&
+                      item.words_tags.values.length > 0
+                    "
+                  >
                     <p></p>
-                    <template v-for="(subItem, index) in item.words_tags.values" :key="index">
+                    <template
+                      v-for="(subItem, index) in item.words_tags.values"
+                      :key="index"
+                    >
                       <a @click="handleTagsLink(subItem.ts_id)">
-                        <template v-if="subItem.tc_color && subItem.tc_background && subItem.tc_border">
-                          <a-tag class="tag-align" :style="'background:' + subItem.tc_background +
-                            ';color:' + subItem.tc_color +
-                            ';border-color:' + subItem.tc_border">
+                        <template
+                          v-if="
+                            subItem.tc_color &&
+                            subItem.tc_background &&
+                            subItem.tc_border
+                          "
+                        >
+                          <a-tag
+                            class="tag-align"
+                            :style="
+                              'background:' +
+                              subItem.tc_background +
+                              ';color:' +
+                              subItem.tc_color +
+                              ';border-color:' +
+                              subItem.tc_border
+                            "
+                          >
                             {{ subItem.ts_name }}
                           </a-tag>
                         </template>
                         <template v-else>
-                          <a-tag class="tag-align" color="default" style="color: #fff">
+                          <a-tag
+                            class="tag-align"
+                            color="default"
+                            style="color: #fff"
+                          >
                             {{ subItem.ts_name }}
                           </a-tag>
                         </template>
@@ -333,19 +502,24 @@
     </a-spin>
   </template>
   <!-- drawer words add -->
-  <WordsDrawerView ref="wordsDrawer" :open="drawerVisible" @close="drawerVisible = false" />
+  <WordsDrawerView
+    ref="wordsDrawer"
+    :open="drawerVisible"
+    @close="drawerVisible = false"
+  />
 </template>
 
-<script>
-import { ref, reactive, toRefs } from 'vue'
+<script lang="ts">
+import { ref, reactive, toRefs, defineComponent } from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
 import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import { Word } from '@/interfaces/Words.ts'
 
-export default {
+export default defineComponent({
   name: 'WordsGridView',
   components: {
     WordsDrawerView,
@@ -407,37 +581,43 @@ export default {
     ]),
     ...mapActions('Views', ['updateWordsGrid', 'updateWordsGroupsView']),
     // ---- actions ----
-    async onUpdateCommon(id, data) {
+    async onUpdateCommon(id: number, data: Word): Promise<void> {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onUpdateImportant(id, data) {
+    async onUpdateImportant(id: number, data: Word): Promise<void> {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onDelete(id) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
     // ---- filter ----
-    async handleCategoryFilter(cateName) {
+    async handleCategoryFilter(cateName: string): Promise<void> {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
       await new Promise((resolve) => setTimeout(resolve, 100))
       window.scrollTo({ top: 180, behavior: 'instant' })
     },
-    async handleTagsChange() {
+    async handleTagsChange(): Promise<void> {
       await this.updateFiltersTags(this.tagsArray)
     },
-    async handleTagsLink(val) {
+    async handleTagsLink(val: number): Promise<void> {
       await this.onResetAll()
       this.tagsArray.push(val)
       await this.updateFiltersTags(this.tagsArray)
@@ -445,43 +625,43 @@ export default {
       window.scrollTo({ top: 180, behavior: 'instant' })
     },
     // ---- set value in vuex ----
-    setItemShow() {
+    setItemShow(): void {
       this.updateWordsGrid({
         variable: 'isItemsState',
         data: this.isItemsState
       })
     },
-    setFilterItems() {
+    setFilterItems(): void {
       this.updateWordsGrid({
         variable: 'filterItemsState',
         data: this.filterItemsState
       })
     },
     // ---- clear button ----
-    async onResetSearch() {
+    async onResetSearch(): Promise<void> {
       this.updateKeyword('')
     },
-    async onResetTags() {
+    async onResetTags(): Promise<void> {
       this.tagsArray = []
       await this.updateFiltersTags([])
     },
-    async onResetAll() {
+    async onResetAll(): Promise<void> {
       this.onResetSearch()
       this.onResetTags()
       this.choiceArray = []
       this.setFilterItems()
     },
     // ---- set page ----
-    setPageSize() {
+    setPageSize(): void {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
       this.currentPage = this.pagination.current
     },
-    setPaginationCurrent() {
+    setPaginationCurrent(): void {
       this.pagination.current = Number(this.currentPage)
     },
     // ---- scroll setting ----
-    setDetailsClick() {
+    setDetailsClick(): void {
       const scrollY =
         window.scrollY ||
         document.documentElement.scrollTop ||
@@ -495,13 +675,13 @@ export default {
       })
     },
     // ---- set default ----
-    setPagination() {
+    setPagination(): void {
       this.pagination.pageSize = Number(this.$WordsGrid.currentPageSize)
       this.selectPageSize = this.$WordsGrid.currentPageSize
       this.pagination.current = Number(this.$WordsGrid.currentPage)
       this.currentPage = this.pagination.current
     },
-    setDefaultFromState() {
+    setDefaultFromState(): void {
       this.tagsArray = this.$filtersTags
       const filterItemsStateProperty = Object.keys(this.filterItemsState)
       filterItemsStateProperty.forEach((property) => {
@@ -515,7 +695,7 @@ export default {
       this.AfterReady = true
     },
     // ---- words groups ----
-    clickGroupAdd() {
+    clickGroupAdd(): void {
       if (
         this.checkboxShow === true &&
         this.$WordsGroupsView.groupArray.length === 0
@@ -525,7 +705,7 @@ export default {
         this.checkboxShow = true
       }
     },
-    changeCheckbox(id, wsName) {
+    changeCheckbox(id: number, wsName: string) {
       if (this.checkboxArray[id]) {
         this.updateWordsGroupsView({
           variable: 'groupArray',
@@ -556,14 +736,16 @@ export default {
       await this.fetch()
       this.setDefaultFromState()
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.setDetailsClick()
     next()
   },
   watch: {
-    Ready(newVal) {
+    Ready(newVal: boolean) {
       if (newVal) {
         this.$nextTick(() => {
           // set page checkbox
@@ -574,7 +756,7 @@ export default {
         })
       }
     },
-    AfterReady(newVal) {
+    AfterReady(newVal: boolean) {
       if (newVal) {
         this.$nextTick(() => {
           // run scroll after page setting
@@ -589,7 +771,7 @@ export default {
       }
     },
     // tags filters
-    '$filtersTags.length'(val) {
+    '$filtersTags.length'(val: number) {
       if (val !== this.tagsArray.length) {
         this.tagsArray = this.$filtersTags
       }
@@ -617,13 +799,14 @@ export default {
     const labelColor = ref('rgba(59, 39, 12, 1)')
 
     const pagination = reactive({
-      onChange: (page) => {
+      onChange: (page: number) => {
         currentPage.value = page
         pagination.current = currentPage.value
       },
       pageSize: Number(selectPageSize.value),
       position: 'bottom',
-      showSizeChanger: false
+      showSizeChanger: false,
+      current: currentPage.value
     })
 
     const filterItemsState = reactive({
@@ -669,7 +852,7 @@ export default {
       ...toRefs(isItemsState)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

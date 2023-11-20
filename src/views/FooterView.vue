@@ -16,14 +16,15 @@
   </footer>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
-export default {
+export default defineComponent({
   name: 'FooterView',
   computed: {
     ...mapState('Theme', ['$theme'])
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -40,6 +41,7 @@ export default {
 .footer__copyright__text a:hover {
   color: #ca1515;
 }
+
 /*---------------------
     Footer Theme
 -----------------------*/
@@ -49,6 +51,7 @@ export default {
   &.dark {
     background: var(--body-background);
   }
+
   &.light {
     background: var(--body-background);
   }
@@ -63,6 +66,7 @@ export default {
     background: var(--body-background);
     color: var(--head-text);
   }
+
   &.light {
     background: var(--body-background);
     color: var(--head-text);
@@ -73,6 +77,7 @@ export default {
   &.dark a {
     color: var(--footer-a-text);
   }
+
   &.light a {
     color: var(--footer-a-text);
   }

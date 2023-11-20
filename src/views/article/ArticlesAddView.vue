@@ -39,36 +39,41 @@
   </a-form>
 </template>
 
-<script>
-import { ref, reactive, onMounted } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts">
+import { ref, reactive, onMounted, defineComponent } from 'vue'
+import { mapActions, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { ArticleForm } from '@/interfaces/Articles.ts'
 
-export default {
+export default defineComponent({
   name: 'ArticlesAddView',
   computed: {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('ArticlesStore', ['add']),
-    async onFinish(values) {
+    async onFinish() {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(values.article)
+        await this.add(this.formState.article)
         this.formRef.resetFields()
         window.scrollTo({ top: 100, behavior: 'smooth' })
-      } catch (error) {}
+      } catch (error) {
+        //
+      }
     }
   },
   setup() {
     const formRef = ref()
     const formState = reactive({
-      article: {}
+      article: {} as ArticleForm
     })
 
-    const { articleForm } = mapGetters('ArticlesStore', ['articleForm'])
+    onMounted(() => {
+      formState.article = { ...formState.article }
+    })
 
     const articleEditor = reactive({
       id: '',
@@ -80,10 +85,6 @@ export default {
       }
     })
 
-    onMounted(() => {
-      formState.article = { ...articleForm }
-    })
-
     const validateMsg = {
       required: ''
     }
@@ -93,11 +94,10 @@ export default {
       editor: ClassicEditor,
       formRef,
       formState,
-      articleForm,
       validateMsg
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

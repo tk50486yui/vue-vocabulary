@@ -22,13 +22,17 @@
                   </router-link>
                   <ul class="dropdown">
                     <li>
-                      <router-link :to="{ name: 'wordsGrid' }">單字總覽</router-link>
+                      <router-link :to="{ name: 'wordsGrid' }"
+                        >單字總覽</router-link
+                      >
                     </li>
                     <li>
                       <router-link :to="{ name: 'words' }">單字表</router-link>
                     </li>
                     <li>
-                      <router-link :to="{ name: 'wordsAdd' }">單字新增</router-link>
+                      <router-link :to="{ name: 'wordsAdd' }"
+                        >單字新增</router-link
+                      >
                     </li>
                   </ul>
                 </li>
@@ -71,8 +75,14 @@
     </header>
   </div>
   <div class="drawer-theme" ref="navDrawer" :class="$theme">
-    <a-drawer :getContainer="() => $refs.navDrawer" :width="230" placement="left" :closable="false"
-      :visible="drawerVisible" @close="drawerVisible = false">
+    <a-drawer
+      :getContainer="() => $refs.navDrawer"
+      :width="230"
+      placement="left"
+      :closable="false"
+      :visible="drawerVisible"
+      @close="drawerVisible = false"
+    >
       <template #title>
         <div class="drawer__logo">
           <router-link :to="{ name: 'home' }">
@@ -88,7 +98,6 @@
 import { ref } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import NavDrawerView from '@/views/NavDrawerView.vue'
-// @ts-ignore
 import logo from '@/assets/img/logo.png'
 
 export default {
@@ -136,7 +145,7 @@ export default {
     this.setActive()
   },
   watch: {
-    $route: function (val) {
+    $route: function () {
       this.setActive()
     }
   },

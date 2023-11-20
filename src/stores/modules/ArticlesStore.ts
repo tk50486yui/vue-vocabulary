@@ -52,7 +52,7 @@ const actions = {
 
   async update(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: Article }
+    { id, data }: { id: number; data: Article }
   ) {
     await ArticlesRepo.update(id, data)
     await dispatch('fetch')

@@ -12,11 +12,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
 import TagsAddView from '@/views/tag/TagsAddView.vue'
 
-export default {
+export default defineComponent({
   name: 'TagsModalView',
   components: {
     TagsAddView
@@ -24,7 +25,7 @@ export default {
   computed: {
     ...mapState('Theme', ['$theme'])
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

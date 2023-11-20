@@ -5,12 +5,18 @@
     </div>
     <div class="list-theme" :class="$theme">
       <!-- list -->
-      <a-list item-layout="horizontal" :data-source="$WordsGroupsView.groupArray">
+      <a-list
+        item-layout="horizontal"
+        :data-source="$WordsGroupsView.groupArray"
+      >
         <template #renderItem="{ item, index }">
           <a-list-item>
             <template #actions>
               <span class="button-container">
-                <DeleteOutlined class="button-remove" @click="onRemove(item.ws_id, item.ws_name)" />
+                <DeleteOutlined
+                  class="button-remove"
+                  @click="onRemove(item.ws_id, item.ws_name)"
+                />
               </span>
             </template>
             <a-list-item-meta>
@@ -28,35 +34,72 @@
     <!-- save button -->
     <template v-if="wordsCount > 0 && updateNow === false">
       <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
-        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
+        <a-input
+          v-model:value="formState.wordsGroup.wg_name"
+          placeholder="組別名稱"
+          allow-clear
+        />
       </div>
-      <a-button type="primary" size="small" shape="round" @click="onSave()" :disabled="saveDisabled">儲存</a-button>
+      <a-button
+        type="primary"
+        size="small"
+        shape="round"
+        @click="onSave()"
+        :disabled="saveDisabled"
+        >儲存</a-button
+      >
       <span style="padding-left: 6px">
-        <a-popconfirm title="確定要清空嗎？" ok-text="是" cancel-text="否" @confirm="clearCheckbox()">
-          <a-button type="primary" size="small" shape="round" danger>清空</a-button>
+        <a-popconfirm
+          title="確定要清空嗎？"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="clearCheckbox()"
+        >
+          <a-button type="primary" size="small" shape="round" danger
+            >清空</a-button
+          >
         </a-popconfirm>
       </span>
     </template>
     <template v-else-if="updateNow">
       <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
-        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
+        <a-input
+          v-model:value="formState.wordsGroup.wg_name"
+          placeholder="組別名稱"
+          allow-clear
+        />
       </div>
-      <a-button type="primary" size="small" shape="round" @click="onEditSave()" :disabled="saveDisabled">儲存編輯</a-button>
+      <a-button
+        type="primary"
+        size="small"
+        shape="round"
+        @click="onEditSave()"
+        :disabled="saveDisabled"
+        >儲存編輯</a-button
+      >
       <span style="padding-left: 6px">
-        <a-popconfirm title="確定要取消編輯嗎？" ok-text="是" cancel-text="否" @confirm="clearCheckbox()">
-          <a-button type="primary" size="small" shape="round" danger>取消編輯</a-button>
+        <a-popconfirm
+          title="確定要取消編輯嗎？"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="clearCheckbox()"
+        >
+          <a-button type="primary" size="small" shape="round" danger
+            >取消編輯</a-button
+          >
         </a-popconfirm>
       </span>
     </template>
   </template>
 </template>
 
-<script>
-import { ref, reactive, onMounted } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { ref, reactive, onMounted, defineComponent } from 'vue'
+import { mapState, mapActions } from 'vuex'
 import { message } from 'ant-design-vue'
+import { WordsGroupsForm } from '@/interfaces/WordsGroups.ts'
 
-export default {
+export default defineComponent({
   name: 'WordsGroupsView',
   computed: {
     updateNow() {
@@ -85,7 +128,9 @@ export default {
         await this.add(this.formState.wordsGroup)
         this.clearCheckbox()
         this.$router.push({ name: 'wordsGroups' })
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
     async onEditSave() {
       const wordsIdArray = this.$WordsGroupsView.groupArray.map(
@@ -108,7 +153,7 @@ export default {
       this.formState.wordsGroup.wg_name = ''
       this.saveDisabled = false
     },
-    onRemove(id, wsName) {
+    onRemove(id: number, wsName: string) {
       this.updateWordsGroupsView({
         variable: 'groupArray',
         data: { ws_id: id, ws_name: wsName, checked: false }
@@ -118,7 +163,9 @@ export default {
   async created() {
     try {
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   watch: {
     'formState.wordsGroup.wg_name'(val) {
@@ -140,7 +187,7 @@ export default {
         this.formState.wordsGroup.wg_name = ''
       }
     },
-    '$WordsGroupsView.wg_name'(val) {
+    '$WordsGroupsView.wg_name'() {
       if (this.updateNow === true) {
         this.formState.wordsGroup.wg_name = this.$WordsGroupsView.wg_name
       } else {
@@ -153,12 +200,11 @@ export default {
     const saveDisabled = ref(true)
     const formRef = ref()
     const formState = reactive({
-      wordsGroup: {}
+      wordsGroup: {} as WordsGroupsForm
     })
-    const { wordsGroupForm } = mapGetters('WordsGroupStore', ['wordsGroupForm'])
 
     onMounted(() => {
-      formState.wordsGroup = { ...wordsGroupForm }
+      formState.wordsGroup = { ...formState.wordsGroup }
       formState.wordsGroup.words_groups_details = []
     })
 
@@ -169,7 +215,7 @@ export default {
       formState
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

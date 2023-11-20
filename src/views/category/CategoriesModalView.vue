@@ -12,11 +12,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
 import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
 
-export default {
+export default defineComponent({
   name: 'CategoriesModalView',
   components: {
     CategoriesAddView
@@ -24,11 +25,12 @@ export default {
   computed: {
     ...mapState('Theme', ['$theme'])
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
 .section-title {
   margin-bottom: 8px;
 }

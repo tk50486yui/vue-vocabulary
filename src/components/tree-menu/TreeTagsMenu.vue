@@ -8,7 +8,10 @@
               <span class="dropdown-container">
                 {{ item.ts_name }} （{{ item.children.length }}）
                 <template v-if="$filtersTags.includes(item.id)">
-                  <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
+                  <CheckOutlined
+                    :style="{ 'font-size': '10px' }"
+                    :rotate="10"
+                  />
                 </template>
               </span>
             </a>
@@ -32,10 +35,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapActions, mapState } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'TreeTagsMenu',
   props: {
     data: Object,
@@ -54,7 +58,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 <style scoped>
 .dropdown-container {

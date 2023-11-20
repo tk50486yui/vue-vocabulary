@@ -55,7 +55,7 @@ const actions = {
 
   async update(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: Category }
+    { id, data }: { id: number; data: Category }
   ) {
     await CategoriesRepo.update(id, data)
     await dispatch('fetch')

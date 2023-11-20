@@ -1,8 +1,14 @@
 <template>
   <div>
-    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
+    <div
+      class="section-title d-flex justify-content-between align-items-center"
+      :class="$theme"
+    >
       <h4>詞組類別</h4>
-      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" @click="visible = true" />
+      <PlusBtn
+        class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+        @click="visible = true"
+      />
     </div>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
@@ -47,14 +53,14 @@
   <!-- Modal  -->
   <CategoriesModalView v-model:open="visible" />
 </template>
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { PlusBtn } from '@/components/button'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 
-export default {
+export default defineComponent({
   name: 'CategoriesMenuView',
   components: {
     PlusBtn,
@@ -80,13 +86,15 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.spinning = false
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async handleCategoryFilter(cateName) {
+    async handleCategoryFilter(cateName: string) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
-      if (this.$route !== 'wordsGrid') {
+      if (String(this.$route) !== 'wordsGrid') {
         this.$router.push({ name: 'wordsGrid' })
       }
     }
@@ -107,7 +115,7 @@ export default {
       visible
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

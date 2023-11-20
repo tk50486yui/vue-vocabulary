@@ -2,28 +2,44 @@
   <template v-if="ready">
     <a-spin :spinning="spinning">
       <div class="draggable-tree-theme" :class="$theme">
-        <a-tree draggable block-node :tree-data="dropData" @drop="onDrop" :field-names="{
-          children: 'children',
-          title: 'ts_name',
-          key: 'id'
-        }" />
+        <a-tree
+          draggable
+          block-node
+          :tree-data="dropData"
+          @drop="onDrop"
+          :field-names="{
+            children: 'children',
+            title: 'ts_name',
+            key: 'id'
+          }"
+        />
       </div>
     </a-spin>
     <p></p>
     <div>
-      <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onFinish(tagsForm)" :disabled="saveDisabled">
+      <a-button
+        class="btn btn-primary btn-outline-light btn-sm"
+        @click="onFinish(tagsForm)"
+        :disabled="saveDisabled"
+      >
         儲存
       </a-button>
-      <a-button class="btn btn-danger btn-outline-light btn-sm" style="margin-left: 10px" @click="onReset()">還原</a-button>
+      <a-button
+        class="btn btn-danger btn-outline-light btn-sm"
+        style="margin-left: 10px"
+        @click="onReset()"
+        >還原</a-button
+      >
     </div>
   </template>
 </template>
-<script>
-import { ref, reactive } from 'vue'
+<script lang="ts">
+import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
+import { Tag, TagsOrder } from '@/interfaces/Tags.ts'
 
-export default {
+export default defineComponent({
   name: 'TagsSortView',
   computed: {
     ...mapGetters('TagsStore', ['tags']),
@@ -31,7 +47,7 @@ export default {
   },
   methods: {
     ...mapActions('TagsStore', ['fetch', 'updateOrder']),
-    async onFinish(values) {
+    async onFinish(values: TagsOrder[]) {
       try {
         const tagsArray = Object.values(values).filter(
           (item) => item !== null && typeof item === 'object'
@@ -44,7 +60,9 @@ export default {
         this.tagsForm.splice(0, this.tagsForm.length)
         this.spinning = false
         this.saveDisabled = true
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
     async onReset() {
       try {
@@ -55,7 +73,9 @@ export default {
         this.tagsForm.splice(0, this.tagsForm.length)
         this.spinning = false
         this.saveDisabled = true
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     }
   },
   async created() {
@@ -66,7 +86,7 @@ export default {
   setup() {
     const ready = ref(false)
     const dropData = ref([])
-    const tagsForm = reactive([])
+    const tagsForm = reactive([] as TagsOrder[])
     const saveDisabled = ref(true)
     const spinning = ref(false)
     /* 只允許排序同個父節點 */
@@ -87,18 +107,22 @@ export default {
         // if 第一層 else 第二層以後
         if (currentParents && currentParents.length === 0) {
           currentNode = dropData.value.findIndex(
-            (item) => item.id === currentId
+            (item: Tag) => item.id === currentId
           )
         } else {
           for (const parentId of currentParents) {
-            const parent = currentArray.find((item) => item.id === parentId)
+            const parent = currentArray.find(
+              (item: Tag) => item.id === parentId
+            )
             if (parent) {
               currentArray = parent.children
             } else {
               break
             }
           }
-          currentNode = currentArray.findIndex((item) => item.id === currentId)
+          currentNode = currentArray.findIndex(
+            (item: Tag) => item.id === currentId
+          )
         }
 
         let newNode = info.dropPosition
@@ -115,8 +139,11 @@ export default {
 
         const element = currentArray.splice(currentNode, 1)[0]
         currentArray.splice(newNode, 0, element)
-        currentArray = currentArray.map((item, index) => ({ ...item, index }))
-        currentArray.forEach((item, index) => {
+        currentArray = currentArray.map((item: Tag, index) => ({
+          ...item,
+          index
+        }))
+        currentArray.forEach((item: Tag, index: number) => {
           if (!tagsForm[item.id]) {
             tagsForm[item.id] = {}
           }
@@ -138,7 +165,7 @@ export default {
       onDrop
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';

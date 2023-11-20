@@ -3,37 +3,67 @@
     <!-- 上層 顏色新增 -->
     <div class="demo-color-block">
       <span class="demonstration">
-        <a-tag :style="'background:' +
-          selectedBackground +
-          ';color:' +
-          selectedColor +
-          ';border-color:' +
-          selectedBorder
-          ">
+        <a-tag
+          :style="
+            'background:' +
+            selectedBackground +
+            ';color:' +
+            selectedColor +
+            ';border-color:' +
+            selectedBorder
+          "
+        >
           With default value
         </a-tag>
       </span>
       <span class="main-body" :class="$theme">
         背景：
-        <el-color-picker @active-change="activeBackground" size="large" v-model="selectedBackground" show-alpha />
+        <el-color-picker
+          @active-change="activeBackground"
+          size="large"
+          v-model="selectedBackground"
+          show-alpha
+        />
         文字：
-        <el-color-picker @active-change="activeColor" size="large" v-model="selectedColor" show-alpha />
+        <el-color-picker
+          @active-change="activeColor"
+          size="large"
+          v-model="selectedColor"
+          show-alpha
+        />
         邊框：
-        <el-color-picker @active-change="activeBorder" size="large" v-model="selectedBorder" show-alpha />
+        <el-color-picker
+          @active-change="activeBorder"
+          size="large"
+          v-model="selectedBorder"
+          show-alpha
+        />
       </span>
-      <a-button class="btn btn-primary btn-outline-light btn-sm button-add" @click="onFinish" :loading="confirmLoading">
+      <a-button
+        class="btn btn-primary btn-outline-light btn-sm button-add"
+        @click="onFinish"
+        :loading="confirmLoading"
+      >
         儲存顏色
       </a-button>
     </div>
     <p></p>
     <!-- 主表格 顏色 -->
     <div class="table-theme" :class="$theme">
-      <a-table :dataSource="tagsColorArray" :columns="columns" :scroll="{ y: 600 }" :showHeader="false">
+      <a-table
+        :dataSource="tagsColorArray"
+        :columns="columns"
+        :scroll="{ y: 600 }"
+        :showHeader="false"
+      >
         <template #bodyCell="{ column, record }">
-          <template v-if="['id', 'tc_color', 'tc_background', 'tc_border'].includes(
-            column.dataIndex
-          )
-            ">
+          <template
+            v-if="
+              ['id', 'tc_color', 'tc_background', 'tc_border'].includes(
+                column.dataIndex
+              )
+            "
+          >
             <!-- id -->
             <template v-if="column.dataIndex === 'id'">
               <template v-if="editTableData[record.id]">
@@ -47,35 +77,59 @@
             <template v-else-if="column.dataIndex === 'tc_color'">
               <template v-if="editTableData[record.id]">
                 <div>
-                  <a-tag :style="'background:' +
-                    editTableData[record.id]['tc_background'] +
-                    ';color:' +
-                    editTableData[record.id]['tc_color'] +
-                    ';border-color:' +
-                    editTableData[record.id]['tc_border']
-                    ">
+                  <a-tag
+                    :style="
+                      'background:' +
+                      editTableData[record.id]['tc_background'] +
+                      ';color:' +
+                      editTableData[record.id]['tc_color'] +
+                      ';border-color:' +
+                      editTableData[record.id]['tc_border']
+                    "
+                  >
                     With default value
                   </a-tag>
                   背景：
-                  <el-color-picker @active-change="(value) => activeBackground(value, record.id)
-                    " size="large" v-model="editTableData[record.id]['tc_background']" show-alpha />
+                  <el-color-picker
+                    @active-change="
+                      (value: string) => activeBackground(value, record.id)
+                    "
+                    size="large"
+                    v-model="editTableData[record.id]['tc_background']"
+                    show-alpha
+                  />
                   文字：
-                  <el-color-picker @active-change="(value) => activeColor(value, record.id)" size="large"
-                    v-model="editTableData[record.id]['tc_color']" show-alpha />
+                  <el-color-picker
+                    @active-change="
+                      (value: string) => activeColor(value, record.id)
+                    "
+                    size="large"
+                    v-model="editTableData[record.id]['tc_color']"
+                    show-alpha
+                  />
                   邊框：
-                  <el-color-picker @active-change="(value) => activeBorder(value, record.id)" size="large"
-                    v-model="editTableData[record.id]['tc_border']" show-alpha />
+                  <el-color-picker
+                    @active-change="
+                      (value: string) => activeBorder(value, record.id)
+                    "
+                    size="large"
+                    v-model="editTableData[record.id]['tc_border']"
+                    show-alpha
+                  />
                 </div>
               </template>
               <template v-else>
                 <div class="column-container">
-                  <a-tag :style="'background:' +
-                    record.tc_background +
-                    ';color:' +
-                    record.tc_color +
-                    ';border-color:' +
-                    record.tc_border
-                    ">
+                  <a-tag
+                    :style="
+                      'background:' +
+                      record.tc_background +
+                      ';color:' +
+                      record.tc_color +
+                      ';border-color:' +
+                      record.tc_border
+                    "
+                  >
                     With default value
                   </a-tag>
                   <DeleteBtn @confirm="onDelete(record.id)" />
@@ -85,12 +139,21 @@
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <template v-if="editTableData[record.id]">
-              <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
-              <CloseOutlined class="button-edit-close" @click="cancel(record)" />
+              <CheckOutlined
+                class="button-edit-check"
+                @click="onEditFinish(record)"
+              />
+              <CloseOutlined
+                class="button-edit-close"
+                @click="cancel(record)"
+              />
             </template>
             <template v-else>
               <div class="column-container">
-                <EditOutlined class="button-edit" @click="edit(record, tagsColorArray)" />
+                <EditOutlined
+                  class="button-edit"
+                  @click="edit(record, tagsColorArray)"
+                />
               </div>
             </template>
           </template>
@@ -100,14 +163,16 @@
   </template>
 </template>
 
-<script>
-import { ref, reactive } from 'vue'
+<script lang="ts">
+import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
+import type { UnwrapRef } from 'vue'
+import { TagsColor, TagsColorForm } from '@/interfaces/TagsColor.ts'
 
-export default {
+export default defineComponent({
   name: 'TagsColorView',
   components: {
     DeleteBtn
@@ -120,50 +185,56 @@ export default {
     ...mapActions('TagsColorStore', ['fetch', 'add', 'update', 'deleteById']),
     async onFinish() {
       try {
-        this.formState.tagColor.tc_color = this.selectedColor
-        this.formState.tagColor.tc_background = this.selectedBackground
-        this.formState.tagColor.tc_border = this.selectedBorder
+        this.formState.tagsColor.tc_color = this.selectedColor
+        this.formState.tagsColor.tc_background = this.selectedBackground
+        this.formState.tagsColor.tc_border = this.selectedBorder
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(this.formState.tagColor)
+        await this.add(this.formState.tagsColor)
         this.selectedBackground = 'rgba(0, 0, 0, 1)'
         this.selectedColor = 'rgba(248, 246, 246, 1)'
         this.selectedBorder = 'rgba(245, 241, 241, 1)'
         this.confirmLoading = false
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onEditFinish(record) {
+    async onEditFinish(record: TagsColor) {
       try {
         const editData = await this.save(record)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
         this.cancel(record)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onDelete(id) {
+    async onDelete(id: number) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    activeBackground(value, id) {
+    activeBackground(value: string, id: number): void {
       if (id) {
         this.editTableData[id].tc_background = value
       } else {
         this.selectedBackground = value
       }
     },
-    activeColor(value, id) {
+    activeColor(value: string, id: number): void {
       if (id) {
         this.editTableData[id].tc_color = value
       } else {
         this.selectedColor = value
       }
     },
-    activeBorder(value, id) {
+    activeBorder(value: string, id: number): void {
       if (id) {
         this.editTableData[id].tc_border = value
       } else {
@@ -175,30 +246,32 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   setup() {
     const Ready = ref(false)
-    const editTableData = reactive({})
+    const editTableData: UnwrapRef<Record<number, TagsColor>> = reactive({})
     const confirmLoading = ref(false)
     const selectedBackground = ref('rgba(0, 0, 0, 1)')
     const selectedColor = ref('rgba(248, 246, 246, 1)')
     const selectedBorder = ref('rgba(245, 241, 241, 1)')
     const formState = reactive({
-      tagColor: {}
+      tagsColor: {} as TagsColorForm
     })
 
-    const edit = (record, editDataSource) => {
+    const edit = (record: TagsColor, editDataSource: TagsColor[]) => {
       editTableData[record.id] = cloneDeep(
         editDataSource.filter((item) => record.id === item.id)[0]
       )
     }
 
-    const save = async (record) => {
+    const save = async (record: TagsColor) => {
       return editTableData[record.id]
     }
 
-    const cancel = (record) => {
+    const cancel = (record: TagsColor) => {
       delete editTableData[record.id]
     }
 
@@ -234,7 +307,7 @@ export default {
       cancel
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

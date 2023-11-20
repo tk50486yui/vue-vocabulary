@@ -34,18 +34,18 @@
     </div>
   </div>
 </template>
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapState, mapActions } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'BreadcrumbView',
   computed: {
     ...mapState('Theme', ['$theme'])
   },
   methods: {
     ...mapActions('Theme', ['updateTheme']),
-    changeTheme(checked) {
+    changeTheme(checked: boolean) {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
     },
@@ -88,7 +88,7 @@ export default {
     this.getCurrentRoute()
   },
   watch: {
-    $route: function (val) {
+    $route: function () {
       this.getCurrentRoute()
     }
   },
@@ -100,7 +100,7 @@ export default {
       activeHome
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -212,4 +212,5 @@ export default {
   &.light span.active {
     color: var(--breadcrumb-text-active);
   }
-}</style>
+}
+</style>

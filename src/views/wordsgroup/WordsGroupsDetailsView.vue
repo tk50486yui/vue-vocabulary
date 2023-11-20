@@ -43,20 +43,20 @@
   </template>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 
-export default {
+export default defineComponent({
   name: 'WordsGroupsDetailsView',
   components: {
     DeleteBtn
   },
   computed: {
-    wgId() {
-      return this.$route.params.id
+    wgId(): number {
+      return Number(this.$route.params.id)
     },
     wordsGroup() {
       return this.wordsGroupsById(this.wgId) || null
@@ -74,13 +74,15 @@ export default {
       'updateWordsGroupsView',
       'updateWordsGroupsDetailsView'
     ]),
-    async onDelete(id) {
+    async onDelete(id: number) {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
         this.$router.push({ name: 'wordsGroups' })
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
     onEdit() {
       if (this.editShow === false) {
@@ -131,7 +133,9 @@ export default {
       window.scrollTo({ top: 120, behavior: 'instant' })
       await this.fetch()
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   setup() {
     const Ready = ref(false)
@@ -139,7 +143,7 @@ export default {
       Ready
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,29 +1,40 @@
 <template>
   <div class="select-theme" :class="$theme" ref="selectMod">
-    <a-select :getPopupContainer="() => $refs.selectMod" v-bind="$attrs" :options="tagsColor" show-search allowClear
+    <a-select
+      :getPopupContainer="() => $refs.selectMod"
+      v-bind="$attrs"
+      :options="tagsColor"
+      show-search
+      allowClear
       :field-names="{
         label: 'id',
         value: 'id'
-      }">
+      }"
+    >
       <template #option="{ id, tc_color, tc_background, tc_border }">
         #{{ id }}
-        <a-tag :style="'background:' +
-          tc_background +
-          ';color:' +
-          tc_color +
-          ';border-color:' +
-          tc_border
-          ">
+        <a-tag
+          :style="
+            'background:' +
+            tc_background +
+            ';color:' +
+            tc_color +
+            ';border-color:' +
+            tc_border
+          "
+        >
           default
         </a-tag>
       </template>
     </a-select>
   </div>
 </template>
-<script>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
-export default {
+export default defineComponent({
   computed: {
     selectData() {
       return this.tagsColor
@@ -37,7 +48,7 @@ export default {
   async created() {
     await this.fetch()
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

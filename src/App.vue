@@ -31,8 +31,8 @@
     <FooterView />
   </div>
 </template>
-<script>
-import { ref, onMounted } from 'vue'
+<script lang="ts">
+import { ref, onMounted, defineComponent } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import HeaderView from '@/views/HeaderView.vue'
 import SearchView from '@/views/SearchView.vue'
@@ -40,7 +40,7 @@ import BreadcrumbView from '@/views/BreadcrumbView.vue'
 import SideMenuView from '@/views/SideMenuView.vue'
 import FooterView from '@/views/FooterView.vue'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     HeaderView,
@@ -98,7 +98,7 @@ export default {
       isScreenLarge
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

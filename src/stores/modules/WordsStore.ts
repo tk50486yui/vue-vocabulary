@@ -62,7 +62,7 @@ const actions = {
 
   async update(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: Word }
+    { id, data }: { id: number; data: Word }
   ) {
     await WordsRepo.update(id, data)
     await dispatch('fetch')
@@ -70,7 +70,7 @@ const actions = {
 
   async updateCommon(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: { ws_is_common: boolean } }
+    { id, data }: { id: number; data: { ws_is_common: boolean } }
   ) {
     await WordsRepo.updateCommon(id, data)
     await dispatch('fetch')
@@ -78,7 +78,7 @@ const actions = {
 
   async updateImportant(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: { ws_is_important: boolean } }
+    { id, data }: { id: number; data: { ws_is_important: boolean } }
   ) {
     await WordsRepo.updateImportant(id, data)
     await dispatch('fetch')

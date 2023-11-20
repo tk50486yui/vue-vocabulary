@@ -22,10 +22,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapActions } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'TreeCategoriesMenu',
   props: {
     data: Object,
@@ -37,12 +38,12 @@ export default {
       'updateFilters',
       'updateSearchClass'
     ]),
-    async handleCategoryFilter(cateName) {
+    async handleCategoryFilter(cateName: string) {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)
       this.$router.push({ name: 'wordsGrid' })
     }
   }
-}
+})
 </script>

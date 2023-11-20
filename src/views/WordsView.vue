@@ -5,8 +5,14 @@
     </div>
     <div class="select-theme" :class="$theme" ref="selectMod">
       每頁：
-      <a-select v-model:value="selectPageSize" ref="select" :getPopupContainer="() => $refs.selectMod" size="small"
-        style="width: 80px" @change="handlePageSize()">
+      <a-select
+        v-model:value="selectPageSize"
+        ref="select"
+        :getPopupContainer="() => $refs.selectMod"
+        size="small"
+        style="width: 80px"
+        @change="handlePageSize()"
+      >
         <a-select-option value="10">10 筆</a-select-option>
         <a-select-option value="20">20 筆</a-select-option>
         <a-select-option value="50">50 筆</a-select-option>
@@ -14,8 +20,13 @@
         <a-select-option :value="wordsArray.length">全部</a-select-option>
       </a-select>
       <span style="padding-left: 8px">表格高度：</span>
-      <a-select v-model:value="selectTablescrollY" :getPopupContainer="() => $refs.selectMod" size="small"
-        style="width: 80px" @change="handleTableScrollY()">
+      <a-select
+        v-model:value="selectTablescrollY"
+        :getPopupContainer="() => $refs.selectMod"
+        size="small"
+        style="width: 80px"
+        @change="handleTableScrollY()"
+      >
         <a-select-option value="400">極低</a-select-option>
         <a-select-option value="600">低</a-select-option>
         <a-select-option value="800">適中</a-select-option>
@@ -24,18 +35,31 @@
       </a-select>
     </div>
     <div class="table-theme" :class="$theme">
-      <a-table :dataSource="wordsArray" :columns="columns" :scroll="{ y: TablescrollY, x: 850 }" :loading="TableLoading"
-        :pagination="pagination">
+      <a-table
+        :dataSource="wordsArray"
+        :columns="columns"
+        :scroll="{ y: TablescrollY, x: 850 }"
+        :loading="TableLoading"
+        :pagination="pagination"
+      >
         <!-- Table header -->
         <template #title>
-          <PlusBtn class="btn btn-primary btn-outline-light btn-sm float-end me-md-2" @click="onDrawerShow()" />
-          <RefreshBtn class="btn btn-info btn-outline-light btn-sm float-end me-md-2" :spin="SyncOutlinedSpin"
-            @click="refreshTable" />
+          <PlusBtn
+            class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
+            @click="onDrawerShow()"
+          />
+          <RefreshBtn
+            class="btn btn-info btn-outline-light btn-sm float-end me-md-2"
+            :spin="SyncOutlinedSpin"
+            @click="refreshTable"
+          />
         </template>
         <!-- Table expanded -->
         <template #expandedRowRender="{ record }">
           <p style="margin: 0">
-            <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
+            <a-typography-paragraph
+              :copyable="{ text: record.ws_name }"
+            ></a-typography-paragraph>
           </p>
           <p></p>
           <DeleteBtn @confirm="onDelete(record.id)" />
@@ -44,24 +68,42 @@
         </template>
         <!-- Table body -->
         <template #bodyCell="{ column, text, record }">
-          <template v-if="[
-            'ws_name',
-            'ws_pronunciation',
-            'ws_definition',
-            'cate_name'
-          ].includes(column.dataIndex)
-            ">
+          <template
+            v-if="
+              [
+                'ws_name',
+                'ws_pronunciation',
+                'ws_definition',
+                'cate_name'
+              ].includes(column.dataIndex)
+            "
+          >
             <div>
-              <template v-if="editTableData[record.key] && column.dataIndex === 'cate_name'
-                ">
-                <CategoriesTreeSelect size="small" placeholder="選擇" :dropdownMatchSelectWidth="false" style="width: 100%"
-                  v-model:value="editTableData[record.key]['cate_id']"
-                  :defaultValue="editTableData[record.key]['cate_id']"
-                  :treeDefaultExpandedKeys="[editTableData[record.key]['cate_id']]"
-                  @change="handleCategoriesSelectChange(editTableData[record.key])" />
+              <template
+                v-if="
+                  editTableData[record.id] && column.dataIndex === 'cate_name'
+                "
+              >
+                <CategoriesTreeSelect
+                  size="small"
+                  placeholder="選擇"
+                  :dropdownMatchSelectWidth="false"
+                  style="width: 100%"
+                  v-model:value="editTableData[record.id]['cate_id']"
+                  :defaultValue="editTableData[record.id]['cate_id']"
+                  :treeDefaultExpandedKeys="[
+                    editTableData[record.id]['cate_id']
+                  ]"
+                  @change="
+                    handleCategoriesSelectChange(editTableData[record.id])
+                  "
+                />
               </template>
-              <template v-else-if="editTableData[record.key]">
-                <a-input v-model:value="editTableData[record.key][column.dataIndex]" style="margin: -5px 0" />
+              <template v-else-if="editTableData[record.id]">
+                <a-input
+                  v-model:value="editTableData[record.id][column.dataIndex]"
+                  style="margin: -5px 0"
+                />
               </template>
               <template v-else>{{ text }}</template>
             </div>
@@ -69,14 +111,23 @@
           <!-- Table operation -->
           <template v-else-if="column.dataIndex === 'operation'">
             <div>
-              <template v-if="editTableData[record.key]">
+              <template v-if="editTableData[record.id]">
                 <div class="button-edit-container">
-                  <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
-                  <CloseOutlined class="button-edit-close" @click="cancel(record)" />
+                  <CheckOutlined
+                    class="button-edit-check"
+                    @click="onEditFinish(record)"
+                  />
+                  <CloseOutlined
+                    class="button-edit-close"
+                    @click="cancel(record)"
+                  />
                 </div>
               </template>
               <template v-else>
-                <EditOutlined class="button-edit" @click="edit(record, wordsArray)" />
+                <EditOutlined
+                  class="button-edit"
+                  @click="edit(record, wordsArray)"
+                />
               </template>
             </div>
           </template>
@@ -118,19 +169,25 @@
     </div>
   </template>
   <!-- drawer words add -->
-  <WordsDrawerView ref="wordsDrawer" :open="drawerVisible" @close="drawerVisible = false" />
+  <WordsDrawerView
+    ref="wordsDrawer"
+    :open="drawerVisible"
+    @close="drawerVisible = false"
+  />
 </template>
 
-<script>
-import { ref, reactive } from 'vue'
+<script lang="ts">
+import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import { PlusBtn, DeleteBtn, RefreshBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+import type { UnwrapRef } from 'vue'
+import { Word } from '@/interfaces/Words.ts'
 
-export default {
+export default defineComponent({
   name: 'WordsView',
   components: {
     PlusBtn,
@@ -151,7 +208,7 @@ export default {
       'updateImportant',
       'deleteById'
     ]),
-    async refreshTable() {
+    async refreshTable(): Promise<void> {
       try {
         this.SyncOutlinedSpin = true
         this.TableLoading = true
@@ -159,48 +216,58 @@ export default {
         await this.fetch()
         this.SyncOutlinedSpin = false
         this.TableLoading = false
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onEditFinish(record) {
+    async onEditFinish(record: Word): Promise<void> {
       try {
         const editData = await this.save(record)
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.update({ id: editData.id, data: editData })
         this.cancel(record)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onUpdateCommon(id, data) {
+    async onUpdateCommon(id: number, data: Word): Promise<void> {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onUpdateImportant(id, data) {
+    async onUpdateImportant(id: number, data: Word): Promise<void> {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    async onDelete(id) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
         await this.deleteById(id)
-      } catch (error) { }
+      } catch (error) {
+        //
+      }
     },
-    handleCategoriesSelectChange(currentData) {
+    handleCategoriesSelectChange(currentData: Word): void {
       currentData.cate_id =
         typeof currentData.cate_id !== 'undefined' ? currentData.cate_id : null
     },
-    handlePageSize() {
+    handlePageSize(): void {
       this.pagination.pageSize = Number(this.selectPageSize)
     },
-    handleTableScrollY() {
+    handleTableScrollY(): void {
       this.TablescrollY = Number(this.selectTablescrollY)
     },
     // drawer
-    onDrawerShow() {
+    onDrawerShow(): void {
       this.$refs.wordsDrawer.setDrawerStyle()
       this.drawerVisible = true
     }
@@ -209,13 +276,15 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   setup() {
     const Ready = ref(false)
     const TableLoading = ref(false)
     const SyncOutlinedSpin = ref(false)
-    const editTableData = reactive({})
+    const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
     const drawerVisible = ref(false)
     const TablescrollY = ref(400)
     const selectTablescrollY = ref('400')
@@ -225,18 +294,18 @@ export default {
       position: ['topLEFT', 'bottomLeft'],
       showSizeChanger: false
     })
-    const edit = (record, editDataSource) => {
-      editTableData[record.key] = cloneDeep(
-        editDataSource.filter((item) => record.key === item.key)[0]
+    const edit = (record: Word, editDataSource: Word[]) => {
+      editTableData[record.id] = cloneDeep(
+        editDataSource.filter((item) => record.id === item.id)[0]
       )
     }
 
-    const cancel = (record) => {
-      delete editTableData[record.key]
+    const cancel = (record: Word) => {
+      delete editTableData[record.id]
     }
 
-    const save = async (record) => {
-      return editTableData[record.key]
+    const save = async (record: Word) => {
+      return editTableData[record.id]
     }
 
     const columns = [
@@ -258,7 +327,7 @@ export default {
             value: '昆蟲'
           }
         ],
-        onFilter: (value, record) =>
+        onFilter: (value: string, record: Word) =>
           record.cate_name != null && record.cate_name.indexOf(value) === 0
       },
       {
@@ -298,7 +367,7 @@ export default {
       cancel
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

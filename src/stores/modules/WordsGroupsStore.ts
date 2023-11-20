@@ -40,7 +40,7 @@ const actions = {
 
   async update(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: WordsGroupsForm }
+    { id, data }: { id: number; data: WordsGroupsForm }
   ) {
     await WordsGroupsRepo.update(id, data)
     await dispatch('fetch')

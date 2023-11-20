@@ -1,14 +1,27 @@
 <template>
   <div class="select-theme" :class="$theme" ref="selectMod">
-    <a-tree-select :getPopupContainer="() => $refs.selectMod" v-bind="$attrs" v-model:searchValue="searchValue"
-      show-search allow-clear :tree-line="treeLine && { showLeafIcon }" :tree-data="tags">
+    <a-tree-select
+      :getPopupContainer="() => $refs.selectMod"
+      v-bind="$attrs"
+      v-model:searchValue="searchValue"
+      show-search
+      allow-clear
+      :tree-line="treeLine && { showLeafIcon }"
+      :tree-data="tags"
+    >
       <template #title="{ value: val, ts_name }">
         <b v-if="val === 1" style="color: #08c">{{ val }}</b>
         <template v-else>
-          <template v-for="(fragment, i) in ts_name
-            .toString()
-            .split(new RegExp(`(?<=${searchValue})|(?=${searchValue})`, 'i'))">
-            <span v-if="fragment.toLowerCase() === searchValue.toLowerCase()" :key="i" style="color: #08c">
+          <template
+            v-for="(fragment, i) in ts_name
+              .toString()
+              .split(new RegExp(`(?<=${searchValue})|(?=${searchValue})`, 'i'))"
+          >
+            <span
+              v-if="fragment.toLowerCase() === searchValue.toLowerCase()"
+              :key="i"
+              style="color: #08c"
+            >
               {{ fragment }}
             </span>
             <template v-else>{{ fragment }}</template>
@@ -18,11 +31,11 @@
     </a-tree-select>
   </div>
 </template>
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
-export default {
+export default defineComponent({
   computed: {
     ...mapGetters('TagsStore', ['tags']),
     ...mapState('Theme', ['$theme'])
@@ -44,7 +57,7 @@ export default {
       showLeafIcon
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

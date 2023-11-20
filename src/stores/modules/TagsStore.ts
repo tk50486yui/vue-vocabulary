@@ -50,7 +50,7 @@ const actions = {
 
   async update(
     { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number, data: Tag }
+    { id, data }: { id: number; data: Tag }
   ) {
     await TagsRepo.update(id, data)
     await dispatch('fetch')

@@ -1,16 +1,22 @@
-export const globalErrorHandler = (error, vm, info) => {
+export const globalErrorHandler = (error: string, info: string) => {
   console.error('全局錯誤：', error)
   console.error('訊息：', info)
 }
 
-export const windowOnError = (message, source, lineno, colno, error) => {
+export const windowOnError = (message: string) => {
   if (message.includes('CKEditor')) {
     console.log('CKEditor Error:', message)
     return true
   }
 }
 
-export const windowErrorListener = function onError(e) {
+export const windowErrorListener = function onError(e: {
+  lineno: number
+  colno: number
+  stopPropagation: () => void
+  stopImmediatePropagation: () => void
+  message: string
+}) {
   console.log('window')
   if (e.lineno === 5 && e.colno === 389560) {
     console.log(

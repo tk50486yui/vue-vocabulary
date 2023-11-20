@@ -1,8 +1,14 @@
 <template>
   <div>
-    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
+    <div
+      class="section-title d-flex justify-content-between align-items-center"
+      :class="$theme"
+    >
       <h4>標籤選單</h4>
-      <PlusBtn class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2" @click="visible = true" />
+      <PlusBtn
+        class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+        @click="visible = true"
+      />
     </div>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
@@ -13,17 +19,28 @@
           <a-collapse-panel key="1">
             <div class="menu-scroll">
               <!--  最頂層 -->
-              <a-menu mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" multiple>
+              <a-menu
+                mode="inline"
+                v-model:selectedKeys="selectedKeys"
+                v-model:openKeys="openKeys"
+                multiple
+              >
                 <!--  第一層  for 顯示  -->
                 <template v-for="data in tags" :key="data.id">
                   <template v-if="data.children && data.children.length">
                     <a-sub-menu :key="data.id">
                       <template #title>
-                        <a @click="handleTagsFilter(data.id)" style="display: inline-block">
+                        <a
+                          @click="handleTagsFilter(data.id)"
+                          style="display: inline-block"
+                        >
                           <span class="dropdown-container">
                             {{ data.ts_name }}（{{ data.children.length }}）
                             <template v-if="$filtersTags.includes(data.id)">
-                              <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
+                              <CheckOutlined
+                                :style="{ 'font-size': '10px' }"
+                                :rotate="10"
+                              />
                             </template>
                           </span>
                         </a>
@@ -33,11 +50,17 @@
                   </template>
                   <template v-else>
                     <a-menu-item :key="data.id">
-                      <a @click="handleTagsFilter(data.id)" style="display: inline-block">
+                      <a
+                        @click="handleTagsFilter(data.id)"
+                        style="display: inline-block"
+                      >
                         <span class="dropdown-container">
                           # {{ data.ts_name }}
                           <template v-if="$filtersTags.includes(data.id)">
-                            <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
+                            <CheckOutlined
+                              :style="{ 'font-size': '10px' }"
+                              :rotate="10"
+                            />
                           </template>
                         </span>
                       </a>
@@ -58,14 +81,15 @@
   <TagsModalView v-model:open="visible" />
 </template>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { PlusBtn } from '@/components/button'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import TagsModalView from '@/views/tag/TagsModalView.vue'
+import { Tag } from '@/interfaces/Tags.ts'
 
-export default {
+export default defineComponent({
   name: 'TagsMenuView',
   components: {
     PlusBtn,
@@ -77,21 +101,22 @@ export default {
     ...mapState('Search', ['$filtersTags', '$filtersTagsState']),
     ...mapState('Theme', ['$theme']),
     hasChildrenArray() {
-      return this.recentTagsArray.filter((tag) => tag.children.length > 0)
+      return this.recentTagsArray.filter((tag: Tag) => tag.children.length > 0)
     },
     noChildrenArray() {
       return this.$filtersTags.filter(
-        (tagId) => !this.hasChildrenArray.some((tag) => tag.id === tagId)
+        (tagId: number) =>
+          !this.hasChildrenArray.some((tag: Tag) => tag.id === tagId)
       )
     }
   },
   methods: {
     ...mapActions('TagsStore', ['fetch', 'fetchRecent']),
     ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
-    async handleTagsFilter(id) {
+    async handleTagsFilter(id: number) {
       await this.pushFiltersTags(id)
       this.updateSearchClass('word')
-      if (this.$route !== 'wordsGrid') {
+      if (String(this.$route) !== 'wordsGrid') {
         this.$router.push({ name: 'wordsGrid' })
       }
     }
@@ -103,10 +128,12 @@ export default {
       await this.fetchRecent()
       this.spinning = false
       this.selectedKeys = this.noChildrenArray
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   watch: {
-    '$filtersTags.length'(val) {
+    '$filtersTags.length'() {
       if (!this.$filtersTagsState) {
         this.selectedKeys = this.noChildrenArray
       }
@@ -120,6 +147,7 @@ export default {
     const selectedCurrent = ref(false)
     const selectedCount = ref(0)
     const visible = ref(false)
+
     return {
       activeKey,
       spinning,
@@ -130,7 +158,7 @@ export default {
       visible
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

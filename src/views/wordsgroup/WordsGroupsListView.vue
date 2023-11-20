@@ -6,8 +6,13 @@
     <!-- 上層 -->
     <div class="select-theme" :class="$theme" ref="selectMod">
       每頁：
-      <a-select v-model:value="selectPageSize" :getPopupContainer="() => $refs.selectMod" size="small" style="width: 80px"
-        @change="handlePageSize()">
+      <a-select
+        v-model:value="selectPageSize"
+        :getPopupContainer="() => $refs.selectMod"
+        size="small"
+        style="width: 80px"
+        @change="handlePageSize()"
+      >
         <a-select-option value="5">5 筆</a-select-option>
         <a-select-option value="10">10 筆</a-select-option>
         <a-select-option value="20">20 筆</a-select-option>
@@ -16,26 +21,43 @@
         <a-select-option :value="wordsGroups.length">全部</a-select-option>
       </a-select>
       <span style="padding-left: 6px">當前：</span>
-      <a-select v-model:value="currentPage" :getPopupContainer="() => $refs.selectMod" size="small" style="width: 80px"
-        @change="handleCurrentPage()">
-        <template v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))" :key="index">
+      <a-select
+        v-model:value="currentPage"
+        :getPopupContainer="() => $refs.selectMod"
+        size="small"
+        style="width: 80px"
+        @change="handleCurrentPage()"
+      >
+        <template
+          v-for="index in Math.ceil(
+            wordsGroups.length / Number(selectPageSize)
+          )"
+          :key="index"
+        >
           <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
         </template>
       </a-select>
-      <span style="padding-left: 6px">
-        共 {{ wordsGroups.length }} 筆
-      </span>
+      <span style="padding-left: 6px"> 共 {{ wordsGroups.length }} 筆 </span>
     </div>
     <p></p>
     <div class="list-theme" :class="$theme">
-      <a-list item-layout="horizontal" :data-source="wordsGroups" :pagination="pagination">
+      <a-list
+        item-layout="horizontal"
+        :data-source="wordsGroups"
+        :pagination="pagination"
+      >
         <template #renderItem="{ item, index }">
           <a-list-item>
             <a-list-item-meta>
               <template #description>
                 <span class="list-link">
                   {{ index + 1 }}.
-                  <router-link :to="{ name: 'wordsGroupsDetails', params: { id: item.id } }">
+                  <router-link
+                    :to="{
+                      name: 'wordsGroupsDetails',
+                      params: { id: item.id }
+                    }"
+                  >
                     {{ item.wg_name }}
                   </router-link>
                   ( {{ item.details.length }} )
@@ -45,20 +67,18 @@
           </a-list-item>
         </template>
         <template #footer>
-          <span class="span-text">
-            共 {{ wordsGroups.length }} 筆
-          </span>
+          <span class="span-text"> 共 {{ wordsGroups.length }} 筆 </span>
         </template>
       </a-list>
     </div>
   </template>
 </template>
 
-<script>
-import { ref, reactive } from 'vue'
+<script lang="ts">
+import { ref, reactive, defineComponent } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'WordsGroupsListView',
   computed: {
     ...mapGetters('WordsGroupsStore', ['wordsGroups']),
@@ -66,12 +86,12 @@ export default {
   },
   methods: {
     ...mapActions('WordsGroupsStore', ['fetch']),
-    handlePageSize() {
+    handlePageSize(): void {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
       this.currentPage = this.pagination.current
     },
-    handleCurrentPage() {
+    handleCurrentPage(): void {
       this.pagination.current = Number(this.currentPage)
     }
   },
@@ -79,19 +99,22 @@ export default {
     try {
       await this.fetch()
       this.Ready = true
-    } catch (error) { }
+    } catch (error) {
+      //
+    }
   },
   setup() {
     const Ready = ref(false)
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const pagination = reactive({
-      onChange: (page) => {
+      onChange: (page: number): void => {
         currentPage.value = page
         pagination.current = currentPage.value
       },
       pageSize: Number(selectPageSize.value),
-      position: 'top'
+      position: 'top',
+      current: currentPage.value
     })
 
     return {
@@ -101,7 +124,7 @@ export default {
       currentPage
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

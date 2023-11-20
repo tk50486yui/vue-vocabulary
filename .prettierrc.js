@@ -6,6 +6,7 @@ module.exports = {
     semi: false,
     trailingComma: "none",
     bracketSpacing: true,
-    parser: "flow"
+   // arrowParens: 'avoid'
+    //parser: "flow"
 }
 

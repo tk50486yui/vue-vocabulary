@@ -8,14 +8,15 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
-export default {
+export default defineComponent({
   name: 'OperatorRadio',
   computed: {
     ...mapState('Theme', ['$theme'])
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
