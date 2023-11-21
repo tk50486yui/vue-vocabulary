@@ -101,7 +101,9 @@
               </template>
               <template v-else-if="editTableData[record.id]">
                 <a-input
-                  v-model:value="editTableData[record.id][column.dataIndex]"
+                  v-model:value="
+                    editTableData[record.id][column.dataIndex as keyof Word]
+                  "
                   style="margin: -5px 0"
                 />
               </template>
@@ -170,9 +172,9 @@
   </template>
   <!-- drawer words add -->
   <WordsDrawerView
-    ref="wordsDrawer"
-    :open="drawerVisible"
-    @close="drawerVisible = false"
+    ref="wordsDrawerRef"
+    :open="wordsDrawerVisible"
+    @close="wordsDrawerVisible = false"
   />
 </template>
 
@@ -185,7 +187,7 @@ import { cloneDeep } from 'lodash-es'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import type { UnwrapRef } from 'vue'
-import { Word } from '@/interfaces/Words.ts'
+import { Word } from '@/interfaces/Words'
 
 export default defineComponent({
   name: 'WordsView',
@@ -268,8 +270,8 @@ export default defineComponent({
     },
     // drawer
     onDrawerShow(): void {
-      this.$refs.wordsDrawer.setDrawerStyle()
-      this.drawerVisible = true
+      this.wordsDrawerRef.setDrawerStyle()
+      this.wordsDrawerVisible = true
     }
   },
   async created() {
@@ -285,7 +287,8 @@ export default defineComponent({
     const TableLoading = ref(false)
     const SyncOutlinedSpin = ref(false)
     const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
-    const drawerVisible = ref(false)
+    const wordsDrawerRef = ref()
+    const wordsDrawerVisible = ref(false)
     const TablescrollY = ref(400)
     const selectTablescrollY = ref('400')
     const selectPageSize = ref('10')
@@ -355,7 +358,8 @@ export default defineComponent({
       Ready,
       TableLoading,
       SyncOutlinedSpin,
-      drawerVisible,
+      wordsDrawerRef,
+      wordsDrawerVisible,
       columns,
       TablescrollY,
       selectTablescrollY,

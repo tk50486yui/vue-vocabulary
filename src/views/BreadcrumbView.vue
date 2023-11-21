@@ -45,11 +45,11 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Theme', ['updateTheme']),
-    changeTheme(checked: boolean) {
+    changeTheme(checked: boolean): void {
       const theme = checked ? 'dark' : 'light'
       this.updateTheme(theme)
     },
-    getCurrentRoute() {
+    getCurrentRoute(): void {
       const { name } = this.$route
       this.activeHome = false
       switch (name) {

@@ -55,7 +55,7 @@ import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
-import { CategoryForm } from '@/interfaces/Categories.ts'
+import { CategoryForm } from '@/interfaces/Categories'
 
 export default defineComponent({
   name: 'CategoriesAddView',
@@ -67,7 +67,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('CategoriesStore', ['add']),
-    async onFinish() {
+    async onFinish(): Promise<void> {
       try {
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
@@ -79,11 +79,11 @@ export default defineComponent({
         //
       }
     },
-    handleTreeSelectChange(value: number) {
+    handleTreeSelectChange(value: number): void {
       this.formState.category.cate_parent_id =
         typeof value !== 'undefined' ? value : null
     },
-    resetForm() {
+    resetForm(): void {
       this.formState.category.cate_parent_id = null
       this.formRef.resetFields()
     }

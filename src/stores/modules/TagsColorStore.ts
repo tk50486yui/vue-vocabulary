@@ -1,6 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
-import TagsColorRepo from '@/repositories/TagsColorRepo.ts'
-import { TagsColor, TagsColorForm, RootState } from '@/interfaces/TagsColor.ts'
+import TagsColorRepo from '@/repositories/TagsColorRepo'
+import { TagsColor, TagsColorForm, RootState } from '@/interfaces/TagsColor'
 
 const state = {
   tagsColor: [] as TagsColor[],
@@ -11,9 +11,9 @@ const getters: GetterTree<RootState, RootState> = {
   tagsColor: (state) => state.tagsColor,
   tagsColorForm: (state) => state.tagsColorForm,
   tagsColorArray: (state) => {
-    return Object.keys(state.tagsColor).map((key) => ({
+    return Object.entries(state.tagsColor).map(([key, value]) => ({
       key,
-      ...state.tagsColor[key]
+      ...value
     }))
   }
 }

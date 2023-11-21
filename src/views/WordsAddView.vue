@@ -114,7 +114,7 @@ import { mapActions, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import { WordForm } from '@/interfaces/Words.ts'
+import { WordForm } from '@/interfaces/Words'
 
 export default defineComponent({
   name: 'WordsAddView',
@@ -127,7 +127,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('WordsStore', ['add']),
-    async onFinish() {
+    async onFinish(): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -138,14 +138,14 @@ export default defineComponent({
         //
       }
     },
-    handleCategoriesSelectChange(value: number) {
+    handleCategoriesSelectChange(value: number): void {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
     },
-    handleTagsSelectChange(value: number[]) {
+    handleTagsSelectChange(value: number[]): void {
       this.formState.word.words_tags.array =
         typeof value !== 'undefined' ? value : []
     },
-    resetForm() {
+    resetForm(): void {
       this.formState.word.cate_id = null
       this.formState.word.words_tags.array = []
       this.formRef.resetFields()

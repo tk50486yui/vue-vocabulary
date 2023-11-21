@@ -1,6 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
-import TagsRepo from '@/repositories/TagsRepo.ts'
-import { Tag, TagForm, TagsOrder, RootState } from '@/interfaces/Tags.ts'
+import TagsRepo from '@/repositories/TagsRepo'
+import { Tag, TagForm, TagsOrder, RootState } from '@/interfaces/Tags'
 
 const state = {
   tags: [] as Tag[],
@@ -13,15 +13,15 @@ const getters: GetterTree<RootState, RootState> = {
   tags: (state) => state.tags,
   tagForm: (state) => state.tagForm,
   tagsArray: (state) => {
-    return Object.keys(state.tags).map((key) => ({
+    return Object.entries(state.tags).map(([key, value]) => ({
       key,
-      ...state.tags[key]
+      ...value
     }))
   },
   recentTagsArray: (state) => {
-    return Object.keys(state.recentTags).map((key) => ({
+    return Object.entries(state.recentTags).map(([key, value]) => ({
       key,
-      ...state.recentTags[key]
+      ...value
     }))
   }
 }

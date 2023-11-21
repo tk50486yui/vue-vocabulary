@@ -1,4 +1,5 @@
-import api from '@/api/interceptors.ts'
+import api from '@/api/interceptors'
+import { CategoryForm, CategoriesOrder } from '@/interfaces/Categories'
 
 export default {
   async get() {
@@ -16,17 +17,17 @@ export default {
     return response.data
   },
 
-  async add<T>(data: T) {
+  async add(data: CategoryForm) {
     const response = await api.post('/categories', data)
     return response.data
   },
 
-  async update<T>(id: number, data: T) {
+  async update(id: number, data: CategoryForm) {
     const response = await api.put(`/categories/${id}`, data)
     return response.data
   },
 
-  async updateOrder<T>(data: T) {
+  async updateOrder(data: CategoriesOrder[]) {
     const response = await api.patch('/categories/order/all', data)
     return response.data
   },

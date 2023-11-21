@@ -38,7 +38,6 @@ import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
 export default defineComponent({
   name: 'NavDrawerView',
-
   computed: {
     ...mapState('Theme', ['$theme'])
   }

@@ -345,16 +345,16 @@ export default defineComponent({
     ]),
     ...mapActions('Views', ['updateArticlesView']),
     // articles tiltle
-    splitTitle(title: string, keyword: string) {
+    splitTitle(title: string, keyword: string): string[] {
       const regex = new RegExp(`(${keyword})`, 'i')
       const parts = title.split(regex)
       return parts.filter((part) => part !== '')
     },
-    onResetSearch() {
+    onResetSearch(): void {
       this.updateKeyword('')
     },
     // set value in vuex
-    setDefaultFromState() {
+    setDefaultFromState(): void {
       this.pagination.pageSize = Number(this.$ArticlesView.currentPageSize)
       this.selectPageSize = this.$ArticlesView.currentPageSize
       this.pagination.current = Number(this.$ArticlesView.currentPage)
@@ -362,16 +362,16 @@ export default defineComponent({
       this.AfterReady = true
     },
     // pagination
-    setPageSize() {
+    setPageSize(): void {
       this.pagination.pageSize = Number(this.selectPageSize)
       this.pagination.current = 1
       this.currentPage = this.pagination.current
     },
-    setCurrentPage() {
+    setCurrentPage(): void {
       this.pagination.current = Number(this.currentPage)
     },
     // scroll setting
-    setContentClick() {
+    setContentClick(): void {
       const scrollY =
         window.scrollY ||
         document.documentElement.scrollTop ||

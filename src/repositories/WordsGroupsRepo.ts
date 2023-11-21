@@ -1,4 +1,5 @@
-import api from '@/api/interceptors.ts'
+import api from '@/api/interceptors'
+import { WordsGroupsForm } from '@/interfaces/WordsGroups'
 
 export default {
   async get() {
@@ -11,12 +12,12 @@ export default {
     return response.data
   },
 
-  async add<T>(data: T) {
+  async add(data: WordsGroupsForm) {
     const response = await api.post('/wordsgroups', data)
     return response.data
   },
 
-  async update<T>(id: number, data: T) {
+  async update(id: number, data: WordsGroupsForm) {
     const response = await api.put(`/wordsgroups/${id}`, data)
     return response.data
   },

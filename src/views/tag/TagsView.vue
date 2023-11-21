@@ -42,7 +42,9 @@
                       />
                       <a-input
                         v-model:value="
-                          editTableData[0][record.id][column.dataIndex]
+                          editTableData[0][record.id][
+                            column.dataIndex as keyof Tag
+                          ]
                         "
                         style="margin: -5px 0"
                       />
@@ -215,7 +217,9 @@
                         />
                         <a-input
                           v-model:value="
-                            editTableData[1][record.id][column.dataIndex]
+                            editTableData[1][record.id][
+                              column.dataIndex as keyof Tag
+                            ]
                           "
                           style="margin: -5px 0"
                         />
@@ -377,8 +381,8 @@ import TagsColorView from '@/views/tag/TagsColorView.vue'
 import TagsColorSelect from '@/components/select/TagsColorSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import type { UnwrapRef } from 'vue'
-import { Tag } from '@/interfaces/Tags.ts'
-import { TagsColor } from '@/interfaces/TagsColor.ts'
+import { Tag } from '@/interfaces/Tags'
+import { TagsColor } from '@/interfaces/TagsColor'
 
 export default defineComponent({
   name: 'TagsView',
@@ -404,7 +408,7 @@ export default defineComponent({
       'update',
       'deleteById'
     ]),
-    async refreshTable(tab: number) {
+    async refreshTable(tab: number): Promise<void> {
       try {
         this.SyncOutlinedSpin[tab] = true
         this.TableLoading[tab] = true
@@ -420,7 +424,7 @@ export default defineComponent({
         //
       }
     },
-    async onEditFinish(record: Tag, tab: number) {
+    async onEditFinish(record: Tag, tab: number): Promise<void> {
       try {
         const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
@@ -431,7 +435,7 @@ export default defineComponent({
         //
       }
     },
-    async onDelete(id: number) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -440,7 +444,7 @@ export default defineComponent({
         //
       }
     },
-    handleColorSelectChange(value: number, record: Tag) {
+    handleColorSelectChange(value: number, record: Tag): void {
       if (value) {
         const newVar = this.tagsColor.find(
           (tagColor: TagsColor) => tagColor.id === value
@@ -470,10 +474,11 @@ export default defineComponent({
     const SyncOutlinedSpin = ref([false, false])
     const visible = ref(false)
     const activeTab = ref('0')
-    const editTableData: UnwrapRef<Record<number, Tag[]>> = reactive({
-      0: {} as Tag[],
-      1: {} as Tag[]
-    })
+    const editTableData: UnwrapRef<Record<number, Record<number, Tag>>> =
+      reactive({
+        0: {} as Record<number, Tag>,
+        1: {} as Record<number, Tag>
+      })
 
     const edit = (record: Tag, tab: number, editDataSource: Tag[]) => {
       editTableData[tab][record.id] = cloneDeep(

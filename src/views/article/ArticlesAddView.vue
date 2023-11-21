@@ -44,7 +44,7 @@ import { ref, reactive, onMounted, defineComponent } from 'vue'
 import { mapActions, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { ArticleForm } from '@/interfaces/Articles.ts'
+import { ArticleForm } from '@/interfaces/Articles'
 
 export default defineComponent({
   name: 'ArticlesAddView',
@@ -53,7 +53,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('ArticlesStore', ['add']),
-    async onFinish() {
+    async onFinish(): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))

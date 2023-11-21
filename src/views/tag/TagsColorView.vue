@@ -170,7 +170,7 @@ import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
 import type { UnwrapRef } from 'vue'
-import { TagsColor, TagsColorForm } from '@/interfaces/TagsColor.ts'
+import { TagsColor, TagsColorForm } from '@/interfaces/TagsColor'
 
 export default defineComponent({
   name: 'TagsColorView',
@@ -183,7 +183,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('TagsColorStore', ['fetch', 'add', 'update', 'deleteById']),
-    async onFinish() {
+    async onFinish(): Promise<void> {
       try {
         this.formState.tagsColor.tc_color = this.selectedColor
         this.formState.tagsColor.tc_background = this.selectedBackground
@@ -200,7 +200,7 @@ export default defineComponent({
         //
       }
     },
-    async onEditFinish(record: TagsColor) {
+    async onEditFinish(record: TagsColor): Promise<void> {
       try {
         const editData = await this.save(record)
         message.loading({ content: 'Loading..', duration: 1 })
@@ -211,7 +211,7 @@ export default defineComponent({
         //
       }
     },
-    async onDelete(id: number) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))

@@ -1,11 +1,11 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
-import CategoriesRepo from '@/repositories/CategoriesRepo.ts'
+import CategoriesRepo from '@/repositories/CategoriesRepo'
 import {
   Category,
   CategoryForm,
   CategoriesOrder,
   RootState
-} from '@/interfaces/Categories.ts'
+} from '@/interfaces/Categories'
 
 const state = {
   categories: [] as Category[],
@@ -18,15 +18,15 @@ const getters: GetterTree<RootState, RootState> = {
   categories: (state) => state.categories,
   categoryForm: (state) => state.categoryForm,
   categoriesArray: (state) => {
-    return Object.keys(state.categories).map((key) => ({
+    return Object.entries(state.categories).map(([key, value]) => ({
       key,
-      ...state.categories[key]
+      ...value
     }))
   },
   recentCategoriesArray: (state) => {
-    return Object.keys(state.recentCategories).map((key) => ({
+    return Object.entries(state.recentCategories).map(([key, value]) => ({
       key,
-      ...state.recentCategories[key]
+      ...value
     }))
   }
 }

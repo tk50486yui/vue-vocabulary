@@ -4,9 +4,10 @@
   </a-button>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { SyncOutlined } from '@ant-design/icons-vue'
-export default {
+export default defineComponent({
   name: 'RefreshBtn',
   props: {
     spin: Boolean
@@ -14,7 +15,7 @@ export default {
   components: {
     SyncOutlined
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .button-container {

@@ -1,35 +1,37 @@
 <template>
-  <div class="main-body" :class="$theme">
-    <!-- 頂端 導覽列 -->
-    <HeaderView />
+  <a-config-provider :getPopupContainer="getPopupContainer">
+    <div class="main-body" :class="$theme">
+      <!-- 頂端 導覽列 -->
+      <HeaderView />
 
-    <!-- Breadcrumb -->
-    <BreadcrumbView />
+      <!-- Breadcrumb -->
+      <BreadcrumbView />
 
-    <!-- 主頁面 -->
-    <div class="spad" :class="$theme">
-      <div class="container">
-        <!-- 上方搜尋列 -->
-        <SearchView />
+      <!-- 主頁面 -->
+      <div class="spad" :class="$theme">
+        <div class="container">
+          <!-- 上方搜尋列 -->
+          <SearchView />
 
-        <!-- 下方顯示頁面 -->
-        <div class="row">
-          <!-- 左側 -->
-          <div class="col-lg-3">
-            <SideMenuView />
-          </div>
+          <!-- 下方顯示頁面 -->
+          <div class="row">
+            <!-- 左側 -->
+            <div class="col-lg-3">
+              <SideMenuView />
+            </div>
 
-          <!-- 右側 -->
-          <div class="col-lg-9">
-            <router-view></router-view>
+            <!-- 右側 -->
+            <div class="col-lg-9">
+              <router-view></router-view>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 底部 Footer -->
-    <FooterView />
-  </div>
+      <!-- 底部 Footer -->
+      <FooterView />
+    </div>
+  </a-config-provider>
 </template>
 <script lang="ts">
 import { ref, onMounted, defineComponent } from 'vue'
@@ -54,16 +56,24 @@ export default defineComponent({
     ...mapState('Screen', ['$mobile'])
   },
   methods: {
-    ...mapActions('Screen', ['updateDesktop', 'updateTablet', 'updateMobile'])
+    ...mapActions('Screen', ['updateDesktop', 'updateTablet', 'updateMobile']),
+    // @ts-expect-error:  necessary
+    getPopupContainer(el, dialogContext) {
+      if (dialogContext) {
+        return dialogContext.getDialogWrap()
+      } else {
+        return document.body
+      }
+    }
   },
   watch: {
-    isScreenSmall: function (val) {
+    isScreenSmall(val: boolean) {
       this.updateMobile(!!val)
     },
-    isScreenMedium: function (val) {
+    isScreenMedium(val: boolean) {
       this.updateTablet(!!val)
     },
-    isScreenLarge: function (val) {
+    isScreenLarge(val: boolean) {
       this.updateDesktop(!!val)
     }
   },

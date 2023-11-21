@@ -1,4 +1,4 @@
-export const messageMap = {
+export const messageMap: Record<string, { default: string }> = {
   post: {
     default: '新增成功'
   },
@@ -10,6 +10,9 @@ export const messageMap = {
   },
   delete: {
     default: '刪除成功'
+  },
+  other: {
+    default: '成功，未知'
   },
   400: {
     default: 'Invalid data'

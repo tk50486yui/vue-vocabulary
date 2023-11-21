@@ -97,7 +97,7 @@
 import { ref, reactive, onMounted, defineComponent } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import { message } from 'ant-design-vue'
-import { WordsGroupsForm } from '@/interfaces/WordsGroups.ts'
+import { WordsGroupsForm, groupArray } from '@/interfaces/WordsGroups'
 
 export default defineComponent({
   name: 'WordsGroupsView',
@@ -117,10 +117,11 @@ export default defineComponent({
       'updateWordsGroupsView',
       'updateWordsGroupsDetailsView'
     ]),
-    async onSave() {
+    async onSave(): Promise<void> {
+      console.log(this.$WordsGroupsView.groupArray)
       try {
         const wordsIdArray = this.$WordsGroupsView.groupArray.map(
-          (item) => item.ws_id
+          (item: groupArray) => item.ws_id
         )
         this.formState.wordsGroup.words_groups_details = wordsIdArray
         message.loading({ content: 'Loading..', duration: 1 })
@@ -132,9 +133,9 @@ export default defineComponent({
         //
       }
     },
-    async onEditSave() {
+    async onEditSave(): Promise<void> {
       const wordsIdArray = this.$WordsGroupsView.groupArray.map(
-        (item) => item.ws_id
+        (item: groupArray) => item.ws_id
       )
       this.formState.wordsGroup.words_groups_details = wordsIdArray
       const editId = this.$WordsGroupsView.id
@@ -144,7 +145,7 @@ export default defineComponent({
       this.clearCheckbox()
       this.$router.push({ name: 'wordsGroupsDetails', params: { id: editId } })
     },
-    clearCheckbox() {
+    clearCheckbox(): void {
       this.updateWordsGroupsView({
         variable: 'groupArray',
         data: { clear: true }
@@ -153,7 +154,7 @@ export default defineComponent({
       this.formState.wordsGroup.wg_name = ''
       this.saveDisabled = false
     },
-    onRemove(id: number, wsName: string) {
+    onRemove(id: number, wsName: string): void {
       this.updateWordsGroupsView({
         variable: 'groupArray',
         data: { ws_id: id, ws_name: wsName, checked: false }

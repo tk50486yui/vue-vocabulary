@@ -36,7 +36,8 @@
 import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
-import { Category, CategoriesOrder } from '@/interfaces/Categories.ts'
+import { Category, CategoriesOrder } from '@/interfaces/Categories'
+import type { AntTreeNodeDropEvent } from 'ant-design-vue/es/tree'
 
 export default defineComponent({
   name: 'CategoriesSortView',
@@ -46,7 +47,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('CategoriesStore', ['fetch', 'updateOrder']),
-    async onFinish(values: CategoriesOrder[]) {
+    async onFinish(values: Record<number, CategoriesOrder>): Promise<void> {
       try {
         const categoriesArray = Object.values(values).filter(
           (item) => item !== null && typeof item === 'object'
@@ -56,20 +57,24 @@ export default defineComponent({
         await new Promise((resolve) => setTimeout(resolve, 800))
         await this.updateOrder(categoriesArray)
         this.dropData = this.categories
-        this.categoriesForm.splice(0, this.categoriesForm.length)
+        Object.keys(this.categoriesForm).forEach((key) => {
+          delete this.categoriesForm[Number(key)]
+        })
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {
         //
       }
     },
-    async onReset() {
+    async onReset(): Promise<void> {
       try {
         this.spinning = true
         await new Promise((resolve) => setTimeout(resolve, 500))
         await this.fetch()
         this.dropData = this.categories
-        this.categoriesForm.splice(0, this.categoriesForm.length)
+        Object.keys(this.categoriesForm).forEach((key) => {
+          delete this.categoriesForm[Number(key)]
+        })
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {
@@ -85,11 +90,11 @@ export default defineComponent({
   setup() {
     const ready = ref(false)
     const dropData = ref([])
-    const categoriesForm = reactive([] as CategoriesOrder[])
+    const categoriesForm = reactive<Record<number, CategoriesOrder>>({})
     const saveDisabled = ref(true)
     const spinning = ref(false)
     // 只允許排序同個父節點
-    const onDrop = (info) => {
+    const onDrop = (info: AntTreeNodeDropEvent) => {
       const currentId = info.dragNode.id
       const currentParentId = info.dragNode.cate_parent_id
       const dropToGap = info.dropToGap
@@ -100,7 +105,8 @@ export default defineComponent({
       }
       if (currentId) {
         let currentNode
-        let currentArray = dropData.value
+        let currentArray: Category[]
+        currentArray = dropData.value
         const currentParents = info.dragNode.parents
         // if 第一層 else 第二層以後
         if (currentParents && currentParents.length === 0) {
@@ -109,9 +115,8 @@ export default defineComponent({
           )
         } else {
           for (const parentId of currentParents) {
-            const parent = currentArray.find(
-              (item: Category) => item.id === parentId
-            )
+            let parent: Category | undefined
+            parent = currentArray.find((item: Category) => item.id === parentId)
             if (parent) {
               currentArray = parent.children
             } else {
@@ -143,7 +148,7 @@ export default defineComponent({
         }))
         currentArray.forEach((item: Category, index: number) => {
           if (!categoriesForm[item.id]) {
-            categoriesForm[item.id] = {}
+            categoriesForm[item.id] = {} as CategoriesOrder
           }
           categoriesForm[item.id].id = item.id
           categoriesForm[item.id].cate_order = index

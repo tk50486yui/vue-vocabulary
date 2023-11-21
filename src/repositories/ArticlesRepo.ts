@@ -1,4 +1,5 @@
-import api from '@/api/interceptors.ts'
+import api from '@/api/interceptors'
+import { ArticleForm } from '@/interfaces/Articles'
 
 export default {
   async get() {
@@ -11,12 +12,12 @@ export default {
     return response.data
   },
 
-  async add<T>(data: T) {
+  async add(data: ArticleForm) {
     const response = await api.post('/articles', data)
     return response.data
   },
 
-  async update<T>(id: number, data: T) {
+  async update(id: number, data: ArticleForm) {
     const response = await api.put(`/articles/${id}`, data)
     return response.data
   },

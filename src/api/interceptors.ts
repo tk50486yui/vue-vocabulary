@@ -1,5 +1,5 @@
-import api from '@/api/api.ts'
-import globalNotify from '@/components/notification/globalNotify.ts'
+import api from '@/api/api'
+import globalNotify from '@/components/notification/globalNotify'
 
 // 請求攔截
 api.interceptors.request.use(

@@ -98,8 +98,8 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import TagsColorSelect from '@/components/select/TagsColorSelect.vue'
-import { TagForm } from '@/interfaces/Tags.ts'
-import { TagsColor } from '@/interfaces/TagsColor.ts'
+import { TagForm } from '@/interfaces/Tags'
+import { TagsColor } from '@/interfaces/TagsColor'
 
 export default defineComponent({
   name: 'TagsAddView',
@@ -120,7 +120,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('TagsStore', ['add']),
-    async onFinish() {
+    async onFinish(): Promise<void> {
       try {
         this.confirmLoading = true
         message.loading({ content: 'Loading..', duration: 1 })
@@ -132,16 +132,16 @@ export default defineComponent({
         //
       }
     },
-    handleTreeSelectChange(value: number) {
+    handleTreeSelectChange(value: number): void {
       this.formState.tag.ts_parent_id =
         typeof value !== 'undefined' ? value : null
     },
-    resetForm() {
+    resetForm(): void {
       this.formState.tag.ts_parent_id = null
       this.formState.tag.tc_id = null
       this.formRef.resetFields()
     },
-    handleTagsColorSelectChange(value: number) {
+    handleTagsColorSelectChange(value: number): void {
       this.formState.tag.tc_id = typeof value !== 'undefined' ? value : null
     }
   },

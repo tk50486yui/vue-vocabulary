@@ -1,10 +1,5 @@
-export const globalErrorHandler = (error: string, info: string) => {
-  console.error('全局錯誤：', error)
-  console.error('訊息：', info)
-}
-
-export const windowOnError = (message: string) => {
-  if (message.includes('CKEditor')) {
+export const windowOnError = (message: string | Event) => {
+  if (typeof message === 'string' && message.includes('CKEditor')) {
     console.log('CKEditor Error:', message)
     return true
   }

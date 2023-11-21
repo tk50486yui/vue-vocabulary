@@ -21,3 +21,9 @@ export interface WordsGroupsDetails {
   wg_id: number
   wgd_content: string
 }
+
+export interface groupArray {
+  ws_id: number
+  ws_name: string
+  checked: boolean
+}

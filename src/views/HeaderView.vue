@@ -86,7 +86,7 @@
       <template #title>
         <div class="drawer__logo">
           <router-link :to="{ name: 'home' }">
-            <img :src="require('@/assets/logo.png')" />
+            <img :src="logo" />
           </router-link>
         </div>
       </template>
@@ -94,13 +94,13 @@
     </a-drawer>
   </div>
 </template>
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import NavDrawerView from '@/views/NavDrawerView.vue'
 import logo from '@/assets/img/logo.png'
 
-export default {
+export default defineComponent({
   name: 'HeaderView',
   components: {
     NavDrawerView
@@ -111,10 +111,10 @@ export default {
   },
   methods: {
     ...mapActions('Search', ['updateSearchShow']),
-    setSearchShow() {
+    setSearchShow(): void {
       this.updateSearchShow(!this.$searchShow)
     },
-    setActive() {
+    setActive(): void {
       const { name } = this.$route
       switch (name) {
         case 'wordsGrid':
@@ -159,7 +159,7 @@ export default {
       logo
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

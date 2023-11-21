@@ -23,13 +23,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { mapActions } from 'vuex'
+import { Category } from '@/interfaces/Categories'
 
 export default defineComponent({
   name: 'TreeCategoriesMenu',
   props: {
-    data: Object,
+    data: {
+      type: Object as PropType<Category>,
+      required: true
+    },
     parentId: String
   },
   methods: {
@@ -38,7 +42,7 @@ export default defineComponent({
       'updateFilters',
       'updateSearchClass'
     ]),
-    async handleCategoryFilter(cateName: string) {
+    async handleCategoryFilter(cateName: string): Promise<void> {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)

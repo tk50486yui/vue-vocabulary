@@ -42,7 +42,9 @@
                       />
                       <a-input
                         v-model:value="
-                          editTableData[0][record.id][column.dataIndex]
+                          editTableData[0][record.id][
+                            column.dataIndex as keyof Category
+                          ]
                         "
                         style="margin: -5px 0"
                       />
@@ -134,7 +136,9 @@
                       />
                       <a-input
                         v-model:value="
-                          editTableData[1][record.id][column.dataIndex]
+                          editTableData[1][record.id][
+                            column.dataIndex as keyof Category
+                          ]
                         "
                         style="margin: -5px 0"
                       />
@@ -206,7 +210,7 @@ import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 import CategoriesSortView from '@/views/category/CategoriesSortView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import type { UnwrapRef } from 'vue'
-import { Category } from '@/interfaces/Categories.ts'
+import { Category } from '@/interfaces/Categories'
 
 export default defineComponent({
   name: 'CategoriesView',
@@ -232,7 +236,7 @@ export default defineComponent({
       'update',
       'deleteById'
     ]),
-    async refreshTable(tab: number) {
+    async refreshTable(tab: number): Promise<void> {
       try {
         this.SyncOutlinedSpin[tab] = true
         this.TableLoading[tab] = true
@@ -248,7 +252,7 @@ export default defineComponent({
         //
       }
     },
-    async onEditFinish(record: Category, tab: number) {
+    async onEditFinish(record: Category, tab: number): Promise<void> {
       try {
         const editData = await this.save(record, tab)
         message.loading({ content: 'Loading..', duration: 1 })
@@ -259,7 +263,7 @@ export default defineComponent({
         //
       }
     },
-    async onDelete(id: number) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -284,10 +288,11 @@ export default defineComponent({
     const SyncOutlinedSpin = ref([false, false])
     const visible = ref(false)
     const activeTab = ref('0')
-    const editTableData: UnwrapRef<Record<number, Category[]>> = reactive({
-      0: {} as Category[],
-      1: {} as Category[]
-    })
+    const editTableData: UnwrapRef<Record<number, Record<number, Category>>> =
+      reactive({
+        0: {} as Record<number, Category>,
+        1: {} as Record<number, Category>
+      })
 
     const edit = (
       record: Category,

@@ -1,7 +1,14 @@
-import { ElNotification, ElMessage } from 'element-plus'
-import { messageMap } from './messageMap.ts'
+import {
+  ElNotification,
+  ElMessage,
+  NotificationParams,
+  MessageParams
+} from 'element-plus'
+import { messageMap } from './messageMap'
+import { AxiosResponse } from 'axios'
+import { CustomAxiosConfig } from '@/interfaces/axios/CustomAxios'
 
-function globalNotify(response) {
+function globalNotify(response: AxiosResponse) {
   let type = ''
   let tagType = ''
   let errorKey = ''
@@ -11,28 +18,29 @@ function globalNotify(response) {
       break
     default:
       type = 'error'
-      errorKey = response.status
+      errorKey = String(response.status)
   }
-  if (response.config.tagType) {
-    tagType = response.config.tagType
+  const method = response.config.method
+  const customConfig = response.config as CustomAxiosConfig
+  if (customConfig.tagType) {
+    tagType = customConfig.tagType
   }
-
-  if (tagType) {
+  if (tagType && method) {
     ElMessage({
-      message: messageMap[response.config.method].default,
+      message: messageMap[method || 'other'].default,
       type: type
-    })
+    } as MessageParams)
   } else {
     if (errorKey) {
       ElNotification({
-        message: messageMap[errorKey].default,
+        message: messageMap[errorKey || 'other'].default,
         type: type
-      })
+      } as NotificationParams)
     } else {
       ElNotification({
-        message: messageMap[response.config.method].default,
+        message: messageMap[method || 'other'].default,
         type: type
-      })
+      } as NotificationParams)
     }
   }
 }

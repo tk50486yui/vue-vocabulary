@@ -1,4 +1,5 @@
-import api from '@/api/interceptors.ts'
+import api from '@/api/interceptors'
+import { TagForm, TagsOrder } from '@/interfaces/Tags'
 
 export default {
   async get() {
@@ -16,17 +17,17 @@ export default {
     return response.data
   },
 
-  async add<T>(data: T) {
+  async add(data: TagForm) {
     const response = await api.post('/tags', data)
     return response.data
   },
 
-  async update<T>(id: number, data: T) {
+  async update(id: number, data: TagForm) {
     const response = await api.put(`/tags/${id}`, data)
     return response.data
   },
 
-  async updateOrder<T>(data: T) {
+  async updateOrder(data: TagsOrder[]) {
     const response = await api.patch('/tags/order/all', data)
     return response.data
   },

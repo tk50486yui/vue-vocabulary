@@ -78,7 +78,7 @@ export default defineComponent({
       'updateFilters',
       'updateSearchClass'
     ]),
-    async refresh() {
+    async refresh(): Promise<void> {
       try {
         this.SyncOutlinedSpin = true
         this.spinning = true
@@ -90,7 +90,7 @@ export default defineComponent({
         //
       }
     },
-    async handleCategoryFilter(cateName: string) {
+    async handleCategoryFilter(cateName: string): Promise<void> {
       this.updateSearchClass('word')
       this.updateFilters(['cate_name'])
       this.updateKeyword(cateName)

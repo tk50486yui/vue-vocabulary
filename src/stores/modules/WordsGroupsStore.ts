@@ -1,10 +1,10 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
-import WordsGroupsRepo from '@/repositories/WordsGroupsRepo.ts'
+import WordsGroupsRepo from '@/repositories/WordsGroupsRepo'
 import {
   WordsGroup,
   WordsGroupsForm,
   RootState
-} from '@/interfaces/WordsGroups.ts'
+} from '@/interfaces/WordsGroups'
 
 const state = {
   wordsGroups: [] as WordsGroup[],

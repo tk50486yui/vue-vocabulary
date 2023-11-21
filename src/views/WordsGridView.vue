@@ -503,9 +503,9 @@
   </template>
   <!-- drawer words add -->
   <WordsDrawerView
-    ref="wordsDrawer"
-    :open="drawerVisible"
-    @close="drawerVisible = false"
+    ref="wordsDrawerRef"
+    :open="wordsDrawerVisible"
+    @close="wordsDrawerVisible = false"
   />
 </template>
 
@@ -517,7 +517,7 @@ import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
 import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import { Word } from '@/interfaces/Words.ts'
+import { Word } from '@/interfaces/Words'
 
 export default defineComponent({
   name: 'WordsGridView',
@@ -541,7 +541,7 @@ export default defineComponent({
       )
     },
     checkboxArray() {
-      const newArray = {}
+      const newArray: Record<number, boolean> = {}
       for (const item of this.$WordsGroupsView.groupArray) {
         newArray[item.ws_id] = item.checked
       }
@@ -685,12 +685,14 @@ export default defineComponent({
       this.tagsArray = this.$filtersTags
       const filterItemsStateProperty = Object.keys(this.filterItemsState)
       filterItemsStateProperty.forEach((property) => {
-        this.filterItemsState[property] =
+        const propName = property as keyof typeof this.filterItemsState
+        this.filterItemsState[propName] =
           this.$WordsGrid.filterItemsState[property]
       })
       const isItemsStateProperty = Object.keys(this.isItemsState)
       isItemsStateProperty.forEach((property) => {
-        this.isItemsState[property] = this.$WordsGrid.isItemsState[property]
+        const propName = property as keyof typeof this.isItemsState
+        this.isItemsState[propName] = this.$WordsGrid.isItemsState[property]
       })
       this.AfterReady = true
     },
@@ -727,8 +729,8 @@ export default defineComponent({
     },
     // drawer
     onDrawerShow() {
-      this.$refs.wordsDrawer.setDrawerStyle()
-      this.drawerVisible = true
+      this.wordsDrawerRef.setDrawerStyle()
+      this.wordsDrawerVisible = true
     }
   },
   async created() {
@@ -789,13 +791,14 @@ export default defineComponent({
     const AfterReady = ref(false)
     const ReadySpinning = ref(false)
     const filterShow = ref(true)
-    const tagsArray = ref([])
+    const tagsArray = ref<number[]>([])
     const selectPageSize = ref('20')
     const currentPage = ref(1)
     const dataSize = ref(0)
     const checkboxShow = ref(false)
     const checkboxBtn = ref(false)
-    const drawerVisible = ref(false)
+    const wordsDrawerRef = ref()
+    const wordsDrawerVisible = ref(false)
     const labelColor = ref('rgba(59, 39, 12, 1)')
 
     const pagination = reactive({
@@ -844,7 +847,8 @@ export default defineComponent({
       selectPageSize,
       currentPage,
       dataSize,
-      drawerVisible,
+      wordsDrawerRef,
+      wordsDrawerVisible,
       labelColor,
       filterItemsState,
       ...toRefs(filterItemsState),

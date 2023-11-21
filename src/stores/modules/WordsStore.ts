@@ -1,6 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
-import WordsRepo from '@/repositories/WordsRepo.ts'
-import { Word, WordForm, RootState } from '@/interfaces/Words.ts'
+import WordsRepo from '@/repositories/WordsRepo'
+import { Word, WordForm, RootState } from '@/interfaces/Words'
 import { generalFilterWords as generalFilter } from '@/libs/filterHelper'
 
 const state = {
@@ -17,9 +17,9 @@ const getters: GetterTree<RootState, RootState> = {
   },
   wordForm: (state) => state.wordForm,
   wordsArray: (state) => {
-    return Object.keys(state.words).map((key) => ({
+    return Object.entries(state.words).map(([key, value]) => ({
       key,
-      ...state.words[key]
+      ...value
     }))
   },
   filterWords:
@@ -72,7 +72,7 @@ const actions = {
     { dispatch }: { dispatch: Dispatch },
     { id, data }: { id: number; data: { ws_is_common: boolean } }
   ) {
-    await WordsRepo.updateCommon(id, data)
+    await WordsRepo.updateCommon(id, data, { tagType: 'heart' })
     await dispatch('fetch')
   },
 
@@ -80,7 +80,7 @@ const actions = {
     { dispatch }: { dispatch: Dispatch },
     { id, data }: { id: number; data: { ws_is_important: boolean } }
   ) {
-    await WordsRepo.updateImportant(id, data)
+    await WordsRepo.updateImportant(id, data, { tagType: 'star' })
     await dispatch('fetch')
   },
 

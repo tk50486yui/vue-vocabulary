@@ -171,7 +171,7 @@ import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import { ArticleForm } from '@/interfaces/Articles.ts'
+import { ArticleForm } from '@/interfaces/Articles'
 
 export default defineComponent({
   name: 'ArticlesContentView',
@@ -202,7 +202,7 @@ export default defineComponent({
   methods: {
     ...mapActions('ArticlesStore', ['fetch', 'update', 'deleteById']),
     ...mapActions('Views', ['updateArticlesView']),
-    async onEditFinish() {
+    async onEditFinish(): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -215,7 +215,7 @@ export default defineComponent({
         //
       }
     },
-    async onDelete(id: number) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -225,7 +225,7 @@ export default defineComponent({
         //
       }
     },
-    onEdit() {
+    onEdit(): void {
       this.editShow = !this.editShow
       this.formState.article = Object.assign(
         {},
@@ -233,7 +233,7 @@ export default defineComponent({
         this.article
       )
     },
-    onEditCancel() {
+    onEditCancel(): void {
       if (this.editShow) {
         this.editShow = false
       }
@@ -243,15 +243,15 @@ export default defineComponent({
         })
       }
     },
-    handleCategoriesSelectChange(value: number) {
+    handleCategoriesSelectChange(value: number): void {
       this.formState.article.cate_id =
         typeof value !== 'undefined' ? value : null
     },
-    handleTagsSelectChange(value: number[]) {
+    handleTagsSelectChange(value: number[]): void {
       this.formState.article.articles_tags.array =
         typeof value !== 'undefined' ? value : []
     },
-    setGridState() {
+    setGridState(): void {
       this.updateArticlesView({ variable: 'jumpPage', data: true })
       this.updateArticlesView({ variable: 'jumpScroll', data: true })
     }

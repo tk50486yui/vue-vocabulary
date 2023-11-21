@@ -1,6 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
-import ArticlesRepo from '@/repositories/ArticlesRepo.ts'
-import { Article, ArticleForm, RootState } from '@/interfaces/Articles.ts'
+import ArticlesRepo from '@/repositories/ArticlesRepo'
+import { Article, ArticleForm, RootState } from '@/interfaces/Articles'
 import { generalFilterArticles as generalFilter } from '@/libs/filterHelper'
 
 const state = {

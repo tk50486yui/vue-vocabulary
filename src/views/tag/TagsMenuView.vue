@@ -87,7 +87,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { PlusBtn } from '@/components/button'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import TagsModalView from '@/views/tag/TagsModalView.vue'
-import { Tag } from '@/interfaces/Tags.ts'
+import { Tag } from '@/interfaces/Tags'
 
 export default defineComponent({
   name: 'TagsMenuView',
@@ -113,7 +113,7 @@ export default defineComponent({
   methods: {
     ...mapActions('TagsStore', ['fetch', 'fetchRecent']),
     ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
-    async handleTagsFilter(id: number) {
+    async handleTagsFilter(id: number): Promise<void> {
       await this.pushFiltersTags(id)
       this.updateSearchClass('word')
       if (String(this.$route) !== 'wordsGrid') {

@@ -1,4 +1,6 @@
-import api from '@/api/interceptors.ts'
+import api from '@/api/interceptors'
+import { WordForm } from '@/interfaces/Words'
+import { CustomAxiosConfig } from '@/interfaces/axios/CustomAxios'
 
 export default {
   async get() {
@@ -11,27 +13,31 @@ export default {
     return response.data
   },
 
-  async add<T>(data: T) {
+  async add(data: WordForm) {
     const response = await api.post('/words', data)
     return response.data
   },
 
-  async update<T>(id: number, data: T) {
+  async update(id: number, data: WordForm) {
     const response = await api.put(`/words/${id}`, data)
     return response.data
   },
 
-  async updateCommon<T>(id: number, data: T) {
-    const response = await api.patch(`/words/common/${id}`, data, {
-      tagType: 'star'
-    })
+  async updateCommon(
+    id: number,
+    data: { ws_is_common: boolean },
+    config: CustomAxiosConfig
+  ) {
+    const response = await api.patch(`/words/common/${id}`, data, config)
     return response.data
   },
 
-  async updateImportant<T>(id: number, data: T) {
-    const response = await api.patch(`/words/important/${id}`, data, {
-      tagType: 'heart'
-    })
+  async updateImportant(
+    id: number,
+    data: { ws_is_important: boolean },
+    config: CustomAxiosConfig
+  ) {
+    const response = await api.patch(`/words/important/${id}`, data, config)
     return response.data
   },
 

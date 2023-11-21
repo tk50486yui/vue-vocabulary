@@ -1,3 +1,4 @@
+import { App } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faMagnifyingGlass,
@@ -24,6 +25,6 @@ library.add(faSort)
 library.add(faXmark)
 library.add(faPalette)
 
-export default function installFontAwesomeIcon(app) {
+export default function installFontAwesomeIcon(app: App) {
   app.component('font-awesome-icon', FontAwesomeIcon)
 }

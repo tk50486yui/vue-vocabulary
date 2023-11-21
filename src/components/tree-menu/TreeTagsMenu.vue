@@ -36,13 +36,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { mapActions, mapState } from 'vuex'
+import { Tag } from '@/interfaces/Tags'
 
 export default defineComponent({
   name: 'TreeTagsMenu',
   props: {
-    data: Object,
+    data: {
+      type: Object as PropType<Tag>,
+      required: true
+    },
     parentId: String
   },
   computed: {
@@ -50,10 +54,11 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
-    async handleTagsFilter(id) {
+    async handleTagsFilter(id: number): Promise<void> {
       await this.pushFiltersTags(id)
       this.updateSearchClass('word')
-      if (this.$route !== 'wordsGrid') {
+      const routeName = String(this.$route)
+      if (routeName !== 'wordsGrid') {
         this.$router.push({ name: 'wordsGrid' })
       }
     }

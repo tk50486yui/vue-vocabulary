@@ -243,7 +243,7 @@ import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
-import { Word, WordForm } from '@/interfaces/Words.ts'
+import { Word, WordForm } from '@/interfaces/Words'
 
 export default defineComponent({
   name: 'WordDetailsView',
@@ -281,7 +281,7 @@ export default defineComponent({
       'deleteById'
     ]),
     ...mapActions('Views', ['updateWordsGrid']),
-    async onEditFinish() {
+    async onEditFinish(): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -294,11 +294,11 @@ export default defineComponent({
         //
       }
     },
-    onEdit() {
+    onEdit(): void {
       this.editShow = !this.editShow
       this.formState.word = Object.assign({}, this.formState.word, this.word)
     },
-    onEditCancel() {
+    onEditCancel(): void {
       if (this.editShow) {
         this.editShow = false
       }
@@ -308,7 +308,7 @@ export default defineComponent({
         })
       }
     },
-    async onUpdateCommon(id: number, data: Word) {
+    async onUpdateCommon(id: number, data: Word): Promise<void> {
       try {
         data.ws_is_common = !data.ws_is_common
         await this.updateCommon({ id: id, data: data })
@@ -316,7 +316,7 @@ export default defineComponent({
         //
       }
     },
-    async onUpdateImportant(id: number, data: Word) {
+    async onUpdateImportant(id: number, data: Word): Promise<void> {
       try {
         data.ws_is_important = !data.ws_is_important
         await this.updateImportant({ id: id, data: data })
@@ -324,7 +324,7 @@ export default defineComponent({
         //
       }
     },
-    async onDelete(id: number) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -334,21 +334,21 @@ export default defineComponent({
         //
       }
     },
-    handleCategoriesSelectChange(value: number) {
+    handleCategoriesSelectChange(value: number): void {
       this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
     },
-    handleTagsSelectChange(value: number[]) {
+    handleTagsSelectChange(value: number[]): void {
       this.formState.word.words_tags.array =
         typeof value !== 'undefined' ? value : []
     },
-    changeDescriptionsLayout(isScreenSmall: boolean) {
+    changeDescriptionsLayout(isScreenSmall: boolean): void {
       if (isScreenSmall) {
         this.descriptionsLayout = 'vertical'
       } else {
         this.descriptionsLayout = 'horizontal'
       }
     },
-    setGridState() {
+    setGridState(): void {
       this.updateWordsGrid({ variable: 'jumpPage', data: true })
       this.updateWordsGrid({ variable: 'jumpScroll', data: true })
     }

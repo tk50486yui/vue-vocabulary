@@ -48,6 +48,7 @@ import { ref, defineComponent } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
+import { WordsGroupsDetails } from '@/interfaces/WordsGroups'
 
 export default defineComponent({
   name: 'WordsGroupsDetailsView',
@@ -74,7 +75,7 @@ export default defineComponent({
       'updateWordsGroupsView',
       'updateWordsGroupsDetailsView'
     ]),
-    async onDelete(id: number) {
+    async onDelete(id: number): Promise<void> {
       try {
         message.loading({ content: 'Loading..', duration: 1 })
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -84,7 +85,7 @@ export default defineComponent({
         //
       }
     },
-    onEdit() {
+    onEdit(): void {
       if (this.editShow === false) {
         this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: true })
         this.injectEditData()
@@ -93,7 +94,7 @@ export default defineComponent({
           variable: 'updateNow',
           data: false
         })
-        this.inBlock = false
+        let inBlock = false
         if (this.$WordsGroupsView.id !== this.wordsGroup.id) {
           this.updateWordsGroupsView({
             variable: 'groupArray',
@@ -104,9 +105,9 @@ export default defineComponent({
             variable: 'updateNow',
             data: true
           })
-          this.inBlock = true
+          inBlock = true
         }
-        if (!this.inBlock) {
+        if (!inBlock) {
           this.updateWordsGroupsView({
             variable: 'groupArray',
             data: { clear: true }
@@ -114,13 +115,13 @@ export default defineComponent({
         }
       }
     },
-    injectEditData() {
+    injectEditData(): void {
       this.updateWordsGroupsView({
         variable: 'wg_name',
         data: this.wordsGroup.wg_name
       })
       this.updateWordsGroupsView({ variable: 'id', data: this.wordsGroup.id })
-      this.wordsGroup.details.forEach((item) => {
+      this.wordsGroup.details.forEach((item: WordsGroupsDetails) => {
         this.updateWordsGroupsView({
           variable: 'groupArray',
           data: { ws_id: item.ws_id, ws_name: item.ws_name, checked: true }

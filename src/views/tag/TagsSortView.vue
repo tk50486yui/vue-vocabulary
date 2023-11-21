@@ -37,7 +37,8 @@
 import { ref, reactive, defineComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { message } from 'ant-design-vue'
-import { Tag, TagsOrder } from '@/interfaces/Tags.ts'
+import { Tag, TagsOrder } from '@/interfaces/Tags'
+import type { AntTreeNodeDropEvent } from 'ant-design-vue/es/tree'
 
 export default defineComponent({
   name: 'TagsSortView',
@@ -47,7 +48,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('TagsStore', ['fetch', 'updateOrder']),
-    async onFinish(values: TagsOrder[]) {
+    async onFinish(values: Record<number, TagsOrder>): Promise<void> {
       try {
         const tagsArray = Object.values(values).filter(
           (item) => item !== null && typeof item === 'object'
@@ -57,20 +58,24 @@ export default defineComponent({
         await new Promise((resolve) => setTimeout(resolve, 800))
         await this.updateOrder(tagsArray)
         this.dropData = this.tags
-        this.tagsForm.splice(0, this.tagsForm.length)
+        Object.keys(this.tagsForm).forEach((key) => {
+          delete this.tagsForm[Number(key)]
+        })
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {
         //
       }
     },
-    async onReset() {
+    async onReset(): Promise<void> {
       try {
         this.spinning = true
         await new Promise((resolve) => setTimeout(resolve, 500))
         await this.fetch()
         this.dropData = this.tags
-        this.tagsForm.splice(0, this.tagsForm.length)
+        Object.keys(this.tagsForm).forEach((key) => {
+          delete this.tagsForm[Number(key)]
+        })
         this.spinning = false
         this.saveDisabled = true
       } catch (error) {
@@ -86,11 +91,11 @@ export default defineComponent({
   setup() {
     const ready = ref(false)
     const dropData = ref([])
-    const tagsForm = reactive([] as TagsOrder[])
+    const tagsForm = reactive<Record<number, TagsOrder>>({})
     const saveDisabled = ref(true)
     const spinning = ref(false)
     /* 只允許排序同個父節點 */
-    const onDrop = (info) => {
+    const onDrop = (info: AntTreeNodeDropEvent) => {
       const currentId = info.dragNode.id
       const currentParentId = info.dragNode.cate_parent_id
       const dropToGap = info.dropToGap
@@ -102,7 +107,8 @@ export default defineComponent({
       }
       if (currentId) {
         let currentNode
-        let currentArray = dropData.value
+        let currentArray: Tag[]
+        currentArray = dropData.value
         const currentParents = info.dragNode.parents
         // if 第一層 else 第二層以後
         if (currentParents && currentParents.length === 0) {
@@ -111,9 +117,8 @@ export default defineComponent({
           )
         } else {
           for (const parentId of currentParents) {
-            const parent = currentArray.find(
-              (item: Tag) => item.id === parentId
-            )
+            let parent: Tag | undefined
+            parent = currentArray.find((item: Tag) => item.id === parentId)
             if (parent) {
               currentArray = parent.children
             } else {
@@ -145,7 +150,7 @@ export default defineComponent({
         }))
         currentArray.forEach((item: Tag, index: number) => {
           if (!tagsForm[item.id]) {
-            tagsForm[item.id] = {}
+            tagsForm[item.id] = {} as TagsOrder
           }
           tagsForm[item.id].id = item.id
           tagsForm[item.id].ts_order = index

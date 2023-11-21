@@ -4,10 +4,11 @@
   </a-button>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlusBtn'
-}
+})
 </script>
 <style lang="scss" scoped>
 .button-container {
