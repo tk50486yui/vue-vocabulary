@@ -1,6 +1,7 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
 import WordsRepo from '@/repositories/WordsRepo'
-import { Word, WordForm, RootState } from '@/interfaces/Words'
+import { Word, WordForm, WordsState } from '@/interfaces/Words'
+import { RootState } from '@/interfaces/RootState'
 import { generalFilterWords as generalFilter } from '@/libs/filterHelper'
 
 const state = {
@@ -9,7 +10,7 @@ const state = {
   wordForm: {} as WordForm
 }
 
-const getters: GetterTree<RootState, RootState> = {
+const getters: GetterTree<WordsState, RootState> = {
   words: (state) => state.words,
   word: (state) => state.word,
   wordById: (state) => (id: number) => {

@@ -122,9 +122,9 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item:hover){
-    color:var(--pagination-text);
-    background: var(--pagination-background-hover);
-    border-color: var(--pagination-background-active);
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
  
   &.dark :deep(.ant-pagination-item-link){
@@ -142,6 +142,12 @@ $edit-icon-color: #6A6AFF;
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);
   }
+  &.dark :deep(.ant-pagination-item-active:hover){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+  
   
 }
 
@@ -165,9 +171,7 @@ $edit-icon-color: #6A6AFF;
 
   &.light :deep(.ant-input::placeholder ){   
     color: var(--placeholder-text)
-  }
-
-  
+  } 
    
 
   &.dark :deep(.ant-input-affix-wrapper){
@@ -197,6 +201,9 @@ $edit-icon-color: #6A6AFF;
   }  
   /** clear icon **/
   &.dark :deep(.anticon.ant-input-clear-icon){
+    color: var(--input-clear-icon)
+  }
+  &.dark :deep(.anticon-close-circle){ 
     color: var(--input-clear-icon)
   }
 }
@@ -579,9 +586,9 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item:hover){
-    color:var(--pagination-text);
-    background: var(--pagination-background-hover);
-    border-color: var(--pagination-background-active);
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
  
   &.dark :deep(.ant-pagination-item-link){
@@ -595,6 +602,12 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover){   
     color:var(--pagination-text-active);
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);
@@ -666,9 +679,9 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item:hover){
-    color:var(--pagination-text);
-    background: var(--pagination-background-hover);
-    border-color: var(--pagination-background-active);
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
  
   &.dark :deep(.ant-pagination-item-link){
@@ -682,6 +695,12 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover){   
     color:var(--pagination-text-active);
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);
@@ -723,9 +742,9 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item:hover){
-    color:var(--pagination-text);
-    background: var(--pagination-background-hover);
-    border-color: var(--pagination-background-active);
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
   }
  
   &.dark :deep(.ant-pagination-item-link){
@@ -739,6 +758,12 @@ $edit-icon-color: #6A6AFF;
   }
 
   &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover){   
     color:var(--pagination-text-active);
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);

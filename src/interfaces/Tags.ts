@@ -1,4 +1,4 @@
-export interface RootState {
+export interface TagsState {
   tags: Tag[]
   tag: Tag
   tagForm: TagForm

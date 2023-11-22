@@ -176,6 +176,7 @@
     :open="wordsDrawerVisible"
     @close="wordsDrawerVisible = false"
   />
+  <a-back-top />
 </template>
 
 <script lang="ts">

@@ -4,8 +4,9 @@ import {
   Category,
   CategoryForm,
   CategoriesOrder,
-  RootState
+  CategoriesState
 } from '@/interfaces/Categories'
+import { RootState } from '@/interfaces/RootState'
 
 const state = {
   categories: [] as Category[],
@@ -14,7 +15,7 @@ const state = {
   recentCategories: [] as Category[]
 }
 
-const getters: GetterTree<RootState, RootState> = {
+const getters: GetterTree<CategoriesState, RootState> = {
   categories: (state) => state.categories,
   categoryForm: (state) => state.categoryForm,
   categoriesArray: (state) => {

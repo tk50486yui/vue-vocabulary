@@ -301,6 +301,7 @@
         </a-tab-pane>
       </a-tabs>
     </div>
+    <a-back-top />
   </template>
 </template>
 

@@ -41,9 +41,9 @@
         />
       </div>
       <a-button
-        type="primary"
-        size="small"
+        class="btn btn-primary btn-outline-light btn-sm"
         shape="round"
+        size="small"
         @click="onSave()"
         :disabled="saveDisabled"
         >儲存</a-button
@@ -55,9 +55,13 @@
           cancel-text="否"
           @confirm="clearCheckbox()"
         >
-          <a-button type="primary" size="small" shape="round" danger
-            >清空</a-button
+          <a-button
+            class="btn btn-danger btn-outline-light"
+            shape="round"
+            size="small"
           >
+            清空
+          </a-button>
         </a-popconfirm>
       </span>
     </template>
@@ -70,13 +74,13 @@
         />
       </div>
       <a-button
-        type="primary"
-        size="small"
+        class="btn btn-primary btn-outline-light btn-sm"
         shape="round"
+        size="small"
         @click="onEditSave()"
         :disabled="saveDisabled"
-        >儲存編輯</a-button
-      >
+        >儲存
+      </a-button>
       <span style="padding-left: 6px">
         <a-popconfirm
           title="確定要取消編輯嗎？"
@@ -84,9 +88,13 @@
           cancel-text="否"
           @confirm="clearCheckbox()"
         >
-          <a-button type="primary" size="small" shape="round" danger
-            >取消編輯</a-button
+          <a-button
+            class="btn btn-danger btn-outline-light btn-sm"
+            shape="round"
+            size="small"
           >
+            取消編輯
+          </a-button>
         </a-popconfirm>
       </span>
     </template>
@@ -147,8 +155,8 @@ export default defineComponent({
     },
     clearCheckbox(): void {
       this.updateWordsGroupsView({
-        variable: 'groupArray',
-        data: { clear: true }
+        variable: 'clear',
+        data: true
       })
       this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: false })
       this.formState.wordsGroup.wg_name = ''

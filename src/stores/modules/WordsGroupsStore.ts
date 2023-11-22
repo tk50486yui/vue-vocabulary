@@ -3,8 +3,9 @@ import WordsGroupsRepo from '@/repositories/WordsGroupsRepo'
 import {
   WordsGroup,
   WordsGroupsForm,
-  RootState
+  WordsGroupsState
 } from '@/interfaces/WordsGroups'
+import { RootState } from '@/interfaces/RootState'
 
 const state = {
   wordsGroups: [] as WordsGroup[],
@@ -12,7 +13,7 @@ const state = {
   wordsGroupsForm: {} as WordsGroupsForm
 }
 
-const getters: GetterTree<RootState, RootState> = {
+const getters: GetterTree<WordsGroupsState, RootState> = {
   wordsGroups: (state) => state.wordsGroups,
   wordsGroupsById: (state) => (id: number) => {
     return state.wordsGroups.find(

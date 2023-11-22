@@ -1,4 +1,14 @@
-const state = {
+import { Commit } from 'vuex'
+interface RootState {
+  $searchShow: boolean
+  $keyword: string
+  $searchClass: string
+  $filters: string[]
+  $filtersTags: number[]
+  $filtersTagsState: boolean
+}
+
+const state: RootState = {
   $searchShow: false,
   $keyword: '',
   $searchClass: '',
@@ -8,44 +18,44 @@ const state = {
 }
 
 const actions = {
-  updateSearchShow({ commit }, searchShow) {
+  updateSearchShow({ commit }: { commit: Commit }, searchShow: boolean) {
     commit('setSearchShow', searchShow)
   },
-  updateKeyword({ commit }, keyword) {
+  updateKeyword({ commit }: { commit: Commit }, keyword: string) {
     commit('setKeyword', keyword)
   },
-  updateSearchClass({ commit }, searchClass) {
+  updateSearchClass({ commit }: { commit: Commit }, searchClass: string) {
     commit('setSearchClass', searchClass)
   },
-  updateFilters({ commit }, filters) {
+  updateFilters({ commit }: { commit: Commit }, filters: string[]) {
     commit('setFilters', filters)
   },
-  updateFiltersTags({ commit }, filters) {
-    commit('setFiltersTags', filters)
+  updateFiltersTags({ commit }: { commit: Commit }, filtersTags: number[]) {
+    commit('setFiltersTags', filtersTags)
   },
-  pushFiltersTags({ commit }, filters) {
-    commit('pushFiltersTags', filters)
+  pushFiltersTags({ commit }: { commit: Commit }, filtersTags: number[]) {
+    commit('pushFiltersTags', filtersTags)
   }
 }
 
 const mutations = {
-  setSearchShow(state, searchShow) {
+  setSearchShow(state: RootState, searchShow: boolean) {
     state.$searchShow = searchShow
   },
-  setKeyword(state, keyword) {
+  setKeyword(state: RootState, keyword: string) {
     state.$keyword = keyword
   },
-  setSearchClass(state, searchClass) {
+  setSearchClass(state: RootState, searchClass: string) {
     state.$searchClass = searchClass
   },
-  setFilters(state, filters) {
+  setFilters(state: RootState, filters: string[]) {
     state.$filters = filters
   },
-  async setFiltersTags(state, filtersTags) {
+  async setFiltersTags(state: RootState, filtersTags: number[]) {
     state.$filtersTags = filtersTags
     state.$filtersTagsState = false // 不是在 menu 設定的
   },
-  async pushFiltersTags(state, id) {
+  async pushFiltersTags(state: RootState, id: number) {
     if (state.$filtersTags.includes(id)) {
       const index = state.$filtersTags.indexOf(id)
       if (index !== -1) {
@@ -54,7 +64,7 @@ const mutations = {
     } else {
       state.$filtersTags.push(id)
     }
-    state.$filtersTagsState = true // 是在 menu 設定的
+    state.$filtersTagsState = true // 只在 menu 設定
   }
 }
 

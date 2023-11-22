@@ -1,4 +1,4 @@
-export interface RootState {
+export interface TagsColorState {
   tagsColor: TagsColor[]
   tagColor: TagsColor
   tagsColorForm: TagsColorForm

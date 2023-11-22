@@ -1,4 +1,4 @@
-export interface RootState {
+export interface ArticlesState {
   articles: Article[]
   article: Article
   articleForm: ArticleForm

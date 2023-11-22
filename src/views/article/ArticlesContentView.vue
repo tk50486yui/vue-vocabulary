@@ -160,6 +160,7 @@
         <DeleteBtn @confirm="onDelete(articleId)" />
       </template>
     </div>
+    <a-back-top />
   </template>
 </template>
 

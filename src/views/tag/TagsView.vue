@@ -367,6 +367,7 @@
   </template>
   <!-- Modal -->
   <TagsModalView v-model:open="visible" />
+  <a-back-top />
 </template>
 
 <script lang="ts">

@@ -1,4 +1,4 @@
-export interface RootState {
+export interface CategoriesState {
   categories: Category[]
   category: Category
   categoryForm: CategoryForm

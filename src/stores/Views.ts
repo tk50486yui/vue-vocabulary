@@ -1,4 +1,14 @@
-const state = {
+import { Commit } from 'vuex'
+import { groupArray } from '@/interfaces/WordsGroups'
+import {
+  RootState,
+  WordsGridType,
+  ArticlesViewType,
+  WordsGroupsViewType,
+  WordsGroupsDetailsViewType
+} from '@/interfaces/ViewsType'
+
+const state: RootState = {
   $WordsGrid: {
     currentPage: '1',
     jumpPage: false,
@@ -26,9 +36,11 @@ const state = {
     currentPageSize: 20
   },
   $WordsGroupsView: {
-    groupArray: [],
+    groupArray: [] as groupArray[],
     wg_name: '',
-    id: ''
+    id: null,
+    clear: false,
+    checked: false
   },
   $WordsGroupsDetailsView: {
     updateNow: false
@@ -36,22 +48,28 @@ const state = {
 }
 
 const actions = {
-  updateWordsGrid({ commit }, { variable, data }) {
+  updateWordsGrid(
+    { commit }: { commit: Commit },
+    { variable, data }: WordsGridType
+  ) {
     commit('setWordsGrid', { variable, data })
   },
-  updateArticlesView({ commit }, { variable, data }) {
+  updateArticlesView(
+    { commit }: { commit: Commit },
+    { variable, data }: ArticlesViewType
+  ) {
     commit('setArticlesView', { variable, data })
   },
-  updateWordsGroupsView({ commit }, { variable, data }) {
-    if (variable === 'groupArray') {
-      commit('setWordsGroupsView', { variable, data })
-    } else if (variable === 'wg_name') {
-      state.$WordsGroupsView.wg_name = data
-    } else if (variable === 'id') {
-      state.$WordsGroupsView.id = data
-    }
+  updateWordsGroupsView(
+    { commit }: { commit: Commit },
+    { variable, data }: WordsGroupsViewType
+  ) {
+    commit('setWordsGroupsView', { variable, data })
   },
-  updateWordsGroupsDetailsView({ commit }, { variable, data }) {
+  updateWordsGroupsDetailsView(
+    { commit }: { commit: Commit },
+    { variable, data }: WordsGroupsDetailsViewType
+  ) {
     if (variable === 'updateNow') {
       commit('setWordsGroupsDetailsView', { variable, data })
     }
@@ -59,31 +77,77 @@ const actions = {
 }
 
 const mutations = {
-  setWordsGrid(state, { variable, data }) {
-    state.$WordsGrid[variable] = data
+  setWordsGrid(state: RootState, { variable, data }: WordsGridType) {
+    switch (variable) {
+      case 'filterItemsState':
+        state.$WordsGrid[variable] =
+          data as (typeof state.$WordsGrid)['filterItemsState']
+        break
+      case 'isItemsState':
+        state.$WordsGrid[variable] =
+          data as (typeof state.$WordsGrid)['isItemsState']
+        break
+      case 'jumpPage':
+      case 'jumpScroll':
+        state.$WordsGrid[variable] = data as boolean
+        break
+      case 'currentScrollY':
+      case 'currentPageSize':
+        state.$WordsGrid[variable] = data as number
+        break
+      case 'currentPage':
+        state.$WordsGrid[variable] = data as string
+        break
+      default:
+        break
+    }
   },
-  setArticlesView(state, { variable, data }) {
-    state.$ArticlesView[variable] = data
+  setArticlesView(state: RootState, { variable, data }: ArticlesViewType) {
+    switch (variable) {
+      case 'jumpPage':
+      case 'jumpScroll':
+        state.$ArticlesView[variable] = data as boolean
+        break
+      case 'currentScrollY':
+      case 'currentPageSize':
+        state.$ArticlesView[variable] = data as number
+        break
+      case 'currentPage':
+        state.$ArticlesView[variable] = data as string
+        break
+      default:
+        break
+    }
   },
-  setWordsGroupsView(state, { variable, data }) {
-    if (data.clear && data.clear === true) {
-      state.$WordsGroupsView[variable] = []
-      state.$WordsGroupsView.wg_name = ''
-      state.$WordsGroupsView.id = ''
-    } else {
-      if (data.checked === true) {
-        state.$WordsGroupsView[variable].push(data)
-      } else {
-        const index = state.$WordsGroupsView[variable].findIndex(
-          (item) => item.ws_id === data.ws_id
-        )
-        if (index !== -1) {
-          state.$WordsGroupsView[variable].splice(index, 1)
-        }
+  setWordsGroupsView(
+    state: RootState,
+    { variable, data }: { variable: string; data: groupArray }
+  ) {
+    if (variable === 'groupArray' && data.checked === true) {
+      state.$WordsGroupsView[variable].push(data)
+    } else if (variable === 'groupArray' && data.checked === false) {
+      const index = state.$WordsGroupsView[variable].findIndex(
+        (item) => item.ws_id === data.ws_id
+      )
+      if (index !== -1) {
+        state.$WordsGroupsView[variable].splice(index, 1)
+      }
+    } else if (variable === 'wg_name' && typeof data === 'string') {
+      state.$WordsGroupsView.wg_name = data
+    } else if (variable === 'id' && typeof data === 'number') {
+      state.$WordsGroupsView.id = data
+    } else if (variable === 'clear' && typeof data === 'boolean') {
+      if (data === true) {
+        state.$WordsGroupsView['groupArray'] = []
+        state.$WordsGroupsView.wg_name = ''
+        state.$WordsGroupsView.id = null
       }
     }
   },
-  setWordsGroupsDetailsView(state, { variable, data }) {
+  setWordsGroupsDetailsView(
+    state: RootState,
+    { variable, data }: WordsGroupsDetailsViewType
+  ) {
     state.$WordsGroupsDetailsView[variable] = data
   }
 }

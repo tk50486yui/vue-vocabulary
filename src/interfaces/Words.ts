@@ -1,4 +1,4 @@
-export interface RootState {
+export interface WordsState {
   words: Word[]
   word: Word
   wordForm: WordForm

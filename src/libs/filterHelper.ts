@@ -1,5 +1,5 @@
-import { Word } from '@/interfaces/Words.ts'
-import { Article } from '@/interfaces/Articles.ts'
+import { Word } from '@/interfaces/Words'
+import { Article } from '@/interfaces/Articles'
 
 export function generalFilterWords(
   words: Word[],
@@ -10,24 +10,27 @@ export function generalFilterWords(
   choiceArray: string[],
   choiceOperator: string
 ) {
-  let currentFilteredWords = []
+  let currentFilteredWords = [] as Word[]
   // 第一次搜尋篩選 (關鍵字及類別共用)
   if (keyword && options && options.length > 0) {
-    currentFilteredWords = Object.keys(words)
-      .filter((key) => {
-        const word = words[key]
-        return options.some(
-          (option) => word[option] && word[option].includes(keyword)
-        )
+    currentFilteredWords = Object.entries(words)
+      .filter(([, word]) => {
+        return options.some((option) => {
+          const optionValue = word[option as keyof Word]
+          if (typeof optionValue === 'string' || optionValue === null) {
+            return optionValue && optionValue.includes(keyword)
+          }
+          return false
+        })
       })
-      .map((key) => ({
+      .map(([key, value]) => ({
         key,
-        ...words[key]
+        ...value
       }))
   } else {
-    currentFilteredWords = Object.keys(words).map((key) => ({
+    currentFilteredWords = Object.entries(words).map(([key, value]) => ({
       key,
-      ...words[key]
+      ...value
     }))
   }
 
@@ -128,21 +131,24 @@ export function generalFilterArticles(
   let currentFiltered = []
   // 第一次 關鍵字
   if (keyword && options && options.length > 0) {
-    currentFiltered = Object.keys(articles)
-      .filter((key: string) => {
-        const article = articles[key]
-        return options.some(
-          (option) => article[option] && article[option].includes(keyword)
-        )
+    currentFiltered = Object.entries(articles)
+      .filter(([, article]) => {
+        return options.some((option) => {
+          const optionValue = article[option as keyof Article]
+          if (typeof optionValue === 'string' || optionValue === null) {
+            return optionValue && optionValue.includes(keyword)
+          }
+          return false
+        })
       })
-      .map((key) => ({
+      .map(([key, value]) => ({
         key,
-        ...articles[key]
+        ...value
       }))
   } else {
-    currentFiltered = Object.keys(articles).map((key) => ({
+    currentFiltered = Object.entries(articles).map(([key, value]) => ({
       key,
-      ...articles[key]
+      ...value
     }))
   }
   // 第二次用 tags 篩選 接續第一個篩選結果

@@ -232,6 +232,7 @@
         <DeleteBtn @confirm="onDelete(wordId)" />
       </template>
     </div>
+    <a-back-top />
   </template>
 </template>
 

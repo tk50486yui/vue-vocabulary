@@ -1,6 +1,7 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
 import ArticlesRepo from '@/repositories/ArticlesRepo'
-import { Article, ArticleForm, RootState } from '@/interfaces/Articles'
+import { Article, ArticleForm, ArticlesState } from '@/interfaces/Articles'
+import { RootState } from '@/interfaces/RootState'
 import { generalFilterArticles as generalFilter } from '@/libs/filterHelper'
 
 const state = {
@@ -9,7 +10,7 @@ const state = {
   articleForm: {} as ArticleForm
 }
 
-const getters: GetterTree<RootState, RootState> = {
+const getters: GetterTree<ArticlesState, RootState> = {
   articles: (state) => state.articles,
   article: (state) => state.article,
   articleById: (state) => (id: number) => {
