@@ -28,14 +28,13 @@
 ----
 ## 目錄架構
 ```    
-+ vue-vocabulary
-    │
++ vue-vocabulary  
     └─ src                //  主程式目錄
         ├─
-        ├─ api            //  定義 API 與攔截器
+        ├─ api            //  宣告 API 與攔截器
         ├─ assets         //  素材
         ├─ components     //  Vue 組件 (.vue) (.ts)
-        ├─ interfaces     //  宣告 interface 型別
+        ├─ interfaces     //  定義型別
         ├─ libs           //  函式庫
         ├─ plugins        //  定義插件
         ├─ repositories   //  API 接口
