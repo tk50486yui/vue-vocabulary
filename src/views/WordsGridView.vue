@@ -14,7 +14,6 @@
           <a-col :span="18">
             <TagsTreeSelect
               size="small"
-              ref="TagsTreeSelect"
               placeholder="以標籤過濾資料"
               style="width: 100%"
               v-model:value="tagsArray"
@@ -31,10 +30,7 @@
           </a-col>
           <a-col :span="2" class="d-flex align-items-center">
             <template v-if="$filtersTags.length > 0">
-              <CloseBtn
-                class="d-flex align-items-center"
-                @click="onResetTags()"
-              />
+              <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
             </template>
           </a-col>
         </a-row>
@@ -42,27 +38,17 @@
       <p></p>
       <!-- 第二層 tags filter -->
       <span class="d-flex align-items-center">
-        <el-tag effect="dark" type="warning" :color="labelColor" round>
-          標籤條件
-        </el-tag>
+        <el-tag effect="dark" type="warning" :color="labelColor" round> 標籤條件 </el-tag>
         <span style="margin-left: 8px">
-          <OperatorRadio
-            v-model:value="tagsOperator"
-            @change="setFilterItems()"
-          />
+          <OperatorRadio v-model:value="tagsOperator" @change="setFilterItems()" />
         </span>
       </span>
       <p></p>
       <!-- 第三層 heart star -->
       <span class="d-flex align-items-center">
-        <el-tag effect="dark" type="warning" :color="labelColor" round>
-          標記條件
-        </el-tag>
+        <el-tag effect="dark" type="warning" :color="labelColor" round> 標記條件 </el-tag>
         <span style="margin-left: 8px">
-          <OperatorRadio
-            v-model:value="choiceOperator"
-            @change="setFilterItems()"
-          />
+          <OperatorRadio v-model:value="choiceOperator" @change="setFilterItems()" />
           <a-checkbox-group
             v-model:value="choiceArray"
             :options="choiceArrayOptions"
@@ -94,25 +80,13 @@
       <p></p>
       <!-- 第四層 show -->
       <span class="d-flex align-items-center">
-        <el-tag effect="dark" type="warning" :color="labelColor" round>
-          顯示項目
-        </el-tag>
+        <el-tag effect="dark" type="warning" :color="labelColor" round> 顯示項目 </el-tag>
         <span class="checkbox-theme" style="margin-left: 8px" :class="$theme">
-          <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()">
-            假名
-          </a-checkbox>
-          <a-checkbox v-model:checked="isDefinition" @change="setItemShow()">
-            中譯
-          </a-checkbox>
-          <a-checkbox v-model:checked="isSlogan" @change="setItemShow()">
-            短句
-          </a-checkbox>
-          <a-checkbox v-model:checked="isCate" @change="setItemShow()">
-            類別
-          </a-checkbox>
-          <a-checkbox v-model:checked="isTag" @change="setItemShow()">
-            標籤
-          </a-checkbox>
+          <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()"> 假名 </a-checkbox>
+          <a-checkbox v-model:checked="isDefinition" @change="setItemShow()"> 中譯 </a-checkbox>
+          <a-checkbox v-model:checked="isSlogan" @change="setItemShow()"> 短句 </a-checkbox>
+          <a-checkbox v-model:checked="isCate" @change="setItemShow()"> 類別 </a-checkbox>
+          <a-checkbox v-model:checked="isTag" @change="setItemShow()"> 標籤 </a-checkbox>
         </span>
       </span>
       <p></p>
@@ -127,9 +101,7 @@
         <font-awesome-icon :icon="['fas', 'plus']" /> 單詞群組
       </template>
       <template v-else>
-        <template v-if="$WordsGroupsView.groupArray.length === 0">
-          請勾選單詞或點擊取消
-        </template>
+        <template v-if="$WordsGroupsView.groupArray.length === 0"> 請勾選單詞或點擊取消 </template>
         <template v-else> 請繼續勾選單詞 </template>
       </template>
     </a-button>
@@ -156,11 +128,7 @@
         >
           <!-- card header -->
           <template #header>
-            <div
-              class="select-theme d-flex align-items-center"
-              :class="$theme"
-              ref="selectMod"
-            >
+            <div class="select-theme d-flex align-items-center" :class="$theme" ref="selectMod">
               <a-row>
                 每頁：
                 <a-select
@@ -185,14 +153,10 @@
                   @change="setPaginationCurrent()"
                 >
                   <template
-                    v-for="index in Math.ceil(
-                      words.length / Number(selectPageSize)
-                    )"
+                    v-for="index in Math.ceil(words.length / Number(selectPageSize))"
                     :key="index"
                   >
-                    <a-select-option :value="index"
-                      >第 {{ index }} 頁</a-select-option
-                    >
+                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                   </template>
                 </a-select>
                 <span style="margin-left: 8px">
@@ -206,16 +170,9 @@
                   >
                     關鍵字：
                     <template v-if="$keyword != '' && $filters.length > 0">
-                      <template
-                        v-if="
-                          $filters.length === 1 &&
-                          $filters.includes('cate_name')
-                        "
-                      >
+                      <template v-if="$filters.length === 1 && $filters.includes('cate_name')">
                         `
-                        <span class="category-keyword-text"
-                          >{{ $keyword }} </span
-                        >`
+                        <span class="category-keyword-text">{{ $keyword }} </span>`
                       </template>
                       <template v-else>
                         ` <span class="keyword-text">{{ $keyword }} </span>`
@@ -237,10 +194,7 @@
                 </span>
                 <span style="margin-left: 6px">
                   <template v-if="$keyword != ''">
-                    <CloseBtn
-                      class="d-flex align-items-center"
-                      @click="onResetSearch()"
-                    />
+                    <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
                   </template>
                 </span>
               </a-row>
@@ -257,11 +211,7 @@
                 <!-- cate_name -->
                 <template #title>
                   <template v-if="isCate">
-                    <template
-                      v-if="item.cate_name == null || item.cate_name == ''"
-                    >
-                      --
-                    </template>
+                    <template v-if="item.cate_name == null || item.cate_name == ''"> -- </template>
                     <template v-else>
                       <template
                         v-if="
@@ -271,10 +221,7 @@
                         "
                       >
                         <a @click="handleCategoryFilter(item.cate_name)">
-                          <template
-                            v-for="(char, index) in item.cate_name"
-                            :key="char + index"
-                          >
+                          <template v-for="(char, index) in item.cate_name" :key="char + index">
                             <span
                               :class="{
                                 'category-keyword-text': $keyword.includes(char)
@@ -295,10 +242,7 @@
                 </template>
                 <!-- checkbox -->
                 <template
-                  v-if="
-                    $WordsGroupsDetailsView.updateNow === true ||
-                    checkboxShow === true
-                  "
+                  v-if="$WordsGroupsDetailsView.updateNow === true || checkboxShow === true"
                 >
                   <a-checkbox
                     v-model:checked="checkboxArray[item.id]"
@@ -353,34 +297,22 @@
                     :to="{ name: 'wordDetails', params: { id: item.id } }"
                     @click="setDetailsClick()"
                   >
-                    <template
-                      v-for="(char, index) in item.ws_name"
-                      :key="char + index"
-                    >
-                      <span
-                        :class="{ 'keyword-text': $keyword.includes(char) }"
-                      >
+                    <template v-for="(char, index) in item.ws_name" :key="char + index">
+                      <span :class="{ 'keyword-text': $keyword.includes(char) }">
                         {{ char }}
                       </span>
                     </template>
                   </router-link>
                 </template>
                 <template v-else>
-                  <router-link
-                    :to="{ name: 'wordDetails', params: { id: item.id } }"
-                  >
+                  <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
                     {{ item.ws_name }}
                   </router-link>
                 </template>
                 <!-- ws_pronunciation -->
                 <template v-if="isPronunciation">
                   <p></p>
-                  <template
-                    v-if="
-                      item.ws_pronunciation == null ||
-                      item.ws_pronunciation == ''
-                    "
-                  >
+                  <template v-if="item.ws_pronunciation == null || item.ws_pronunciation == ''">
                     <br />
                   </template>
                   <template v-else>
@@ -391,13 +323,8 @@
                         item.ws_pronunciation.includes($keyword)
                       "
                     >
-                      <template
-                        v-for="(char, index) in item.ws_pronunciation"
-                        :key="char + index"
-                      >
-                        <span
-                          :class="{ 'keyword-text': $keyword.includes(char) }"
-                        >
+                      <template v-for="(char, index) in item.ws_pronunciation" :key="char + index">
+                        <span :class="{ 'keyword-text': $keyword.includes(char) }">
                           {{ char }}
                         </span>
                       </template>
@@ -410,11 +337,7 @@
                 <!-- ws_definition -->
                 <template v-if="isDefinition">
                   <p></p>
-                  <template
-                    v-if="
-                      item.ws_definition == null || item.ws_definition == ''
-                    "
-                  >
+                  <template v-if="item.ws_definition == null || item.ws_definition == ''">
                     <br />
                   </template>
                   <template v-else>
@@ -425,13 +348,8 @@
                         item.ws_definition.includes($keyword)
                       "
                     >
-                      <template
-                        v-for="(char, index) in item.ws_definition"
-                        :key="char + index"
-                      >
-                        <span
-                          :class="{ 'keyword-text': $keyword.includes(char) }"
-                        >
+                      <template v-for="(char, index) in item.ws_definition" :key="char + index">
+                        <span :class="{ 'keyword-text': $keyword.includes(char) }">
                           {{ char }}
                         </span>
                       </template>
@@ -443,9 +361,7 @@
                 </template>
                 <!-- ws_slogan -->
                 <template v-if="isSlogan">
-                  <template
-                    v-if="item.ws_slogan != null && item.ws_slogan != ''"
-                  >
+                  <template v-if="item.ws_slogan != null && item.ws_slogan != ''">
                     <p></p>
                     {{ item.ws_slogan }}
                   </template>
@@ -453,23 +369,13 @@
                 <!-- tags -->
                 <template v-if="isTag">
                   <template
-                    v-if="
-                      item.words_tags.values != null &&
-                      item.words_tags.values.length > 0
-                    "
+                    v-if="item.words_tags.values != null && item.words_tags.values.length > 0"
                   >
                     <p></p>
-                    <template
-                      v-for="(subItem, index) in item.words_tags.values"
-                      :key="index"
-                    >
+                    <template v-for="(subItem, index) in item.words_tags.values" :key="index">
                       <a @click="handleTagsLink(subItem.ts_id)">
                         <template
-                          v-if="
-                            subItem.tc_color &&
-                            subItem.tc_background &&
-                            subItem.tc_border
-                          "
+                          v-if="subItem.tc_color && subItem.tc_background && subItem.tc_border"
                         >
                           <a-tag
                             class="tag-align"
@@ -486,11 +392,7 @@
                           </a-tag>
                         </template>
                         <template v-else>
-                          <a-tag
-                            class="tag-align"
-                            color="default"
-                            style="color: #fff"
-                          >
+                          <a-tag class="tag-align" color="default" style="color: #fff">
                             {{ subItem.ts_name }}
                           </a-tag>
                         </template>
@@ -513,10 +415,19 @@
   />
   <a-back-top />
 </template>
-
-<script lang="ts">
-import { ref, reactive, toRefs, defineComponent } from 'vue'
-import { mapActions, mapState, mapGetters } from 'vuex'
+<script lang="ts" setup>
+import {
+  ref,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+  watch,
+  watchEffect,
+  onBeforeUnmount,
+  nextTick
+} from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
 import OperatorRadio from '@/components/radio/OperatorRadio.vue'
@@ -524,346 +435,285 @@ import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import { Word } from '@/interfaces/Words'
 
-export default defineComponent({
-  name: 'WordsGridView',
-  components: {
-    WordsDrawerView,
-    TagsTreeSelect,
-    PlusBtn,
-    DeleteBtn,
-    CloseBtn,
-    OperatorRadio
-  },
-  computed: {
-    filterWordsResult() {
-      return this.filterWords(
-        this.$keyword,
-        this.$filters,
-        this.$filtersTags,
-        this.tagsOperator,
-        this.choiceArray,
-        this.choiceOperator
-      )
-    },
-    checkboxArray() {
-      const newArray: Record<number, boolean> = {}
-      for (const item of this.$WordsGroupsView.groupArray) {
-        newArray[item.ws_id] = item.checked
-      }
-      return newArray
-    },
-    btnDisibled() {
-      return this.$WordsGroupsDetailsView.updateNow || this.checkboxBtn
-    },
-    ...mapGetters('WordsStore', ['words', 'filterWords']),
-    ...mapState('Search', [
-      '$keyword',
-      '$searchClass',
-      '$filters',
-      '$filtersTags'
-    ]),
-    ...mapState('Views', [
-      '$WordsGrid',
-      '$WordsGroupsView',
-      '$WordsGroupsDetailsView'
-    ]),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$desktop'])
-  },
-  methods: {
-    ...mapActions('WordsStore', [
-      'fetch',
-      'updateCommon',
-      'updateImportant',
-      'deleteById'
-    ]),
-    ...mapActions('Search', [
-      'updateKeyword',
-      'updateFilters',
-      'updateFiltersTags',
-      'pushFiltersTags',
-      'updateSearchClass'
-    ]),
-    ...mapActions('Views', ['updateWordsGrid', 'updateWordsGroupsView']),
-    // ---- actions ----
-    async onUpdateCommon(id: number, data: Word): Promise<void> {
-      try {
-        data.ws_is_common = !data.ws_is_common
-        await this.updateCommon({ id: id, data: data })
-      } catch (error) {
-        //
-      }
-    },
-    async onUpdateImportant(id: number, data: Word): Promise<void> {
-      try {
-        data.ws_is_important = !data.ws_is_important
-        await this.updateImportant({ id: id, data: data })
-      } catch (error) {
-        //
-      }
-    },
-    async onDelete(id: number): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-      } catch (error) {
-        //
-      }
-    },
-    // ---- filter ----
-    async handleCategoryFilter(cateName: string): Promise<void> {
-      this.updateSearchClass('word')
-      this.updateFilters(['cate_name'])
-      this.updateKeyword(cateName)
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      window.scrollTo({ top: 180, behavior: 'instant' })
-    },
-    async handleTagsChange(): Promise<void> {
-      await this.updateFiltersTags(this.tagsArray)
-    },
-    async handleTagsLink(val: number): Promise<void> {
-      await this.onResetAll()
-      this.tagsArray.push(val)
-      await this.updateFiltersTags(this.tagsArray)
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      window.scrollTo({ top: 180, behavior: 'instant' })
-    },
-    // ---- set value in vuex ----
-    setItemShow(): void {
-      this.updateWordsGrid({
-        variable: 'isItemsState',
-        data: this.isItemsState
-      })
-    },
-    setFilterItems(): void {
-      this.updateWordsGrid({
-        variable: 'filterItemsState',
-        data: this.filterItemsState
-      })
-    },
-    // ---- clear button ----
-    async onResetSearch(): Promise<void> {
-      this.updateKeyword('')
-    },
-    async onResetTags(): Promise<void> {
-      this.tagsArray = []
-      await this.updateFiltersTags([])
-    },
-    async onResetAll(): Promise<void> {
-      this.onResetSearch()
-      this.onResetTags()
-      this.choiceArray = []
-      this.setFilterItems()
-    },
-    // ---- set page ----
-    setPageSize(): void {
-      this.pagination.pageSize = Number(this.selectPageSize)
-      this.pagination.current = 1
-      this.currentPage = this.pagination.current
-    },
-    setPaginationCurrent(): void {
-      this.pagination.current = Number(this.currentPage)
-    },
-    // ---- scroll setting ----
-    setDetailsClick(): void {
-      const scrollY =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
-      this.updateWordsGrid({ variable: 'currentScrollY', data: scrollY })
-      this.updateWordsGrid({ variable: 'currentPage', data: this.currentPage })
-      this.updateWordsGrid({ variable: 'jumpPage', data: false })
-      this.updateWordsGrid({
-        variable: 'currentPageSize',
-        data: this.selectPageSize
-      })
-    },
-    // ---- set default ----
-    setPagination(): void {
-      this.pagination.pageSize = Number(this.$WordsGrid.currentPageSize)
-      this.selectPageSize = this.$WordsGrid.currentPageSize
-      this.pagination.current = Number(this.$WordsGrid.currentPage)
-      this.currentPage = this.pagination.current
-    },
-    setDefaultFromState(): void {
-      this.tagsArray = this.$filtersTags
-      const filterItemsStateProperty = Object.keys(this.filterItemsState)
-      filterItemsStateProperty.forEach((property) => {
-        const propName = property as keyof typeof this.filterItemsState
-        this.filterItemsState[propName] =
-          this.$WordsGrid.filterItemsState[property]
-      })
-      const isItemsStateProperty = Object.keys(this.isItemsState)
-      isItemsStateProperty.forEach((property) => {
-        const propName = property as keyof typeof this.isItemsState
-        this.isItemsState[propName] = this.$WordsGrid.isItemsState[property]
-      })
-      this.AfterReady = true
-    },
-    // ---- words groups ----
-    clickGroupAdd(): void {
-      if (
-        this.checkboxShow === true &&
-        this.$WordsGroupsView.groupArray.length === 0
-      ) {
-        this.checkboxShow = false
-      } else {
-        this.checkboxShow = true
-      }
-    },
-    changeCheckbox(id: number, wsName: string) {
-      if (this.checkboxArray[id]) {
-        this.updateWordsGroupsView({
-          variable: 'groupArray',
-          data: { ws_id: id, ws_name: wsName, checked: true }
-        })
-      } else {
-        this.updateWordsGroupsView({
-          variable: 'groupArray',
-          data: { ws_id: id, ws_name: wsName, checked: false }
-        })
-      }
-      this.setCheckbox()
-    },
-    setCheckbox() {
-      if (this.$WordsGroupsView.groupArray.length > 0) {
-        this.checkboxShow = true
-        this.checkboxBtn = true
-      }
-    },
-    // drawer
-    onDrawerShow() {
-      this.wordsDrawerRef.setDrawerStyle()
-      this.wordsDrawerVisible = true
-    }
-  },
-  async created() {
-    try {
-      await this.fetch()
-      this.setDefaultFromState()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  beforeRouteLeave(to, from, next) {
-    this.setDetailsClick()
-    next()
-  },
-  watch: {
-    Ready(newVal: boolean) {
-      if (newVal) {
-        this.$nextTick(() => {
-          // set page checkbox
-          if (this.$WordsGrid.jumpPage === true) {
-            this.setPagination()
-          }
-          this.setCheckbox()
-        })
-      }
-    },
-    AfterReady(newVal: boolean) {
-      if (newVal) {
-        this.$nextTick(() => {
-          // run scroll after page setting
-          if (this.$WordsGrid.jumpScroll === true) {
-            window.scrollTo({
-              top: this.$WordsGrid.currentScrollY,
-              behavior: 'instant'
-            })
-            this.updateWordsGrid({ variable: 'jumpScroll', data: false })
-          }
-        })
-      }
-    },
-    // tags filters
-    '$filtersTags.length'(val: number) {
-      if (val !== this.tagsArray.length) {
-        this.tagsArray = this.$filtersTags
-      }
-    },
-    // words groups checkbox
-    checkboxArray(val) {
-      if (Object.keys(val).length === 0) {
-        this.checkboxShow = false
-        this.checkboxBtn = false
-      }
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const AfterReady = ref(false)
-    const ReadySpinning = ref(false)
-    const filterShow = ref(true)
-    const tagsArray = ref<number[]>([])
-    const selectPageSize = ref('20')
-    const currentPage = ref(1)
-    const dataSize = ref(0)
-    const checkboxShow = ref(false)
-    const checkboxBtn = ref(false)
-    const wordsDrawerRef = ref()
-    const wordsDrawerVisible = ref(false)
-    const labelColor = ref('rgba(59, 39, 12, 1)')
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $keyword, $filters, $filtersTags } = toRefs(store.state.Search)
+const { $WordsGrid, $WordsGroupsView, $WordsGroupsDetailsView } = toRefs(store.state.Views)
+const { $desktop } = toRefs(store.state.Screen)
 
-    const pagination = reactive({
-      onChange: (page: number) => {
-        currentPage.value = page
-        pagination.current = currentPage.value
-      },
-      pageSize: Number(selectPageSize.value),
-      position: 'bottom',
-      showSizeChanger: false,
-      current: currentPage.value
+const words = computed(() => store.getters['WordsStore/words'])
+const filterWords = computed(() => store.getters['WordsStore/filterWords'])
+
+const filterWordsResult = computed(() =>
+  filterWords.value(
+    $keyword.value,
+    $filters.value,
+    $filtersTags.value,
+    filterItemsState.tagsOperator,
+    filterItemsState.choiceArray,
+    filterItemsState.choiceOperator
+  )
+)
+
+const checkboxArray = computed(() => {
+  const newArray: Record<number, boolean> = {}
+  for (const item of $WordsGroupsView.value.groupArray) {
+    newArray[item.ws_id] = item.checked
+  }
+  return newArray
+})
+const btnDisibled = computed(() => $WordsGroupsDetailsView.value.updateNow || checkboxBtn.value)
+
+const Ready = ref<boolean>(false)
+const AfterReady = ref<boolean>(false)
+const ReadySpinning = ref<boolean>(false)
+const filterShow = ref<boolean>(true)
+const tagsArray = ref<number[]>([])
+const selectPageSize = ref<string>('20')
+const currentPage = ref<number>(1)
+const checkboxShow = ref<boolean>(false)
+const checkboxBtn = ref<boolean>(false)
+const wordsDrawerRef = ref()
+const wordsDrawerVisible = ref<boolean>(false)
+const labelColor = ref<string>('rgba(59, 39, 12, 1)')
+
+const pagination = reactive({
+  onChange: (page: number) => {
+    currentPage.value = page
+    pagination.current = currentPage.value
+  },
+  pageSize: Number(selectPageSize.value),
+  position: 'bottom',
+  showSizeChanger: false,
+  current: currentPage.value
+})
+
+const filterItemsState = reactive({
+  tagsOperator: 'or',
+  choiceArray: [],
+  choiceOperator: 'or'
+})
+const { tagsOperator, choiceArray, choiceOperator } = toRefs(filterItemsState)
+const isItemsState = reactive({
+  isPronunciation: true,
+  isDefinition: true,
+  isSlogan: false,
+  isCate: false,
+  isTag: true
+})
+const { isPronunciation, isDefinition, isSlogan, isCate, isTag } = toRefs(isItemsState)
+const choiceArrayOptions = [
+  {
+    value: 'ws_is_important'
+  },
+  {
+    value: 'ws_is_common'
+  }
+]
+
+const onUpdateCommon = async (id: number, data: Word): Promise<void> => {
+  try {
+    data.ws_is_common = !data.ws_is_common
+    await store.dispatch('WordsStore/updateCommon', { id: id, data: data })
+  } catch (e) {
+    //
+  }
+}
+const onUpdateImportant = async (id: number, data: Word): Promise<void> => {
+  try {
+    data.ws_is_important = !data.ws_is_important
+    await store.dispatch('WordsStore/updateImportant', { id: id, data: data })
+  } catch (e) {
+    //
+  }
+}
+
+const onDelete = async (id: number): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsStore/deleteById', id)
+  } catch (e) {
+    //
+  }
+}
+
+// ---- filter ----
+const handleCategoryFilter = async (cateName: string): Promise<void> => {
+  store.dispatch('Search/updateSearchClass', 'word')
+  store.dispatch('Search/updateFilters', ['cate_name'])
+  store.dispatch('Search/updateKeyword', cateName)
+  await new Promise((resolve) => setTimeout(resolve, 100))
+  window.scrollTo({ top: 180, behavior: 'instant' })
+}
+const handleTagsChange = async (): Promise<void> => {
+  await store.dispatch('Search/updateFiltersTags', tagsArray.value)
+}
+const handleTagsLink = async (val: number): Promise<void> => {
+  await onResetAll()
+  tagsArray.value.push(val)
+  await store.dispatch('Search/updateFiltersTags', tagsArray.value)
+  await new Promise((resolve) => setTimeout(resolve, 100))
+  window.scrollTo({ top: 180, behavior: 'instant' })
+}
+
+// ---- set value in vuex ----
+const setItemShow = (): void => {
+  store.dispatch('Views/updateWordsGrid', { variable: 'isItemsState', data: isItemsState })
+}
+const setFilterItems = (): void => {
+  store.dispatch('Views/updateWordsGrid', { variable: 'filterItemsState', data: filterItemsState })
+}
+
+// ---- clear button ----
+const onResetSearch = async (): Promise<void> => {
+  store.dispatch('Search/updateKeyword', '')
+}
+const onResetTags = async (): Promise<void> => {
+  tagsArray.value = []
+  await store.dispatch('Search/updateFiltersTags', [])
+}
+const onResetAll = async (): Promise<void> => {
+  onResetSearch()
+  onResetTags()
+  filterItemsState.choiceArray = []
+  setFilterItems()
+}
+
+// ---- set page ----
+const setPageSize = (): void => {
+  pagination.pageSize = Number(selectPageSize.value)
+  pagination.current = 1
+  currentPage.value = pagination.current
+}
+const setPaginationCurrent = (): void => {
+  pagination.current = Number(currentPage.value)
+}
+// ---- scroll setting ----
+const setDetailsClick = (): void => {
+  const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+  store.dispatch('Views/updateWordsGrid', { variable: 'currentScrollY', data: scrollY })
+  store.dispatch('Views/updateWordsGrid', {
+    variable: 'currentPage',
+    data: currentPage.value
+  })
+  store.dispatch('Views/updateWordsGrid', { variable: 'jumpPage', data: false })
+  store.dispatch('Views/updateWordsGrid', {
+    variable: 'currentPageSize',
+    data: selectPageSize.value
+  })
+}
+// ---- set default ----
+const setPagination = (): void => {
+  pagination.pageSize = Number($WordsGrid.value.currentPageSize)
+  selectPageSize.value = $WordsGrid.value.currentPageSize
+  pagination.current = Number($WordsGrid.value.currentPage)
+  currentPage.value = pagination.current
+}
+const setDefaultFromState = (): void => {
+  tagsArray.value = $filtersTags.value
+  const filterItemsStateProperty = Object.keys(filterItemsState)
+  filterItemsStateProperty.forEach((property) => {
+    const propName = property as keyof typeof filterItemsState
+    filterItemsState[propName] = $WordsGrid.value.filterItemsState[property]
+  })
+  const isItemsStateProperty = Object.keys(isItemsState)
+  isItemsStateProperty.forEach((property) => {
+    const propName = property as keyof typeof isItemsState
+    isItemsState[propName] = $WordsGrid.value.isItemsState[property]
+  })
+  AfterReady.value = true
+}
+// ---- words groups ----
+const clickGroupAdd = (): void => {
+  if (checkboxShow.value === true && $WordsGroupsView.value.groupArray.length === 0) {
+    checkboxShow.value = false
+  } else {
+    checkboxShow.value = true
+  }
+}
+const changeCheckbox = (id: number, wsName: string): void => {
+  if (checkboxArray.value[id]) {
+    store.dispatch('Views/updateWordsGroupsView', {
+      variable: 'groupArray',
+      data: { ws_id: id, ws_name: wsName, checked: true }
     })
-
-    const filterItemsState = reactive({
-      tagsOperator: 'or',
-      choiceArray: [],
-      choiceOperator: 'or'
+  } else {
+    store.dispatch('Views/updateWordsGroupsView', {
+      variable: 'groupArray',
+      data: { ws_id: id, ws_name: wsName, checked: false }
     })
-    const isItemsState = reactive({
-      isPronunciation: true,
-      isDefinition: true,
-      isSlogan: false,
-      isCate: false,
-      isTag: true
-    })
+  }
+  setCheckbox()
+}
+const setCheckbox = (): void => {
+  if ($WordsGroupsView.value.groupArray.length > 0) {
+    checkboxShow.value = true
+    checkboxBtn.value = true
+  }
+}
+// drawer
+const onDrawerShow = (): void => {
+  wordsDrawerRef.value.setDrawerStyle()
+  wordsDrawerVisible.value = true
+}
 
-    const choiceArrayOptions = [
-      {
-        value: 'ws_is_important'
-      },
-      {
-        value: 'ws_is_common'
+onBeforeUnmount(() => {
+  setDetailsClick()
+})
+
+onMounted(async () => {
+  try {
+    await store.dispatch('WordsStore/fetch')
+    setDefaultFromState()
+    Ready.value = true
+  } catch (e) {
+    //
+  }
+})
+
+watch(Ready, (val) => {
+  if (val) {
+    nextTick(() => {
+      if ($WordsGrid.value.jumpPage === true) {
+        setPagination()
       }
-    ]
+      setCheckbox()
+    })
+  }
+})
 
-    return {
-      Ready,
-      AfterReady,
-      ReadySpinning,
-      filterShow,
-      tagsArray,
-      choiceArrayOptions,
-      checkboxShow,
-      checkboxBtn,
-      pagination,
-      selectPageSize,
-      currentPage,
-      dataSize,
-      wordsDrawerRef,
-      wordsDrawerVisible,
-      labelColor,
-      filterItemsState,
-      ...toRefs(filterItemsState),
-      isItemsState,
-      ...toRefs(isItemsState)
-    }
+watch(AfterReady, (val) => {
+  if (val) {
+    nextTick(() => {
+      // run scroll after page setting
+      if ($WordsGrid.value.jumpScroll === true) {
+        window.scrollTo({
+          top: $WordsGrid.value.currentScrollY,
+          behavior: 'instant'
+        })
+        store.dispatch('Views/updateWordsGrid', {
+          variable: 'jumpScroll',
+          data: false
+        })
+      }
+    })
+  }
+})
+
+watchEffect(() => {
+  if ($filtersTags.value.length !== tagsArray.value.length) {
+    tagsArray.value = $filtersTags.value
+  }
+})
+
+watch(checkboxArray.value, (val) => {
+  if (Object.keys(val).length === 0) {
+    checkboxShow.value = false
+    checkboxBtn.value = false
   }
 })
 </script>
-
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

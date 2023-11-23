@@ -23,20 +23,12 @@ export default {
     return response.data
   },
 
-  async updateCommon(
-    id: number,
-    data: { ws_is_common: boolean },
-    config: CustomAxiosConfig
-  ) {
+  async updateCommon(id: number, data: { ws_is_common: boolean }, config: CustomAxiosConfig) {
     const response = await api.patch(`/words/common/${id}`, data, config)
     return response.data
   },
 
-  async updateImportant(
-    id: number,
-    data: { ws_is_important: boolean },
-    config: CustomAxiosConfig
-  ) {
+  async updateImportant(id: number, data: { ws_is_important: boolean }, config: CustomAxiosConfig) {
     const response = await api.patch(`/words/important/${id}`, data, config)
     return response.data
   },

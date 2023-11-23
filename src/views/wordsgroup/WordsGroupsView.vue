@@ -5,24 +5,16 @@
     </div>
     <div class="list-theme" :class="$theme">
       <!-- list -->
-      <a-list
-        item-layout="horizontal"
-        :data-source="$WordsGroupsView.groupArray"
-      >
+      <a-list item-layout="horizontal" :data-source="$WordsGroupsView.groupArray">
         <template #renderItem="{ item, index }">
           <a-list-item>
             <template #actions>
               <span class="button-container">
-                <DeleteOutlined
-                  class="button-remove"
-                  @click="onRemove(item.ws_id, item.ws_name)"
-                />
+                <DeleteOutlined class="button-remove" @click="onRemove(item.ws_id, item.ws_name)" />
               </span>
             </template>
             <a-list-item-meta>
-              <template #description>
-                {{ index + 1 }}. {{ item.ws_name }}
-              </template>
+              <template #description> {{ index + 1 }}. {{ item.ws_name }} </template>
             </a-list-item-meta>
           </a-list-item>
         </template>
@@ -34,11 +26,7 @@
     <!-- save button -->
     <template v-if="wordsCount > 0 && updateNow === false">
       <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
-        <a-input
-          v-model:value="formState.wordsGroup.wg_name"
-          placeholder="組別名稱"
-          allow-clear
-        />
+        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
       </div>
       <a-button
         class="btn btn-primary btn-outline-light btn-sm"
@@ -55,11 +43,7 @@
           cancel-text="否"
           @confirm="clearCheckbox()"
         >
-          <a-button
-            class="btn btn-danger btn-outline-light"
-            shape="round"
-            size="small"
-          >
+          <a-button class="btn btn-danger btn-outline-light" shape="round" size="small">
             清空
           </a-button>
         </a-popconfirm>
@@ -67,11 +51,7 @@
     </template>
     <template v-else-if="updateNow">
       <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
-        <a-input
-          v-model:value="formState.wordsGroup.wg_name"
-          placeholder="組別名稱"
-          allow-clear
-        />
+        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
       </div>
       <a-button
         class="btn btn-primary btn-outline-light btn-sm"
@@ -88,11 +68,7 @@
           cancel-text="否"
           @confirm="clearCheckbox()"
         >
-          <a-button
-            class="btn btn-danger btn-outline-light btn-sm"
-            shape="round"
-            size="small"
-          >
+          <a-button class="btn btn-danger btn-outline-light btn-sm" shape="round" size="small">
             取消編輯
           </a-button>
         </a-popconfirm>
@@ -101,130 +77,128 @@
   </template>
 </template>
 
-<script lang="ts">
-import { ref, reactive, onMounted, defineComponent } from 'vue'
-import { mapState, mapActions } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, computed, watch, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
-import { WordsGroupsForm, groupArray } from '@/interfaces/WordsGroups'
+import { WordsGroupsForm, groupArray as WordsGroupArray } from '@/interfaces/WordsGroups'
 
-export default defineComponent({
-  name: 'WordsGroupsView',
-  computed: {
-    updateNow() {
-      return this.$WordsGroupsDetailsView.updateNow
-    },
-    wordsCount() {
-      return this.$WordsGroupsView.groupArray.length
-    },
-    ...mapState('Views', ['$WordsGroupsView', '$WordsGroupsDetailsView']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('WordsGroupsStore', ['fetch', 'add', 'update']),
-    ...mapActions('Views', [
-      'updateWordsGroupsView',
-      'updateWordsGroupsDetailsView'
-    ]),
-    async onSave(): Promise<void> {
-      console.log(this.$WordsGroupsView.groupArray)
-      try {
-        const wordsIdArray = this.$WordsGroupsView.groupArray.map(
-          (item: groupArray) => item.ws_id
-        )
-        this.formState.wordsGroup.words_groups_details = wordsIdArray
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(this.formState.wordsGroup)
-        this.clearCheckbox()
-        this.$router.push({ name: 'wordsGroups' })
-      } catch (error) {
-        //
-      }
-    },
-    async onEditSave(): Promise<void> {
-      const wordsIdArray = this.$WordsGroupsView.groupArray.map(
-        (item: groupArray) => item.ws_id
-      )
-      this.formState.wordsGroup.words_groups_details = wordsIdArray
-      const editId = this.$WordsGroupsView.id
-      message.loading({ content: 'Loading..', duration: 1 })
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      await this.update({ id: editId, data: this.formState.wordsGroup })
-      this.clearCheckbox()
-      this.$router.push({ name: 'wordsGroupsDetails', params: { id: editId } })
-    },
-    clearCheckbox(): void {
-      this.updateWordsGroupsView({
-        variable: 'clear',
-        data: true
-      })
-      this.updateWordsGroupsDetailsView({ variable: 'updateNow', data: false })
-      this.formState.wordsGroup.wg_name = ''
-      this.saveDisabled = false
-    },
-    onRemove(id: number, wsName: string): void {
-      this.updateWordsGroupsView({
-        variable: 'groupArray',
-        data: { ws_id: id, ws_name: wsName, checked: false }
-      })
-    }
-  },
-  async created() {
-    try {
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  watch: {
-    'formState.wordsGroup.wg_name'(val) {
-      if (val == null || val === '' || this.wordsCount === 0) {
-        this.saveDisabled = true
-      } else {
-        this.saveDisabled = false
-      }
-    },
-    wordsCount(val) {
-      if (val > 0 && this.formState.wordsGroup.wg_name) {
-        this.saveDisabled = false
-      }
-    },
-    updateNow(val) {
-      if (val === true) {
-        this.formState.wordsGroup.wg_name = this.$WordsGroupsView.wg_name
-      } else {
-        this.formState.wordsGroup.wg_name = ''
-      }
-    },
-    '$WordsGroupsView.wg_name'() {
-      if (this.updateNow === true) {
-        this.formState.wordsGroup.wg_name = this.$WordsGroupsView.wg_name
-      } else {
-        this.formState.wordsGroup.wg_name = ''
-      }
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const saveDisabled = ref(true)
-    const formRef = ref()
-    const formState = reactive({
-      wordsGroup: {} as WordsGroupsForm
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+
+const $router = useRouter()
+
+const { $WordsGroupsView, $WordsGroupsDetailsView } = toRefs(store.state.Views)
+
+const updateNow = computed(() => $WordsGroupsDetailsView.value.updateNow)
+const wordsCount = computed(() => $WordsGroupsView.value.groupArray.length)
+
+const Ready = ref<boolean>(false)
+const saveDisabled = ref<boolean>(true)
+
+const formState = reactive({
+  wordsGroup: {} as WordsGroupsForm
+})
+
+const onSave = async (): Promise<void> => {
+  try {
+    const wordsIdArray = $WordsGroupsView.value.groupArray.map(
+      (item: WordsGroupArray) => item.ws_id
+    )
+    formState.wordsGroup.words_groups_details = wordsIdArray
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsGroupsStore/add', formState.wordsGroup)
+    clearCheckbox()
+    $router.push({ name: 'wordsGroups' })
+  } catch (e) {
+    //
+  }
+}
+
+const onEditSave = async (): Promise<void> => {
+  try {
+    const wordsIdArray = $WordsGroupsView.value.groupArray.map(
+      (item: WordsGroupArray) => item.ws_id
+    )
+    formState.wordsGroup.words_groups_details = wordsIdArray
+    const editId = $WordsGroupsView.value.id
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsGroupsStore/update', {
+      id: editId,
+      data: formState.wordsGroup
     })
+    clearCheckbox()
+    $router.push({ name: 'wordsGroupsDetails', params: { id: editId } })
+  } catch (e) {
+    //
+  }
+}
 
-    onMounted(() => {
-      formState.wordsGroup = { ...formState.wordsGroup }
-      formState.wordsGroup.words_groups_details = []
-    })
+const clearCheckbox = (): void => {
+  store.dispatch('Views/updateWordsGroupsView', {
+    variable: 'clear',
+    data: true
+  })
+  store.dispatch('Views/updateWordsGroupsDetailsView', {
+    variable: 'updateNow',
+    data: false
+  })
+  formState.wordsGroup.wg_name = ''
+  saveDisabled.value = false
+}
 
-    return {
-      Ready,
-      saveDisabled,
-      formRef,
-      formState
-    }
+const onRemove = (id: number, wsName: string): void => {
+  store.dispatch('Views/updateWordsGroupsView', {
+    variable: 'groupArray',
+    data: { ws_id: id, ws_name: wsName, checked: false }
+  })
+}
+
+onMounted(() => {
+  formState.wordsGroup = { ...formState.wordsGroup }
+  formState.wordsGroup.words_groups_details = []
+  Ready.value = true
+})
+
+watchEffect(() => {
+  if (
+    formState.wordsGroup.wg_name == null ||
+    formState.wordsGroup.wg_name === '' ||
+    wordsCount.value === 0
+  ) {
+    saveDisabled.value = true
+  } else {
+    saveDisabled.value = false
   }
 })
+
+watch(wordsCount, (val) => {
+  if (val > 0 && formState.wordsGroup.wg_name) {
+    saveDisabled.value = false
+  }
+})
+
+watch(updateNow, (val) => {
+  if (val === true) {
+    formState.wordsGroup.wg_name = $WordsGroupsView.value.wg_name
+  } else {
+    formState.wordsGroup.wg_name = ''
+  }
+})
+
+watch(
+  () => $WordsGroupsView.value.wg_name,
+  (val) => {
+    if (updateNow.value === true) {
+      formState.wordsGroup.wg_name = val
+    } else {
+      formState.wordsGroup.wg_name = ''
+    }
+  }
+)
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,7 @@
 <template>
   <template v-if="Ready && article">
     <span class="back-link-theme" :class="$theme">
-      <router-link :to="{ name: 'articles' }" @click="setGridState()">
-        返回
-      </router-link>
+      <router-link :to="{ name: 'articles' }" @click="setListState()"> 返回 </router-link>
       <span class="link-separator h5">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
@@ -45,7 +43,7 @@
             <div class="article-editor" :class="$theme">
               <ckeditor
                 v-model="arti_content"
-                :editor="editor"
+                :editor="ClassicEditor"
                 :config="articleEditor.Config"
               />
             </div>
@@ -59,7 +57,6 @@
           <template v-if="editShow">
             <CategoriesTreeSelect
               size="large"
-              ref="CategoriesTreeSelect"
               placeholder="選擇分類"
               :dropdownMatchSelectWidth="false"
               style="width: 100%"
@@ -70,23 +67,16 @@
             />
           </template>
           <template v-else>
-            <template
-              v-if="article.cate_name != null && article.cate_name != ''"
-            >
-              主題分類：<span class="span-category">{{
-                article.cate_name
-              }}</span>
+            <template v-if="article.cate_name != null && article.cate_name != ''">
+              主題分類：<span class="span-category">{{ article.cate_name }}</span>
             </template>
-            <template v-else>
-              主題分類：<span class="span-category">暫無</span>
-            </template>
+            <template v-else> 主題分類：<span class="span-category">暫無</span> </template>
           </template>
         </div>
         <div class="article-tag">
           <template v-if="editShow">
             <TagsTreeSelect
               size="large"
-              ref="TagsTreeSelect"
               placeholder="添加標籤"
               style="width: 100%"
               v-model:value="formState.article.articles_tags.array"
@@ -102,13 +92,8 @@
             />
           </template>
           <template v-else>
-            <template
-              v-for="(item, index) in article.articles_tags.values"
-              :key="item.ts_id"
-            >
-              <template
-                v-if="item.tc_color && item.tc_background && item.tc_border"
-              >
+            <template v-for="(item, index) in article.articles_tags.values" :key="item.ts_id">
+              <template v-if="item.tc_color && item.tc_background && item.tc_border">
                 <a-tag
                   class="tag-align"
                   :style="
@@ -128,11 +113,7 @@
                   {{ item.ts_name }}
                 </a-tag>
               </template>
-              <template
-                v-if="
-                  index != article.articles_tags.values.length && index / 5 == 1
-                "
-              >
+              <template v-if="index != article.articles_tags.values.length && index / 5 == 1">
                 <br />
               </template>
             </template>
@@ -143,9 +124,7 @@
       <template v-if="editShow">
         <p></p>
         <div>
-          <a-button
-            class="btn btn-primary btn-outline-light btn-sm"
-            @click="onEditFinish()"
+          <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onEditFinish()"
             >儲存</a-button
           >
           <a-button
@@ -163,10 +142,10 @@
     <a-back-top />
   </template>
 </template>
-
-<script lang="ts">
-import { ref, reactive, onMounted, defineComponent } from 'vue'
-import { mapActions, mapState, mapGetters } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, computed, onBeforeMount, nextTick } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -174,128 +153,108 @@ import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import { ArticleForm } from '@/interfaces/Articles'
 
-export default defineComponent({
-  name: 'ArticlesContentView',
-  components: {
-    DeleteBtn,
-    CategoriesTreeSelect,
-    TagsTreeSelect
-  },
-  computed: {
-    articleId(): number {
-      return Number(this.$route.params.id)
-    },
-    article() {
-      return this.articleById(this.articleId) || null
-    },
-    arti_content: {
-      get() {
-        return this.article.arti_content || ''
-      },
-      set(value: string) {
-        this.formState.article.arti_content = value
-      }
-    },
-    ...mapGetters('ArticlesStore', ['articleById']),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$tablet', '$mobile'])
-  },
-  methods: {
-    ...mapActions('ArticlesStore', ['fetch', 'update', 'deleteById']),
-    ...mapActions('Views', ['updateArticlesView']),
-    async onEditFinish(): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.update({
-          id: this.articleId,
-          data: this.formState.article
-        })
-        this.onEditCancel()
-      } catch (error) {
-        //
-      }
-    },
-    async onDelete(id: number): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-        this.$router.push({ name: 'articles' })
-      } catch (error) {
-        //
-      }
-    },
-    onEdit(): void {
-      this.editShow = !this.editShow
-      this.formState.article = Object.assign(
-        {},
-        this.formState.article,
-        this.article
-      )
-    },
-    onEditCancel(): void {
-      if (this.editShow) {
-        this.editShow = false
-      }
-      if (!this.editShow) {
-        this.$nextTick(() => {
-          window.scrollTo({ top: 160, behavior: 'auto' })
-        })
-      }
-    },
-    handleCategoriesSelectChange(value: number): void {
-      this.formState.article.cate_id =
-        typeof value !== 'undefined' ? value : null
-    },
-    handleTagsSelectChange(value: number[]): void {
-      this.formState.article.articles_tags.array =
-        typeof value !== 'undefined' ? value : []
-    },
-    setGridState(): void {
-      this.updateArticlesView({ variable: 'jumpPage', data: true })
-      this.updateArticlesView({ variable: 'jumpScroll', data: true })
-    }
-  },
-  async created() {
-    try {
-      window.scrollTo({ top: 120, behavior: 'instant' })
-      await this.fetch()
-      console.log(this.article)
-      console.log(this.articleId)
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const editShow = ref(false)
-    const formRef = ref()
-    const formState = reactive({
-      article: {} as ArticleForm
-    })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    onMounted(() => {
-      formState.article = { ...formState.article }
-      formState.article.articles_tags = { array: [], values: [] }
-    })
+const $route = useRoute()
+const $router = useRouter()
 
-    const articleEditor = reactive({
-      Config: {
-        autoGrow: true,
-        placeholder: '尚無內容'
-      }
-    })
+const articleById = computed(() => store.getters['ArticlesStore/articleById'])
 
-    return {
-      Ready,
-      editShow,
-      formRef,
-      formState,
-      articleEditor,
-      editor: ClassicEditor
-    }
+const articleId = computed(() => Number($route.params.id))
+const article = computed(() => articleById.value(articleId.value) || null)
+
+const arti_content = computed({
+  get: () => article.value.arti_content || null,
+  set: (value: string) => {
+    formState.article.arti_content = value
+  }
+})
+
+const Ready = ref<boolean>(false)
+const editShow = ref<boolean>(false)
+const formState = reactive({
+  article: {} as ArticleForm
+})
+
+const onEditFinish = async (): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('ArticlesStore/update', {
+      id: articleId.value,
+      data: formState.article
+    })
+    onEditCancel()
+  } catch (e) {
+    //
+  }
+}
+const onDelete = async (id: number): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('ArticlesStore/deleteById', id)
+    $router.push({ name: 'articles' })
+  } catch (e) {
+    //
+  }
+}
+
+const onEdit = () => {
+  editShow.value = !editShow.value
+  formState.article = Object.assign({}, formState.article, article.value)
+}
+
+const onEditCancel = () => {
+  if (editShow.value) {
+    editShow.value = false
+  }
+  if (!editShow.value) {
+    nextTick(() => {
+      window.scrollTo({ top: 160, behavior: 'auto' })
+    })
+  }
+}
+
+const handleCategoriesSelectChange = (value: number) => {
+  formState.article.cate_id = typeof value !== 'undefined' ? value : null
+}
+
+const handleTagsSelectChange = (value: number[]) => {
+  formState.article.articles_tags.array = typeof value !== 'undefined' ? value : []
+}
+
+const setListState = () => {
+  store.dispatch('Views/updateArticlesView', {
+    variable: 'jumpPage',
+    data: true
+  })
+  store.dispatch('Views/updateArticlesView', {
+    variable: 'jumpScroll',
+    data: true
+  })
+}
+
+onBeforeMount(() => {
+  formState.article = { ...formState.article }
+  formState.article.articles_tags = { array: [], values: [] }
+})
+
+onMounted(async () => {
+  try {
+    window.scrollTo({ top: 120, behavior: 'instant' })
+    await store.dispatch('ArticlesStore/fetch')
+    Ready.value = true
+  } catch (e) {
+    //
+  }
+})
+
+const articleEditor = reactive({
+  Config: {
+    autoGrow: true,
+    placeholder: '尚無內容'
   }
 })
 </script>

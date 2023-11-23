@@ -29,9 +29,7 @@
         @change="handleCurrentPage()"
       >
         <template
-          v-for="index in Math.ceil(
-            wordsGroups.length / Number(selectPageSize)
-          )"
+          v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))"
           :key="index"
         >
           <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
@@ -41,11 +39,7 @@
     </div>
     <p></p>
     <div class="list-theme" :class="$theme">
-      <a-list
-        item-layout="horizontal"
-        :data-source="wordsGroups"
-        :pagination="pagination"
-      >
+      <a-list item-layout="horizontal" :data-source="wordsGroups" :pagination="pagination">
         <template #renderItem="{ item, index }">
           <a-list-item>
             <a-list-item-meta>
@@ -74,56 +68,44 @@
     <a-back-top />
   </template>
 </template>
+<script setup lang="ts">
+import { ref, reactive, toRefs, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-export default defineComponent({
-  name: 'WordsGroupsListView',
-  computed: {
-    ...mapGetters('WordsGroupsStore', ['wordsGroups']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('WordsGroupsStore', ['fetch']),
-    handlePageSize(): void {
-      this.pagination.pageSize = Number(this.selectPageSize)
-      this.pagination.current = 1
-      this.currentPage = this.pagination.current
-    },
-    handleCurrentPage(): void {
-      this.pagination.current = Number(this.currentPage)
-    }
-  },
-  async created() {
-    try {
-      await this.fetch()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const selectPageSize = ref('20')
-    const currentPage = ref(1)
-    const pagination = reactive({
-      onChange: (page: number): void => {
-        currentPage.value = page
-        pagination.current = currentPage.value
-      },
-      pageSize: Number(selectPageSize.value),
-      position: 'top',
-      current: currentPage.value
-    })
+const wordsGroups = computed(() => store.getters['WordsGroupsStore/wordsGroups'])
 
-    return {
-      Ready,
-      pagination,
-      selectPageSize,
-      currentPage
-    }
+const Ready = ref<boolean>(false)
+const selectPageSize = ref<string>('20')
+const currentPage = ref<number>(1)
+const pagination = reactive({
+  onChange: (page: number): void => {
+    currentPage.value = page
+    pagination.current = currentPage.value
+  },
+  pageSize: Number(selectPageSize.value),
+  position: 'top',
+  current: currentPage.value
+})
+
+const handlePageSize = (): void => {
+  pagination.pageSize = Number(selectPageSize.value)
+  pagination.current = 1
+  currentPage.value = pagination.current
+}
+
+const handleCurrentPage = (): void => {
+  pagination.current = Number(currentPage.value)
+}
+
+onMounted(async () => {
+  try {
+    await store.dispatch('WordsGroupsStore/fetch')
+    Ready.value = true
+  } catch (error) {
+    //
   }
 })
 </script>

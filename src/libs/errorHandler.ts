@@ -14,9 +14,7 @@ export const windowErrorListener = function onError(e: {
 }) {
   console.log('window')
   if (e.lineno === 5 && e.colno === 389560) {
-    console.log(
-      'CKEditorError: Permission denied to access property Symbol.toStringTag'
-    )
+    console.log('CKEditorError: Permission denied to access property Symbol.toStringTag')
     e.stopPropagation()
     e.stopImmediatePropagation()
   }
@@ -26,12 +24,8 @@ export const windowErrorListener = function onError(e: {
     e.stopPropagation()
     e.stopImmediatePropagation()
   }
-  if (
-    e.message === 'ResizeObserver loop completed with undelivered notifications'
-  ) {
-    console.log(
-      'window in ResizeObserver loop completed with undelivered notifications'
-    )
+  if (e.message === 'ResizeObserver loop completed with undelivered notifications') {
+    console.log('window in ResizeObserver loop completed with undelivered notifications')
     e.stopPropagation()
     e.stopImmediatePropagation()
   }

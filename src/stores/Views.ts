@@ -48,22 +48,13 @@ const state: ViewsState = {
 }
 
 const actions = {
-  updateWordsGrid(
-    { commit }: { commit: Commit },
-    { variable, data }: WordsGridType
-  ) {
+  updateWordsGrid({ commit }: { commit: Commit }, { variable, data }: WordsGridType) {
     commit('setWordsGrid', { variable, data })
   },
-  updateArticlesView(
-    { commit }: { commit: Commit },
-    { variable, data }: ArticlesViewType
-  ) {
+  updateArticlesView({ commit }: { commit: Commit }, { variable, data }: ArticlesViewType) {
     commit('setArticlesView', { variable, data })
   },
-  updateWordsGroupsView(
-    { commit }: { commit: Commit },
-    { variable, data }: WordsGroupsViewType
-  ) {
+  updateWordsGroupsView({ commit }: { commit: Commit }, { variable, data }: WordsGroupsViewType) {
     commit('setWordsGroupsView', { variable, data })
   },
   updateWordsGroupsDetailsView(
@@ -78,12 +69,10 @@ const mutations = {
   setWordsGrid(state: ViewsState, { variable, data }: WordsGridType) {
     switch (variable) {
       case 'filterItemsState':
-        state.$WordsGrid[variable] =
-          data as (typeof state.$WordsGrid)['filterItemsState']
+        state.$WordsGrid[variable] = data as (typeof state.$WordsGrid)['filterItemsState']
         break
       case 'isItemsState':
-        state.$WordsGrid[variable] =
-          data as (typeof state.$WordsGrid)['isItemsState']
+        state.$WordsGrid[variable] = data as (typeof state.$WordsGrid)['isItemsState']
         break
       case 'jumpPage':
       case 'jumpScroll':
@@ -124,9 +113,7 @@ const mutations = {
     if (variable === 'groupArray' && data.checked === true) {
       state.$WordsGroupsView[variable].push(data)
     } else if (variable === 'groupArray' && data.checked === false) {
-      const index = state.$WordsGroupsView[variable].findIndex(
-        (item) => item.ws_id === data.ws_id
-      )
+      const index = state.$WordsGroupsView[variable].findIndex((item) => item.ws_id === data.ws_id)
       if (index !== -1) {
         state.$WordsGroupsView[variable].splice(index, 1)
       }
@@ -142,10 +129,7 @@ const mutations = {
       }
     }
   },
-  setWordsGroupsDetailsView(
-    state: ViewsState,
-    { variable, data }: WordsGroupsDetailsViewType
-  ) {
+  setWordsGroupsDetailsView(state: ViewsState, { variable, data }: WordsGroupsDetailsViewType) {
     state.$WordsGroupsDetailsView[variable] = data
   }
 }

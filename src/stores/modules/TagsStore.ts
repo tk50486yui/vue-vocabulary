@@ -49,10 +49,7 @@ const actions = {
     await dispatch('fetchRecent')
   },
 
-  async update(
-    { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number; data: Tag }
-  ) {
+  async update({ dispatch }: { dispatch: Dispatch }, { id, data }: { id: number; data: Tag }) {
     await TagsRepo.update(id, data)
     await dispatch('fetch')
     await dispatch('fetchRecent')

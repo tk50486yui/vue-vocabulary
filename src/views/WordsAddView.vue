@@ -16,7 +16,6 @@
         <CategoriesTreeSelect
           placeholder="詞語主題分類"
           size="large"
-          ref="CategoriesTreeSelect"
           v-model:value="formState.word.cate_id"
           @change="handleCategoriesSelectChange"
         />
@@ -36,11 +35,7 @@
         />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="$theme"
-        :name="['word', 'ws_pronunciation']"
-      >
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_pronunciation']">
         <a-textarea
           v-model:value="formState.word.ws_pronunciation"
           placeholder="假名 / 發音"
@@ -49,11 +44,7 @@
         />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="$theme"
-        :name="['word', 'ws_definition']"
-      >
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_definition']">
         <a-textarea
           v-model:value="formState.word.ws_definition"
           placeholder="中文定義"
@@ -62,11 +53,7 @@
         />
       </a-form-item>
       <p></p>
-      <a-form-item
-        class="input-theme"
-        :class="$theme"
-        :name="['word', 'ws_slogan']"
-      >
+      <a-form-item class="input-theme" :class="$theme" :name="['word', 'ws_slogan']">
         <a-textarea
           v-model:value="formState.word.ws_slogan"
           placeholder="標誌性短句"
@@ -79,7 +66,6 @@
         <TagsTreeSelect
           placeholder="添加標籤"
           size="large"
-          ref="TagsTreeSelect"
           multiple
           v-model:value="formState.word.words_tags.array"
           @change="handleTagsSelectChange"
@@ -93,102 +79,83 @@
       </a-form-item>
       <p></p>
       <a-form-item>
-        <a-button
-          class="btn btn-primary btn-outline-light btn-sm"
-          html-type="submit"
+        <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit"
           >儲存</a-button
         >
-        <a-button
-          class="btn btn-danger btn-outline-light btn-sm float-end"
-          @click="resetForm"
+        <a-button class="btn btn-danger btn-outline-light btn-sm float-end" @click="resetForm"
           >重置</a-button
         >
       </a-form-item>
     </a-form>
   </template>
 </template>
-
-<script lang="ts">
-import { reactive, ref, onMounted, defineComponent } from 'vue'
-import { mapActions, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import { WordForm } from '@/interfaces/Words'
 
-export default defineComponent({
-  name: 'WordsAddView',
-  components: {
-    CategoriesTreeSelect,
-    TagsTreeSelect
-  },
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('WordsStore', ['add']),
-    async onFinish(): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(this.formState.word)
-        this.resetForm()
-        window.scrollTo({ top: 100, behavior: 'smooth' })
-      } catch (error) {
-        //
-      }
-    },
-    handleCategoriesSelectChange(value: number): void {
-      this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
-    },
-    handleTagsSelectChange(value: number[]): void {
-      this.formState.word.words_tags.array =
-        typeof value !== 'undefined' ? value : []
-    },
-    resetForm(): void {
-      this.formState.word.cate_id = null
-      this.formState.word.words_tags.array = []
-      this.formRef.resetFields()
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const formRef = ref()
-    const formState = reactive({
-      word: {} as WordForm
-    })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    onMounted(() => {
-      formState.word = {
-        ...formState.word,
-        words_tags: { array: [], values: [] }
-      }
-      Ready.value = true
-    })
+const Ready = ref<boolean>(false)
+const formRef = ref()
+const formState = reactive({
+  word: {} as WordForm
+})
 
-    const validateMsg = {
-      required: 'required'
-    }
+const onFinish = async (): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsStore/add', formState.word)
+    resetForm()
+  } catch (error) {
+    //
+  }
+}
 
-    const layout = {
-      labelCol: {
-        span: 8
-      },
-      wrapperCol: {
-        span: 24
-      }
-    }
+const handleCategoriesSelectChange = (value: number): void => {
+  formState.word.cate_id = typeof value !== 'undefined' ? value : null
+}
 
-    return {
-      Ready,
-      formRef,
-      formState,
-      validateMsg,
-      layout
-    }
+const handleTagsSelectChange = (value: number[]): void => {
+  formState.word.words_tags.array = typeof value !== 'undefined' ? value : []
+}
+
+const resetForm = (): void => {
+  formState.word.cate_id = null
+  formState.word.words_tags.array = []
+  formRef.value.resetFields()
+}
+
+onBeforeMount(() => {
+  formState.word = {
+    ...formState.word,
+    words_tags: { array: [], values: [] }
   }
 })
+
+onMounted(() => {
+  Ready.value = true
+})
+
+const validateMsg = {
+  required: 'required'
+}
+
+const layout = {
+  labelCol: {
+    span: 8
+  },
+  wrapperCol: {
+    span: 24
+  }
+}
 </script>
+
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

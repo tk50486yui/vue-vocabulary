@@ -49,9 +49,7 @@ export function generalFilterWords(
           return (
             word.words_tags.values &&
             word.words_tags.values.length === tagsArray.length &&
-            tagsArray.every((tag) =>
-              word.words_tags.values.some((t) => t.ts_id === tag)
-            )
+            tagsArray.every((tag) => word.words_tags.values.some((t) => t.ts_id === tag))
           )
         })
       } else {
@@ -60,9 +58,7 @@ export function generalFilterWords(
           return (
             word.words_tags.values &&
             word.words_tags.values.length >= tagsArray.length &&
-            tagsArray.every((tag) =>
-              word.words_tags.values.some((t) => t.ts_id === tag)
-            )
+            tagsArray.every((tag) => word.words_tags.values.some((t) => t.ts_id === tag))
           )
         })
       }
@@ -86,10 +82,7 @@ export function generalFilterWords(
     // AND
     if (choiceOperator && choiceOperator === 'and' && choiceArray.length >= 1) {
       return currentFilteredWords.filter((word) => {
-        if (
-          choiceArray.includes('ws_is_important') &&
-          choiceArray.includes('ws_is_common')
-        ) {
+        if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
           return word.ws_is_important === true && word.ws_is_common === true
         } else if (choiceArray.includes('ws_is_important')) {
           return word.ws_is_important === true && word.ws_is_common === false
@@ -102,10 +95,7 @@ export function generalFilterWords(
     } else {
       // OR
       return currentFilteredWords.filter((word) => {
-        if (
-          choiceArray.includes('ws_is_important') &&
-          choiceArray.includes('ws_is_common')
-        ) {
+        if (choiceArray.includes('ws_is_important') && choiceArray.includes('ws_is_common')) {
           return word.ws_is_important === true || word.ws_is_common === true
         } else if (choiceArray.includes('ws_is_important')) {
           return word.ws_is_important === true
@@ -155,10 +145,7 @@ export function generalFilterArticles(
   if (tagsOperator === 'none') {
     // NONE
     currentFiltered = currentFiltered.filter((article) => {
-      return (
-        !article.articles_tags.values ||
-        article.articles_tags.values.length === 0
-      )
+      return !article.articles_tags.values || article.articles_tags.values.length === 0
     })
   } else if (tagsArray && tagsArray.length > 0) {
     // AND
@@ -169,9 +156,7 @@ export function generalFilterArticles(
           return (
             article.articles_tags.values &&
             article.articles_tags.values.length === tagsArray.length &&
-            tagsArray.every((tag) =>
-              article.articles_tags.values.some((t) => t.ts_id === tag)
-            )
+            tagsArray.every((tag) => article.articles_tags.values.some((t) => t.ts_id === tag))
           )
         })
       } else {
@@ -180,9 +165,7 @@ export function generalFilterArticles(
           return (
             article.articles_tags.values &&
             article.articles_tags.values.length >= tagsArray.length &&
-            tagsArray.every((tag) =>
-              article.articles_tags.values.some((t) => t.ts_id === tag)
-            )
+            tagsArray.every((tag) => article.articles_tags.values.some((t) => t.ts_id === tag))
           )
         })
       }
@@ -191,9 +174,7 @@ export function generalFilterArticles(
       currentFiltered = currentFiltered.filter((article) => {
         return (
           article.articles_tags.values &&
-          article.articles_tags.values.some((tag) =>
-            tagsArray.includes(tag.ts_id)
-          )
+          article.articles_tags.values.some((tag) => tagsArray.includes(tag.ts_id))
         )
       })
     }

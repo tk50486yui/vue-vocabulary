@@ -4,11 +4,7 @@
       <h4>文章總覽</h4>
     </div>
     <div class="tab-theme" :class="$theme">
-      <a-tabs
-        v-model:activeKey="activeTab"
-        type="card"
-        :tab-position="tabPosition"
-      >
+      <a-tabs v-model:activeKey="activeTab" type="card" :tab-position="tabPosition">
         <!-- tab 1 -->
         <a-tab-pane key="1" tab="全部">
           <!-- 篩選 選擇 搜索列表 -->
@@ -18,7 +14,6 @@
               <a-col :span="18">
                 <TagsTreeSelect
                   size="small"
-                  ref="TagsTreeSelect"
                   placeholder="以標籤過濾資料"
                   style="width: 100%"
                   v-model:value="tagsArray"
@@ -34,10 +29,7 @@
               </a-col>
               <a-col :span="2" class="d-flex align-items-center">
                 <template v-if="tagsArray.length > 0">
-                  <CloseBtn
-                    class="d-flex align-items-center"
-                    @click="tagsArray = []"
-                  />
+                  <CloseBtn class="d-flex align-items-center" @click="tagsArray = []" />
                 </template>
               </a-col>
             </a-row>
@@ -45,9 +37,7 @@
           <p></p>
           <!-- 第二層 tags filter -->
           <span class="tab-body-text d-flex align-items-center">
-            <el-tag effect="dark" type="warning" :color="labelColor" round>
-              標籤條件
-            </el-tag>
+            <el-tag effect="dark" type="warning" :color="labelColor" round> 標籤條件 </el-tag>
             <span style="margin-left: 8px">
               <OperatorRadio v-model:value="tagsOperator" />
             </span>
@@ -84,14 +74,10 @@
               @change="setCurrentPage()"
             >
               <template
-                v-for="index in Math.ceil(
-                  articles.length / Number(selectPageSize)
-                )"
+                v-for="index in Math.ceil(articles.length / Number(selectPageSize))"
                 :key="index"
               >
-                <a-select-option :value="index"
-                  >第 {{ index }} 頁</a-select-option
-                >
+                <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
               </template>
             </a-select>
             <span class="span-text" style="margin-left: 8px">
@@ -129,10 +115,7 @@
             </span>
             <span style="margin-left: 6px">
               <template v-if="$keyword != ''">
-                <CloseBtn
-                  class="d-flex align-items-center"
-                  @click="onResetSearch()"
-                />
+                <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
               </template>
             </span>
           </div>
@@ -173,16 +156,10 @@
                         >
                           <span class="title-link h5">
                             <template
-                              v-for="(char, index) in splitTitle(
-                                item.arti_title,
-                                $keyword
-                              )"
+                              v-for="(char, index) in splitTitle(item.arti_title, $keyword)"
                               :key="index + char"
                             >
-                              <span
-                                v-if="char === $keyword"
-                                class="keyword-text"
-                              >
+                              <span v-if="char === $keyword" class="keyword-text">
                                 {{ char }}
                               </span>
                               <span v-else>
@@ -199,9 +176,7 @@
                             params: { id: item.id }
                           }"
                         >
-                          <span class="title-link h5">{{
-                            item.arti_title
-                          }}</span>
+                          <span class="title-link h5">{{ item.arti_title }}</span>
                         </router-link>
                       </template>
                     </template>
@@ -224,10 +199,7 @@
                         "
                       >
                         <template
-                          v-for="(char, index) in splitTitle(
-                            item.created_at,
-                            $keyword
-                          )"
+                          v-for="(char, index) in splitTitle(item.created_at, $keyword)"
                           :key="index + char"
                         >
                           <span v-if="char === $keyword" class="keyword-text">
@@ -247,19 +219,14 @@
                   <template #actions>
                     <template
                       v-if="
-                        item.articles_tags.values != null &&
-                        item.articles_tags.values.length > 0
+                        item.articles_tags.values != null && item.articles_tags.values.length > 0
                       "
                     >
                       <span
                         v-for="(tag, index) in item.articles_tags.values"
                         :key="tag.ts_id + index"
                       >
-                        <template
-                          v-if="
-                            tag.tc_color && tag.tc_background && tag.tc_border
-                          "
-                        >
+                        <template v-if="tag.tc_color && tag.tc_background && tag.tc_border">
                           <a-tag
                             :style="
                               'background:' +
@@ -285,9 +252,7 @@
               </template>
               <!-- 最底部 -->
               <template #footer>
-                <span class="span-text">
-                  共 {{ filterdResult.length }} 筆
-                </span>
+                <span class="span-text"> 共 {{ filterdResult.length }} 筆 </span>
               </template>
             </a-list>
           </div>
@@ -304,171 +269,125 @@
     <a-back-top />
   </template>
 </template>
-
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, watch, computed, onBeforeUnmount, nextTick } from 'vue'
+import { useStore } from 'vuex'
 import { CloseBtn } from '@/components/button'
 import ArticlesAddView from '@/views/article/ArticlesAddView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 import avatar from '@/assets/img/avatar.png'
 
-export default defineComponent({
-  name: 'ArticlesView',
-  components: {
-    ArticlesAddView,
-    TagsTreeSelect,
-    OperatorRadio,
-    CloseBtn
-  },
-  computed: {
-    filterdResult() {
-      return this.filterArticles(
-        this.$keyword,
-        this.$filters,
-        this.tagsArray,
-        this.tagsOperator
-      )
-    },
-    ...mapGetters('ArticlesStore', ['articles', 'filterArticles']),
-    ...mapState('Search', ['$keyword', '$searchClass', '$filters']),
-    ...mapState('Views', ['$ArticlesView']),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$tablet', '$mobile'])
-  },
-  methods: {
-    ...mapActions('ArticlesStore', ['fetch']),
-    ...mapActions('Search', [
-      'updateKeyword',
-      'updateFilters',
-      'updateSearchClass'
-    ]),
-    ...mapActions('Views', ['updateArticlesView']),
-    // articles tiltle
-    splitTitle(title: string, keyword: string): string[] {
-      const regex = new RegExp(`(${keyword})`, 'i')
-      const parts = title.split(regex)
-      return parts.filter((part) => part !== '')
-    },
-    onResetSearch(): void {
-      this.updateKeyword('')
-    },
-    // set value in vuex
-    setDefaultFromState(): void {
-      this.pagination.pageSize = Number(this.$ArticlesView.currentPageSize)
-      this.selectPageSize = this.$ArticlesView.currentPageSize
-      this.pagination.current = Number(this.$ArticlesView.currentPage)
-      this.currentPage = this.pagination.current
-      this.AfterReady = true
-    },
-    // pagination
-    setPageSize(): void {
-      this.pagination.pageSize = Number(this.selectPageSize)
-      this.pagination.current = 1
-      this.currentPage = this.pagination.current
-    },
-    setCurrentPage(): void {
-      this.pagination.current = Number(this.currentPage)
-    },
-    // scroll setting
-    setContentClick(): void {
-      const scrollY =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
-      this.updateArticlesView({ variable: 'currentScrollY', data: scrollY })
-      this.updateArticlesView({
-        variable: 'currentPage',
-        data: this.currentPage
-      })
-      this.updateArticlesView({ variable: 'jumpPage', data: false })
-      this.updateArticlesView({
-        variable: 'currentPageSize',
-        data: this.selectPageSize
-      })
-    }
-  },
-  async created() {
-    try {
-      await this.fetch()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  beforeRouteLeave(to, from, next) {
-    this.setContentClick()
-    next()
-  },
-  watch: {
-    Ready(newVal: boolean) {
-      if (newVal) {
-        this.$nextTick(() => {
-          if (this.$ArticlesView.jumpPage === true) {
-            this.setDefaultFromState()
-          }
-        })
-      }
-    },
-    AfterReady(newVal: boolean) {
-      if (newVal) {
-        this.$nextTick(() => {
-          if (this.$ArticlesView.jumpScroll === true) {
-            window.scrollTo({
-              top: this.$ArticlesView.currentScrollY,
-              behavior: 'instant'
-            })
-            this.updateArticlesView({ variable: 'jumpScroll', data: false })
-          }
-        })
-      }
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const AfterReady = ref(false)
-    const activeTab = ref('1')
-    const tabPosition = ref('top')
-    const selectPageSize = ref('3')
-    const currentPage = ref(1)
-    const showContent = ref(true)
-    const tagsArray = ref([])
-    const tagsOperator = ref('or')
-    const labelColor = ref('rgba(59, 39, 12, 1)')
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $keyword, $filters } = toRefs(store.state.Search)
+const { $ArticlesView } = toRefs(store.state.Views)
 
-    const expandContent = reactive([
-      {
-        id: '',
-        expand: false
-      }
-    ])
+const articles = computed(() => store.getters['ArticlesStore/articles'])
+const filterArticles = computed(() => store.getters['ArticlesStore/filterArticles'])
 
-    const pagination = reactive({
-      onChange: (page: number) => {
-        currentPage.value = page
-        pagination.current = currentPage.value
-      },
-      pageSize: Number(selectPageSize.value),
-      position: 'top',
-      current: currentPage.value
+const filterdResult = computed(() =>
+  filterArticles.value($keyword.value, $filters.value, tagsArray.value, tagsOperator.value)
+)
+
+const Ready = ref<boolean>(false)
+const AfterReady = ref<boolean>(false)
+const activeTab = ref<string>('1')
+const tabPosition = ref<string>('top')
+const selectPageSize = ref<string>('3')
+const currentPage = ref<number>(1)
+const showContent = ref<boolean>(true)
+const tagsArray = ref<number[]>([])
+const tagsOperator = ref<string>('or')
+const labelColor = ref<string>('rgba(59, 39, 12, 1)')
+
+const pagination = reactive({
+  onChange: (page: number) => {
+    currentPage.value = page
+    pagination.current = currentPage.value
+  },
+  pageSize: Number(selectPageSize.value),
+  position: 'top',
+  current: currentPage.value
+})
+
+const splitTitle = (title: string, keyword: string): string[] => {
+  const regex = new RegExp(`(${keyword})`, 'i')
+  const parts = title.split(regex)
+  return parts.filter((part) => part !== '')
+}
+
+const onResetSearch = () => {
+  store.dispatch('Search/updateKeyword', '')
+}
+
+const setDefaultFromState = () => {
+  pagination.pageSize = Number($ArticlesView.value.currentPageSize)
+  selectPageSize.value = $ArticlesView.value.currentPageSize
+  pagination.current = Number($ArticlesView.value.currentPage)
+  currentPage.value = pagination.current
+  AfterReady.value = true
+}
+
+const setPageSize = () => {
+  pagination.pageSize = Number(selectPageSize.value)
+  pagination.current = 1
+  currentPage.value = pagination.current
+}
+
+const setCurrentPage = () => {
+  pagination.current = Number(currentPage.value)
+}
+
+const setContentClick = () => {
+  const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+  store.dispatch('Views/updateArticlesView', { variable: 'currentScrollY', data: scrollY })
+  store.dispatch('Views/updateArticlesView', {
+    variable: 'currentPage',
+    data: currentPage.value
+  })
+  store.dispatch('Views/updateArticlesView', { variable: 'jumpPage', data: false })
+  store.dispatch('Views/updateArticlesView', {
+    variable: 'currentPageSize',
+    data: selectPageSize.value
+  })
+}
+
+onMounted(async () => {
+  try {
+    await store.dispatch('ArticlesStore/fetch')
+    Ready.value = true
+  } catch (e) {
+    //
+  }
+})
+
+onBeforeUnmount(() => {
+  setContentClick()
+})
+
+watch(Ready, (val) => {
+  if (val) {
+    nextTick(() => {
+      if ($ArticlesView.value.jumpPage === true) {
+        setDefaultFromState()
+      }
     })
+  }
+})
 
-    return {
-      Ready,
-      AfterReady,
-      avatar,
-      tabPosition,
-      activeTab,
-      selectPageSize,
-      currentPage,
-      pagination,
-      showContent,
-      expandContent,
-      tagsArray,
-      tagsOperator,
-      labelColor
-    }
+watch(AfterReady, (val) => {
+  if (val) {
+    nextTick(() => {
+      if ($ArticlesView.value.jumpScroll === true) {
+        window.scrollTo({
+          top: $ArticlesView.value.currentScrollY,
+          behavior: 'instant'
+        })
+
+        store.dispatch('Views/updateArticlesView', { variable: 'jumpScroll', data: false })
+      }
+    })
   }
 })
 </script>

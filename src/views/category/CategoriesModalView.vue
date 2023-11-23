@@ -12,20 +12,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+<script setup lang="ts">
+import { toRefs } from 'vue'
+import { useStore } from 'vuex'
 import CategoriesAddView from '@/views/category/CategoriesAddView.vue'
 
-export default defineComponent({
-  name: 'CategoriesModalView',
-  components: {
-    CategoriesAddView
-  },
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  }
-})
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 </script>
 
 <style lang="scss" scoped>

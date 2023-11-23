@@ -61,10 +61,7 @@ const actions = {
     await dispatch('fetch')
   },
 
-  async update(
-    { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number; data: Word }
-  ) {
+  async update({ dispatch }: { dispatch: Dispatch }, { id, data }: { id: number; data: Word }) {
     await WordsRepo.update(id, data)
     await dispatch('fetch')
   },

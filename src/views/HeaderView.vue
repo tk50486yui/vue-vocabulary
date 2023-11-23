@@ -22,17 +22,13 @@
                   </router-link>
                   <ul class="dropdown">
                     <li>
-                      <router-link :to="{ name: 'wordsGrid' }"
-                        >單字總覽</router-link
-                      >
+                      <router-link :to="{ name: 'wordsGrid' }">單字總覽</router-link>
                     </li>
                     <li>
                       <router-link :to="{ name: 'words' }">單字表</router-link>
                     </li>
                     <li>
-                      <router-link :to="{ name: 'wordsAdd' }"
-                        >單字新增</router-link
-                      >
+                      <router-link :to="{ name: 'wordsAdd' }">單字新增</router-link>
                     </li>
                   </ul>
                 </li>
@@ -139,11 +135,11 @@ const setActive = (): void => {
   }
 }
 
-watchEffect(() => {
+onMounted(() => {
   setActive()
 })
 
-onMounted(() => {
+watchEffect(() => {
   setActive()
 })
 </script>

@@ -21,33 +21,24 @@
     </template>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { mapActions } from 'vuex'
+<script setup lang="ts">
+import { defineProps, PropType } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { Category } from '@/interfaces/Categories'
 
-export default defineComponent({
-  name: 'TreeCategoriesMenu',
-  props: {
-    data: {
-      type: Object as PropType<Category>,
-      required: true
-    },
-    parentId: String
-  },
-  methods: {
-    ...mapActions('Search', [
-      'updateKeyword',
-      'updateFilters',
-      'updateSearchClass'
-    ]),
-    async handleCategoryFilter(cateName: string): Promise<void> {
-      this.updateSearchClass('word')
-      this.updateFilters(['cate_name'])
-      this.updateKeyword(cateName)
-      this.$router.push({ name: 'wordsGrid' })
-    }
-  }
+const store = useStore()
+
+const $router = useRouter()
+
+defineProps({
+  data: { type: Object as PropType<Category>, required: true }
 })
+
+const handleCategoryFilter = async (cateName: string): Promise<void> => {
+  store.dispatch('Search/updateSearchClass', 'word')
+  store.dispatch('Search/updateFilters', ['cate_name'])
+  store.dispatch('Search/updateKeyword', cateName)
+  $router.push({ name: 'wordsGrid' })
+}
 </script>

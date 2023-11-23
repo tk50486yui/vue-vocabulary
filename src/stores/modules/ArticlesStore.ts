@@ -18,20 +18,8 @@ const getters: GetterTree<ArticlesState, RootState> = {
   },
   articleForm: (state) => state.articleForm,
   filterArticles:
-    (state) =>
-    (
-      keyword: string,
-      options: string[],
-      tagsArray: number[],
-      tagsOperator: string
-    ) => {
-      return generalFilter(
-        state.articles,
-        keyword,
-        options,
-        tagsArray,
-        tagsOperator
-      )
+    (state) => (keyword: string, options: string[], tagsArray: number[], tagsOperator: string) => {
+      return generalFilter(state.articles, keyword, options, tagsArray, tagsOperator)
     }
 }
 
@@ -51,10 +39,7 @@ const actions = {
     await dispatch('fetch')
   },
 
-  async update(
-    { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number; data: Article }
-  ) {
+  async update({ dispatch }: { dispatch: Dispatch }, { id, data }: { id: number; data: Article }) {
     await ArticlesRepo.update(id, data)
     await dispatch('fetch')
   },

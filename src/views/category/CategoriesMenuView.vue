@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      class="section-title d-flex justify-content-between align-items-center"
-      :class="$theme"
-    >
+    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
       <h4>詞組類別</h4>
       <PlusBtn
         class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
@@ -53,68 +50,52 @@
   <!-- Modal  -->
   <CategoriesModalView v-model:open="visible" />
 </template>
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+
+<script lang="ts" setup>
+import { ref, toRefs, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import { PlusBtn } from '@/components/button'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 
-export default defineComponent({
-  name: 'CategoriesMenuView',
-  components: {
-    PlusBtn,
-    TreeCategoriesMenu,
-    CategoriesModalView
-  },
-  computed: {
-    ...mapGetters('CategoriesStore', ['categories']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('CategoriesStore', ['fetch']),
-    ...mapActions('Search', [
-      'updateKeyword',
-      'updateFilters',
-      'updateSearchClass'
-    ]),
-    async refresh(): Promise<void> {
-      try {
-        this.SyncOutlinedSpin = true
-        this.spinning = true
-        await new Promise((resolve) => setTimeout(resolve, 100))
-        await this.fetch()
-        this.SyncOutlinedSpin = false
-        this.spinning = false
-      } catch (error) {
-        //
-      }
-    },
-    async handleCategoryFilter(cateName: string): Promise<void> {
-      this.updateSearchClass('word')
-      this.updateFilters(['cate_name'])
-      this.updateKeyword(cateName)
-      if (String(this.$route) !== 'wordsGrid') {
-        this.$router.push({ name: 'wordsGrid' })
-      }
-    }
-  },
-  async created() {
-    await this.refresh()
-  },
-  setup() {
-    const activeKey = ref(['1'])
-    const spinning = ref(false)
-    const SyncOutlinedSpin = ref(false)
-    const visible = ref(false)
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    return {
-      activeKey,
-      spinning,
-      SyncOutlinedSpin,
-      visible
-    }
+const $route = useRoute()
+const $router = useRouter()
+
+const categories = computed(() => store.getters['CategoriesStore/categories'])
+
+const activeKey = ref<string[]>(['1'])
+const spinning = ref<boolean>(false)
+const SyncOutlinedSpin = ref<boolean>(false)
+const visible = ref<boolean>(false)
+
+const refresh = async (): Promise<void> => {
+  try {
+    SyncOutlinedSpin.value = true
+    spinning.value = true
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    await store.dispatch('CategoriesStore/fetch')
+    SyncOutlinedSpin.value = false
+    spinning.value = false
+  } catch (error) {
+    //
   }
+}
+
+const handleCategoryFilter = (cateName: string): void => {
+  store.dispatch('Search/updateSearchClass', 'word')
+  store.dispatch('Search/updateFilters', ['cate_name'])
+  store.dispatch('Search/updateKeyword', cateName)
+  if (String($route.name) !== 'wordsGrid') {
+    $router.push({ name: 'wordsGrid' })
+  }
+}
+
+onMounted(() => {
+  refresh()
 })
 </script>
 

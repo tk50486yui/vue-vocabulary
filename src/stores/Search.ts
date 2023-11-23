@@ -33,8 +33,8 @@ const actions = {
   updateFiltersTags({ commit }: { commit: Commit }, filtersTags: number[]) {
     commit('setFiltersTags', filtersTags)
   },
-  pushFiltersTags({ commit }: { commit: Commit }, filtersTags: number[]) {
-    commit('pushFiltersTags', filtersTags)
+  pushFiltersTags({ commit }: { commit: Commit }, id: number) {
+    commit('pushFiltersTags', id)
   }
 }
 

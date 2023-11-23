@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      class="section-title d-flex justify-content-between align-items-center"
-      :class="$theme"
-    >
+    <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
       <h4>標籤選單</h4>
       <PlusBtn
         class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
@@ -30,17 +27,11 @@
                   <template v-if="data.children && data.children.length">
                     <a-sub-menu :key="data.id">
                       <template #title>
-                        <a
-                          @click="handleTagsFilter(data.id)"
-                          style="display: inline-block"
-                        >
+                        <a @click="handleTagsFilter(data.id)" style="display: inline-block">
                           <span class="dropdown-container">
                             {{ data.ts_name }}（{{ data.children.length }}）
                             <template v-if="$filtersTags.includes(data.id)">
-                              <CheckOutlined
-                                :style="{ 'font-size': '10px' }"
-                                :rotate="10"
-                              />
+                              <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
                             </template>
                           </span>
                         </a>
@@ -50,17 +41,13 @@
                   </template>
                   <template v-else>
                     <a-menu-item :key="data.id">
-                      <a
-                        @click="handleTagsFilter(data.id)"
-                        style="display: inline-block"
-                      >
+                      <a @click="handleTagsFilter(data.id)" style="display: inline-block">
                         <span class="dropdown-container">
                           # {{ data.ts_name }}
                           <template v-if="$filtersTags.includes(data.id)">
-                            <CheckOutlined
-                              :style="{ 'font-size': '10px' }"
-                              :rotate="10"
-                            />
+                            <span style="margin-left: 6px">
+                              <CheckOutlined :style="{ 'font-size': '10px' }" />
+                            </span>
                           </template>
                         </span>
                       </a>
@@ -80,83 +67,58 @@
   <!-- Modal  -->
   <TagsModalView v-model:open="visible" />
 </template>
-
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, toRefs, onMounted, computed, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import { PlusBtn } from '@/components/button'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import TagsModalView from '@/views/tag/TagsModalView.vue'
 import { Tag } from '@/interfaces/Tags'
 
-export default defineComponent({
-  name: 'TagsMenuView',
-  components: {
-    PlusBtn,
-    TreeTagsMenu,
-    TagsModalView
-  },
-  computed: {
-    ...mapGetters('TagsStore', ['tags', 'recentTagsArray']),
-    ...mapState('Search', ['$filtersTags', '$filtersTagsState']),
-    ...mapState('Theme', ['$theme']),
-    hasChildrenArray() {
-      return this.recentTagsArray.filter((tag: Tag) => tag.children.length > 0)
-    },
-    noChildrenArray() {
-      return this.$filtersTags.filter(
-        (tagId: number) =>
-          !this.hasChildrenArray.some((tag: Tag) => tag.id === tagId)
-      )
-    }
-  },
-  methods: {
-    ...mapActions('TagsStore', ['fetch', 'fetchRecent']),
-    ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
-    async handleTagsFilter(id: number): Promise<void> {
-      await this.pushFiltersTags(id)
-      this.updateSearchClass('word')
-      if (String(this.$route) !== 'wordsGrid') {
-        this.$router.push({ name: 'wordsGrid' })
-      }
-    }
-  },
-  async created() {
-    try {
-      this.spinning = true
-      await this.fetch()
-      await this.fetchRecent()
-      this.spinning = false
-      this.selectedKeys = this.noChildrenArray
-    } catch (error) {
-      //
-    }
-  },
-  watch: {
-    '$filtersTags.length'() {
-      if (!this.$filtersTagsState) {
-        this.selectedKeys = this.noChildrenArray
-      }
-    }
-  },
-  setup() {
-    const activeKey = ref(['1'])
-    const spinning = ref(false)
-    const selectedKeys = ref([])
-    const openKeys = ref()
-    const selectedCurrent = ref(false)
-    const selectedCount = ref(0)
-    const visible = ref(false)
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $filtersTags, $filtersTagsState } = toRefs(store.state.Search)
 
-    return {
-      activeKey,
-      spinning,
-      selectedKeys,
-      openKeys,
-      selectedCurrent,
-      selectedCount,
-      visible
-    }
+const $route = useRoute()
+const $router = useRouter()
+
+const tags = computed(() => store.getters['TagsStore/tags'])
+const recentTagsArray = computed(() => store.getters['TagsStore/recentTagsArray'])
+const hasChildrenArray = computed(() =>
+  recentTagsArray.value.filter((tag: Tag) => tag.children.length > 0)
+)
+const noChildrenArray = computed(() =>
+  $filtersTags.value.filter(
+    (tagId: number) => !hasChildrenArray.value.some((tag: Tag) => tag.id === tagId)
+  )
+)
+
+const activeKey = ref<string[]>(['1'])
+const spinning = ref<boolean>(false)
+const selectedKeys = ref([])
+const openKeys = ref()
+const visible = ref<boolean>(false)
+
+const handleTagsFilter = async (id: number): Promise<void> => {
+  await store.dispatch('Search/pushFiltersTags', id)
+  store.dispatch('Search/updateSearchClass', 'word')
+  if (String($route.name) !== 'wordsGrid') {
+    $router.push({ name: 'wordsGrid' })
+  }
+}
+
+onMounted(async () => {
+  spinning.value = true
+  await store.dispatch('TagsStore/fetch')
+  await store.dispatch('TagsStore/fetchRecent')
+  spinning.value = false
+  selectedKeys.value = noChildrenArray.value
+})
+
+watchEffect(() => {
+  if (!$filtersTagsState.value) {
+    selectedKeys.value = noChildrenArray.value
   }
 })
 </script>

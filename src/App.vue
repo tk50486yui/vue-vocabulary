@@ -50,9 +50,7 @@ const isScreenMedium = ref<boolean>(false)
 const isScreenLarge = ref<boolean>(false)
 
 const mediaQuerySmall = window.matchMedia('(max-width: 576px)')
-const mediaQueryMedium = window.matchMedia(
-  '(min-width: 577px) and (max-width: 1024px)'
-)
+const mediaQueryMedium = window.matchMedia('(min-width: 577px) and (max-width: 1024px)')
 const mediaQueryLarge = window.matchMedia('(min-width: 1025px)')
 
 const handleMediaQueryChange = () => {

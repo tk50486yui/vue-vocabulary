@@ -15,12 +15,7 @@
         #{{ id }}
         <a-tag
           :style="
-            'background:' +
-            tc_background +
-            ';color:' +
-            tc_color +
-            ';border-color:' +
-            tc_border
+            'background:' + tc_background + ';color:' + tc_color + ';border-color:' + tc_border
           "
         >
           default
@@ -29,24 +24,19 @@
     </a-select>
   </div>
 </template>
+<script lang="ts" setup>
+import { toRefs, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+const tagsColor = computed(() => store.getters['TagsColorStore/tagsColor'])
 
-export default defineComponent({
-  computed: {
-    selectData() {
-      return this.tagsColor
-    },
-    ...mapGetters('TagsColorStore', ['tagsColor']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('TagsColorStore', ['fetch'])
-  },
-  async created() {
-    await this.fetch()
+onMounted(async () => {
+  try {
+    await store.dispatch('TagsColorStore/fetch')
+  } catch (e) {
+    //
   }
 })
 </script>

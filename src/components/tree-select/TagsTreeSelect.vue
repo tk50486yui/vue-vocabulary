@@ -31,31 +31,24 @@
     </a-tree-select>
   </div>
 </template>
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, toRefs, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 
-export default defineComponent({
-  computed: {
-    ...mapGetters('TagsStore', ['tags']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('TagsStore', ['fetch'])
-  },
-  async created() {
-    await this.fetch()
-  },
-  setup() {
-    const searchValue = ref('')
-    const treeLine = ref(true)
-    const showLeafIcon = ref(false)
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    return {
-      searchValue,
-      treeLine,
-      showLeafIcon
-    }
+const tags = computed(() => store.getters['TagsStore/tags'])
+
+const searchValue = ref<string>('')
+const treeLine = ref<boolean>(true)
+const showLeafIcon = ref<boolean>(false)
+
+onMounted(async () => {
+  try {
+    await store.dispatch('TagsStore/fetch')
+  } catch (e) {
+    //
   }
 })
 </script>

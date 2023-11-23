@@ -31,20 +31,10 @@
                 <template v-if="['ts_name'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
                     <div class="button-edit-container">
-                      <CheckOutlined
-                        class="button-edit-check"
-                        @click="onEditFinish(record, 0)"
-                      />
-                      <CloseOutlined
-                        class="button-edit-close"
-                        @click="cancel(record, 0)"
-                      />
+                      <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 0)" />
+                      <CloseOutlined class="button-edit-close" @click="cancel(record, 0)" />
                       <a-input
-                        v-model:value="
-                          editTableData[0][record.id][
-                            column.dataIndex as keyof Tag
-                          ]
-                        "
+                        v-model:value="editTableData[0][record.id][column.dataIndex as keyof Tag]"
                         style="margin: -5px 0"
                       />
                     </div>
@@ -54,8 +44,7 @@
                       <template v-if="column.dataIndex === 'ts_name'">
                         <template
                           v-if="
-                            (record.parents && record.parents > 0) ||
-                            record.ts_parent_id !== null
+                            (record.parents && record.parents > 0) || record.ts_parent_id !== null
                           "
                         >
                           <span
@@ -83,9 +72,7 @@
                 <!-- tc_color show-->
                 <template v-else-if="['tc_show'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
-                    <div
-                      style="display: flex; align-items: center; width: 100%"
-                    >
+                    <div style="display: flex; align-items: center; width: 100%">
                       <a-tag
                         :style="
                           'background:' +
@@ -102,13 +89,7 @@
                     </div>
                   </template>
                   <template v-else>
-                    <template
-                      v-if="
-                        record.tc_color &&
-                        record.tc_background &&
-                        record.tc_border
-                      "
-                    >
+                    <template v-if="record.tc_color && record.tc_background && record.tc_border">
                       <a-tag
                         :style="
                           'background:' +
@@ -132,20 +113,14 @@
                 <!-- tc_color select -->
                 <template v-else-if="['tc_color'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
-                    <div
-                      style="display: flex; align-items: center; width: 100%"
-                    >
+                    <div style="display: flex; align-items: center; width: 100%">
                       <TagsColorSelect
                         size="small"
                         style="width: 100%; flex: 2"
                         placeholder="選擇標籤顏色"
                         v-model:value="editTableData[0][record.id]['tc_id']"
                         @change="
-                          (value) =>
-                            handleColorSelectChange(
-                              value,
-                              editTableData[0][record.id]
-                            )
+                          (value) => handleColorSelectChange(value, editTableData[0][record.id])
                         "
                       />
                     </div>
@@ -155,9 +130,7 @@
                   </template>
                 </template>
                 <!-- ts_parent_id -->
-                <template
-                  v-else-if="['ts_parent_id'].includes(column.dataIndex)"
-                >
+                <template v-else-if="['ts_parent_id'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'ts_parent_id'">
                     <template v-if="editTableData[0][record.id]">
                       <TagsTreeSelect
@@ -165,15 +138,9 @@
                         placeholder="選擇父類別"
                         :dropdownMatchSelectWidth="false"
                         style="width: 100%"
-                        v-model:value="
-                          editTableData[0][record.id]['ts_parent_id']
-                        "
-                        :defaultValue="
-                          editTableData[0][record.id]['ts_parent_id']
-                        "
-                        :treeDefaultExpandedKeys="[
-                          editTableData[0][record.id]['ts_parent_id']
-                        ]"
+                        v-model:value="editTableData[0][record.id]['ts_parent_id']"
+                        :defaultValue="editTableData[0][record.id]['ts_parent_id']"
+                        :treeDefaultExpandedKeys="[editTableData[0][record.id]['ts_parent_id']]"
                         :field-names="{
                           children: 'children',
                           label: 'ts_name',
@@ -218,20 +185,10 @@
                   <div>
                     <template v-if="editTableData[1][record.id]">
                       <div class="button-edit-container">
-                        <CheckOutlined
-                          class="button-edit-check"
-                          @click="onEditFinish(record, 1)"
-                        />
-                        <CloseOutlined
-                          class="button-edit-close"
-                          @click="cancel(record, 1)"
-                        />
+                        <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)" />
+                        <CloseOutlined class="button-edit-close" @click="cancel(record, 1)" />
                         <a-input
-                          v-model:value="
-                            editTableData[1][record.id][
-                              column.dataIndex as keyof Tag
-                            ]
-                          "
+                          v-model:value="editTableData[1][record.id][column.dataIndex as keyof Tag]"
                           style="margin: -5px 0"
                         />
                       </div>
@@ -251,9 +208,7 @@
                 <!-- tc_color show-->
                 <template v-else-if="['tc_show'].includes(column.dataIndex)">
                   <template v-if="editTableData[1][record.id]">
-                    <div
-                      style="display: flex; align-items: center; width: 100%"
-                    >
+                    <div style="display: flex; align-items: center; width: 100%">
                       <a-tag
                         :style="
                           'background:' +
@@ -270,13 +225,7 @@
                     </div>
                   </template>
                   <template v-else>
-                    <template
-                      v-if="
-                        record.tc_color &&
-                        record.tc_background &&
-                        record.tc_border
-                      "
-                    >
+                    <template v-if="record.tc_color && record.tc_background && record.tc_border">
                       <a-tag
                         :style="
                           'background:' +
@@ -300,18 +249,13 @@
                 <!-- tc_color select -->
                 <template v-else-if="['tc_color'].includes(column.dataIndex)">
                   <template v-if="editTableData[1][record.id]">
-                    <div
-                      style="display: flex; align-items: center; width: 100%"
-                    >
+                    <div style="display: flex; align-items: center; width: 100%">
                       <TagsColorSelect
                         v-model:value="editTableData[1][record.id]['tc_id']"
                         placeholder="選擇標籤顏色"
                         @change="
                           (value: number) =>
-                            handleColorSelectChange(
-                              value,
-                              editTableData[1][record.id]
-                            )
+                            handleColorSelectChange(value, editTableData[1][record.id])
                         "
                         size="small"
                         style="width: 100%; flex: 2"
@@ -323,9 +267,7 @@
                   </template>
                 </template>
                 <!-- ts_parent_id -->
-                <template
-                  v-else-if="['ts_parent_id'].includes(column.dataIndex)"
-                >
+                <template v-else-if="['ts_parent_id'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'ts_parent_id'">
                     <template v-if="editTableData[1][record.id]">
                       <TagsTreeSelect
@@ -333,15 +275,9 @@
                         placeholder="選擇父類別"
                         :dropdownMatchSelectWidth="false"
                         style="width: 100%"
-                        v-model:value="
-                          editTableData[1][record.id]['ts_parent_id']
-                        "
-                        :defaultValue="
-                          editTableData[1][record.id]['ts_parent_id']
-                        "
-                        :treeDefaultExpandedKeys="[
-                          editTableData[1][record.id]['ts_parent_id']
-                        ]"
+                        v-model:value="editTableData[1][record.id]['ts_parent_id']"
+                        :defaultValue="editTableData[1][record.id]['ts_parent_id']"
+                        :treeDefaultExpandedKeys="[editTableData[1][record.id]['ts_parent_id']]"
                         :field-names="{
                           children: 'children',
                           label: 'ts_name',
@@ -380,10 +316,9 @@
   <TagsModalView v-model:open="visible" />
   <a-back-top />
 </template>
-
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import { RefreshBtn, DeleteBtn, PlusBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
@@ -396,160 +331,127 @@ import type { UnwrapRef } from 'vue'
 import { Tag } from '@/interfaces/Tags'
 import { TagsColor } from '@/interfaces/TagsColor'
 
-export default defineComponent({
-  name: 'TagsView',
-  components: {
-    DeleteBtn,
-    RefreshBtn,
-    PlusBtn,
-    TagsModalView,
-    TagsSortView,
-    TagsColorView,
-    TagsColorSelect,
-    TagsTreeSelect
-  },
-  computed: {
-    ...mapGetters('TagsStore', ['tagsArray', 'recentTagsArray']),
-    ...mapGetters('TagsColorStore', ['tagsColor']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('TagsStore', [
-      'fetch',
-      'fetchRecent',
-      'update',
-      'deleteById'
-    ]),
-    async refreshTable(tab: number): Promise<void> {
-      try {
-        this.SyncOutlinedSpin[tab] = true
-        this.TableLoading[tab] = true
-        await new Promise((resolve) => setTimeout(resolve, 100))
-        if (tab === 0) {
-          await this.fetch()
-        } else if (tab === 1) {
-          await this.fetchRecent()
-        }
-        this.SyncOutlinedSpin[tab] = false
-        this.TableLoading[tab] = false
-      } catch (error) {
-        //
-      }
-    },
-    async onEditFinish(record: Tag, tab: number): Promise<void> {
-      try {
-        const editData = await this.save(record, tab)
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.update({ id: editData.id, data: editData })
-        this.cancel(record, tab)
-      } catch (error) {
-        //
-      }
-    },
-    async onDelete(id: number): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-      } catch (error) {
-        //
-      }
-    },
-    handleColorSelectChange(value: number, record: Tag): void {
-      if (value) {
-        const newVar = this.tagsColor.find(
-          (tagColor: TagsColor) => tagColor.id === value
-        )
-        record.tc_background = newVar.tc_background
-        record.tc_color = newVar.tc_color
-        record.tc_border = newVar.tc_border
-      } else {
-        record.tc_background = ''
-        record.tc_color = ''
-        record.tc_border = ''
-      }
-    }
-  },
-  async created() {
-    try {
-      await this.fetch()
-      await this.fetchRecent()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const TableLoading = ref([false, false])
-    const SyncOutlinedSpin = ref([false, false])
-    const visible = ref(false)
-    const activeTab = ref('0')
-    const editTableData: UnwrapRef<Record<number, Record<number, Tag>>> =
-      reactive({
-        0: {} as Record<number, Tag>,
-        1: {} as Record<number, Tag>
-      })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    const edit = (record: Tag, tab: number, editDataSource: Tag[]) => {
-      editTableData[tab][record.id] = cloneDeep(
-        editDataSource.filter((item) => record.id === item.id)[0]
-      )
-    }
+const tagsArray = computed(() => store.getters['TagsStore/tagsArray'])
+const recentTagsArray = computed(() => store.getters['TagsStore/recentTagsArray'])
+const tagsColor = computed(() => store.getters['TagsColorStore/tagsColor'])
 
-    const save = async (record: Tag, tab: number) => {
-      return editTableData[tab][record.id]
-    }
+const Ready = ref(false)
+const TableLoading = ref([false, false])
+const SyncOutlinedSpin = ref([false, false])
+const visible = ref(false)
+const activeTab = ref('0')
+const editTableData: UnwrapRef<Record<number, Record<number, Tag>>> = reactive({
+  0: {} as Record<number, Tag>,
+  1: {} as Record<number, Tag>
+})
 
-    const cancel = (record: Tag, tab: number) => {
-      delete editTableData[tab][record.id]
+const refreshTable = async (tab: number): Promise<void> => {
+  try {
+    SyncOutlinedSpin.value[tab] = true
+    TableLoading.value[tab] = true
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    if (tab === 0) {
+      await store.dispatch('TagsStore/fetch')
+    } else if (tab === 1) {
+      await store.dispatch('TagsStore/fetchRecent')
     }
+    SyncOutlinedSpin.value[tab] = false
+    TableLoading.value[tab] = false
+  } catch (e) {
+    //
+  }
+}
 
-    const columns = [
-      {
-        dataIndex: 'operation',
-        width: '7%',
-        colSpan: 0
-      },
-      {
-        dataIndex: 'ts_name',
-        width: '28%',
-        colSpan: 0
-      },
-      {
-        dataIndex: 'tc_show',
-        width: '20%',
-        colSpan: 0
-      },
-      {
-        dataIndex: 'tc_color',
-        width: '20%',
-        colSpan: 0
-      },
-      {
-        dataIndex: 'ts_parent_id',
-        width: '25%',
-        colSpan: 0
-      }
-    ]
+const onEditFinish = async (record: Tag, tab: number): Promise<void> => {
+  try {
+    const editData = await save(record, tab)
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('TagsStore/update', { id: editData.id, data: editData })
+    cancel(record, tab)
+  } catch (e) {
+    //
+  }
+}
 
-    return {
-      Ready,
-      TableLoading,
-      SyncOutlinedSpin,
-      visible,
-      columns,
-      activeTab,
-      editTableData,
-      edit,
-      save,
-      cancel
-    }
+const onDelete = async (id: number): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('TagsStore/deleteById', id)
+  } catch (e) {
+    //
+  }
+}
+
+const handleColorSelectChange = (value: number, record: Tag): void => {
+  if (value) {
+    const newVar = tagsColor.value.find((tagColor: TagsColor) => tagColor.id === value)
+    record.tc_background = newVar.tc_background
+    record.tc_color = newVar.tc_color
+    record.tc_border = newVar.tc_border
+  } else {
+    record.tc_background = ''
+    record.tc_color = ''
+    record.tc_border = ''
+  }
+}
+
+const edit = (record: Tag, tab: number, editDataSource: Tag[]) => {
+  editTableData[tab][record.id] = cloneDeep(
+    editDataSource.filter((item) => record.id === item.id)[0]
+  )
+}
+
+const save = async (record: Tag, tab: number) => {
+  return editTableData[tab][record.id]
+}
+
+const cancel = (record: Tag, tab: number) => {
+  delete editTableData[tab][record.id]
+}
+
+onMounted(async () => {
+  try {
+    await store.dispatch('TagsStore/fetch')
+    await store.dispatch('TagsStore/fetchRecent')
+    Ready.value = true
+  } catch (e) {
+    //
   }
 })
-</script>
 
+const columns = [
+  {
+    dataIndex: 'operation',
+    width: '7%',
+    colSpan: 0
+  },
+  {
+    dataIndex: 'ts_name',
+    width: '28%',
+    colSpan: 0
+  },
+  {
+    dataIndex: 'tc_show',
+    width: '20%',
+    colSpan: 0
+  },
+  {
+    dataIndex: 'tc_color',
+    width: '20%',
+    colSpan: 0
+  },
+  {
+    dataIndex: 'ts_parent_id',
+    width: '25%',
+    colSpan: 0
+  }
+]
+</script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

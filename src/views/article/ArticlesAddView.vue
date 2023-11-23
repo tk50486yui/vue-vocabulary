@@ -12,92 +12,67 @@
       :name="['article', 'arti_title']"
       :rules="[{ required: true }]"
     >
-      <a-input
-        v-model:value="formState.article.arti_title"
-        placeholder="輸入標題"
-        allow-clear
-      />
+      <a-input v-model:value="formState.article.arti_title" placeholder="輸入標題" allow-clear />
     </a-form-item>
     <p></p>
     <a-form-item :name="['article', 'arti_content']">
       <div class="article-editor" :class="$theme">
         <ckeditor
           v-model="formState.article.arti_content"
-          :editor="editor"
+          :editor="ClassicEditor"
           :config="articleEditor.Config"
         />
       </div>
     </a-form-item>
     <p></p>
     <a-form-item>
-      <a-button
-        class="btn btn-primary btn-outline-light btn-sm"
-        html-type="submit"
-        >儲存</a-button
-      >
+      <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
     </a-form-item>
   </a-form>
 </template>
-
-<script lang="ts">
-import { ref, reactive, onMounted, defineComponent } from 'vue'
-import { mapActions, mapState } from 'vuex'
+<script setup lang="ts">
+import { ref, reactive, toRefs, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { ArticleForm } from '@/interfaces/Articles'
 
-export default defineComponent({
-  name: 'ArticlesAddView',
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('ArticlesStore', ['add']),
-    async onFinish(): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(this.formState.article)
-        this.formRef.resetFields()
-        window.scrollTo({ top: 100, behavior: 'smooth' })
-      } catch (error) {
-        //
-      }
-    }
-  },
-  setup() {
-    const formRef = ref()
-    const formState = reactive({
-      article: {} as ArticleForm
-    })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    onMounted(() => {
-      formState.article = { ...formState.article }
-    })
+const formRef = ref()
+const formState = reactive({
+  article: {} as ArticleForm
+})
 
-    const articleEditor = reactive({
-      id: '',
-      arti_title: '',
-      arti_content: '',
-      Config: {
-        autoGrow: true,
-        placeholder: '請輸入文章內容...'
-      }
-    })
+const onFinish = async (): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('ArticlesStore/add', formState.article)
+    formRef.value.resetFields()
+  } catch (e) {
+    //
+  }
+}
 
-    const validateMsg = {
-      required: ''
-    }
+onBeforeMount(() => {
+  formState.article = { ...formState.article }
+})
 
-    return {
-      articleEditor,
-      editor: ClassicEditor,
-      formRef,
-      formState,
-      validateMsg
-    }
+const articleEditor = reactive({
+  id: '',
+  arti_title: '',
+  arti_content: '',
+  Config: {
+    autoGrow: true,
+    placeholder: '請輸入文章內容...'
   }
 })
+
+const validateMsg = {
+  required: ''
+}
 </script>
 
 <style lang="scss" scoped>

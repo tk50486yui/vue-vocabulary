@@ -12,20 +12,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+<script setup lang="ts">
+import { toRefs } from 'vue'
+import { useStore } from 'vuex'
 import TagsAddView from '@/views/tag/TagsAddView.vue'
 
-export default defineComponent({
-  name: 'TagsModalView',
-  components: {
-    TagsAddView
-  },
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  }
-})
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 </script>
 
 <style lang="scss" scoped>

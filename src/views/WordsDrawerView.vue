@@ -30,13 +30,7 @@ const drawerWidthMap = {
 const setDrawerStyle = (): void => {
   drawerWidth.value =
     drawerWidthMap[
-      $desktop.value
-        ? 'desktop'
-        : $tablet.value
-          ? 'tablet'
-          : $mobile.value
-            ? 'mobile'
-            : 'desktop'
+      $desktop.value ? 'desktop' : $tablet.value ? 'tablet' : $mobile.value ? 'mobile' : 'desktop'
     ]
 }
 

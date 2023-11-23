@@ -1,15 +1,9 @@
 <template>
-  <a-form
-    ref="formRef"
-    :model="formState"
-    :validate-messages="validateMsg"
-    @finish="onFinish"
-  >
+  <a-form ref="formRef" :model="formState" :validate-messages="validateMsg" @finish="onFinish">
     <p></p>
     <CategoriesTreeSelect
       placeholder="選擇類別層級"
       size="large"
-      ref="treeSelect"
       v-model:value="formState.category.cate_parent_id"
       @chnage="handleTreeSelectChange"
       style="width: 100%"
@@ -41,72 +35,52 @@
         html-type="submit"
         >儲存</a-button
       >
-      <a-button
-        class="btn btn-danger btn-outline-light btn-sm"
-        @click="resetForm"
-        >重置</a-button
-      >
+      <a-button class="btn btn-danger btn-outline-light btn-sm" @click="resetForm">重置</a-button>
     </a-form-item>
   </a-form>
 </template>
 
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapActions, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import { CategoryForm } from '@/interfaces/Categories'
 
-export default defineComponent({
-  name: 'CategoriesAddView',
-  components: {
-    CategoriesTreeSelect
-  },
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('CategoriesStore', ['add']),
-    async onFinish(): Promise<void> {
-      try {
-        this.confirmLoading = true
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(this.formState.category)
-        this.resetForm()
-        this.confirmLoading = false
-      } catch (error) {
-        //
-      }
-    },
-    handleTreeSelectChange(value: number): void {
-      this.formState.category.cate_parent_id =
-        typeof value !== 'undefined' ? value : null
-    },
-    resetForm(): void {
-      this.formState.category.cate_parent_id = null
-      this.formRef.resetFields()
-    }
-  },
-  setup() {
-    const confirmLoading = ref(false)
-    const formRef = ref()
-    const formState = reactive({
-      category: {} as CategoryForm
-    })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    const validateMsg = {
-      required: 'required'
-    }
-
-    return {
-      confirmLoading,
-      formRef,
-      formState,
-      validateMsg
-    }
-  }
+const confirmLoading = ref<boolean>(false)
+const formRef = ref()
+const formState = reactive({
+  category: {} as CategoryForm
 })
+
+const onFinish = async (): Promise<void> => {
+  try {
+    confirmLoading.value = true
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('CategoriesStore/add', formState.category)
+    resetForm()
+    confirmLoading.value = false
+  } catch (e) {
+    //
+  }
+}
+
+const handleTreeSelectChange = (value: number): void => {
+  formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null
+}
+
+const resetForm = (): void => {
+  formState.category.cate_parent_id = null
+  formRef.value.resetFields()
+}
+
+const validateMsg = {
+  required: 'required'
+}
 </script>
 
 <style lang="scss" scoped>

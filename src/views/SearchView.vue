@@ -8,10 +8,7 @@
             class="col-lg-4 col-md-12 d-flex justify-content-lg-end justify-content-md-start align-items-center"
           >
             <div class="radio-button-theme" :class="$theme">
-              <a-radio-group
-                v-model:value="searchRadio"
-                @change="onSearchRadio()"
-              >
+              <a-radio-group v-model:value="searchRadio" @change="onSearchRadio()">
                 <a-radio-button value="word">單字</a-radio-button>
                 <a-radio-button value="article">文章</a-radio-button>
               </a-radio-group>
@@ -27,9 +24,7 @@
                 allow-clear
               >
                 <template #enterButton>
-                  <a-button
-                    ><font-awesome-icon :icon="['fas', 'magnifying-glass']"
-                  /></a-button>
+                  <a-button><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></a-button>
                 </template>
               </a-input-search>
             </div>

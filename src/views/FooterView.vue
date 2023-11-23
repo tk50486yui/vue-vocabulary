@@ -5,8 +5,8 @@
         <div class="col-lg-12">
           <div class="footer__copyright__text" :class="$theme">
             <p>
-              Copyright &copy; 2023 All rights reserved | This template is made
-              with <i class="fa fa-heart" aria-hidden="true"></i> by
+              Copyright &copy; 2023 All rights reserved | This template is made with
+              <i class="fa fa-heart" aria-hidden="true"></i> by
               <a href="https://colorlib.com" target="_blank">Colorlib</a>
             </p>
           </div>

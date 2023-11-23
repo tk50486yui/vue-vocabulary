@@ -57,9 +57,7 @@
         <!-- Table expanded -->
         <template #expandedRowRender="{ record }">
           <p style="margin: 0">
-            <a-typography-paragraph
-              :copyable="{ text: record.ws_name }"
-            ></a-typography-paragraph>
+            <a-typography-paragraph :copyable="{ text: record.ws_name }"></a-typography-paragraph>
           </p>
           <p></p>
           <DeleteBtn @confirm="onDelete(record.id)" />
@@ -70,20 +68,13 @@
         <template #bodyCell="{ column, text, record }">
           <template
             v-if="
-              [
-                'ws_name',
-                'ws_pronunciation',
-                'ws_definition',
-                'cate_name'
-              ].includes(column.dataIndex)
+              ['ws_name', 'ws_pronunciation', 'ws_definition', 'cate_name'].includes(
+                column.dataIndex
+              )
             "
           >
             <div>
-              <template
-                v-if="
-                  editTableData[record.id] && column.dataIndex === 'cate_name'
-                "
-              >
+              <template v-if="editTableData[record.id] && column.dataIndex === 'cate_name'">
                 <CategoriesTreeSelect
                   size="small"
                   placeholder="選擇"
@@ -91,19 +82,13 @@
                   style="width: 100%"
                   v-model:value="editTableData[record.id]['cate_id']"
                   :defaultValue="editTableData[record.id]['cate_id']"
-                  :treeDefaultExpandedKeys="[
-                    editTableData[record.id]['cate_id']
-                  ]"
-                  @change="
-                    handleCategoriesSelectChange(editTableData[record.id])
-                  "
+                  :treeDefaultExpandedKeys="[editTableData[record.id]['cate_id']]"
+                  @change="handleCategoriesSelectChange(editTableData[record.id])"
                 />
               </template>
               <template v-else-if="editTableData[record.id]">
                 <a-input
-                  v-model:value="
-                    editTableData[record.id][column.dataIndex as keyof Word]
-                  "
+                  v-model:value="editTableData[record.id][column.dataIndex as keyof Word]"
                   style="margin: -5px 0"
                 />
               </template>
@@ -115,21 +100,12 @@
             <div>
               <template v-if="editTableData[record.id]">
                 <div class="button-edit-container">
-                  <CheckOutlined
-                    class="button-edit-check"
-                    @click="onEditFinish(record)"
-                  />
-                  <CloseOutlined
-                    class="button-edit-close"
-                    @click="cancel(record)"
-                  />
+                  <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
+                  <CloseOutlined class="button-edit-close" @click="cancel(record)" />
                 </div>
               </template>
               <template v-else>
-                <EditOutlined
-                  class="button-edit"
-                  @click="edit(record, wordsArray)"
-                />
+                <EditOutlined class="button-edit" @click="edit(record, wordsArray)" />
               </template>
             </div>
           </template>
@@ -178,10 +154,9 @@
   />
   <a-back-top />
 </template>
-
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import { PlusBtn, DeleteBtn, RefreshBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
@@ -190,191 +165,156 @@ import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.
 import type { UnwrapRef } from 'vue'
 import { Word } from '@/interfaces/Words'
 
-export default defineComponent({
-  name: 'WordsView',
-  components: {
-    PlusBtn,
-    DeleteBtn,
-    RefreshBtn,
-    WordsDrawerView,
-    CategoriesTreeSelect
-  },
-  computed: {
-    ...mapGetters('WordsStore', ['wordsArray']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('WordsStore', [
-      'fetch',
-      'update',
-      'updateCommon',
-      'updateImportant',
-      'deleteById'
-    ]),
-    async refreshTable(): Promise<void> {
-      try {
-        this.SyncOutlinedSpin = true
-        this.TableLoading = true
-        await new Promise((resolve) => setTimeout(resolve, 100))
-        await this.fetch()
-        this.SyncOutlinedSpin = false
-        this.TableLoading = false
-      } catch (error) {
-        //
-      }
-    },
-    async onEditFinish(record: Word): Promise<void> {
-      try {
-        const editData = await this.save(record)
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.update({ id: editData.id, data: editData })
-        this.cancel(record)
-      } catch (error) {
-        //
-      }
-    },
-    async onUpdateCommon(id: number, data: Word): Promise<void> {
-      try {
-        data.ws_is_common = !data.ws_is_common
-        await this.updateCommon({ id: id, data: data })
-      } catch (error) {
-        //
-      }
-    },
-    async onUpdateImportant(id: number, data: Word): Promise<void> {
-      try {
-        data.ws_is_important = !data.ws_is_important
-        await this.updateImportant({ id: id, data: data })
-      } catch (error) {
-        //
-      }
-    },
-    async onDelete(id: number): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-      } catch (error) {
-        //
-      }
-    },
-    handleCategoriesSelectChange(currentData: Word): void {
-      currentData.cate_id =
-        typeof currentData.cate_id !== 'undefined' ? currentData.cate_id : null
-    },
-    handlePageSize(): void {
-      this.pagination.pageSize = Number(this.selectPageSize)
-    },
-    handleTableScrollY(): void {
-      this.TablescrollY = Number(this.selectTablescrollY)
-    },
-    // drawer
-    onDrawerShow(): void {
-      this.wordsDrawerRef.setDrawerStyle()
-      this.wordsDrawerVisible = true
-    }
-  },
-  async created() {
-    try {
-      await this.fetch()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const TableLoading = ref(false)
-    const SyncOutlinedSpin = ref(false)
-    const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
-    const wordsDrawerRef = ref()
-    const wordsDrawerVisible = ref(false)
-    const TablescrollY = ref(400)
-    const selectTablescrollY = ref('400')
-    const selectPageSize = ref('10')
-    const pagination = reactive({
-      pageSize: Number(selectPageSize.value),
-      position: ['topLEFT', 'bottomLeft'],
-      showSizeChanger: false
-    })
-    const edit = (record: Word, editDataSource: Word[]) => {
-      editTableData[record.id] = cloneDeep(
-        editDataSource.filter((item) => record.id === item.id)[0]
-      )
-    }
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    const cancel = (record: Word) => {
-      delete editTableData[record.id]
-    }
+const wordsArray = computed(() => store.getters['WordsStore/wordsArray'])
 
-    const save = async (record: Word) => {
-      return editTableData[record.id]
-    }
+const Ready = ref(false)
+const TableLoading = ref<boolean>(false)
+const SyncOutlinedSpin = ref<boolean>(false)
+const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
+const wordsDrawerRef = ref()
+const wordsDrawerVisible = ref<boolean>(false)
+const TablescrollY = ref<number>(400)
+const selectTablescrollY = ref<string>('400')
+const selectPageSize = ref<string>('10')
+const pagination = reactive({
+  pageSize: Number(selectPageSize.value),
+  position: ['topLEFT', 'bottomLeft'],
+  showSizeChanger: false
+})
 
-    const columns = [
-      {
-        dataIndex: 'operation',
-        width: '8%'
-      },
-      {
-        title: '類別',
-        dataIndex: 'cate_name',
-        width: '18%',
-        filters: [
-          {
-            text: '動物',
-            value: '動物'
-          },
-          {
-            text: '昆蟲',
-            value: '昆蟲'
-          }
-        ],
-        onFilter: (value: string, record: Word) =>
-          record.cate_name != null && record.cate_name.indexOf(value) === 0
-      },
-      {
-        title: '單字名稱',
-        dataIndex: 'ws_name',
-        width: '28%'
-      },
-      {
-        title: '假名 / 發音',
-        dataIndex: 'ws_pronunciation',
-        width: '20%'
-      },
-      {
-        title: '中文定義',
-        dataIndex: 'ws_definition',
-        width: '18%'
-      },
-      {
-        dataIndex: 'common',
-        width: '8%'
-      }
-    ]
+const refreshTable = async (): Promise<void> => {
+  try {
+    SyncOutlinedSpin.value = true
+    TableLoading.value = true
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    await store.dispatch('WordsStore/fetch')
+    SyncOutlinedSpin.value = false
+    TableLoading.value = false
+  } catch (e) {
+    //
+  }
+}
 
-    return {
-      Ready,
-      TableLoading,
-      SyncOutlinedSpin,
-      wordsDrawerRef,
-      wordsDrawerVisible,
-      columns,
-      TablescrollY,
-      selectTablescrollY,
-      selectPageSize,
-      pagination,
-      editTableData,
-      edit,
-      save,
-      cancel
-    }
+const onEditFinish = async (record: Word): Promise<void> => {
+  try {
+    const editData = await save(record)
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsStore/update', { id: editData.id, data: editData })
+    cancel(record)
+  } catch (e) {
+    //
+  }
+}
+
+const onUpdateCommon = async (id: number, data: Word): Promise<void> => {
+  try {
+    data.ws_is_common = !data.ws_is_common
+    await store.dispatch('WordsStore/updateCommon', { id: id, data: data })
+  } catch (e) {
+    //
+  }
+}
+const onUpdateImportant = async (id: number, data: Word): Promise<void> => {
+  try {
+    data.ws_is_important = !data.ws_is_important
+    await store.dispatch('WordsStore/updateImportant', { id: id, data: data })
+  } catch (e) {
+    //
+  }
+}
+
+const onDelete = async (id: number): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsStore/deleteById', id)
+  } catch (e) {
+    //
+  }
+}
+
+const handleCategoriesSelectChange = (currentData: Word): void => {
+  currentData.cate_id = typeof currentData.cate_id !== 'undefined' ? currentData.cate_id : null
+}
+const handlePageSize = (): void => {
+  pagination.pageSize = Number(selectPageSize.value)
+}
+const handleTableScrollY = (): void => {
+  TablescrollY.value = Number(selectTablescrollY.value)
+}
+// drawer
+const onDrawerShow = (): void => {
+  wordsDrawerRef.value.setDrawerStyle()
+  wordsDrawerVisible.value = true
+}
+
+const edit = (record: Word, editDataSource: Word[]) => {
+  editTableData[record.id] = cloneDeep(editDataSource.filter((item) => record.id === item.id)[0])
+}
+
+const cancel = (record: Word) => {
+  delete editTableData[record.id]
+}
+
+const save = async (record: Word) => {
+  return editTableData[record.id]
+}
+onMounted(async () => {
+  try {
+    await store.dispatch('WordsStore/fetch')
+    Ready.value = true
+  } catch (e) {
+    //
   }
 })
-</script>
 
+const columns = [
+  {
+    dataIndex: 'operation',
+    width: '8%'
+  },
+  {
+    title: '類別',
+    dataIndex: 'cate_name',
+    width: '18%',
+    filters: [
+      {
+        text: '動物',
+        value: '動物'
+      },
+      {
+        text: '昆蟲',
+        value: '昆蟲'
+      }
+    ],
+    onFilter: (value: string, record: Word) =>
+      record.cate_name != null && record.cate_name.indexOf(value) === 0
+  },
+  {
+    title: '單字名稱',
+    dataIndex: 'ws_name',
+    width: '28%'
+  },
+  {
+    title: '假名 / 發音',
+    dataIndex: 'ws_pronunciation',
+    width: '20%'
+  },
+  {
+    title: '中文定義',
+    dataIndex: 'ws_definition',
+    width: '18%'
+  },
+  {
+    dataIndex: 'common',
+    width: '8%'
+  }
+]
+</script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

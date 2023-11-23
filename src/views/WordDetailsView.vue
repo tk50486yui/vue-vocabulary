@@ -1,9 +1,7 @@
 <template>
   <template v-if="Ready && word">
     <span class="back-link-theme" :class="$theme">
-      <router-link :to="{ name: 'wordsGrid' }" @click="setGridState()">
-        返回
-      </router-link>
+      <router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> 返回 </router-link>
       <span class="link-separator h5">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
@@ -34,9 +32,7 @@
                 {{ word.ws_name }}
               </span>
               <span class="copy-icon">
-                <a-typography-paragraph
-                  :copyable="{ text: word.ws_name }"
-                ></a-typography-paragraph>
+                <a-typography-paragraph :copyable="{ text: word.ws_name }"></a-typography-paragraph>
               </span>
             </div>
           </template>
@@ -44,18 +40,11 @@
         <a-descriptions-item label="假名 / 發音">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
-              <a-input
-                v-model:value="formState.word.ws_pronunciation"
-                allow-clear
-              />
+              <a-input v-model:value="formState.word.ws_pronunciation" allow-clear />
             </div>
           </template>
           <template v-else>
-            <template
-              v-if="
-                word.ws_pronunciation == null || word.ws_pronunciation == ''
-              "
-            >
+            <template v-if="word.ws_pronunciation == null || word.ws_pronunciation == ''">
               {{ word.ws_pronunciation }}
             </template>
             <template v-else>
@@ -75,10 +64,7 @@
         <a-descriptions-item label="中文定義">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
-              <a-input
-                v-model:value="formState.word.ws_definition"
-                allow-clear
-              />
+              <a-input v-model:value="formState.word.ws_definition" allow-clear />
             </div>
           </template>
           <template v-else>
@@ -89,7 +75,6 @@
           <template v-if="editShow">
             <CategoriesTreeSelect
               size="small"
-              ref="CategoriesTreeSelect"
               placeholder="選擇分類"
               :dropdownMatchSelectWidth="false"
               style="width: 100%"
@@ -150,7 +135,7 @@
             <div class="article-editor" :class="$theme">
               <ckeditor
                 v-model="ws_description"
-                :editor="editor"
+                :editor="ClassicEditor"
                 :config="wordEditor.Config"
               />
             </div>
@@ -163,7 +148,6 @@
           <template v-if="editShow">
             <TagsTreeSelect
               size="large"
-              ref="TagsTreeSelect"
               placeholder="添加標籤"
               style="width: 100%"
               v-model:value="formState.word.words_tags.array"
@@ -179,13 +163,8 @@
             />
           </template>
           <template v-else>
-            <template
-              v-for="(item, index) in word.words_tags.values"
-              :key="item.ts_id"
-            >
-              <template
-                v-if="item.tc_color && item.tc_background && item.tc_border"
-              >
+            <template v-for="(item, index) in word.words_tags.values" :key="item.ts_id">
+              <template v-if="item.tc_color && item.tc_background && item.tc_border">
                 <a-tag
                   class="tag-align"
                   :style="
@@ -205,9 +184,7 @@
                   {{ item.ts_name }}
                 </a-tag>
               </template>
-              <template
-                v-if="index != word.words_tags.values.length && index / 5 == 1"
-              >
+              <template v-if="index != word.words_tags.values.length && index / 5 == 1">
                 <br />
               </template>
             </template>
@@ -216,9 +193,7 @@
       </a-descriptions>
       <p></p>
       <template v-if="editShow">
-        <a-button
-          class="btn btn-primary btn-outline-light btn-sm"
-          @click="onEditFinish()"
+        <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onEditFinish()"
           >儲存</a-button
         >
         <a-button
@@ -235,10 +210,19 @@
     <a-back-top />
   </template>
 </template>
-
-<script lang="ts">
-import { ref, reactive, onMounted, defineComponent } from 'vue'
-import { mapActions, mapState, mapGetters } from 'vuex'
+<script lang="ts" setup>
+import {
+  ref,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+  watchEffect,
+  onBeforeMount,
+  nextTick
+} from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -246,169 +230,138 @@ import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import { Word, WordForm } from '@/interfaces/Words'
 
-export default defineComponent({
-  name: 'WordDetailsView',
-  components: {
-    DeleteBtn,
-    CategoriesTreeSelect,
-    TagsTreeSelect
-  },
-  computed: {
-    wordId(): number {
-      return Number(this.$route.params.id)
-    },
-    word() {
-      return this.wordById(this.wordId) || null
-    },
-    ws_description: {
-      get() {
-        return this.formState.word.ws_description || ''
-      },
-      set(value: string) {
-        this.formState.word.ws_description = value
-      }
-    },
-    ...mapGetters('WordsStore', ['wordById']),
-    ...mapState('Views', ['$WordsGrid']),
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$tablet', '$mobile'])
-  },
-  methods: {
-    ...mapActions('WordsStore', [
-      'fetch',
-      'update',
-      'updateCommon',
-      'updateImportant',
-      'deleteById'
-    ]),
-    ...mapActions('Views', ['updateWordsGrid']),
-    async onEditFinish(): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.update({
-          id: this.word.id,
-          data: this.formState.word
-        })
-        this.onEditCancel()
-      } catch (error) {
-        //
-      }
-    },
-    onEdit(): void {
-      this.editShow = !this.editShow
-      this.formState.word = Object.assign({}, this.formState.word, this.word)
-    },
-    onEditCancel(): void {
-      if (this.editShow) {
-        this.editShow = false
-      }
-      if (!this.editShow) {
-        this.$nextTick(() => {
-          window.scrollTo({ top: 160, behavior: 'auto' })
-        })
-      }
-    },
-    async onUpdateCommon(id: number, data: Word): Promise<void> {
-      try {
-        data.ws_is_common = !data.ws_is_common
-        await this.updateCommon({ id: id, data: data })
-      } catch (error) {
-        //
-      }
-    },
-    async onUpdateImportant(id: number, data: Word): Promise<void> {
-      try {
-        data.ws_is_important = !data.ws_is_important
-        await this.updateImportant({ id: id, data: data })
-      } catch (error) {
-        //
-      }
-    },
-    async onDelete(id: number): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-        this.$router.push({ name: 'wordsGrid' })
-      } catch (error) {
-        //
-      }
-    },
-    handleCategoriesSelectChange(value: number): void {
-      this.formState.word.cate_id = typeof value !== 'undefined' ? value : null
-    },
-    handleTagsSelectChange(value: number[]): void {
-      this.formState.word.words_tags.array =
-        typeof value !== 'undefined' ? value : []
-    },
-    changeDescriptionsLayout(isScreenSmall: boolean): void {
-      if (isScreenSmall) {
-        this.descriptionsLayout = 'vertical'
-      } else {
-        this.descriptionsLayout = 'horizontal'
-      }
-    },
-    setGridState(): void {
-      this.updateWordsGrid({ variable: 'jumpPage', data: true })
-      this.updateWordsGrid({ variable: 'jumpScroll', data: true })
-    }
-  },
-  async created() {
-    try {
-      window.scrollTo({ top: 120, behavior: 'instant' })
-      await this.fetch()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  watch: {
-    $mobile(val: boolean) {
-      this.changeDescriptionsLayout(val)
-    },
-    $tablet(val: boolean) {
-      this.changeDescriptionsLayout(val)
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const descriptionsLayout = ref('horizontal')
-    const editShow = ref(false)
-    const formRef = ref()
-    const formState = reactive({
-      word: {} as WordForm
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $mobile, $tablet, $desktop } = toRefs(store.state.Screen)
+
+const $route = useRoute()
+const $router = useRouter()
+
+const wordById = computed(() => store.getters['WordsStore/wordById'])
+
+const wordId = computed(() => Number($route.params.id))
+const word = computed(() => wordById.value(wordId.value) || null)
+
+const ws_description = computed({
+  get: () => formState.word.ws_description || '',
+  set: (value: string) => {
+    formState.word.ws_description = value
+  }
+})
+
+const Ready = ref<boolean>(false)
+const descriptionsLayout = ref<string>('horizontal')
+const editShow = ref<boolean>(false)
+const formState = reactive({
+  word: {} as WordForm
+})
+
+const onEditFinish = async (): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsStore/update', {
+      id: word.value.id,
+      data: formState.word
     })
+    onEditCancel()
+  } catch (e) {
+    //
+  }
+}
 
-    onMounted(() => {
-      formState.word = { ...formState.word }
+const onEdit = (): void => {
+  editShow.value = !editShow.value
+  formState.word = Object.assign({}, formState.word, word.value)
+}
+const onEditCancel = (): void => {
+  if (editShow.value) {
+    editShow.value = false
+  }
+  if (!editShow.value) {
+    nextTick(() => {
+      window.scrollTo({ top: 160, behavior: 'auto' })
     })
+  }
+}
+const onUpdateCommon = async (id: number, data: Word): Promise<void> => {
+  try {
+    data.ws_is_common = !data.ws_is_common
+    await store.dispatch('WordsStore/updateCommon', { id: id, data: data })
+  } catch (e) {
+    //
+  }
+}
+const onUpdateImportant = async (id: number, data: Word): Promise<void> => {
+  try {
+    data.ws_is_important = !data.ws_is_important
+    await store.dispatch('WordsStore/updateImportant', { id: id, data: data })
+  } catch (e) {
+    //
+  }
+}
 
-    const wordEditor = reactive({
-      Config: {
-        autoGrow: true,
-        placeholder: '請為單字添加註釋或說明...'
-      }
-    })
+const onDelete = async (id: number): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('WordsStore/deleteById', id)
+    $router.push({ name: 'wordsGrid' })
+  } catch (e) {
+    //
+  }
+}
 
-    const validateMsg = {
-      required: 'required'
-    }
+const handleCategoriesSelectChange = (value: number): void => {
+  formState.word.cate_id = typeof value !== 'undefined' ? value : null
+}
+const handleTagsSelectChange = (value: number[]): void => {
+  formState.word.words_tags.array = typeof value !== 'undefined' ? value : []
+}
+const changeDescriptionsLayout = (isScreenSmall: boolean): void => {
+  if ($desktop.value === false && isScreenSmall === true) {
+    descriptionsLayout.value = 'vertical'
+  } else if ($desktop.value === true) {
+    descriptionsLayout.value = 'horizontal'
+  }
+}
+const setGridState = (): void => {
+  store.dispatch('Views/updateWordsGrid', {
+    variable: 'jumpPage',
+    data: true
+  })
+  store.dispatch('Views/updateWordsGrid', {
+    variable: 'jumpScroll',
+    data: true
+  })
+}
 
-    return {
-      Ready,
-      descriptionsLayout,
-      editShow,
-      formRef,
-      formState,
-      validateMsg,
-      wordEditor,
-      editor: ClassicEditor
-    }
+onBeforeMount(() => {
+  formState.word = { ...formState.word }
+})
+
+onMounted(async () => {
+  try {
+    window.scrollTo({ top: 120, behavior: 'instant' })
+    await store.dispatch('WordsStore/fetch')
+    Ready.value = true
+  } catch (e) {
+    //
+  }
+})
+
+watchEffect(() => {
+  changeDescriptionsLayout($mobile.value)
+  changeDescriptionsLayout($tablet.value)
+})
+
+const wordEditor = reactive({
+  Config: {
+    autoGrow: true,
+    placeholder: '請為單字添加註釋或說明...'
   }
 })
 </script>
-
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

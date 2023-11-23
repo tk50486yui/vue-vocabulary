@@ -1,9 +1,4 @@
-import {
-  ElNotification,
-  ElMessage,
-  NotificationParams,
-  MessageParams
-} from 'element-plus'
+import { ElNotification, ElMessage, NotificationParams, MessageParams } from 'element-plus'
 import { messageMap } from './messageMap'
 import { AxiosResponse } from 'axios'
 import { CustomAxiosConfig } from '@/interfaces/axios/CustomAxios'

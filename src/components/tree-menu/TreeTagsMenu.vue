@@ -8,10 +8,9 @@
               <span class="dropdown-container">
                 {{ item.ts_name }} （{{ item.children.length }}）
                 <template v-if="$filtersTags.includes(item.id)">
-                  <CheckOutlined
-                    :style="{ 'font-size': '10px' }"
-                    :rotate="10"
-                  />
+                  <span style="margin-left: 6px">
+                    <CheckOutlined :style="{ 'font-size': '10px' }" />
+                  </span>
                 </template>
               </span>
             </a>
@@ -25,7 +24,9 @@
             <span class="dropdown-container">
               # {{ item.ts_name }}
               <template v-if="$filtersTags.includes(item.id)">
-                <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
+                <span style="margin-left: 6px">
+                  <CheckOutlined :style="{ 'font-size': '10px' }" />
+                </span>
               </template>
             </span>
           </a>
@@ -34,36 +35,29 @@
     </template>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { mapActions, mapState } from 'vuex'
+<script setup lang="ts">
+import { defineProps, PropType } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import { Tag } from '@/interfaces/Tags'
 
-export default defineComponent({
-  name: 'TreeTagsMenu',
-  props: {
-    data: {
-      type: Object as PropType<Tag>,
-      required: true
-    },
-    parentId: String
-  },
-  computed: {
-    ...mapState('Search', ['$filtersTags'])
-  },
-  methods: {
-    ...mapActions('Search', ['updateSearchClass', 'pushFiltersTags']),
-    async handleTagsFilter(id: number): Promise<void> {
-      await this.pushFiltersTags(id)
-      this.updateSearchClass('word')
-      const routeName = String(this.$route)
-      if (routeName !== 'wordsGrid') {
-        this.$router.push({ name: 'wordsGrid' })
-      }
-    }
-  }
+const store = useStore()
+const { $filtersTags } = store.state.Search
+const $route = useRoute()
+const $router = useRouter()
+
+defineProps({
+  data: { type: Object as PropType<Tag>, required: true }
 })
+
+const handleTagsFilter = async (id: number): Promise<void> => {
+  await store.dispatch('Search/pushFiltersTags', id)
+  store.dispatch('Search/updateSearchClass', 'word')
+
+  if (String($route.name) !== 'wordsGrid') {
+    $router.push({ name: 'wordsGrid' })
+  }
+}
 </script>
 <style scoped>
 .dropdown-container {

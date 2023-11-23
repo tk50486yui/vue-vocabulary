@@ -4,12 +4,6 @@
   </a-popconfirm>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'DeleteBtn'
-})
-</script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

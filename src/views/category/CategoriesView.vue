@@ -31,19 +31,11 @@
                 <template v-if="['cate_name'].includes(column.dataIndex)">
                   <template v-if="editTableData[0][record.id]">
                     <div class="button-edit-container">
-                      <CheckOutlined
-                        class="button-edit-check"
-                        @click="onEditFinish(record, 0)"
-                      />
-                      <CloseOutlined
-                        class="button-edit-close"
-                        @click="cancel(record, 0)"
-                      />
+                      <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 0)" />
+                      <CloseOutlined class="button-edit-close" @click="cancel(record, 0)" />
                       <a-input
                         v-model:value="
-                          editTableData[0][record.id][
-                            column.dataIndex as keyof Category
-                          ]
+                          editTableData[0][record.id][column.dataIndex as keyof Category]
                         "
                         style="margin: -5px 0"
                       />
@@ -54,8 +46,7 @@
                       <template v-if="column.dataIndex === 'cate_name'">
                         <template
                           v-if="
-                            (record.parents && record.parents > 0) ||
-                            record.cate_parent_id !== null
+                            (record.parents && record.parents > 0) || record.cate_parent_id !== null
                           "
                         >
                           <span
@@ -81,9 +72,7 @@
                   </template>
                 </template>
                 <!-- cate_parent_id -->
-                <template
-                  v-else-if="['cate_parent_id'].includes(column.dataIndex)"
-                >
+                <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'cate_parent_id'">
                     <template v-if="editTableData[0][record.id]">
                       <CategoriesTreeSelect
@@ -91,15 +80,9 @@
                         placeholder="選擇父類別"
                         :dropdownMatchSelectWidth="false"
                         style="width: 100%"
-                        v-model:value="
-                          editTableData[0][record.id]['cate_parent_id']
-                        "
-                        :defaultValue="
-                          editTableData[0][record.id]['cate_parent_id']
-                        "
-                        :treeDefaultExpandedKeys="[
-                          editTableData[0][record.id]['cate_parent_id']
-                        ]"
+                        v-model:value="editTableData[0][record.id]['cate_parent_id']"
+                        :defaultValue="editTableData[0][record.id]['cate_parent_id']"
+                        :treeDefaultExpandedKeys="[editTableData[0][record.id]['cate_parent_id']]"
                       />
                     </template>
                     <template v-else>
@@ -137,19 +120,11 @@
                 <template v-if="['cate_name'].includes(column.dataIndex)">
                   <template v-if="editTableData[1][record.id]">
                     <div class="button-edit-container">
-                      <CheckOutlined
-                        class="button-edit-check"
-                        @click="onEditFinish(record, 1)"
-                      />
-                      <CloseOutlined
-                        class="button-edit-close"
-                        @click="cancel(record, 1)"
-                      />
+                      <CheckOutlined class="button-edit-check" @click="onEditFinish(record, 1)" />
+                      <CloseOutlined class="button-edit-close" @click="cancel(record, 1)" />
                       <a-input
                         v-model:value="
-                          editTableData[1][record.id][
-                            column.dataIndex as keyof Category
-                          ]
+                          editTableData[1][record.id][column.dataIndex as keyof Category]
                         "
                         style="margin: -5px 0"
                       />
@@ -167,9 +142,7 @@
                   </template>
                 </template>
                 <!-- cate_parent_id -->
-                <template
-                  v-else-if="['cate_parent_id'].includes(column.dataIndex)"
-                >
+                <template v-else-if="['cate_parent_id'].includes(column.dataIndex)">
                   <template v-if="column.dataIndex === 'cate_parent_id'">
                     <template v-if="editTableData[1][record.id]">
                       <CategoriesTreeSelect
@@ -177,15 +150,9 @@
                         placeholder="選擇父類別"
                         :dropdownMatchSelectWidth="false"
                         style="width: 100%"
-                        v-model:value="
-                          editTableData[1][record.id]['cate_parent_id']
-                        "
-                        :defaultValue="
-                          editTableData[1][record.id]['cate_parent_id']
-                        "
-                        :treeDefaultExpandedKeys="[
-                          editTableData[1][record.id]['cate_parent_id']
-                        ]"
+                        v-model:value="editTableData[1][record.id]['cate_parent_id']"
+                        :defaultValue="editTableData[1][record.id]['cate_parent_id']"
+                        :treeDefaultExpandedKeys="[editTableData[1][record.id]['cate_parent_id']]"
                       />
                     </template>
                     <template v-else>
@@ -211,10 +178,9 @@
   <CategoriesModalView v-model:open="visible" />
   <a-back-top />
 </template>
-
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import { PlusBtn, RefreshBtn, DeleteBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
@@ -224,140 +190,102 @@ import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.
 import type { UnwrapRef } from 'vue'
 import { Category } from '@/interfaces/Categories'
 
-export default defineComponent({
-  name: 'CategoriesView',
-  components: {
-    PlusBtn,
-    DeleteBtn,
-    RefreshBtn,
-    CategoriesModalView,
-    CategoriesSortView,
-    CategoriesTreeSelect
-  },
-  computed: {
-    ...mapGetters('CategoriesStore', [
-      'categoriesArray',
-      'recentCategoriesArray'
-    ]),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('CategoriesStore', [
-      'fetch',
-      'fetchRecent',
-      'update',
-      'deleteById'
-    ]),
-    async refreshTable(tab: number): Promise<void> {
-      try {
-        this.SyncOutlinedSpin[tab] = true
-        this.TableLoading[tab] = true
-        await new Promise((resolve) => setTimeout(resolve, 100))
-        if (tab === 0) {
-          await this.fetch()
-        } else if (tab === 1) {
-          await this.fetchRecent()
-        }
-        this.SyncOutlinedSpin[tab] = false
-        this.TableLoading[tab] = false
-      } catch (error) {
-        //
-      }
-    },
-    async onEditFinish(record: Category, tab: number): Promise<void> {
-      try {
-        const editData = await this.save(record, tab)
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.update({ id: editData.id, data: editData })
-        this.cancel(record, tab)
-      } catch (error) {
-        //
-      }
-    },
-    async onDelete(id: number): Promise<void> {
-      try {
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.deleteById(id)
-      } catch (error) {
-        //
-      }
-    }
-  },
-  async created() {
-    try {
-      await this.fetch()
-      await this.fetchRecent()
-      this.Ready = true
-    } catch (error) {
-      //
-    }
-  },
-  setup() {
-    const Ready = ref(false)
-    const TableLoading = ref([false, false])
-    const SyncOutlinedSpin = ref([false, false])
-    const visible = ref(false)
-    const activeTab = ref('0')
-    const editTableData: UnwrapRef<Record<number, Record<number, Category>>> =
-      reactive({
-        0: {} as Record<number, Category>,
-        1: {} as Record<number, Category>
-      })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    const edit = (
-      record: Category,
-      tab: number,
-      editDataSource: Category[]
-    ) => {
-      editTableData[tab][record.id] = cloneDeep(
-        editDataSource.filter((item) => record.id === item.id)[0]
-      )
-    }
+const categoriesArray = computed(() => store.getters['CategoriesStore/categoriesArray'])
+const recentCategoriesArray = computed(() => store.getters['CategoriesStore/recentCategoriesArray'])
 
-    const save = async (record: Category, tab: number) => {
-      return editTableData[tab][record.id]
-    }
+const Ready = ref(false)
+const TableLoading = ref([false, false])
+const SyncOutlinedSpin = ref([false, false])
+const visible = ref<boolean>(false)
+const activeTab = ref<string>('0')
+const editTableData: UnwrapRef<Record<number, Record<number, Category>>> = reactive({
+  0: {} as Record<number, Category>,
+  1: {} as Record<number, Category>
+})
 
-    const cancel = (record: Category, tab: number) => {
-      delete editTableData[tab][record.id]
+const refreshTable = async (tab: number): Promise<void> => {
+  try {
+    SyncOutlinedSpin.value[tab] = true
+    TableLoading.value[tab] = true
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    if (tab === 0) {
+      await store.dispatch('CategoriesStore/fetch')
+    } else if (tab === 1) {
+      await store.dispatch('CategoriesStore/fetchRecent')
     }
+    SyncOutlinedSpin.value[tab] = false
+    TableLoading.value[tab] = false
+  } catch (e) {
+    //
+  }
+}
 
-    const columns = [
-      {
-        dataIndex: 'operation',
-        width: '7%',
-        colSpan: 0
-      },
-      {
-        dataIndex: 'cate_name',
-        width: '63%',
-        colSpan: 0
-      },
-      {
-        dataIndex: 'cate_parent_id',
-        width: '30%',
-        colSpan: 0
-      }
-    ]
+const onEditFinish = async (record: Category, tab: number): Promise<void> => {
+  try {
+    const editData = await save(record, tab)
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('CategoriesStore/update', { id: editData.id, data: editData })
+    cancel(record, tab)
+  } catch (e) {
+    //
+  }
+}
 
-    return {
-      Ready,
-      TableLoading,
-      SyncOutlinedSpin,
-      columns,
-      visible,
-      activeTab,
-      editTableData,
-      edit,
-      save,
-      cancel
-    }
+const onDelete = async (id: number): Promise<void> => {
+  try {
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('CategoriesStore/deleteById', id)
+  } catch (e) {
+    //
+  }
+}
+
+const edit = (record: Category, tab: number, editDataSource: Category[]) => {
+  editTableData[tab][record.id] = cloneDeep(
+    editDataSource.filter((item) => record.id === item.id)[0]
+  )
+}
+
+const save = async (record: Category, tab: number) => {
+  return editTableData[tab][record.id]
+}
+
+const cancel = (record: Category, tab: number) => {
+  delete editTableData[tab][record.id]
+}
+
+onMounted(async () => {
+  try {
+    await store.dispatch('CategoriesStore/fetch')
+    await store.dispatch('CategoriesStore/fetchRecent')
+    Ready.value = true
+  } catch (e) {
+    //
   }
 })
+const columns = [
+  {
+    dataIndex: 'operation',
+    width: '7%',
+    colSpan: 0
+  },
+  {
+    dataIndex: 'cate_name',
+    width: '63%',
+    colSpan: 0
+  },
+  {
+    dataIndex: 'cate_parent_id',
+    width: '30%',
+    colSpan: 0
+  }
+]
 </script>
-
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 

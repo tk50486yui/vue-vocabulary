@@ -1,10 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
 import TagsColorRepo from '@/repositories/TagsColorRepo'
-import {
-  TagsColor,
-  TagsColorForm,
-  TagsColorState
-} from '@/interfaces/TagsColor'
+import { TagsColor, TagsColorForm, TagsColorState } from '@/interfaces/TagsColor'
 import { RootState } from '@/interfaces/RootState'
 
 const state = {

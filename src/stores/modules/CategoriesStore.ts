@@ -1,11 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
 import CategoriesRepo from '@/repositories/CategoriesRepo'
-import {
-  Category,
-  CategoryForm,
-  CategoriesOrder,
-  CategoriesState
-} from '@/interfaces/Categories'
+import { Category, CategoryForm, CategoriesOrder, CategoriesState } from '@/interfaces/Categories'
 import { RootState } from '@/interfaces/RootState'
 
 const state = {
@@ -54,19 +49,13 @@ const actions = {
     await dispatch('fetchRecent')
   },
 
-  async update(
-    { dispatch }: { dispatch: Dispatch },
-    { id, data }: { id: number; data: Category }
-  ) {
+  async update({ dispatch }: { dispatch: Dispatch }, { id, data }: { id: number; data: Category }) {
     await CategoriesRepo.update(id, data)
     await dispatch('fetch')
     await dispatch('fetchRecent')
   },
 
-  async updateOrder(
-    { dispatch }: { dispatch: Dispatch },
-    data: CategoriesOrder[]
-  ) {
+  async updateOrder({ dispatch }: { dispatch: Dispatch }, data: CategoriesOrder[]) {
     await CategoriesRepo.updateOrder(data)
     await dispatch('fetch')
     await dispatch('fetchRecent')

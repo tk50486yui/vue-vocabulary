@@ -1,18 +1,12 @@
 <template>
-  <a-form
-    ref="formRef"
-    :model="formState"
-    :validate-messages="validateMsg"
-    @finish="onFinish"
-  >
+  <a-form ref="formRef" :model="formState" :validate-messages="validateMsg" @finish="onFinish">
     <p></p>
     <TagsTreeSelect
       placeholder="選擇標籤層級"
       size="large"
-      ref="treeSelect"
       style="width: 100%"
       v-model:value="formState.tag.ts_parent_id"
-      @chnage="handleTreeSelectChange"
+      @chnage="handleTagsSelectChange"
       :field-names="{
         children: 'children',
         label: 'ts_name',
@@ -36,9 +30,7 @@
     </a-form-item>
     <p></p>
     <template v-if="formState.tag.tc_id">
-      <template
-        v-if="formState.tag.ts_name != '' && formState.tag.ts_name != null"
-      >
+      <template v-if="formState.tag.ts_name != '' && formState.tag.ts_name != null">
         <a-tag
           :style="
             'background:' +
@@ -83,89 +75,66 @@
         html-type="submit"
         >儲存</a-button
       >
-      <a-button
-        class="btn btn-danger btn-outline-light btn-sm"
-        @click="resetForm"
-        >重置</a-button
-      >
+      <a-button class="btn btn-danger btn-outline-light btn-sm" @click="resetForm">重置</a-button>
     </a-form-item>
   </a-form>
 </template>
-
-<script lang="ts">
-import { ref, reactive, defineComponent } from 'vue'
-import { mapActions, mapState, mapGetters } from 'vuex'
+<script lang="ts" setup>
+import { ref, reactive, toRefs, computed } from 'vue'
+import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import TagsColorSelect from '@/components/select/TagsColorSelect.vue'
 import { TagForm } from '@/interfaces/Tags'
 import { TagsColor } from '@/interfaces/TagsColor'
 
-export default defineComponent({
-  name: 'TagsAddView',
-  components: {
-    TagsTreeSelect,
-    TagsColorSelect
-  },
-  computed: {
-    selectedTagColor() {
-      return this.formState.tag.tc_id
-        ? this.tagsColor.find(
-            (tagColor: TagsColor) => tagColor.id === this.formState.tag.tc_id
-          )
-        : null
-    },
-    ...mapGetters('TagsColorStore', ['tagsColor']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('TagsStore', ['add']),
-    async onFinish(): Promise<void> {
-      try {
-        this.confirmLoading = true
-        message.loading({ content: 'Loading..', duration: 1 })
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        await this.add(this.formState.tag)
-        this.resetForm()
-        this.confirmLoading = false
-      } catch (error) {
-        //
-      }
-    },
-    handleTreeSelectChange(value: number): void {
-      this.formState.tag.ts_parent_id =
-        typeof value !== 'undefined' ? value : null
-    },
-    resetForm(): void {
-      this.formState.tag.ts_parent_id = null
-      this.formState.tag.tc_id = null
-      this.formRef.resetFields()
-    },
-    handleTagsColorSelectChange(value: number): void {
-      this.formState.tag.tc_id = typeof value !== 'undefined' ? value : null
-    }
-  },
-  setup() {
-    const confirmLoading = ref(false)
-    const formRef = ref()
-    const formState = reactive({
-      tag: {} as TagForm
-    })
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    const validateMsg = {
-      required: 'required'
-    }
-
-    return {
-      confirmLoading,
-      formRef,
-      formState,
-      validateMsg
-    }
-  }
+const confirmLoading = ref(false)
+const formRef = ref()
+const formState = reactive({
+  tag: {} as TagForm
 })
-</script>
+const tagsColor = computed(() => store.getters['TagsColorStore/tagsColor'])
 
+const selectedTagColor = computed(() => {
+  return formState.tag.tc_id
+    ? tagsColor.value.find((tagColor: TagsColor) => tagColor.id === formState.tag.tc_id)
+    : null
+})
+
+const onFinish = async (): Promise<void> => {
+  try {
+    confirmLoading.value = true
+    message.loading({ content: 'Loading..', duration: 1 })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await store.dispatch('TagsStore/add', formState.tag)
+    resetForm()
+    confirmLoading.value = false
+  } catch (e) {
+    //
+  }
+}
+
+const handleTagsSelectChange = (value: number): void => {
+  formState.tag.ts_parent_id = typeof value !== 'undefined' ? value : null
+}
+
+const handleTagsColorSelectChange = (value: number): void => {
+  formState.tag.tc_id = typeof value !== 'undefined' ? value : null
+}
+
+const resetForm = (): void => {
+  formState.tag.ts_parent_id = null
+  formState.tag.tc_id = null
+  formRef.value.resetFields()
+}
+
+const validateMsg = {
+  required: 'required'
+}
+</script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 </style>

@@ -1,10 +1,6 @@
 import { GetterTree, Commit, Dispatch } from 'vuex'
 import WordsGroupsRepo from '@/repositories/WordsGroupsRepo'
-import {
-  WordsGroup,
-  WordsGroupsForm,
-  WordsGroupsState
-} from '@/interfaces/WordsGroups'
+import { WordsGroup, WordsGroupsForm, WordsGroupsState } from '@/interfaces/WordsGroups'
 import { RootState } from '@/interfaces/RootState'
 
 const state = {
@@ -16,9 +12,7 @@ const state = {
 const getters: GetterTree<WordsGroupsState, RootState> = {
   wordsGroups: (state) => state.wordsGroups,
   wordsGroupsById: (state) => (id: number) => {
-    return state.wordsGroups.find(
-      (wordsGroup) => String(wordsGroup.id) === String(id)
-    )
+    return state.wordsGroups.find((wordsGroup) => String(wordsGroup.id) === String(id))
   },
   wordsGroupsForm: (state) => state.wordsGroupsForm
 }

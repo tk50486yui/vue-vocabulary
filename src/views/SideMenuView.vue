@@ -32,9 +32,7 @@ const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 const { $WordsGroupsView, $WordsGroupsDetailsView } = toRefs(store.state.Views)
 
-const updateNow = computed(() => {
-  return $WordsGroupsDetailsView.value.updateNow
-})
+const updateNow = computed(() => $WordsGroupsDetailsView.value.updateNow)
 
 const sideGroup = ref<string>('1')
 
@@ -44,11 +42,11 @@ const setUpdateNow = (val: boolean) => {
   }
 }
 
-watchEffect(() => {
+onMounted(() => {
   setUpdateNow(updateNow.value)
 })
 
-onMounted(() => {
+watchEffect(() => {
   setUpdateNow(updateNow.value)
 })
 </script>
