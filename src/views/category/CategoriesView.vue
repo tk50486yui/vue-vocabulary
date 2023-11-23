@@ -11,9 +11,8 @@
             <a-table
               :dataSource="categoriesArray"
               :columns="columns"
-              :scroll="{ y: 600, x: 400 }"
+              :scroll="{ y: 600, x: 450 }"
               :loading="TableLoading[0]"
-              expandRowByClick
             >
               <!-- header -->
               <template #title>
@@ -53,8 +52,20 @@
                   <template v-else>
                     <div class="column-container">
                       <template v-if="column.dataIndex === 'cate_name'">
-                        <template v-if="record.parents && record.parents > 0">
-                          <span style="margin-left: 8px"></span>
+                        <template
+                          v-if="
+                            (record.parents && record.parents > 0) ||
+                            record.cate_parent_id !== null
+                          "
+                        >
+                          <span
+                            :style="{
+                              'margin-left': `${record.cate_level * 14}px`,
+                              'margin-right': '6px'
+                            }"
+                          >
+                            │</span
+                          >
                         </template>
                         <EditOutlined
                           class="button-edit"
@@ -106,7 +117,7 @@
             <a-table
               :dataSource="recentCategoriesArray"
               :columns="columns"
-              :scroll="{ y: 600 }"
+              :scroll="{ y: 600, x: 450 }"
               :loading="TableLoading[1]"
             >
               <!-- header -->

@@ -11,9 +11,8 @@
             <a-table
               :dataSource="tagsArray"
               :columns="columns"
-              :scroll="{ y: 600, x: 400 }"
+              :scroll="{ y: 600, x: 800 }"
               :loading="TableLoading[0]"
-              expandRowByClick
             >
               <!-- header -->
               <template #title>
@@ -53,8 +52,20 @@
                   <template v-else>
                     <div class="column-container">
                       <template v-if="column.dataIndex === 'ts_name'">
-                        <template v-if="record.parents && record.parents > 0">
-                          <span style="margin-left: 8px"></span>
+                        <template
+                          v-if="
+                            (record.parents && record.parents > 0) ||
+                            record.ts_parent_id !== null
+                          "
+                        >
+                          <span
+                            :style="{
+                              'margin-left': `${record.ts_level * 6}px`,
+                              'margin-right': '3px'
+                            }"
+                          >
+                            │
+                          </span>
                         </template>
                         <EditOutlined
                           class="button-edit"
@@ -186,7 +197,7 @@
             <a-table
               :dataSource="recentTagsArray"
               :columns="columns"
-              :scroll="{ y: 600 }"
+              :scroll="{ y: 600, x: 800 }"
               :loading="TableLoading[1]"
             >
               <!-- header -->

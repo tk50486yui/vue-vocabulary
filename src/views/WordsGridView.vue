@@ -161,85 +161,89 @@
               :class="$theme"
               ref="selectMod"
             >
-              每頁：
-              <a-select
-                v-model:value="selectPageSize"
-                :getPopupContainer="() => $refs.selectMod"
-                size="small"
-                style="width: 80px"
-                @change="setPageSize()"
-              >
-                <a-select-option value="10">10 筆</a-select-option>
-                <a-select-option value="20">20 筆</a-select-option>
-                <a-select-option value="50">50 筆</a-select-option>
-                <a-select-option value="100">100 筆</a-select-option>
-                <a-select-option :value="words.length">全部</a-select-option>
-              </a-select>
-              <span style="margin-left: 8px">當前：</span>
-              <a-select
-                v-model:value="currentPage"
-                :getPopupContainer="() => $refs.selectMod"
-                size="small"
-                style="width: 80px"
-                @change="setPaginationCurrent()"
-              >
-                <template
-                  v-for="index in Math.ceil(
-                    words.length / Number(selectPageSize)
-                  )"
-                  :key="index"
+              <a-row>
+                每頁：
+                <a-select
+                  v-model:value="selectPageSize"
+                  :getPopupContainer="() => $refs.selectMod"
+                  size="small"
+                  style="width: 80px"
+                  @change="setPageSize()"
                 >
-                  <a-select-option :value="index"
-                    >第 {{ index }} 頁</a-select-option
+                  <a-select-option value="10">10 筆</a-select-option>
+                  <a-select-option value="20">20 筆</a-select-option>
+                  <a-select-option value="50">50 筆</a-select-option>
+                  <a-select-option value="100">100 筆</a-select-option>
+                  <a-select-option :value="words.length">全部</a-select-option>
+                </a-select>
+                <span style="margin-left: 8px">當前：</span>
+                <a-select
+                  v-model:value="currentPage"
+                  :getPopupContainer="() => $refs.selectMod"
+                  size="small"
+                  style="width: 80px"
+                  @change="setPaginationCurrent()"
+                >
+                  <template
+                    v-for="index in Math.ceil(
+                      words.length / Number(selectPageSize)
+                    )"
+                    :key="index"
                   >
-                </template>
-              </a-select>
-              <span style="margin-left: 8px">
-                <el-tag
-                  class="d-flex align-items-center"
-                  effect="dark"
-                  size="small"
-                  type="success"
-                  color="black"
-                  round
-                >
-                  關鍵字：
-                  <template v-if="$keyword != '' && $filters.length > 0">
-                    <template
-                      v-if="
-                        $filters.length === 1 && $filters.includes('cate_name')
-                      "
+                    <a-select-option :value="index"
+                      >第 {{ index }} 頁</a-select-option
                     >
-                      `
-                      <span class="category-keyword-text">{{ $keyword }} </span
-                      >`
-                    </template>
-                    <template v-else>
-                      ` <span class="keyword-text">{{ $keyword }} </span>`
-                    </template>
                   </template>
-                  <template v-else> 無 </template>
-                </el-tag>
-              </span>
-              <span style="margin-left: 8px">
-                <el-tag
-                  class="d-flex align-items-center"
-                  effect="dark"
-                  size="small"
-                  color="black"
-                  round
-                >
-                  共 {{ filterWordsResult.length }} 筆
-                </el-tag>
-              </span>
-              <span style="margin-left: 6px">
-                <template v-if="$keyword != ''">
-                  <CloseBtn
+                </a-select>
+                <span style="margin-left: 8px">
+                  <el-tag
                     class="d-flex align-items-center"
-                    @click="onResetSearch()"
-                  />
-                </template>
-              </span>
+                    effect="dark"
+                    size="small"
+                    type="success"
+                    color="black"
+                    round
+                  >
+                    關鍵字：
+                    <template v-if="$keyword != '' && $filters.length > 0">
+                      <template
+                        v-if="
+                          $filters.length === 1 &&
+                          $filters.includes('cate_name')
+                        "
+                      >
+                        `
+                        <span class="category-keyword-text"
+                          >{{ $keyword }} </span
+                        >`
+                      </template>
+                      <template v-else>
+                        ` <span class="keyword-text">{{ $keyword }} </span>`
+                      </template>
+                    </template>
+                    <template v-else> 無 </template>
+                  </el-tag>
+                </span>
+                <span style="margin-left: 8px">
+                  <el-tag
+                    class="d-flex align-items-center"
+                    effect="dark"
+                    size="small"
+                    color="black"
+                    round
+                  >
+                    共 {{ filterWordsResult.length }} 筆
+                  </el-tag>
+                </span>
+                <span style="margin-left: 6px">
+                  <template v-if="$keyword != ''">
+                    <CloseBtn
+                      class="d-flex align-items-center"
+                      @click="onResetSearch()"
+                    />
+                  </template>
+                </span>
+              </a-row>
             </div>
           </template>
           <!-- card main -->
