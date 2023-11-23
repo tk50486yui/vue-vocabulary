@@ -1,5 +1,5 @@
 import { Commit } from 'vuex'
-interface RootState {
+interface SearchState {
   $searchShow: boolean
   $keyword: string
   $searchClass: string
@@ -8,7 +8,7 @@ interface RootState {
   $filtersTagsState: boolean
 }
 
-const state: RootState = {
+const state: SearchState = {
   $searchShow: false,
   $keyword: '',
   $searchClass: '',
@@ -39,23 +39,23 @@ const actions = {
 }
 
 const mutations = {
-  setSearchShow(state: RootState, searchShow: boolean) {
+  setSearchShow(state: SearchState, searchShow: boolean) {
     state.$searchShow = searchShow
   },
-  setKeyword(state: RootState, keyword: string) {
+  setKeyword(state: SearchState, keyword: string) {
     state.$keyword = keyword
   },
-  setSearchClass(state: RootState, searchClass: string) {
+  setSearchClass(state: SearchState, searchClass: string) {
     state.$searchClass = searchClass
   },
-  setFilters(state: RootState, filters: string[]) {
+  setFilters(state: SearchState, filters: string[]) {
     state.$filters = filters
   },
-  async setFiltersTags(state: RootState, filtersTags: number[]) {
+  async setFiltersTags(state: SearchState, filtersTags: number[]) {
     state.$filtersTags = filtersTags
     state.$filtersTagsState = false // 不是在 menu 設定的
   },
-  async pushFiltersTags(state: RootState, id: number) {
+  async pushFiltersTags(state: SearchState, id: number) {
     if (state.$filtersTags.includes(id)) {
       const index = state.$filtersTags.indexOf(id)
       if (index !== -1) {

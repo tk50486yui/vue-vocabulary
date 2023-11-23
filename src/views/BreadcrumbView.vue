@@ -34,72 +34,64 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapState, mapActions } from 'vuex'
+<script lang="ts" setup>
+import { ref, onBeforeMount, watch, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
-export default defineComponent({
-  name: 'BreadcrumbView',
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('Theme', ['updateTheme']),
-    changeTheme(checked: boolean): void {
-      const theme = checked ? 'dark' : 'light'
-      this.updateTheme(theme)
-    },
-    getCurrentRoute(): void {
-      const { name } = this.$route
-      this.activeHome = false
-      switch (name) {
-        case 'wordsAdd':
-          this.activeRoute = '單字新增'
-          break
-        case 'words':
-          this.activeRoute = '單字表'
-          break
-        case 'wordsGrid':
-        case 'wordDetails':
-          this.activeRoute = '單字總覽'
-          break
-        case 'articles':
-        case 'articlesContent':
-          this.activeRoute = '文章總覽'
-          break
-        case 'categories':
-          this.activeRoute = '類別列表'
-          break
-        case 'tags':
-          this.activeRoute = '標籤列表'
-          break
-        case 'wordsGroups':
-        case 'wordsGroupsDetails':
-          this.activeRoute = '群組列表'
-          break
-        default:
-          this.activeRoute = ''
-          this.activeHome = true
-          break
-      }
-    }
-  },
-  async created() {
-    this.getCurrentRoute()
-  },
-  watch: {
-    $route: function () {
-      this.getCurrentRoute()
-    }
-  },
-  setup() {
-    const activeRoute = ref('')
-    const activeHome = ref(false)
-    return {
-      activeRoute,
-      activeHome
-    }
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+
+const $route = useRoute()
+
+const activeRoute = ref<string>('')
+const activeHome = ref<boolean>(false)
+
+const changeTheme = (checked: boolean): void => {
+  const theme = checked ? 'dark' : 'light'
+  store.dispatch('Theme/updateTheme', theme)
+}
+
+const getCurrentRoute = (): void => {
+  activeHome.value = false
+  switch ($route.name) {
+    case 'wordsAdd':
+      activeRoute.value = '單字新增'
+      break
+    case 'words':
+      activeRoute.value = '單字表'
+      break
+    case 'wordsGrid':
+    case 'wordDetails':
+      activeRoute.value = '單字總覽'
+      break
+    case 'articles':
+    case 'articlesContent':
+      activeRoute.value = '文章總覽'
+      break
+    case 'categories':
+      activeRoute.value = '類別列表'
+      break
+    case 'tags':
+      activeRoute.value = '標籤列表'
+      break
+    case 'wordsGroups':
+    case 'wordsGroupsDetails':
+      activeRoute.value = '群組列表'
+      break
+    default:
+      activeRoute.value = ''
+      activeHome.value = true
+      break
   }
+}
+
+onBeforeMount(() => {
+  getCurrentRoute()
+})
+
+watch($route, () => {
+  getCurrentRoute()
 })
 </script>
 

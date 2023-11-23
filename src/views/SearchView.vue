@@ -66,91 +66,77 @@
     <p></p>
   </template>
 </template>
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapState, mapActions } from 'vuex'
+<script lang="ts" setup>
+import { ref, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $searchShow } = toRefs(store.state.Search)
 
-export default defineComponent({
-  name: 'SearchView',
-  computed: {
-    ...mapState('Search', ['$searchShow']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('Search', [
-      'updateKeyword',
-      'updateSearchClass',
-      'updateFilters'
-    ]),
-    onSearch(): void {
-      this.onWordChecked()
-      this.onArticleChecked()
-      this.onSearchRadio()
-      this.updateKeyword(this.searchValue)
-      if (this.searchRadio === 'word') {
-        this.$router.push({ name: 'wordsGrid' })
-      } else {
-        this.$router.push({ name: 'articles' })
-      }
-    },
-    onSearchRadio(): void {
-      this.updateSearchClass(this.searchRadio)
-    },
-    onWordChecked(): void {
-      if (this.searchRadio === 'word') {
-        this.updateFilters(this.wordCheckbox)
-      }
-    },
-    onArticleChecked(): void {
-      if (this.searchRadio === 'article') {
-        this.updateFilters(this.articleCheckbox)
-      }
-    }
-  },
-  setup() {
-    const searchValue = ref('')
-    const searchRadio = ref('word')
-    const wordCheckbox = ref(['ws_name', 'ws_pronunciation'])
-    const articleCheckbox = ref(['arti_title'])
-    const wordOptions = [
-      {
-        label: '詞名',
-        value: 'ws_name'
-      },
-      {
-        label: '假名',
-        value: 'ws_pronunciation'
-      },
-      {
-        label: '中譯',
-        value: 'ws_definition'
-      },
-      {
-        label: '類別',
-        value: 'cate_name'
-      }
-    ]
-    const articleOptions = [
-      {
-        label: '標題',
-        value: 'arti_title'
-      },
-      {
-        label: '日期',
-        value: 'created_at'
-      }
-    ]
+const $router = useRouter()
 
-    return {
-      searchValue,
-      searchRadio,
-      wordCheckbox,
-      articleCheckbox,
-      wordOptions,
-      articleOptions
-    }
+const searchValue = ref<string>('')
+const searchRadio = ref<string>('word')
+const wordCheckbox = ref<string[]>(['ws_name', 'ws_pronunciation'])
+const articleCheckbox = ref<string[]>(['arti_title'])
+
+const onSearch = () => {
+  onWordChecked()
+  onArticleChecked()
+  onSearchRadio()
+  store.dispatch('Search/updateKeyword', searchValue.value)
+  if (searchRadio.value === 'word') {
+    $router.push({ name: 'wordsGrid' })
+  } else {
+    $router.push({ name: 'articles' })
   }
-})
+}
+
+const onSearchRadio = () => {
+  store.dispatch('Search/updateSearchClass', searchRadio.value)
+}
+
+const onWordChecked = () => {
+  if (searchRadio.value === 'word') {
+    store.dispatch('Search/updateFilters', wordCheckbox.value)
+  }
+}
+
+const onArticleChecked = () => {
+  if (searchRadio.value === 'article') {
+    store.dispatch('Search/updateFilters', articleCheckbox.value)
+  }
+}
+
+const wordOptions = [
+  {
+    label: '詞名',
+    value: 'ws_name'
+  },
+  {
+    label: '假名',
+    value: 'ws_pronunciation'
+  },
+  {
+    label: '中譯',
+    value: 'ws_definition'
+  },
+  {
+    label: '類別',
+    value: 'cate_name'
+  }
+]
+const articleOptions = [
+  {
+    label: '標題',
+    value: 'arti_title'
+  },
+  {
+    label: '日期',
+    value: 'created_at'
+  }
+]
 </script>
 
 <style lang="scss" scoped>

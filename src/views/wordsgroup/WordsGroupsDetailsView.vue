@@ -98,8 +98,8 @@ export default defineComponent({
         let inBlock = false
         if (this.$WordsGroupsView.id !== this.wordsGroup.id) {
           this.updateWordsGroupsView({
-            variable: 'groupArray',
-            data: { clear: true }
+            variable: 'clear',
+            data: true
           })
           this.injectEditData()
           this.updateWordsGroupsDetailsView({
@@ -110,8 +110,8 @@ export default defineComponent({
         }
         if (!inBlock) {
           this.updateWordsGroupsView({
-            variable: 'groupArray',
-            data: { clear: true }
+            variable: 'clear',
+            data: true
           })
         }
       }

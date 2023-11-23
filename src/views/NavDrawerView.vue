@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-menu-theme" :class="theme">
+  <div class="nav-menu-theme" :class="$theme">
     <a-menu mode="inline">
       <a-sub-menu :key="0">
         <template #title>
@@ -31,12 +31,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { toRefs, computed } from 'vue'
+import { toRefs } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const theme = computed(() => $theme)
 </script>
 
 <style lang="scss" scoped>

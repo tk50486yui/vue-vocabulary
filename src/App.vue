@@ -33,82 +33,63 @@
     </div>
   </a-config-provider>
 </template>
-<script lang="ts">
-import { ref, onMounted, defineComponent } from 'vue'
-import { mapState, mapActions } from 'vuex'
+<script lang="ts" setup>
+import { ref, onMounted, watchEffect, toRefs } from 'vue'
+import { useStore } from 'vuex'
 import HeaderView from '@/views/HeaderView.vue'
 import SearchView from '@/views/SearchView.vue'
 import BreadcrumbView from '@/views/BreadcrumbView.vue'
 import SideMenuView from '@/views/SideMenuView.vue'
 import FooterView from '@/views/FooterView.vue'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    HeaderView,
-    SearchView,
-    BreadcrumbView,
-    FooterView,
-    SideMenuView
-  },
-  computed: {
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$mobile'])
-  },
-  methods: {
-    ...mapActions('Screen', ['updateDesktop', 'updateTablet', 'updateMobile']),
-    // @ts-expect-error:  necessary
-    getPopupContainer(el, dialogContext) {
-      if (dialogContext) {
-        return dialogContext.getDialogWrap()
-      } else {
-        return document.body
-      }
-    }
-  },
-  watch: {
-    isScreenSmall(val: boolean) {
-      this.updateMobile(!!val)
-    },
-    isScreenMedium(val: boolean) {
-      this.updateTablet(!!val)
-    },
-    isScreenLarge(val: boolean) {
-      this.updateDesktop(!!val)
-    }
-  },
-  setup() {
-    const isScreenSmall = ref(false)
-    const isScreenMedium = ref(false)
-    const isScreenLarge = ref(false)
-    const mediaQuerySmall = window.matchMedia('(max-width: 576px)')
-    const mediaQueryMedium = window.matchMedia(
-      '(min-width: 577px) and (max-width: 1024px)'
-    )
-    const mediaQueryLarge = window.matchMedia('(min-width: 1025px)')
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 
-    const handleMediaQueryChange = () => {
-      isScreenSmall.value = mediaQuerySmall.matches
-      isScreenMedium.value = mediaQueryMedium.matches
-      isScreenLarge.value = mediaQueryLarge.matches
-    }
+const isScreenSmall = ref<boolean>(false)
+const isScreenMedium = ref<boolean>(false)
+const isScreenLarge = ref<boolean>(false)
 
-    onMounted(() => {
-      isScreenSmall.value = mediaQuerySmall.matches
-      isScreenMedium.value = mediaQueryMedium.matches
-      isScreenLarge.value = mediaQueryLarge.matches
-      mediaQuerySmall.addEventListener('change', handleMediaQueryChange)
-      mediaQueryMedium.addEventListener('change', handleMediaQueryChange)
-      mediaQueryLarge.addEventListener('change', handleMediaQueryChange)
-    })
+const mediaQuerySmall = window.matchMedia('(max-width: 576px)')
+const mediaQueryMedium = window.matchMedia(
+  '(min-width: 577px) and (max-width: 1024px)'
+)
+const mediaQueryLarge = window.matchMedia('(min-width: 1025px)')
 
-    return {
-      isScreenSmall,
-      isScreenMedium,
-      isScreenLarge
-    }
+const handleMediaQueryChange = () => {
+  isScreenSmall.value = mediaQuerySmall.matches
+  isScreenMedium.value = mediaQueryMedium.matches
+  isScreenLarge.value = mediaQueryLarge.matches
+}
+
+onMounted(() => {
+  isScreenSmall.value = mediaQuerySmall.matches
+  isScreenMedium.value = mediaQueryMedium.matches
+  isScreenLarge.value = mediaQueryLarge.matches
+  mediaQuerySmall.addEventListener('change', handleMediaQueryChange)
+  mediaQueryMedium.addEventListener('change', handleMediaQueryChange)
+  mediaQueryLarge.addEventListener('change', handleMediaQueryChange)
+})
+
+watchEffect(() => {
+  if (isScreenSmall.value) {
+    store.dispatch('Screen/updateMobile', true)
+  }
+  if (isScreenMedium.value) {
+    store.dispatch('Screen/updateTablet', true)
+  }
+  if (isScreenLarge.value) {
+    store.dispatch('Screen/updateDesktop', true)
   }
 })
+
+// @ts-expect-error:  necessary
+const getPopupContainer = (el, dialogContext) => {
+  if (dialogContext) {
+    return dialogContext.getDialogWrap()
+  } else {
+    return document.body
+  }
+}
 </script>
 
 <style lang="scss" scoped>

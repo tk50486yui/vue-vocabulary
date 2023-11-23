@@ -1,14 +1,14 @@
 import { Commit } from 'vuex'
 import { groupArray } from '@/interfaces/WordsGroups'
 import {
-  RootState,
+  ViewsState,
   WordsGridType,
   ArticlesViewType,
   WordsGroupsViewType,
   WordsGroupsDetailsViewType
 } from '@/interfaces/ViewsType'
 
-const state: RootState = {
+const state: ViewsState = {
   $WordsGrid: {
     currentPage: '1',
     jumpPage: false,
@@ -70,14 +70,12 @@ const actions = {
     { commit }: { commit: Commit },
     { variable, data }: WordsGroupsDetailsViewType
   ) {
-    if (variable === 'updateNow') {
-      commit('setWordsGroupsDetailsView', { variable, data })
-    }
+    commit('setWordsGroupsDetailsView', { variable, data })
   }
 }
 
 const mutations = {
-  setWordsGrid(state: RootState, { variable, data }: WordsGridType) {
+  setWordsGrid(state: ViewsState, { variable, data }: WordsGridType) {
     switch (variable) {
       case 'filterItemsState':
         state.$WordsGrid[variable] =
@@ -102,7 +100,7 @@ const mutations = {
         break
     }
   },
-  setArticlesView(state: RootState, { variable, data }: ArticlesViewType) {
+  setArticlesView(state: ViewsState, { variable, data }: ArticlesViewType) {
     switch (variable) {
       case 'jumpPage':
       case 'jumpScroll':
@@ -120,7 +118,7 @@ const mutations = {
     }
   },
   setWordsGroupsView(
-    state: RootState,
+    state: ViewsState,
     { variable, data }: { variable: string; data: groupArray }
   ) {
     if (variable === 'groupArray' && data.checked === true) {
@@ -145,7 +143,7 @@ const mutations = {
     }
   },
   setWordsGroupsDetailsView(
-    state: RootState,
+    state: ViewsState,
     { variable, data }: WordsGroupsDetailsViewType
   ) {
     state.$WordsGroupsDetailsView[variable] = data

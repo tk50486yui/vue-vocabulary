@@ -1,5 +1,5 @@
 import { groupArray } from '@/interfaces/WordsGroups'
-export interface RootState {
+export interface ViewsState {
   $WordsGrid: {
     currentPage: string
     jumpPage: boolean
@@ -39,7 +39,7 @@ export interface RootState {
 }
 
 export interface WordsGridType {
-  variable: keyof RootState['$WordsGrid']
+  variable: keyof ViewsState['$WordsGrid']
   data:
     | string
     | boolean
@@ -59,16 +59,16 @@ export interface WordsGridType {
 }
 
 export interface ArticlesViewType {
-  variable: keyof RootState['$ArticlesView']
+  variable: keyof ViewsState['$ArticlesView']
   data: string | boolean | number
 }
 
 export interface WordsGroupsViewType {
-  variable: keyof RootState['$WordsGroupsView']
+  variable: keyof ViewsState['$WordsGroupsView']
   data: string | number | groupArray | boolean
 }
 
 export interface WordsGroupsDetailsViewType {
-  variable: keyof RootState['$WordsGroupsDetailsView']
+  variable: keyof ViewsState['$WordsGroupsDetailsView']
   data: boolean
 }

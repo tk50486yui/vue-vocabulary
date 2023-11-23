@@ -12,62 +12,44 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapState } from 'vuex'
+<script lang="ts" setup>
+import { ref, onMounted, watch, toRefs, defineExpose } from 'vue'
+import { useStore } from 'vuex'
 import WordsAddView from '@/views/WordsAddView.vue'
 
-export default defineComponent({
-  name: 'WordsDrawerView',
-  components: {
-    WordsAddView
-  },
-  computed: {
-    ...mapState('Theme', ['$theme']),
-    ...mapState('Screen', ['$desktop', '$tablet', '$mobile'])
-  },
-  methods: {
-    // drawer
-    onDrawerShow(): void {
-      this.setDrawerStyle()
-    },
-    setDrawerStyle(): void {
-      this.drawerWidth =
-        this.drawerWidthMap[
-          this.$desktop
-            ? 'desktop'
-            : this.$tablet
-              ? 'tablet'
-              : this.$mobile
-                ? 'mobile'
-                : 'desktop'
-        ]
-    }
-  },
-  watch: {
-    $desktop() {
-      this.setDrawerStyle()
-    },
-    $tablet() {
-      this.setDrawerStyle()
-    },
-    $mobile() {
-      this.setDrawerStyle()
-    }
-  },
-  setup() {
-    const drawerWidth = ref(500)
-    const drawerWidthMap = {
-      desktop: 500,
-      tablet: 400,
-      mobile: 300
-    }
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $desktop, $tablet, $mobile } = toRefs(store.state.Screen)
 
-    return {
-      drawerWidth,
-      drawerWidthMap
-    }
-  }
+const drawerWidth = ref<number>(500)
+const drawerWidthMap = {
+  desktop: 500 as number,
+  tablet: 400 as number,
+  mobile: 300 as number
+}
+const setDrawerStyle = (): void => {
+  drawerWidth.value =
+    drawerWidthMap[
+      $desktop.value
+        ? 'desktop'
+        : $tablet.value
+          ? 'tablet'
+          : $mobile.value
+            ? 'mobile'
+            : 'desktop'
+    ]
+}
+
+onMounted(() => {
+  setDrawerStyle()
+})
+
+watch([$desktop, $tablet, $mobile], () => {
+  setDrawerStyle()
+})
+
+defineExpose({
+  setDrawerStyle
 })
 </script>
 

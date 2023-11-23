@@ -1,9 +1,9 @@
 import { Commit } from 'vuex'
-interface RootState {
+interface ThemeState {
   $theme: string
 }
 
-const state: RootState = {
+const state: ThemeState = {
   $theme: 'dark'
 }
 
@@ -17,7 +17,7 @@ const actions = {
 }
 
 const mutations = {
-  setTheme(state: RootState, theme: string) {
+  setTheme(state: ThemeState, theme: string) {
     state.$theme = theme
   }
 }

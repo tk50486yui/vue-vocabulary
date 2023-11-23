@@ -94,71 +94,57 @@
     </a-drawer>
   </div>
 </template>
-<script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { mapState, mapActions } from 'vuex'
+<script lang="ts" setup>
+import { ref, watchEffect, toRefs, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import NavDrawerView from '@/views/NavDrawerView.vue'
 import logo from '@/assets/img/logo.png'
 
-export default defineComponent({
-  name: 'HeaderView',
-  components: {
-    NavDrawerView
-  },
-  computed: {
-    ...mapState('Search', ['$searchShow']),
-    ...mapState('Theme', ['$theme'])
-  },
-  methods: {
-    ...mapActions('Search', ['updateSearchShow']),
-    setSearchShow(): void {
-      this.updateSearchShow(!this.$searchShow)
-    },
-    setActive(): void {
-      const { name } = this.$route
-      switch (name) {
-        case 'wordsGrid':
-        case 'words':
-        case 'wordsAdd':
-          this.activeIndex = 0
-          break
-        case 'articles':
-          this.activeIndex = 1
-          break
-        case 'tags':
-          this.activeIndex = 2
-          break
-        case 'categories':
-          this.activeIndex = 3
-          break
-        case 'wordsGroups':
-        case 'wordsGroupsDetails':
-          this.activeIndex = 4
-          break
-        default:
-          this.activeIndex = 0
-          break
-      }
-    }
-  },
-  async created() {
-    this.setActive()
-  },
-  watch: {
-    $route: function () {
-      this.setActive()
-    }
-  },
-  setup() {
-    const activeIndex = ref(2)
-    const drawerVisible = ref(false)
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
+const { $searchShow } = toRefs(store.state.Search)
 
-    return {
-      activeIndex,
-      drawerVisible,
-      logo
-    }
+const $route = useRoute()
+
+const activeIndex = ref<number>(2)
+const drawerVisible = ref<boolean>(false)
+
+const setSearchShow = (): void => {
+  store.dispatch('Search/updateSearchShow', !$searchShow.value)
+}
+
+const setActive = (): void => {
+  switch ($route.name) {
+    case 'wordsGrid':
+    case 'words':
+    case 'wordsAdd':
+      activeIndex.value = 0
+      break
+    case 'articles':
+      activeIndex.value = 1
+      break
+    case 'tags':
+      activeIndex.value = 2
+      break
+    case 'categories':
+      activeIndex.value = 3
+      break
+    case 'wordsGroups':
+      activeIndex.value = 4
+      break
+    default:
+      activeIndex.value = 0
+      break
   }
+}
+
+watchEffect(() => {
+  setActive()
+})
+
+onMounted(() => {
+  setActive()
 })
 </script>
 

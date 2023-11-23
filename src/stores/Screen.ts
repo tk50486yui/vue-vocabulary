@@ -1,11 +1,11 @@
 import { Commit } from 'vuex'
-interface RootState {
+interface ScreenState {
   $mobile: boolean
   $tablet: boolean
   $desktop: boolean
 }
 
-const state: RootState = {
+const state: ScreenState = {
   $mobile: false,
   $tablet: false,
   $desktop: false
@@ -24,14 +24,20 @@ const actions = {
 }
 
 const mutations = {
-  setMobile(state: RootState, value: boolean) {
+  setMobile(state: ScreenState, value: boolean) {
     state.$mobile = value
+    state.$tablet = false
+    state.$desktop = false
   },
-  setTablet(state: RootState, value: boolean) {
+  setTablet(state: ScreenState, value: boolean) {
     state.$tablet = value
+    state.$mobile = false
+    state.$desktop = false
   },
-  setDesktop(state: RootState, value: boolean) {
+  setDesktop(state: ScreenState, value: boolean) {
     state.$desktop = value
+    state.$mobile = false
+    state.$tablet = false
   }
 }
 

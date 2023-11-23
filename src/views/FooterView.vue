@@ -16,15 +16,12 @@
   </footer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
-export default defineComponent({
-  name: 'FooterView',
-  computed: {
-    ...mapState('Theme', ['$theme'])
-  }
-})
+<script lang="ts" setup>
+import { toRefs } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const { $theme } = toRefs(store.state.Theme)
 </script>
 
 <style lang="scss" scoped>
