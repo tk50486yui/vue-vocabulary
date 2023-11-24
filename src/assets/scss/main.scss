@@ -1,0 +1,1041 @@
+@import 'theme.scss';
+@import 'func.scss';
+
+$main-color: #111111;
+$keyword-color:#ff7866; // 關鍵字顏色
+$category-keyword-color:rgb(92, 247, 102); // 類別關鍵字顏色
+$edit-icon-color: #6A6AFF;
+
+.main-body {  
+  &.dark {
+    background: var(--body-background);
+    color: var(--head-text); 
+  }
+  &.light {
+    background: var(--body-background);
+    color: var(--head-text);
+  }   
+}
+.show-block {  
+  &.dark {   
+    color: var(--head-text); 
+  }
+  &.light { 
+    color: var(--head-text);
+  } 
+}
+
+.back-link-theme{  
+  a{
+    font-size: 24px;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    margin-right: 18px;
+  }
+  .link-separator {
+    margin-right: 10px;
+    margin-left: -5px;
+    position: relative;
+    display: inline-block;
+  }
+  &.dark a{
+    color: var(--back-link-text); 
+  }
+  &.light a{
+    color: var(--back-link-text);
+  } 
+
+  &.dark a:hover{
+    color: var(--link-text-hover); 
+  }
+  &.light a:hover{
+    color: var(--link-text-hover);
+  } 
+  
+   
+  &.dark {
+    color: var(--head-text); 
+  }
+  &.light {
+    color: var(--head-text);
+  } 
+}
+/*---------------------
+    SideNav Menu in drawer
+-----------------------*/
+.drawer-theme{   
+  // 主顏色 
+  &.dark :deep(.ant-menu){
+    background : var(--table-background);
+    color : var(--head-text)
+  }
+  &.light :deep(.ant-menu){
+    background : var(--table-background);
+    color : var(--head-text)
+  }  
+  // 子層級顏色
+  &.dark :deep(.ant-menu .ant-menu-sub){
+    background : var(--table-background);  
+  }
+  &.light :deep(.ant-menu .ant-menu-sub){
+    background : var(--table-background);
+  } 
+  
+  // title hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu-title:hover){   
+    color : var(--head-text)
+  }
+ 
+  // item hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-item:hover){   
+    color : var(--head-text)
+  } 
+  
+  // 展開時title的顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu-open){   
+    color : var(--head-text)
+  } 
+
+  &.dark :deep(.ant-menu .ant-menu-submenu-open:hover){   
+    color : var(--head-text)
+  }
+
+  // a
+  &.dark :deep(.ant-menu .ant-menu-title-content a:not(:hover)){
+    color : var(--head-text)
+  } 
+  // 選中時的a
+  &.dark :deep(.ant-menu .ant-menu-item-selected .ant-menu-title-content a:not(:hover)){   
+    color : var(--body-background);
+    background: var(--head-text)
+  } 
+  
+  // 選中時的顏色
+  &.dark :deep(.ant-menu .ant-menu-item-selected){   
+    color : var(--body-background);
+    background: var(--head-text)
+  }   
+  // 選中時的顏色
+  &.dark :deep(.ant-menu .ant-menu-item-selected:hover){   
+    color : var(--body-background);
+    background: var(--head-text)
+  } 
+
+  // 主箭頭
+  &.dark :deep(.ant-collapse-arrow){
+    color: var(--head-text)
+  }
+ 
+  // 子箭頭
+  &.dark :deep(.ant-menu-submenu-arrow){
+    color: var(--head-text)
+  }
+  
+  // 子箭頭 hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu:hover .ant-menu-submenu-title .ant-menu-submenu-arrow){   
+    color : var(--menu-text-hover)
+  }
+
+}
+
+/*---------------------
+    Table
+-----------------------*/
+.table-theme {     
+  
+  &.dark :deep(.ant-table){
+    background: var(--table-background);
+    color: var(--table-text);    
+  }
+  &.light :deep(.ant-table){
+    background: var(--table-background);
+    color: var(--table-text);
+  } 
+  // cell 
+  &.dark :deep(.ant-table-cell){
+    background: var(--table-background);
+    color: var(--table-text);
+    border-bottom-color: var(--table-border);
+  }
+  &.light :deep(.ant-table-cell){
+    background: var(--table-background);
+    color: var(--table-text);
+  }   
+  // cell hover  
+  &.dark :deep(.ant-table-row:hover .ant-table-cell) {
+    background: var(--table-cell-hover);
+  }
+
+  &.light :deep(.ant-table-row:hover .ant-table-cell) {
+    background: var(--table-cell-hover);
+  } 
+
+  // cell input 
+  &.dark :deep(.ant-table-cell .ant-input){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+  &.light :deep(.ant-table-cell .ant-input){
+    background: var(--input-background);
+    color: var(--head-text) 
+  } 
+  // scroll 
+  &.dark{
+    scrollbar-color: var(--table-scrollbar);
+  } 
+
+  &.dark :deep(.ant-table-cell-scrollbar){
+    box-shadow: var(--table-scrollbar-shadow);
+  }  
+
+  &.dark :deep(.ant-table-row-expand-icon){
+    background: var(--table-expand-icon);
+  }  
+  //  table pagination  
+  &.dark :deep(.ant-pagination-item){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+  &.dark :deep(.ant-pagination-item-active:hover){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+  
+  
+}
+
+/*---------------------
+    Input
+-----------------------*/
+.input-theme {
+  &.dark :deep(.ant-input){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+
+  &.light :deep(.ant-input){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+
+  &.dark :deep(.ant-input::placeholder ){   
+    color: var(--placeholder-text)
+  }
+
+  &.light :deep(.ant-input::placeholder ){   
+    color: var(--placeholder-text)
+  } 
+   
+
+  &.dark :deep(.ant-input-affix-wrapper){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+
+  &.light :deep(.ant-input-affix-wrapper){
+    background: var(--input-background);
+    color: var(--head-text)
+  }   
+
+  /** Search **/
+  &.dark :deep(.ant-btn){
+    background: var(--input-background);   
+  }
+  &.dark :deep(.ant-input-search .ant-input-group .ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary)){
+    color: var(--head-text)
+  } 
+
+  /** 驗證器 **/
+  &.dark :deep(.ant-form-item-explain-error){   
+    color: var(--input-validate);
+  }
+  &.light :deep( .ant-form-item-explain-error){ 
+    color: var(--input-validate);
+  }  
+  /** clear icon **/
+  &.dark :deep(.anticon.ant-input-clear-icon){
+    color: var(--input-clear-icon)
+  }
+  &.dark :deep(.anticon-close-circle){ 
+    color: var(--input-clear-icon)
+  }
+}
+
+/*---------------------
+    Switch
+-----------------------*/
+.switch-theme{ 
+    &.dark :deep(.ant-switch-checked){
+      background: var(--switch-background);   
+    }      
+    &.light :deep(.ant-switch){
+      background: var(--switch-background);     
+    }
+  
+}
+
+/*---------------------
+    Select
+-----------------------*/
+.select-theme {
+  &.dark :deep(.ant-select-selector){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+
+  &.light :deep(.ant-select-selector){
+    background: var(--input-background);
+    color: var(--head-text)
+  } 
+
+  &.dark :deep(.ant-select-item){
+    background: var(--input-background);
+    color: var(--head-text)
+  }
+
+  &.light :deep(.ant-select-item){
+    background: var(--input-background);
+    color: var(--head-text)
+  }   
+
+  &.dark :deep(.ant-select-item-option-selected){
+    color: var(--input-background);
+    background: var(--head-text);  
+  }
+
+  &.light :deep(.ant-select-item-option-selected){
+    color: var( --input-background);
+    background: var(--head-text);  
+  } 
+
+  // placeholder
+  &.dark :deep(.ant-select-selection-placeholder){
+    color: var(--placeholder-text);   
+  }
+
+  &.light :deep(.ant-select-selection-placeholder){
+    color: var(--placeholder-text);
+  } 
+  
+
+  /** Dropdown 下拉樣式  Tree **/
+  &.dark :deep(.ant-select-tree) {
+    background: var(--select-background);
+    color: var(--select-text)
+  }
+  &.light :deep(.ant-select-tree) {
+    background: var(--select-background);
+    color: var(--select-text)
+  }
+
+  &.dark :deep(.ant-select-dropdown) {
+    background: var(--select-background);  
+  }
+  &.light :deep(.ant-select-dropdown) {
+    background: var(--select-background);  
+  }
+
+  &.dark :deep(.ant-select-tree-switcher){
+    background: var(--select-background);  
+  }
+  &.light :deep(.ant-select-tree-switcher){
+    background: var(--select-background);  
+  } 
+ 
+  // 選中時顏色
+  &.dark :deep(.ant-select-tree-node-selected){
+    color: var( --select-selected-text);
+    background: var(--head-text);  
+  }  
+
+  // 選中後 clear icon 顏色
+  &.dark :deep(.ant-select-clear){
+    background: var(--select-background);  
+    color: var(--input-clear-icon) 
+  }  
+
+  // (多選) 選中加入時的背景框
+  &.dark :deep(.ant-select-selection-overflow .ant-select-selection-item){
+    background: var(--select-selected-item-background);  
+  }
+  // 選中加入時的字體顏色
+  &.dark :deep(.ant-select-selection-item){
+    color:var(--head-text);
+  } 
+  &.dark :deep(.anticon-close){ 
+    color: var(--input-clear-icon)
+  }
+
+  &.dark :deep(span.span-text){  
+    color: var(--table-text);
+  } 
+  
+}
+
+/*---------------------
+    draggable-tree-theme
+-----------------------*/
+.draggable-tree-theme{
+  &.dark :deep(.ant-tree){
+    background: var(--table-background);
+    color: var(--head-text)
+  }
+
+  &.dark :deep(.ant-tree .ant-tree-node-content-wrapper:hover){
+    background: var(--draggable-tree-text-hover);
+    color: var(--input-background)
+  }
+  
+}
+
+/*---------------------
+    Radio Button
+-----------------------*/
+.radio-theme{  
+  &.dark :deep(.ant-radio-wrapper){
+    color: var(--head-text);
+  }
+  &.light :deep(.ant-radio-wrapper){   
+    color: var(--head-text);
+  }
+}
+
+.radio-button-theme{
+  // dark
+  &.dark :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-background);    
+    color: var(--radio-button-text);    
+  }
+  &.dark :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-background-active);    
+    color: var( --radio-button-text-active);   
+  }
+  &.dark :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-background-active); 
+    color: var( --radio-button-text);   
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-background-active);
+    color: var( --radio-button-text-active); 
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-border);    
+  }
+  // light
+  &.light :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-background);    
+    color: var(--radio-button-text);    
+  }
+  &.light :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-background-active);    
+    color: var( --radio-button-text-active);   
+  }
+  &.light :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-background-active); 
+    color: var( --radio-button-text);   
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-background-active);
+    color: var( --radio-button-text-active); 
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-border);    
+  }
+}
+
+.toggle-theme{
+  // dark
+  &.dark :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-toggle-background);    
+    color: var(--radio-button-toggle-text);    
+  }
+  &.dark :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-toggle-background-active);    
+    color: var( --radio-button-toggle-text-active);   
+  }
+  &.dark :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-toggle-background-active); 
+    color: var( --radio-button-toggle-text);   
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-toggle-background-active);
+    color: var( --radio-button-toggle-text-active); 
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-toggle-border);    
+  }
+
+  // light
+  &.light :deep(.ant-radio-button-wrapper){   
+    background: var(--radio-button-toggle-background);    
+    color: var(--radio-button-toggle-text);    
+  }
+  &.light :deep(.ant-radio-button-wrapper:hover){
+    background: var(--radio-button-toggle-background-active);    
+    color: var( --radio-button-toggle-text-active);   
+  }
+  &.light :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
+    background: var(--radio-button-toggle-background-active); 
+    color: var( --radio-button-toggle-text);   
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
+    background: var(--radio-button-toggle-background-active);
+    color: var( --radio-button-toggle-text-active); 
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
+    border-color: var(--radio-button-toggle-border);    
+  }
+}
+
+/*---------------------
+    Checkbox
+-----------------------*/
+.checkbox-theme { 
+  &.dark :deep(.ant-checkbox-wrapper){
+    span{
+      color: var(--head-text)
+    }
+  }    
+}
+
+/*---------------------
+    Drawer
+-----------------------*/
+.drawer-theme{  
+  &.dark :deep(.ant-drawer-header) {
+    background: var(--table-background);
+    color: var(--head-text); 
+    .ant-drawer-title{
+      color: var(--head-text); 
+    }
+    .ant-drawer-close{
+      color: var(--head-text); 
+    }
+  }
+  &.dark :deep(.ant-drawer-body){
+    color: var(--head-text); 
+    background: var(--table-background);
+  }
+  &.light :deep(.ant-drawer-body){ 
+    color: var(--head-text); 
+    background: var(--body-background);
+  }
+
+  &.dark :deep(.nav-menu) {
+    li a {
+      font-size: 15px;
+      text-transform: uppercase;
+      font-weight: 500;
+      display: block;
+      padding: 2px 0;
+      position: relative;
+      text-decoration: none;
+    }
+  
+     li a {
+      color: var(--head-text);    
+    }
+  
+     li a {
+      color: var(--head-text);   
+    }
+  }
+ 
+}
+
+/*---------------------
+    Modal
+-----------------------*/
+
+.menu-modal {
+  // head
+  &.dark :deep(.ant-modal-header){
+    background:var(--head-background);
+    color:var(--head-text);
+  }
+
+  &.light :deep(.ant-modal-header){
+    background:var(--head-background);
+    color:var(--head-text);
+  }
+
+  &.dark :deep(.ant-modal-title){
+    color:var(--head-text);
+  }
+  &.light :deep(.ant-modal-title){
+    color:var(--head-text);
+  }
+
+  &.dark :deep(.ant-modal-close){
+    color:var(--head-text);
+  }
+
+  // body
+  &.dark :deep(.ant-modal-content){
+    background:var(--body-background);
+  }
+
+  &.light :deep(.ant-modal-content){
+    background:var(--body-background);
+  }
+
+}
+
+/*---------------------
+    Spad
+-----------------------*/
+.spad { 
+  &.dark {
+    background: var(--body-background); 
+  }
+  &.light {
+    background: var(--body-background);
+  } 
+}
+
+/*---------------------
+    List Card
+-----------------------*/
+.list-card-theme { 
+  // background 
+  &.dark :deep(.ant-card-head){
+    background: var(--table-background);  
+    color: var(--table-text);
+  }
+
+  &.dark :deep(.ant-card){    
+    background: var(--table-background);   
+    color: var(--table-text);
+  }
+
+  // card header
+  &.dark :deep(.ant-list-header){
+    color: var(--table-text);
+  } 
+  
+  // card title 
+  &.dark :deep(.ant-card-head-title a){    
+    color: var(--card-link-text);
+    text-decoration: none;   
+  }
+  &.dark :deep(.ant-card-head-title a:hover){   
+    color: var(--card-link-text-hover);
+  }
+
+  // card body 
+  &.dark :deep(.ant-card-body a){    
+    color: var(--link-text);
+    text-decoration: none;   
+  }
+
+  &.dark :deep(.ant-card-body a:hover){   
+    color: var(--link-text-hover);
+  } 
+
+  // card pagination
+  &.dark :deep(.ant-pagination-item){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  :deep(.ant-pagination) {      
+    padding-bottom: 12px;
+  } 
+}
+
+// icon
+.icon-theme{
+  &.dark {
+    @include icon-colors(dark);
+  }
+
+  &.light {
+    @include icon-colors(light);
+  }
+}
+
+
+/*---------------------
+    Article List
+-----------------------*/
+.article-list-theme{
+
+  &.dark :deep(.ant-list-item){  
+    background: var(--article-list-background);
+    color: var(--table-text);
+  }
+  &.dark :deep(.ant-list-item-meta-title a){  
+    color: var(--table-text);
+  }
+  &.dark :deep(.ant-list-item-meta-description){  
+    color: var(--table-text);
+  }  
+
+  &.dark :deep(.ant-list-item-action li){  
+    color: var(--table-text);
+  }
+  /* 自定義類別 */
+  &.dark :deep(a){    
+    text-decoration: none;
+  }
+  &.dark :deep(a.list-link){  
+    color: var(--link-text);  
+  }
+
+  &.dark :deep(.title-link){  
+    color: var(--title-link-text); 
+  }
+  &.dark :deep(.title-link:hover){  
+    color: var(--title-link-text-hover);
+  }
+  
+  &.dark :deep(span.span-text){  
+    color: var(--table-text);
+  }
+
+  &.dark :deep(.article-date){
+    color: var(--article-date-text);   
+  }
+
+  // card pagination 
+  &.dark :deep(.ant-pagination-item){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+}
+
+/*---------------------
+   List 
+-----------------------*/
+.list-theme{
+  &.dark :deep(.ant-list-item){     
+    color: var(--table-text);
+  }
+ 
+  &.dark :deep(.ant-list-item-meta-description){  
+    color: var(--table-text);
+  }
+
+  &.dark :deep(span.span-text){  
+    color: var(--table-text);
+  }
+  
+  // a 
+  &.dark :deep(a){    
+    text-decoration: none;
+  }
+  &.dark :deep(.list-link a){  
+    color: var(--list-link-text);  
+  }
+
+  &.dark :deep(.list-link a:hover){  
+    color: var(--list-link-text-hover);
+  }  
+
+  // list pagination 
+  &.dark :deep(.ant-pagination-item){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item:hover){
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+ 
+  &.dark :deep(.ant-pagination-item-link){
+    color:var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled){
+    color:var(--pagination-text);   
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover){   
+    color:var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+}
+
+/*---------------------
+    Descriptions
+-----------------------*/
+.descriptions-theme{  
+  // 內容 
+  &.dark :deep(.ant-descriptions-item-content){   
+    background: var(--table-background);  
+    color: var(--table-text);
+  }
+  // 標題
+  &.dark :deep(.ant-descriptions-bordered .ant-descriptions-item-label){  
+    background: var(--descriptions-title-background);     
+  }
+  &.dark :deep(.ant-descriptions-item-label){   
+    color: var(--descriptions-title-text);
+  }  
+  //   article   
+  &.dark :deep(.article-theme){  
+    background: var(--article-background);   
+  }
+ 
+  // article 標題
+  &.dark :deep(.article-title){     
+    color: var(--atticle-title-text); 
+  }
+  // article 內容
+  &.dark :deep(.article-content){   
+       color: var(--table-text);
+  }
+
+  &.dark :deep(.span-category){   
+    color: var(--span-category-text);
+  }  
+  
+}
+
+/*---------------------
+    Tab
+-----------------------*/
+.tab-theme {  
+
+  &.dark{
+    :deep(.tab-body-text){    
+      color: var(--head-text); 
+    }
+
+    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active){    
+      background: var(--tab-background-active);   
+    }
+    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active:hover){    
+      background: var(--tab-background-active-hover);   
+    }
+    :deep(.ant-tabs-tab:hover){    
+      background: var(--tab-background-active-hover);   
+    }
+  
+    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn){
+      color: var(--tab-text-active);
+    }
+    
+    :deep(.ant-tabs-tab){
+      background: var(--tab-background);
+      color: var(--tab-text);
+    }
+   
+  }
+ 
+ 
+}
+
+/*---------------------
+    CKEditor
+-----------------------*/
+.article-editor {  
+  :deep(.ck.ck-editor__main .ck-editor__editable){ 
+    min-height: 350px;
+  }  
+  &.dark :deep(.ck.ck-editor__main .ck-editor__editable){    
+    background: var(--editor-background);   
+    color:var(--editor-text)
+  }
+}
+
+/*---------------------
+    section-title
+-----------------------*/
+.section-title { 
+  h4 {
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+  }
+ 
+  &.dark h4 {
+    color: var(--head-text); 
+  }
+  &.light h4 {
+    color: var(--head-text); 
+  } 
+}
+
+/*---------------------
+    Collapse
+-----------------------*/
+// 部分只設定dark
+.collapse-theme {
+
+  // head 
+  &.dark :deep(.ant-collapse){
+    background : var(--table-background);
+    color: var(--head-text)
+  }
+  &.light :deep(.ant-collapse){
+    background : var(--collapse-head-background);
+    color: var(--head-text)
+  } 
+  // 外圍顏色 
+  &.dark :deep(.ant-collapse-content){
+    background : var(--collapse-background);
+  }
+  &.light :deep(.ant-collapse-content){
+    background : var(--collapse-background);
+  }   
+  // 主顏色 
+  &.dark :deep(.ant-menu){
+    background : var(--collapse-background);
+    color : var(--head-text)
+  }
+  &.light :deep(.ant-menu){
+    background : var(--collapse-background);
+    color : var(--head-text)
+  }  
+  // 子層級顏色
+  &.dark :deep(.ant-menu .ant-menu-sub){
+    background : var(--collapse-sub-background);  
+  }
+  &.light :deep(.ant-menu .ant-menu-sub){
+    background : var(--collapse-sub-background);
+  } 
+  
+  // title hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu-title:hover){   
+    color : var(--menu-text-hover)
+  }
+ 
+  // item hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-item:hover){   
+    color : var(--menu-text-hover)
+  } 
+  
+  // 展開時title的顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu-open){   
+    color : var(--menu-text-hover)
+  } 
+
+  &.dark :deep(.ant-menu .ant-menu-submenu-open:hover){   
+    color : var(--menu-text-hover)
+  }
+
+  // a
+  &.dark :deep(.ant-menu .ant-menu-title-content a:not(:hover)){   
+    color : var(--head-text)
+  } 
+  // 選中時的a
+  &.dark :deep(.ant-menu .ant-menu-item-selected .ant-menu-title-content a:not(:hover)){   
+    color : var(--menu-text-selected);
+    background: var(--head-text)
+  } 
+  
+  // 選中時的顏色
+  &.dark :deep(.ant-menu .ant-menu-item-selected){   
+    color : var(--menu-text-selected);
+    background: var(--head-text)
+  }   
+
+  // 主箭頭
+  &.dark :deep(.ant-collapse-arrow){
+    color: var(--head-text)
+  }
+ 
+  // 子箭頭
+  &.dark :deep(.ant-menu-submenu-arrow){
+    color: var(--head-text)
+  }
+  
+  // 子箭頭 hover 顏色
+  &.dark :deep(.ant-menu .ant-menu-submenu:hover .ant-menu-submenu-title .ant-menu-submenu-arrow){   
+    color : var(--menu-text-hover)
+  }
+
+}
