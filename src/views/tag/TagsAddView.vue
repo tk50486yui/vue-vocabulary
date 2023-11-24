@@ -2,17 +2,11 @@
   <a-form ref="formRef" :model="formState" :validate-messages="validateMsg" @finish="onFinish">
     <p></p>
     <TagsTreeSelect
+      ref="tagsTreeSelectRef"
       placeholder="選擇標籤層級"
       size="large"
       style="width: 100%"
       v-model:value="formState.tag.ts_parent_id"
-      @chnage="handleTagsSelectChange"
-      :field-names="{
-        children: 'children',
-        label: 'ts_name',
-        value: 'id',
-        key: 'id'
-      }"
     />
     <p></p>
     <a-form-item
@@ -61,11 +55,11 @@
     </template>
     <p></p>
     <TagsColorSelect
+      ref="tagsColorSelectRef"
       placeholder="選擇標籤顏色"
       size="small"
       style="width: 100%"
       v-model:value="formState.tag.tc_id"
-      @change="handleTagsColorSelectChange"
     />
     <p></p>
     <a-form-item>
@@ -80,7 +74,7 @@
   </a-form>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, computed } from 'vue'
+import { ref, reactive, toRefs, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
@@ -91,7 +85,11 @@ import { TagsColor } from '@/interfaces/TagsColor'
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
+provide('mode', 'single') // tagsSelect
+
 const confirmLoading = ref(false)
+const tagsTreeSelectRef = ref()
+const tagsColorSelectRef = ref()
 const formRef = ref()
 const formState = reactive({
   tag: {} as TagForm
@@ -117,17 +115,9 @@ const onFinish = async (): Promise<void> => {
   }
 }
 
-const handleTagsSelectChange = (value: number): void => {
-  formState.tag.ts_parent_id = typeof value !== 'undefined' ? value : null
-}
-
-const handleTagsColorSelectChange = (value: number): void => {
-  formState.tag.tc_id = typeof value !== 'undefined' ? value : null
-}
-
 const resetForm = (): void => {
-  formState.tag.ts_parent_id = null
-  formState.tag.tc_id = null
+  tagsColorSelectRef.value.clearValue()
+  tagsTreeSelectRef.value.clearValue()
   formRef.value.resetFields()
 }
 

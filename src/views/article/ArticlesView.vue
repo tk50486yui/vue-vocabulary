@@ -13,23 +13,21 @@
             <a-row :gutter="4">
               <a-col :span="18">
                 <TagsTreeSelect
+                  ref="filtersTagsTreeSelectRef"
                   size="small"
                   placeholder="以標籤過濾資料"
                   style="width: 100%"
                   v-model:value="tagsArray"
                   :treeDefaultExpandedKeys="tagsArray"
-                  :field-names="{
-                    children: 'children',
-                    label: 'ts_name',
-                    value: 'id',
-                    key: 'id'
-                  }"
                   multiple
                 />
               </a-col>
               <a-col :span="2" class="d-flex align-items-center">
                 <template v-if="tagsArray.length > 0">
-                  <CloseBtn class="d-flex align-items-center" @click="tagsArray = []" />
+                  <CloseBtn
+                    class="d-flex align-items-center"
+                    @click="filtersTagsTreeSelectRef.clearValue()"
+                  />
                 </template>
               </a-col>
             </a-row>
@@ -43,82 +41,70 @@
             </span>
           </span>
           <p></p>
-
-          <div
-            class="select-theme d-flex align-items-center"
-            style="margin-bottom: 8px"
-            :class="$theme"
-            ref="selectMod"
-          >
-            <span class="span-text">每頁：</span>
-            <a-select
-              v-model:value="selectPageSize"
-              :getPopupContainer="() => $refs.selectMod"
-              size="small"
-              style="width: 80px"
-              @change="setPageSize()"
-            >
-              <a-select-option value="3">3 筆</a-select-option>
-              <a-select-option value="10">10 筆</a-select-option>
-              <a-select-option value="20">20 筆</a-select-option>
-              <a-select-option value="50">50 筆</a-select-option>
-              <a-select-option value="100">100 筆</a-select-option>
-              <a-select-option :value="articles.length">全部</a-select-option>
-            </a-select>
-            <span class="span-text" style="margin-left: 8px">當前：</span>
-            <a-select
-              v-model:value="currentPage"
-              :getPopupContainer="() => $refs.selectMod"
-              size="small"
-              style="width: 80px"
-              @change="setCurrentPage()"
-            >
-              <template
-                v-for="index in Math.ceil(articles.length / Number(selectPageSize))"
-                :key="index"
-              >
-                <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
-              </template>
-            </a-select>
-            <span class="span-text" style="margin-left: 8px">
-              <el-tag effect="dark" type="warning" :color="labelColor" round>
-                顯示內容：
-                <a-switch v-model:checked="showContent" size="small" />
-              </el-tag>
-            </span>
-            <span style="margin-left: 8px">
-              <el-tag
-                class="d-flex align-items-center"
-                effect="dark"
-                size="small"
-                type="success"
-                color="black"
-                round
-              >
-                關鍵字：
-                <template v-if="$keyword != '' && $filters.length > 0">
-                  `<span class="keyword-text">{{ $keyword }}</span> `
+          <div class="select-theme" :class="$theme" ref="selectMod">
+            <a-space size="small" wrap>
+              <span class="span-text d-flex align-items-center">
+                每頁：
+                <a-select
+                  v-model:value="selectPageSize"
+                  :getPopupContainer="() => $refs.selectMod"
+                  size="small"
+                  style="width: 80px"
+                  @change="setPageSize()"
+                >
+                  <a-select-option value="3">3 筆</a-select-option>
+                  <a-select-option value="10">10 筆</a-select-option>
+                  <a-select-option value="20">20 筆</a-select-option>
+                  <a-select-option value="50">50 筆</a-select-option>
+                  <a-select-option value="100">100 筆</a-select-option>
+                  <a-select-option :value="articles.length">全部</a-select-option>
+                </a-select>
+              </span>
+              <span class="span-text d-flex align-items-center">
+                當前：
+                <a-select
+                  v-model:value="currentPage"
+                  :getPopupContainer="() => $refs.selectMod"
+                  size="small"
+                  style="width: 80px"
+                  @change="setCurrentPage()"
+                >
+                  <template
+                    v-for="index in Math.ceil(articles.length / Number(selectPageSize))"
+                    :key="index"
+                  >
+                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+                  </template>
+                </a-select>
+              </span>
+              <span class="span-text">
+                <el-tag effect="dark" type="warning" :color="labelColor" round>
+                  顯示內容：
+                  <a-switch v-model:checked="showContent" size="small" />
+                </el-tag>
+              </span>
+              <span class="d-flex align-items-center">
+                <el-tag effect="dark" size="small" type="success" color="black" round>
+                  關鍵字：
+                  <template v-if="$keyword != '' && $filters.length > 0">
+                    `<span class="keyword-text">{{ $keyword }}</span> `
+                  </template>
+                  <template v-else> 無 </template>
+                </el-tag>
+              </span>
+              <span class="d-flex align-items-center">
+                <el-tag effect="dark" size="small" color="black" round>
+                  共 {{ filterdResult.length }} 筆
+                </el-tag>
+              </span>
+              <span class="d-flex align-items-center">
+                <template v-if="$keyword != ''">
+                  <CloseBtn @click="onResetSearch()" />
                 </template>
-                <template v-else> 無 </template>
-              </el-tag>
-            </span>
-            <span style="margin-left: 8px">
-              <el-tag
-                class="d-flex align-items-center"
-                effect="dark"
-                size="small"
-                color="black"
-                round
-              >
-                共 {{ filterdResult.length }} 筆
-              </el-tag>
-            </span>
-            <span style="margin-left: 6px">
-              <template v-if="$keyword != ''">
-                <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
-              </template>
-            </span>
+              </span>
+            </a-space>
           </div>
+          <p></p>
           <!-- 文章列表 -->
           <div class="article-list-theme" :class="$theme">
             <a-list
@@ -294,6 +280,7 @@ const Ready = ref<boolean>(false)
 const AfterReady = ref<boolean>(false)
 const activeTab = ref<string>('1')
 const tabPosition = ref<string>('top')
+const filtersTagsTreeSelectRef = ref()
 const selectPageSize = ref<string>('3')
 const currentPage = ref<number>(1)
 const showContent = ref<boolean>(true)

@@ -4,35 +4,41 @@
       <h4>單字表</h4>
     </div>
     <div class="select-theme" :class="$theme" ref="selectMod">
-      每頁：
-      <a-select
-        v-model:value="selectPageSize"
-        ref="select"
-        :getPopupContainer="() => $refs.selectMod"
-        size="small"
-        style="width: 80px"
-        @change="handlePageSize()"
-      >
-        <a-select-option value="10">10 筆</a-select-option>
-        <a-select-option value="20">20 筆</a-select-option>
-        <a-select-option value="50">50 筆</a-select-option>
-        <a-select-option value="100">100 筆</a-select-option>
-        <a-select-option :value="wordsArray.length">全部</a-select-option>
-      </a-select>
-      <span style="padding-left: 8px">表格高度：</span>
-      <a-select
-        v-model:value="selectTablescrollY"
-        :getPopupContainer="() => $refs.selectMod"
-        size="small"
-        style="width: 80px"
-        @change="handleTableScrollY()"
-      >
-        <a-select-option value="400">極低</a-select-option>
-        <a-select-option value="600">低</a-select-option>
-        <a-select-option value="800">適中</a-select-option>
-        <a-select-option value="1000">高</a-select-option>
-        <a-select-option value="1500">極高</a-select-option>
-      </a-select>
+      <a-space size="middle" wrap>
+        <span>
+          每頁：
+          <a-select
+            v-model:value="selectPageSize"
+            ref="select"
+            :getPopupContainer="() => $refs.selectMod"
+            size="small"
+            style="width: 80px"
+            @change="handlePageSize()"
+          >
+            <a-select-option value="10">10 筆</a-select-option>
+            <a-select-option value="20">20 筆</a-select-option>
+            <a-select-option value="50">50 筆</a-select-option>
+            <a-select-option value="100">100 筆</a-select-option>
+            <a-select-option :value="wordsArray.length">全部</a-select-option>
+          </a-select>
+        </span>
+        <span
+          >表格高度：
+          <a-select
+            v-model:value="selectTablescrollY"
+            :getPopupContainer="() => $refs.selectMod"
+            size="small"
+            style="width: 80px"
+            @change="handleTableScrollY()"
+          >
+            <a-select-option value="400">極低</a-select-option>
+            <a-select-option value="600">低</a-select-option>
+            <a-select-option value="800">適中</a-select-option>
+            <a-select-option value="1000">高</a-select-option>
+            <a-select-option value="1500">極高</a-select-option>
+          </a-select>
+        </span>
+      </a-space>
     </div>
     <div class="table-theme" :class="$theme">
       <a-table
@@ -44,15 +50,16 @@
       >
         <!-- Table header -->
         <template #title>
-          <PlusBtn
-            class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
-            @click="onDrawerShow()"
-          />
-          <RefreshBtn
-            class="btn btn-info btn-outline-light btn-sm float-end me-md-2"
-            :spin="SyncOutlinedSpin"
-            @click="refreshTable"
-          />
+          <span class="float-end">
+            <a-space size="small">
+              <PlusBtn class="btn btn-primary btn-outline-light btn-sm" @click="onDrawerShow()" />
+              <RefreshBtn
+                class="btn btn-info btn-outline-light btn-sm"
+                :spin="SyncOutlinedSpin"
+                @click="refreshTable"
+              />
+            </a-space>
+          </span>
         </template>
         <!-- Table expanded -->
         <template #expandedRowRender="{ record }">
@@ -83,7 +90,6 @@
                   v-model:value="editTableData[record.id]['cate_id']"
                   :defaultValue="editTableData[record.id]['cate_id']"
                   :treeDefaultExpandedKeys="[editTableData[record.id]['cate_id']]"
-                  @change="handleCategoriesSelectChange(editTableData[record.id])"
                 />
               </template>
               <template v-else-if="editTableData[record.id]">
@@ -185,6 +191,14 @@ const pagination = reactive({
   showSizeChanger: false
 })
 
+const edit = (record: Word, editDataSource: Word[]) => {
+  editTableData[record.id] = cloneDeep(editDataSource.filter((item) => record.id === item.id)[0])
+}
+
+const cancel = (record: Word) => {
+  delete editTableData[record.id]
+}
+
 const refreshTable = async (): Promise<void> => {
   try {
     SyncOutlinedSpin.value = true
@@ -200,7 +214,7 @@ const refreshTable = async (): Promise<void> => {
 
 const onEditFinish = async (record: Word): Promise<void> => {
   try {
-    const editData = await save(record)
+    const editData = editTableData[record.id]
     message.loading({ content: 'Loading..', duration: 1 })
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await store.dispatch('WordsStore/update', { id: editData.id, data: editData })
@@ -237,9 +251,6 @@ const onDelete = async (id: number): Promise<void> => {
   }
 }
 
-const handleCategoriesSelectChange = (currentData: Word): void => {
-  currentData.cate_id = typeof currentData.cate_id !== 'undefined' ? currentData.cate_id : null
-}
 const handlePageSize = (): void => {
   pagination.pageSize = Number(selectPageSize.value)
 }
@@ -252,17 +263,6 @@ const onDrawerShow = (): void => {
   wordsDrawerVisible.value = true
 }
 
-const edit = (record: Word, editDataSource: Word[]) => {
-  editTableData[record.id] = cloneDeep(editDataSource.filter((item) => record.id === item.id)[0])
-}
-
-const cancel = (record: Word) => {
-  delete editTableData[record.id]
-}
-
-const save = async (record: Word) => {
-  return editTableData[record.id]
-}
 onMounted(async () => {
   try {
     await store.dispatch('WordsStore/fetch')

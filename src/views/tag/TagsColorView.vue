@@ -165,6 +165,14 @@ const formState = reactive({
   tagsColor: {} as TagsColorForm
 })
 
+const edit = (record: TagsColor, editDataSource: TagsColor[]) => {
+  editTableData[record.id] = cloneDeep(editDataSource.filter((item) => record.id === item.id)[0])
+}
+
+const cancel = (record: TagsColor) => {
+  delete editTableData[record.id]
+}
+
 const onFinish = async (): Promise<void> => {
   try {
     formState.tagsColor.tc_color = selectedColor.value
@@ -185,7 +193,7 @@ const onFinish = async (): Promise<void> => {
 
 const onEditFinish = async (record: TagsColor): Promise<void> => {
   try {
-    const editData = await save(record)
+    const editData = editTableData[record.id]
     message.loading({ content: 'Loading..', duration: 1 })
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await store.dispatch('TagsColorStore/update', { id: editData.id, data: editData })
@@ -225,18 +233,6 @@ const activeBorder = (value: string, id: number): void => {
   } else {
     selectedBorder.value = value
   }
-}
-
-const edit = (record: TagsColor, editDataSource: TagsColor[]) => {
-  editTableData[record.id] = cloneDeep(editDataSource.filter((item) => record.id === item.id)[0])
-}
-
-const save = async (record: TagsColor) => {
-  return editTableData[record.id]
-}
-
-const cancel = (record: TagsColor) => {
-  delete editTableData[record.id]
 }
 
 onMounted(async () => {

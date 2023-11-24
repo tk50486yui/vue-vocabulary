@@ -5,7 +5,6 @@
       placeholder="選擇類別層級"
       size="large"
       v-model:value="formState.category.cate_parent_id"
-      @chnage="handleTreeSelectChange"
       style="width: 100%"
       :field-names="{
         children: 'children',
@@ -33,8 +32,9 @@
         class="btn btn-primary btn-outline-light btn-sm float-end"
         :loading="confirmLoading"
         html-type="submit"
-        >儲存</a-button
       >
+        儲存
+      </a-button>
       <a-button class="btn btn-danger btn-outline-light btn-sm" @click="resetForm">重置</a-button>
     </a-form-item>
   </a-form>
@@ -67,10 +67,6 @@ const onFinish = async (): Promise<void> => {
   } catch (e) {
     //
   }
-}
-
-const handleTreeSelectChange = (value: number): void => {
-  formState.category.cate_parent_id = typeof value !== 'undefined' ? value : null
 }
 
 const resetForm = (): void => {

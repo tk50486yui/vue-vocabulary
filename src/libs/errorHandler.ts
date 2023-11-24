@@ -1,3 +1,11 @@
+export const warningHandler = (err: string) => {
+  if (err === 'Duplicate keys found during update:0Make sure keys are unique.') {
+    return false
+  }
+  console.log(err)
+  return true
+}
+
 export const windowOnError = (message: string | Event) => {
   if (typeof message === 'string' && message.includes('CKEditor')) {
     console.log('CKEditor Error:', message)

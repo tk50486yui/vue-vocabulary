@@ -63,7 +63,6 @@
               v-model:value="formState.article.cate_id"
               :defaultValue="article.cate_id"
               :treeDefaultExpandedKeys="[article.cate_id]"
-              @change="handleCategoriesSelectChange"
             />
           </template>
           <template v-else>
@@ -77,17 +76,10 @@
           <template v-if="editShow">
             <TagsTreeSelect
               size="large"
-              placeholder="添加標籤"
+              placeholder="添加標籤..."
               style="width: 100%"
               v-model:value="formState.article.articles_tags.array"
               :treeDefaultExpandedKeys="formState.article.articles_tags.array"
-              @change="handleTagsSelectChange"
-              :field-names="{
-                children: 'children',
-                label: 'ts_name',
-                value: 'id',
-                key: 'id'
-              }"
               multiple
             />
           </template>
@@ -215,14 +207,6 @@ const onEditCancel = () => {
       window.scrollTo({ top: 160, behavior: 'auto' })
     })
   }
-}
-
-const handleCategoriesSelectChange = (value: number) => {
-  formState.article.cate_id = typeof value !== 'undefined' ? value : null
-}
-
-const handleTagsSelectChange = (value: number[]) => {
-  formState.article.articles_tags.array = typeof value !== 'undefined' ? value : []
 }
 
 const setListState = () => {

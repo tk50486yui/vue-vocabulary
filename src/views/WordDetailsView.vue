@@ -81,7 +81,6 @@
               v-model:value="formState.word.cate_id"
               :defaultValue="word.cate_id"
               :treeDefaultExpandedKeys="[word.cate_id]"
-              @change="handleCategoriesSelectChange"
             />
           </template>
           <template v-else>
@@ -130,6 +129,20 @@
             </template>
           </span>
         </a-descriptions-item>
+        <a-descriptions-item label="忘記 / 重要程度">
+          <template v-if="editShow">
+            <span class="slider-theme" :class="$theme">
+              <a-slider v-model:value="formState.word.ws_forget_count" :min="0" :max="100" />
+            </span>
+          </template>
+          <template v-else>
+            <template v-if="word.ws_forget_count != null">
+              <span class="slider-theme" :class="$theme">
+                <a-slider v-model:value="word.ws_forget_count" :min="0" :max="100" disabled />
+              </span>
+            </template>
+          </template>
+        </a-descriptions-item>
         <a-descriptions-item label="例句說明">
           <template v-if="editShow">
             <div class="article-editor" :class="$theme">
@@ -148,17 +161,10 @@
           <template v-if="editShow">
             <TagsTreeSelect
               size="large"
-              placeholder="添加標籤"
+              placeholder="添加標籤..."
               style="width: 100%"
               v-model:value="formState.word.words_tags.array"
               :treeDefaultExpandedKeys="formState.word.words_tags.array"
-              @change="handleTagsSelectChange"
-              :field-names="{
-                children: 'children',
-                label: 'ts_name',
-                value: 'id',
-                key: 'id'
-              }"
               multiple
             />
           </template>
@@ -312,12 +318,6 @@ const onDelete = async (id: number): Promise<void> => {
   }
 }
 
-const handleCategoriesSelectChange = (value: number): void => {
-  formState.word.cate_id = typeof value !== 'undefined' ? value : null
-}
-const handleTagsSelectChange = (value: number[]): void => {
-  formState.word.words_tags.array = typeof value !== 'undefined' ? value : []
-}
 const changeDescriptionsLayout = (isScreenSmall: boolean): void => {
   if ($desktop.value === false && isScreenSmall === true) {
     descriptionsLayout.value = 'vertical'

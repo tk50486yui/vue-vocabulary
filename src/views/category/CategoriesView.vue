@@ -16,15 +16,16 @@
             >
               <!-- header -->
               <template #title>
-                <PlusBtn
-                  class="btn btn-primary btn-outline-light float-end me-md-2"
-                  @click="visible = true"
-                />
-                <RefreshBtn
-                  class="btn btn-secondary btn-outline-light float-end me-md-2"
-                  :spin="SyncOutlinedSpin[0]"
-                  @click="refreshTable(0)"
-                />
+                <span class="float-end">
+                  <a-space size="small">
+                    <PlusBtn class="btn btn-primary btn-outline-light" @click="visible = true" />
+                    <RefreshBtn
+                      class="btn btn-secondary btn-outline-light"
+                      :spin="SyncOutlinedSpin[0]"
+                      @click="refreshTable(0)"
+                    />
+                  </a-space>
+                </span>
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- cate_name -->
@@ -105,15 +106,19 @@
             >
               <!-- header -->
               <template #title>
-                <PlusBtn
-                  class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
-                  @click="visible = true"
-                />
-                <RefreshBtn
-                  class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-                  :spin="SyncOutlinedSpin[1]"
-                  @click="refreshTable(1)"
-                />
+                <span class="float-end">
+                  <a-space size="small">
+                    <PlusBtn
+                      class="btn btn-primary btn-outline-light btn-sm"
+                      @click="visible = true"
+                    />
+                    <RefreshBtn
+                      class="btn btn-secondary btn-outline-light btn-sm"
+                      :spin="SyncOutlinedSpin[1]"
+                      @click="refreshTable(1)"
+                    />
+                  </a-space>
+                </span>
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- cate_name -->
@@ -206,6 +211,16 @@ const editTableData: UnwrapRef<Record<number, Record<number, Category>>> = react
   1: {} as Record<number, Category>
 })
 
+const edit = (record: Category, tab: number, editDataSource: Category[]) => {
+  editTableData[tab][record.id] = cloneDeep(
+    editDataSource.filter((item) => record.id === item.id)[0]
+  )
+}
+
+const cancel = (record: Category, tab: number) => {
+  delete editTableData[tab][record.id]
+}
+
 const refreshTable = async (tab: number): Promise<void> => {
   try {
     SyncOutlinedSpin.value[tab] = true
@@ -225,7 +240,7 @@ const refreshTable = async (tab: number): Promise<void> => {
 
 const onEditFinish = async (record: Category, tab: number): Promise<void> => {
   try {
-    const editData = await save(record, tab)
+    const editData = editTableData[tab][record.id]
     message.loading({ content: 'Loading..', duration: 1 })
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await store.dispatch('CategoriesStore/update', { id: editData.id, data: editData })
@@ -243,20 +258,6 @@ const onDelete = async (id: number): Promise<void> => {
   } catch (e) {
     //
   }
-}
-
-const edit = (record: Category, tab: number, editDataSource: Category[]) => {
-  editTableData[tab][record.id] = cloneDeep(
-    editDataSource.filter((item) => record.id === item.id)[0]
-  )
-}
-
-const save = async (record: Category, tab: number) => {
-  return editTableData[tab][record.id]
-}
-
-const cancel = (record: Category, tab: number) => {
-  delete editTableData[tab][record.id]
 }
 
 onMounted(async () => {

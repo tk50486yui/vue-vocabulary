@@ -5,37 +5,41 @@
     </div>
     <!-- 上層 -->
     <div class="select-theme" :class="$theme" ref="selectMod">
-      每頁：
-      <a-select
-        v-model:value="selectPageSize"
-        :getPopupContainer="() => $refs.selectMod"
-        size="small"
-        style="width: 80px"
-        @change="handlePageSize()"
-      >
-        <a-select-option value="5">5 筆</a-select-option>
-        <a-select-option value="10">10 筆</a-select-option>
-        <a-select-option value="20">20 筆</a-select-option>
-        <a-select-option value="50">50 筆</a-select-option>
-        <a-select-option value="100">100 筆</a-select-option>
-        <a-select-option :value="wordsGroups.length">全部</a-select-option>
-      </a-select>
-      <span style="padding-left: 6px">當前：</span>
-      <a-select
-        v-model:value="currentPage"
-        :getPopupContainer="() => $refs.selectMod"
-        size="small"
-        style="width: 80px"
-        @change="handleCurrentPage()"
-      >
-        <template
-          v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))"
-          :key="index"
+      <a-space size="middle" wrap>
+        <span>
+          每頁：
+          <a-select
+            v-model:value="selectPageSize"
+            :getPopupContainer="() => $refs.selectMod"
+            size="small"
+            style="width: 80px"
+            @change="handlePageSize()"
+          >
+            <a-select-option value="5">5 筆</a-select-option>
+            <a-select-option value="10">10 筆</a-select-option>
+            <a-select-option value="20">20 筆</a-select-option>
+            <a-select-option value="50">50 筆</a-select-option>
+            <a-select-option value="100">100 筆</a-select-option>
+            <a-select-option :value="wordsGroups.length">全部</a-select-option>
+          </a-select>
+        </span>
+        <span>當前：</span>
+        <a-select
+          v-model:value="currentPage"
+          :getPopupContainer="() => $refs.selectMod"
+          size="small"
+          style="width: 80px"
+          @change="handleCurrentPage()"
         >
-          <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
-        </template>
-      </a-select>
-      <span style="padding-left: 6px"> 共 {{ wordsGroups.length }} 筆 </span>
+          <template
+            v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))"
+            :key="index"
+          >
+            <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+          </template>
+        </a-select>
+        <span> 共 {{ wordsGroups.length }} 筆 </span>
+      </a-space>
     </div>
     <p></p>
     <div class="list-theme" :class="$theme">

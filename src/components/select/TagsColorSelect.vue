@@ -4,6 +4,8 @@
       :getPopupContainer="() => $refs.selectMod"
       v-bind="$attrs"
       :options="tagsColor"
+      v-model:value="selectedValue"
+      @change="handleChange"
       show-search
       allowClear
       :field-names="{
@@ -25,12 +27,30 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { toRefs, computed, onMounted } from 'vue'
+import { ref, toRefs, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
 const tagsColor = computed(() => store.getters['TagsColorStore/tagsColor'])
+
+const props = defineProps(['value'])
+const emit = defineEmits(['update:value'])
+const selectedValue = ref<number | null>(props.value)
+
+const handleChange = (value: number | undefined): void => {
+  selectedValue.value = typeof value !== 'undefined' ? value : null
+  emit('update:value', selectedValue.value)
+}
+
+const clearValue = (): void => {
+  selectedValue.value = null
+  emit('update:value', selectedValue.value)
+}
+
+defineExpose({
+  clearValue
+})
 
 onMounted(async () => {
   try {

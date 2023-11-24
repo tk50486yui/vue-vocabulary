@@ -7,7 +7,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-import { windowOnError, windowErrorListener } from './libs/errorHandler'
+import { windowOnError, windowErrorListener, warningHandler } from './libs/errorHandler'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import installFontAwesomeIcon from '@/plugins/fontawesome/fontawesome-icon'
@@ -18,6 +18,7 @@ const app = createApp(App)
 
 window.onerror = windowOnError
 window.addEventListener('error', windowErrorListener)
+app.config.warnHandler = warningHandler
 
 app.component('TreeCategoriesMenu', TreeCategoriesMenu)
 app.component('TreeTagsMenu', TreeTagsMenu)

@@ -14,10 +14,10 @@
     >
       <a-form-item :name="['word', 'cate_id']">
         <CategoriesTreeSelect
+          ref="categoriesTreeSelectRef"
           placeholder="詞語主題分類"
           size="large"
           v-model:value="formState.word.cate_id"
-          @change="handleCategoriesSelectChange"
         />
       </a-form-item>
       <p></p>
@@ -64,17 +64,11 @@
       <p></p>
       <a-form-item>
         <TagsTreeSelect
-          placeholder="添加標籤"
+          ref="tagsTreeSelectRef"
+          placeholder="添加標籤..."
           size="large"
           multiple
           v-model:value="formState.word.words_tags.array"
-          @change="handleTagsSelectChange"
-          :field-names="{
-            children: 'children',
-            label: 'ts_name',
-            value: 'id',
-            key: 'id'
-          }"
         />
       </a-form-item>
       <p></p>
@@ -101,6 +95,8 @@ const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
 const Ready = ref<boolean>(false)
+const categoriesTreeSelectRef = ref()
+const tagsTreeSelectRef = ref()
 const formRef = ref()
 const formState = reactive({
   word: {} as WordForm
@@ -117,17 +113,9 @@ const onFinish = async (): Promise<void> => {
   }
 }
 
-const handleCategoriesSelectChange = (value: number): void => {
-  formState.word.cate_id = typeof value !== 'undefined' ? value : null
-}
-
-const handleTagsSelectChange = (value: number[]): void => {
-  formState.word.words_tags.array = typeof value !== 'undefined' ? value : []
-}
-
 const resetForm = (): void => {
-  formState.word.cate_id = null
-  formState.word.words_tags.array = []
+  categoriesTreeSelectRef.value.clearValue()
+  tagsTreeSelectRef.value.clearValue('multiple')
   formRef.value.resetFields()
 }
 

@@ -16,15 +16,19 @@
             >
               <!-- header -->
               <template #title>
-                <PlusBtn
-                  class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
-                  @click="visible = true"
-                />
-                <RefreshBtn
-                  class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-                  :spin="SyncOutlinedSpin[0]"
-                  @click="refreshTable(0)"
-                />
+                <span class="float-end">
+                  <a-space size="small">
+                    <PlusBtn
+                      class="btn btn-primary btn-outline-light btn-sm"
+                      @click="visible = true"
+                    />
+                    <RefreshBtn
+                      class="btn btn-secondary btn-outline-light btn-sm"
+                      :spin="SyncOutlinedSpin[0]"
+                      @click="refreshTable(0)"
+                    />
+                  </a-space>
+                </span>
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- ts_name -->
@@ -141,12 +145,6 @@
                         v-model:value="editTableData[0][record.id]['ts_parent_id']"
                         :defaultValue="editTableData[0][record.id]['ts_parent_id']"
                         :treeDefaultExpandedKeys="[editTableData[0][record.id]['ts_parent_id']]"
-                        :field-names="{
-                          children: 'children',
-                          label: 'ts_name',
-                          value: 'id',
-                          key: 'id'
-                        }"
                       />
                     </template>
                     <template v-else>
@@ -169,15 +167,19 @@
             >
               <!-- header -->
               <template #title>
-                <PlusBtn
-                  class="btn btn-primary btn-outline-light btn-sm float-end me-md-2"
-                  @click="visible = true"
-                />
-                <RefreshBtn
-                  class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-                  :spin="SyncOutlinedSpin[1]"
-                  @click="refreshTable(1)"
-                />
+                <span class="float-end">
+                  <a-space size="small">
+                    <PlusBtn
+                      class="btn btn-primary btn-outline-light btn-sm"
+                      @click="visible = true"
+                    />
+                    <RefreshBtn
+                      class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+                      :spin="SyncOutlinedSpin[1]"
+                      @click="refreshTable(1)"
+                    />
+                  </a-space>
+                </span>
               </template>
               <template #bodyCell="{ column, text, record }">
                 <!-- ts_name -->
@@ -278,12 +280,6 @@
                         v-model:value="editTableData[1][record.id]['ts_parent_id']"
                         :defaultValue="editTableData[1][record.id]['ts_parent_id']"
                         :treeDefaultExpandedKeys="[editTableData[1][record.id]['ts_parent_id']]"
-                        :field-names="{
-                          children: 'children',
-                          label: 'ts_name',
-                          value: 'id',
-                          key: 'id'
-                        }"
                       />
                     </template>
                     <template v-else>
@@ -317,7 +313,7 @@
   <a-back-top />
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, computed } from 'vue'
+import { ref, reactive, toRefs, onMounted, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import { RefreshBtn, DeleteBtn, PlusBtn } from '@/components/button'
@@ -334,6 +330,8 @@ import { TagsColor } from '@/interfaces/TagsColor'
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
+provide('mode', 'single') // tagsSelect
+
 const tagsArray = computed(() => store.getters['TagsStore/tagsArray'])
 const recentTagsArray = computed(() => store.getters['TagsStore/recentTagsArray'])
 const tagsColor = computed(() => store.getters['TagsColorStore/tagsColor'])
@@ -347,6 +345,16 @@ const editTableData: UnwrapRef<Record<number, Record<number, Tag>>> = reactive({
   0: {} as Record<number, Tag>,
   1: {} as Record<number, Tag>
 })
+
+const edit = (record: Tag, tab: number, editDataSource: Tag[]) => {
+  editTableData[tab][record.id] = cloneDeep(
+    editDataSource.filter((item) => record.id === item.id)[0]
+  )
+}
+
+const cancel = (record: Tag, tab: number) => {
+  delete editTableData[tab][record.id]
+}
 
 const refreshTable = async (tab: number): Promise<void> => {
   try {
@@ -367,7 +375,7 @@ const refreshTable = async (tab: number): Promise<void> => {
 
 const onEditFinish = async (record: Tag, tab: number): Promise<void> => {
   try {
-    const editData = await save(record, tab)
+    const editData = editTableData[tab][record.id]
     message.loading({ content: 'Loading..', duration: 1 })
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await store.dispatch('TagsStore/update', { id: editData.id, data: editData })
@@ -398,20 +406,6 @@ const handleColorSelectChange = (value: number, record: Tag): void => {
     record.tc_color = ''
     record.tc_border = ''
   }
-}
-
-const edit = (record: Tag, tab: number, editDataSource: Tag[]) => {
-  editTableData[tab][record.id] = cloneDeep(
-    editDataSource.filter((item) => record.id === item.id)[0]
-  )
-}
-
-const save = async (record: Tag, tab: number) => {
-  return editTableData[tab][record.id]
-}
-
-const cancel = (record: Tag, tab: number) => {
-  delete editTableData[tab][record.id]
 }
 
 onMounted(async () => {

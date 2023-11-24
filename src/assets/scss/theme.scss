@@ -12,7 +12,15 @@
     --placeholder-text:rgba(255, 255, 255, 0.46);
     --input-clear-icon:rgb(243, 239, 239); 
     --input-validate:#d46958;
-    
+
+    --slider-track-background-disabled:rgb(243, 255, 150);
+    --slider-rail-background-disabled:#1d141365;
+    --slider-button-box-shadow-disabled:0 0 0 2px #fff6e2;
+    --slider-button-background-disabled:#d7d6fb;
+
+    --slider-button-box-shadow:0 0 0 2px #fff6e2;
+    --slider-button-background:#5d58ff;
+
     --radio-button-text:#fff;
     --radio-button-text-active:#d1def9;
     --radio-button-background:#152231;

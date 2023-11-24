@@ -25,7 +25,8 @@ const state: ViewsState = {
       isDefinition: true,
       isSlogan: false,
       isCate: false,
-      isTag: true
+      isTag: true,
+      isForget: true
     }
   },
   $ArticlesView: {
