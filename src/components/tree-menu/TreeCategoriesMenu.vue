@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
+import { PropType } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { Category } from '@/interfaces/Categories'

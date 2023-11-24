@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch, toRefs, defineExpose } from 'vue'
+import { ref, onMounted, watch, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import WordsAddView from '@/views/WordsAddView.vue'
 

@@ -4,7 +4,6 @@
   </a-button>
 </template>
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { SyncOutlined } from '@ant-design/icons-vue'
 defineProps({
   spin: Boolean

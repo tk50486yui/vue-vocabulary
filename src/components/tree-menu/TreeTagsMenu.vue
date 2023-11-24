@@ -36,7 +36,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
+import { PropType } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { Tag } from '@/interfaces/Tags'
