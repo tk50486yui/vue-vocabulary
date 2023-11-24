@@ -227,7 +227,7 @@
                           </a-tag>
                         </template>
                         <template v-else>
-                          <a-tag color="default" style="color: #fff">
+                          <a-tag style="color: #fff; background: #000">
                             {{ tag.ts_name }}
                           </a-tag>
                         </template>
@@ -392,7 +392,7 @@ watch(AfterReady, (val) => {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #ffb348;
+  background: rgb(116, 111, 255);
   content: '';
 }
 

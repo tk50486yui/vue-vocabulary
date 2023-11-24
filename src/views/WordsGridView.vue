@@ -521,7 +521,7 @@
                                 </a-tag>
                               </template>
                               <template v-else>
-                                <a-tag class="tag-align" color="default" style="color: #fff">
+                                <a-tag class="tag-align" style="color: #fff; background: #000">
                                   {{ subItem.ts_name }}
                                 </a-tag>
                               </template>
@@ -889,6 +889,11 @@ watch(checkboxArray, (val) => {
 
 .category-keyword-text {
   color: $category-keyword-color;
+}
+
+.btn:disabled {
+  color: #5b9bda;
+  background-color: #00000008;
 }
 
 .icon-star {

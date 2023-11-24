@@ -186,7 +186,7 @@
                 </a-tag>
               </template>
               <template v-else>
-                <a-tag class="tag-align" color="default" style="color: #fff">
+                <a-tag class="tag-align" style="color: #fff; background: #000">
                   {{ item.ts_name }}
                 </a-tag>
               </template>

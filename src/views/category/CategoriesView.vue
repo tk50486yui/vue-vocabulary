@@ -300,7 +300,7 @@ const columns = [
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #efffb4;
+  background: rgb(255, 191, 0);
   content: '';
 }
 
@@ -310,7 +310,7 @@ const columns = [
 }
 
 .button-edit {
-  color: #d8f74f;
+  color: rgb(252, 212, 94);
   padding-right: 6px;
 }
 

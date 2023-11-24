@@ -130,4 +130,8 @@ onMounted(async () => {
   background: #17b0f7;
   content: '';
 }
+
+a {
+  text-decoration: none;
+}
 </style>

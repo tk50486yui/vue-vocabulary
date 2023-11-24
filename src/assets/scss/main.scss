@@ -61,6 +61,10 @@ $edit-icon-color: #6A6AFF;
     color: var(--head-text);
   } 
 }
+
+.ant-tag :deep(.ant-tag-close-icon){
+  color: rgba(228, 217, 217, 0.63);
+}
 /*---------------------
     Table
 -----------------------*/
@@ -682,9 +686,9 @@ $edit-icon-color: #6A6AFF;
     color: var(--table-text);
   }
   /* 自定義類別 */
-  &.dark :deep(a){    
+  a{    
     text-decoration: none;
-  }
+  } 
   &.dark :deep(a.list-link){  
     color: var(--link-text);  
   }

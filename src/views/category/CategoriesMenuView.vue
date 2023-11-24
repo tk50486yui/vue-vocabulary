@@ -112,7 +112,7 @@ onMounted(() => {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #efffb4;
+  background: rgb(255, 191, 0);
   content: '';
 }
 

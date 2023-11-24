@@ -5,7 +5,11 @@
     </div>
     <div class="list-theme" :class="$theme">
       <!-- list -->
-      <a-list item-layout="horizontal" :data-source="$WordsGroupsView.groupArray">
+      <a-list
+        item-layout="horizontal"
+        :locale="{ emptyText: '暫無資料' }"
+        :data-source="$WordsGroupsView.groupArray"
+      >
         <template #renderItem="{ item, index }">
           <a-list-item>
             <template #actions>
@@ -34,8 +38,8 @@
         size="small"
         @click="onSave()"
         :disabled="saveDisabled"
-        >儲存</a-button
-      >
+        >儲存
+      </a-button>
       <span style="padding-left: 6px">
         <a-popconfirm
           title="確定要清空嗎？"
@@ -226,5 +230,10 @@ watch(
 .button-remove {
   color: #ea0000;
   margin-bottom: auto;
+}
+
+.btn:disabled {
+  color: #5b9bda;
+  background-color: #00000008;
 }
 </style>
