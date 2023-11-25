@@ -75,25 +75,37 @@
                 </template>
                 <!-- tc_color show-->
                 <template v-else-if="['tc_show'].includes(column.dataIndex)">
-                  <template v-if="editTableData[0][record.id]">
-                    <div style="display: flex; align-items: center; width: 100%">
-                      <a-tag
-                        :style="
-                          'background:' +
-                          editTableData[0][record.id]['tc_background'] +
-                          ';color:' +
-                          editTableData[0][record.id]['tc_color'] +
-                          ';border-color:' +
-                          editTableData[0][record.id]['tc_border']
+                  <div style="display: flex; align-items: center; width: 100%">
+                    <template v-if="editTableData[0][record.id]">
+                      <template
+                        v-if="
+                          editTableData[0][record.id].tc_color &&
+                          editTableData[0][record.id].tc_background &&
+                          editTableData[0][record.id].tc_border
                         "
-                        style="flex: 1; margin-right: 8px"
                       >
-                        {{ editTableData[0][record.id]['ts_name'] }}
-                      </a-tag>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <template v-if="record.tc_color && record.tc_background && record.tc_border">
+                        <a-tag
+                          :style="
+                            'background:' +
+                            editTableData[0][record.id]['tc_background'] +
+                            ';color:' +
+                            editTableData[0][record.id]['tc_color'] +
+                            ';border-color:' +
+                            editTableData[0][record.id]['tc_border']
+                          "
+                        >
+                          {{ editTableData[0][record.id]['ts_name'] }}
+                        </a-tag>
+                      </template>
+                      <template v-else>
+                        <a-tag
+                          style="color: #fff; background: #000; border-color: rgb(244, 202, 202)"
+                        >
+                          {{ editTableData[0][record.id]['ts_name'] }}
+                        </a-tag>
+                      </template>
+                    </template>
+                    <template v-else>
                       <a-tag
                         :style="
                           'background:' +
@@ -107,12 +119,7 @@
                         {{ record.ts_name }}
                       </a-tag>
                     </template>
-                    <template v-else>
-                      <a-tag color="default" style="color: #fff">
-                        {{ record.ts_name }}
-                      </a-tag>
-                    </template>
-                  </template>
+                  </div>
                 </template>
                 <!-- tc_color select -->
                 <template v-else-if="['tc_color'].includes(column.dataIndex)">
@@ -209,25 +216,37 @@
                 </template>
                 <!-- tc_color show-->
                 <template v-else-if="['tc_show'].includes(column.dataIndex)">
-                  <template v-if="editTableData[1][record.id]">
-                    <div style="display: flex; align-items: center; width: 100%">
-                      <a-tag
-                        :style="
-                          'background:' +
-                          editTableData[1][record.id]['tc_background'] +
-                          ';color:' +
-                          editTableData[1][record.id]['tc_color'] +
-                          ';border-color:' +
-                          editTableData[1][record.id]['tc_border']
+                  <div style="display: flex; align-items: center; width: 100%">
+                    <template v-if="editTableData[1][record.id]">
+                      <template
+                        v-if="
+                          editTableData[1][record.id].tc_color &&
+                          editTableData[1][record.id].tc_background &&
+                          editTableData[1][record.id].tc_border
                         "
-                        style="flex: 1; margin-right: 8px"
                       >
-                        {{ editTableData[1][record.id]['ts_name'] }}
-                      </a-tag>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <template v-if="record.tc_color && record.tc_background && record.tc_border">
+                        <a-tag
+                          :style="
+                            'background:' +
+                            editTableData[1][record.id]['tc_background'] +
+                            ';color:' +
+                            editTableData[1][record.id]['tc_color'] +
+                            ';border-color:' +
+                            editTableData[1][record.id]['tc_border']
+                          "
+                        >
+                          {{ editTableData[1][record.id]['ts_name'] }}
+                        </a-tag>
+                      </template>
+                      <template v-else>
+                        <a-tag
+                          style="color: #fff; background: #000; border-color: rgb(244, 202, 202)"
+                        >
+                          {{ editTableData[1][record.id]['ts_name'] }}
+                        </a-tag>
+                      </template>
+                    </template>
+                    <template v-else>
                       <a-tag
                         :style="
                           'background:' +
@@ -241,12 +260,7 @@
                         {{ record.ts_name }}
                       </a-tag>
                     </template>
-                    <template v-else>
-                      <a-tag color="default" style="color: #fff">
-                        {{ record.ts_name }}
-                      </a-tag>
-                    </template>
-                  </template>
+                  </div>
                 </template>
                 <!-- tc_color select -->
                 <template v-else-if="['tc_color'].includes(column.dataIndex)">
@@ -256,8 +270,7 @@
                         v-model:value="editTableData[1][record.id]['tc_id']"
                         placeholder="選擇標籤顏色"
                         @change="
-                          (value: number) =>
-                            handleColorSelectChange(value, editTableData[1][record.id])
+                          (value) => handleColorSelectChange(value, editTableData[1][record.id])
                         "
                         size="small"
                         style="width: 100%; flex: 2"

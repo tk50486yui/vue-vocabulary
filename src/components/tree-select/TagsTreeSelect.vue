@@ -97,9 +97,9 @@ const tags = computed(() => store.getters['TagsStore/tags'])
 const props = defineProps(['value'])
 const emit = defineEmits(['update:value'])
 
-const mode = inject('mode', '')
+const mode = inject('mode', null)
 
-const selectedValue = ref<number | number[]>(props.value)
+const selectedValue = ref<number | number[] | null>(props.value)
 
 const Ready = ref<boolean>(false)
 const searchValue = ref<string>('')

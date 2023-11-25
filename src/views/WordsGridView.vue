@@ -501,30 +501,19 @@
                         >
                           <template v-for="(subItem, index) in item.words_tags.values" :key="index">
                             <a @click="handleTagsLink(subItem.ts_id)">
-                              <template
-                                v-if="
-                                  subItem.tc_color && subItem.tc_background && subItem.tc_border
+                              <a-tag
+                                class="tag-align"
+                                :style="
+                                  'background:' +
+                                  subItem.tc_background +
+                                  ';color:' +
+                                  subItem.tc_color +
+                                  ';border-color:' +
+                                  subItem.tc_border
                                 "
                               >
-                                <a-tag
-                                  class="tag-align"
-                                  :style="
-                                    'background:' +
-                                    subItem.tc_background +
-                                    ';color:' +
-                                    subItem.tc_color +
-                                    ';border-color:' +
-                                    subItem.tc_border
-                                  "
-                                >
-                                  {{ subItem.ts_name }}
-                                </a-tag>
-                              </template>
-                              <template v-else>
-                                <a-tag class="tag-align" style="color: #fff; background: #000">
-                                  {{ subItem.ts_name }}
-                                </a-tag>
-                              </template>
+                                {{ subItem.ts_name }}
+                              </a-tag>
                             </a>
                           </template>
                         </template>

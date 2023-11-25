@@ -212,25 +212,18 @@
                         v-for="(tag, index) in item.articles_tags.values"
                         :key="tag.ts_id + index"
                       >
-                        <template v-if="tag.tc_color && tag.tc_background && tag.tc_border">
-                          <a-tag
-                            :style="
-                              'background:' +
-                              tag.tc_background +
-                              ';color:' +
-                              tag.tc_color +
-                              ';border-color:' +
-                              tag.tc_border
-                            "
-                          >
-                            {{ tag.ts_name }}
-                          </a-tag>
-                        </template>
-                        <template v-else>
-                          <a-tag style="color: #fff; background: #000">
-                            {{ tag.ts_name }}
-                          </a-tag>
-                        </template>
+                        <a-tag
+                          :style="
+                            'background:' +
+                            tag.tc_background +
+                            ';color:' +
+                            tag.tc_color +
+                            ';border-color:' +
+                            tag.tc_border
+                          "
+                        >
+                          {{ tag.ts_name }}
+                        </a-tag>
                       </span>
                     </template>
                   </template>

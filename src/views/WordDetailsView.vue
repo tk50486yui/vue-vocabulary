@@ -170,26 +170,19 @@
           </template>
           <template v-else>
             <template v-for="(item, index) in word.words_tags.values" :key="item.ts_id">
-              <template v-if="item.tc_color && item.tc_background && item.tc_border">
-                <a-tag
-                  class="tag-align"
-                  :style="
-                    'background:' +
-                    item.tc_background +
-                    ';color:' +
-                    item.tc_color +
-                    ';border-color:' +
-                    item.tc_border
-                  "
-                >
-                  {{ item.ts_name }}
-                </a-tag>
-              </template>
-              <template v-else>
-                <a-tag class="tag-align" style="color: #fff; background: #000">
-                  {{ item.ts_name }}
-                </a-tag>
-              </template>
+              <a-tag
+                class="tag-align"
+                :style="
+                  'background:' +
+                  item.tc_background +
+                  ';color:' +
+                  item.tc_color +
+                  ';border-color:' +
+                  item.tc_border
+                "
+              >
+                {{ item.ts_name }}
+              </a-tag>
               <template v-if="index != word.words_tags.values.length && index / 5 == 1">
                 <br />
               </template>
