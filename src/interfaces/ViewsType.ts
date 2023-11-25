@@ -10,6 +10,7 @@ export interface ViewsState {
       choiceArray: string[]
       choiceOperator: string
       tagsOperator: string
+      sortValue: string | null
     }
     isItemsState: {
       isPronunciation: boolean
@@ -17,6 +18,7 @@ export interface ViewsState {
       isSlogan: boolean
       isCate: boolean
       isTag: boolean
+      isForget: boolean
     }
   }
   $ArticlesView: {
@@ -48,6 +50,7 @@ export interface WordsGridType {
         choiceArray: string[]
         choiceOperator: string
         tagsOperator: string
+        sortValue: string | null
       }
     | {
         isPronunciation: boolean
@@ -55,6 +58,7 @@ export interface WordsGridType {
         isSlogan: boolean
         isCate: boolean
         isTag: boolean
+        isForget: boolean
       }
 }
 

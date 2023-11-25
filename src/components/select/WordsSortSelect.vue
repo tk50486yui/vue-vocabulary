@@ -11,8 +11,8 @@
         <template #label>
           <span> 依程度條 </span>
         </template>
-        <a-select-option value="ws_forget_count,desc">程度條（多－少）</a-select-option>
-        <a-select-option value="ws_forget_count,asc">程度條（少－多）</a-select-option>
+        <a-select-option value="ws_forget_count,desc">程度條（高－低）</a-select-option>
+        <a-select-option value="ws_forget_count,asc">程度條（低－高）</a-select-option>
       </a-select-opt-group>
       <a-select-opt-group>
         <template #label>
@@ -44,6 +44,7 @@ const selectedValue = ref<string | null>(props.value)
 const handleChange = (value: string | undefined): void => {
   selectedValue.value = typeof value !== 'undefined' ? value : null
   emit('update:value', selectedValue.value)
+  emit('change', selectedValue.value)
 }
 </script>
 

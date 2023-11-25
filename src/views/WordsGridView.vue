@@ -34,7 +34,7 @@
       <span class="d-flex align-items-center">
         <el-tag effect="dark" type="warning" :color="labelColor" round> 標籤條件 </el-tag>
         <span style="margin-left: 8px">
-          <OperatorRadio v-model:value="tagsOperator" @change="setFilterItems()" />
+          <OperatorRadio v-model:value="tagsOperator" @change="setFilterItems" />
         </span>
       </span>
       <p></p>
@@ -42,11 +42,11 @@
       <span class="d-flex align-items-center">
         <el-tag effect="dark" type="warning" :color="labelColor" round> 標記條件 </el-tag>
         <span style="margin-left: 8px">
-          <OperatorRadio v-model:value="choiceOperator" @change="setFilterItems()" />
+          <OperatorRadio v-model:value="choiceOperator" @change="setFilterItems" />
           <a-checkbox-group
             v-model:value="choiceArray"
             :options="choiceArrayOptions"
-            @change="setFilterItems()"
+            @change="setFilterItems"
           >
             <template #label="{ value }">
               <span class="icon-theme" :class="$theme">
@@ -202,6 +202,7 @@
                     placeholder="依條件排序..."
                     size="small"
                     style="width: 160px"
+                    @change="setFilterItems"
                   />
                 </span>
               </a-space>
@@ -215,47 +216,51 @@
                 <!-- cate_name -->
                 <template #title>
                   <template v-if="isCate">
-                    <template v-if="editTableData[item.id]">
-                      <CategoriesTreeSelect
-                        placeholder="詞語主題分類"
-                        size="small"
-                        :style="'width:100%'"
-                        v-model:value="editTableData[item.id]['cate_id']"
-                        :defaultValue="item.cate_id"
-                        :treeDefaultExpandedKeys="[item.cate_id]"
-                      />
-                    </template>
-                    <template v-else>
-                      <template v-if="item.cate_name == null || item.cate_name == ''">
-                        --
-                      </template>
-                      <template v-else>
-                        <template
-                          v-if="
-                            $keyword != '' &&
-                            $filters.includes('cate_name') &&
-                            item.cate_name.includes($keyword)
-                          "
-                        >
-                          <a @click="handleCategoryFilter(item.cate_name)">
-                            <template v-for="(char, index) in item.cate_name" :key="index">
-                              <span
-                                :class="{
-                                  'category-keyword-text': $keyword.includes(char)
-                                }"
-                              >
-                                {{ char }}
-                              </span>
-                            </template>
-                          </a>
+                    <a-row>
+                      <a-col :span="24" :offset="editTableData[item.id] ? 0 : 1">
+                        <template v-if="editTableData[item.id]">
+                          <CategoriesTreeSelect
+                            placeholder="詞語主題分類"
+                            size="small"
+                            :style="'width:100%'"
+                            v-model:value="editTableData[item.id]['cate_id']"
+                            :defaultValue="item.cate_id"
+                            :treeDefaultExpandedKeys="[item.cate_id]"
+                          />
                         </template>
                         <template v-else>
-                          <a @click="handleCategoryFilter(item.cate_name)">
-                            {{ item.cate_name }}
-                          </a>
+                          <template v-if="item.cate_name == null || item.cate_name == ''">
+                            --
+                          </template>
+                          <template v-else>
+                            <template
+                              v-if="
+                                $keyword != '' &&
+                                $filters.includes('cate_name') &&
+                                item.cate_name.includes($keyword)
+                              "
+                            >
+                              <a @click="handleCategoryFilter(item.cate_name)">
+                                <template v-for="(char, index) in item.cate_name" :key="index">
+                                  <span
+                                    :class="{
+                                      'category-keyword-text': $keyword.includes(char)
+                                    }"
+                                  >
+                                    {{ char }}
+                                  </span>
+                                </template>
+                              </a>
+                            </template>
+                            <template v-else>
+                              <a @click="handleCategoryFilter(item.cate_name)">
+                                {{ item.cate_name }}
+                              </a>
+                            </template>
+                          </template>
                         </template>
-                      </template>
-                    </template>
+                      </a-col>
+                    </a-row>
                   </template>
                 </template>
                 <!-- checkbox -->
@@ -595,7 +600,6 @@ const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
 const filtersTagsTreeSelectRef = ref()
 const filterShow = ref<boolean>(true)
 const tagsArray = ref<number[]>([])
-const sortValue = ref<string | null>(null)
 const selectPageSize = ref<string>('20')
 const currentPage = ref<number>(1)
 const checkboxShow = ref<boolean>(false)
@@ -618,9 +622,10 @@ const pagination = reactive({
 const filterItemsState = reactive({
   tagsOperator: 'or',
   choiceArray: [],
-  choiceOperator: 'or'
+  choiceOperator: 'or',
+  sortValue: ''
 })
-const { tagsOperator, choiceArray, choiceOperator } = toRefs(filterItemsState)
+const { tagsOperator, choiceArray, choiceOperator, sortValue } = toRefs(filterItemsState)
 const isItemsState = reactive({
   isPronunciation: true,
   isDefinition: true,
@@ -699,7 +704,6 @@ const handleCategoryFilter = async (cateName: string): Promise<void> => {
 }*/
 const handleTagsLink = async (val: number): Promise<void> => {
   await onResetAll()
-  //filtersTagsTreeSelectRef.value.setValue([val])
   tagsArray.value.push(val)
   await store.dispatch('Search/updateFiltersTags', tagsArray.value)
   await new Promise((resolve) => setTimeout(resolve, 100))
