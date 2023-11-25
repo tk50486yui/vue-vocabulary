@@ -12,7 +12,7 @@ export interface Word {
   ws_slogan: string
   ws_is_important: boolean
   ws_is_common: boolean
-  ws_forget_count?: number
+  ws_forget_count: number
   ws_order?: number
   cate_id: number | null
   cate_name: string | null
@@ -20,6 +20,8 @@ export interface Word {
     array: number[]
     values: TagsValue[]
   }
+  created_at: Date
+  updated_at: Date
 }
 
 export interface WordForm {

@@ -196,6 +196,14 @@
                     <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
                   </template>
                 </span>
+                <span class="d-flex align-items-center">
+                  <WordsSortSelect
+                    v-model:value="sortValue"
+                    placeholder="依條件排序..."
+                    size="small"
+                    style="width: 160px"
+                  />
+                </span>
               </a-space>
             </div>
           </template>
@@ -546,6 +554,7 @@ import OperatorRadio from '@/components/radio/OperatorRadio.vue'
 import WordsDrawerView from '@/views/WordsDrawerView.vue'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
+import WordsSortSelect from '@/components/select/WordsSortSelect.vue'
 import type { UnwrapRef } from 'vue'
 import { Word } from '@/interfaces/Words'
 
@@ -565,7 +574,8 @@ const filterWordsResult = computed(() =>
     $filtersTags.value,
     filterItemsState.tagsOperator,
     filterItemsState.choiceArray,
-    filterItemsState.choiceOperator
+    filterItemsState.choiceOperator,
+    sortValue.value
   )
 )
 
@@ -585,6 +595,7 @@ const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
 const filtersTagsTreeSelectRef = ref()
 const filterShow = ref<boolean>(true)
 const tagsArray = ref<number[]>([])
+const sortValue = ref<string | null>(null)
 const selectPageSize = ref<string>('20')
 const currentPage = ref<number>(1)
 const checkboxShow = ref<boolean>(false)

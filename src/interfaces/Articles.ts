@@ -14,6 +14,8 @@ export interface Article {
     array: number[]
     values: TagsValue[]
   }
+  created_at: Date
+  updated_at: Date
 }
 
 export interface ArticleForm {

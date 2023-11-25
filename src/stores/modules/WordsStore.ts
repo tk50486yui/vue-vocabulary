@@ -3,6 +3,7 @@ import WordsRepo from '@/repositories/WordsRepo'
 import { Word, WordForm, WordsState } from '@/interfaces/Words'
 import { RootState } from '@/interfaces/RootState'
 import { generalFilterWords as generalFilter } from '@/libs/filterHelper'
+import { sortedWords } from '@/libs/sortHelper'
 
 const state = {
   words: [] as Word[],
@@ -31,9 +32,10 @@ const getters: GetterTree<WordsState, RootState> = {
       tagsArray: number[],
       tagsOperator: string,
       choiceArray: string[],
-      choiceOperator: string
+      choiceOperator: string,
+      sortValue: string
     ) => {
-      return generalFilter(
+      const filteredWords = generalFilter(
         state.words,
         keyword,
         options,
@@ -42,6 +44,12 @@ const getters: GetterTree<WordsState, RootState> = {
         choiceArray,
         choiceOperator
       )
+      if (sortValue && sortValue !== null) {
+        const splitSortValue = sortValue.split(',')
+        return sortedWords(filteredWords, splitSortValue)
+      }
+
+      return filteredWords
     }
 }
 
