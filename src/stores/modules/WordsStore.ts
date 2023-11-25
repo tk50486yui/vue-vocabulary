@@ -69,7 +69,7 @@ const actions = {
     await dispatch('fetch')
   },
 
-  async update({ dispatch }: { dispatch: Dispatch }, { id, data }: { id: number; data: Word }) {
+  async update({ dispatch }: { dispatch: Dispatch }, { id, data }: { id: number; data: WordForm }) {
     await WordsRepo.update(id, data)
     await dispatch('fetch')
   },
@@ -92,6 +92,11 @@ const actions = {
 
   async deleteById({ dispatch }: { dispatch: Dispatch }, id: number) {
     await WordsRepo.deleteById(id)
+    await dispatch('fetch')
+  },
+
+  async upload({ dispatch }: { dispatch: Dispatch }, data: WordForm) {
+    await WordsRepo.upload(data)
     await dispatch('fetch')
   }
 }

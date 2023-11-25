@@ -39,6 +39,7 @@ export interface WordForm {
     array: number[]
     values: TagsValue[]
   }
+  ws_file: File
 }
 
 export interface TagsValue {

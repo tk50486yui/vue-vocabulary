@@ -36,5 +36,14 @@ export default {
   async deleteById(id: number) {
     const response = await api.delete(`/words/${id}`)
     return response.data
+  },
+
+  async upload(data: WordForm) {
+    const response = await api.post('/words/upload', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data' // axios maybe auto setting
+      }
+    })
+    return response.data
   }
 }

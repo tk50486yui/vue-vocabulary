@@ -30,6 +30,9 @@
                     <li>
                       <router-link :to="{ name: 'wordsAdd' }">單字新增</router-link>
                     </li>
+                    <li>
+                      <router-link :to="{ name: 'wordsUpload' }">上傳</router-link>
+                    </li>
                   </ul>
                 </li>
                 <li :class="{ active: activeIndex === 1 }">
@@ -115,6 +118,7 @@ const setActive = (): void => {
     case 'wordsGrid':
     case 'words':
     case 'wordsAdd':
+    case 'wordsUpload':
       activeIndex.value = 0
       break
     case 'articles':
