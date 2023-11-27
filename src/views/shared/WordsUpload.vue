@@ -4,47 +4,77 @@
       <h4>上傳檔案區</h4>
     </div>
     <div :class="$theme">
-      <a-upload v-model:file-list="fileList" :before-upload="beforeUpload">
-        <a-button>
-          <upload-outlined></upload-outlined>
-          Click to Upload
-        </a-button>
-      </a-upload>
       <p></p>
-      <a-button class="btn btn-primary btn-outline-light btn-sm" @click="onFinish">儲存</a-button>
+      <Dashboard
+        :uppy="uppy"
+        :props="{
+          locale: {
+            strings: {
+              addingMoreFiles: '新增更多',
+              addMore: '新增更多',
+              dropPasteFiles: '拖曳至此處或 %{browseFiles}',
+              browseFiles: '讀取檔案',
+              uploadComplete: '上傳成功',
+              done: '完成',
+              complete: '成功',
+              back: '返回',
+              save: '儲存',
+              cancel: '取消'
+            }
+          },
+          theme: 'dark',
+          width: '350',
+          height: '300',
+          size: 'small',
+
+          metaFields: [{ id: 'ws_file', name: 'ws_file', placeholder: 'ws_file' }]
+        }"
+      />
     </div>
   </template>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, onBeforeMount } from 'vue'
+import { ref, reactive, toRefs, computed, onMounted, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { WordForm } from '@/interfaces/Words'
-import { message, Upload } from 'ant-design-vue'
-import { UploadOutlined } from '@ant-design/icons-vue'
-import type { UploadProps } from 'ant-design-vue'
+//import { message } from 'ant-design-vue'
+// import { UploadOutlined } from '@ant-design/icons-vue'
+// import type { UploadProps } from 'ant-design-vue'
+import Uppy from '@uppy/core'
+import XHR from '@uppy/xhr-upload'
+import { Dashboard } from '@uppy/vue'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
+const TUS_ENDPOINT = ref(import.meta.env.VITE_APP_API_UPLOAD_UPPY_URL)
+
+const uppy = computed(() =>
+  new Uppy({ id: 'uppy1', autoProceed: true, debug: true }).use(XHR, {
+    endpoint: TUS_ENDPOINT.value
+  })
+)
 
 const Ready = ref<boolean>(false)
-const fileList = ref([])
+// const fileList = ref([])
 
 const formState = reactive({
   word: {} as WordForm
 })
 
-const beforeUpload: UploadProps['beforeUpload'] = (file) => {
+/*const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   formState.word.ws_file = file
   formState.word.ws_name = 'catTest'
-  /*const isPNG = file.type === 'image/png'
-  if (!isPNG) {
-    message.error(`${file.name} is not a png file`)
-  }*/
-  Promise.reject
-  return Upload.LIST_IGNORE
-}
+  const isJPEG = file.type === 'image/jpeg'
+  if (isJPEG) {
+    message.success(`${file.name} is a jpg file`)
+  }
 
-const onFinish = async (): Promise<void> => {
+  return false
+}*/
+
+/*const onFinish = async (): Promise<void> => {
   try {
     const formData = new FormData()
     formData.append('ws_file', formState.word.ws_file)
@@ -55,7 +85,7 @@ const onFinish = async (): Promise<void> => {
   } catch (error) {
     //
   }
-}
+}*/
 
 onBeforeMount(() => {
   formState.word = {
