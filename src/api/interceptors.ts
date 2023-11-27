@@ -14,7 +14,7 @@ api.interceptors.request.use(
 // 回應攔截
 api.interceptors.response.use(
   (response) => {
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 204) {
       if (
         response.config.method === 'post' ||
         response.config.method === 'put' ||

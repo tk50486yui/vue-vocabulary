@@ -12,7 +12,7 @@ export const messageMap: Record<string, { default: string }> = {
     default: '刪除成功'
   },
   other: {
-    default: '成功，未知'
+    default: '未知成功'
   },
   400: {
     default: 'Invalid data'

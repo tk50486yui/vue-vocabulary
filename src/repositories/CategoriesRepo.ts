@@ -8,7 +8,7 @@ export default {
   },
 
   async getRecent() {
-    const response = await api.get('/categories/recent/all')
+    const response = await api.get('/categories/recent')
     return response.data
   },
 
@@ -28,7 +28,7 @@ export default {
   },
 
   async updateOrder(data: CategoriesOrder[]) {
-    const response = await api.patch('/categories/order/all', data)
+    const response = await api.patch('/categories/sort', data)
     return response.data
   },
 

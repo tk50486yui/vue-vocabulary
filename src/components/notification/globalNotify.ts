@@ -11,6 +11,9 @@ function globalNotify(response: AxiosResponse) {
     case 200:
       type = 'success'
       break
+    case 204:
+      type = 'success'
+      break
     default:
       type = 'error'
       errorKey = String(response.status)

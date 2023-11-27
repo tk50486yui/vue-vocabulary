@@ -76,7 +76,7 @@
       <span class="d-flex align-items-center">
         <el-tag effect="dark" type="warning" :color="labelColor" round> 顯示項目 </el-tag>
         <span class="checkbox-theme" style="margin-left: 8px" :class="$theme">
-          <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()"> 假名 </a-checkbox>
+          <a-checkbox v-model:checked="isPronunciation" @change="setItemShow()"> 仮名 </a-checkbox>
           <a-checkbox v-model:checked="isDefinition" @change="setItemShow()"> 中譯 </a-checkbox>
           <a-checkbox v-model:checked="isSlogan" @change="setItemShow()"> 短句 </a-checkbox>
           <a-checkbox v-model:checked="isCate" @change="setItemShow()"> 類別 </a-checkbox>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
-      <h4>標籤選單</h4>
+      <h4>詞組標籤</h4>
       <PlusBtn
         class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
         @click="visible = true"

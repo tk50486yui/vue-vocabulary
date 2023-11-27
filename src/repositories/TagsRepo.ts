@@ -8,7 +8,7 @@ export default {
   },
 
   async getRecent() {
-    const response = await api.get('/tags/recent/all')
+    const response = await api.get('/tags/recent')
     return response.data
   },
 
@@ -28,7 +28,7 @@ export default {
   },
 
   async updateOrder(data: TagsOrder[]) {
-    const response = await api.patch('/tags/order/all', data)
+    const response = await api.patch('/tags/sort', data)
     return response.data
   },
 

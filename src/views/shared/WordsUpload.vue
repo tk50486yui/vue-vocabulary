@@ -51,7 +51,7 @@ const { $theme } = toRefs(store.state.Theme)
 const TUS_ENDPOINT = ref(import.meta.env.VITE_APP_API_UPLOAD_UPPY_URL)
 
 const uppy = computed(() =>
-  new Uppy({ id: 'uppy1', autoProceed: true, debug: true }).use(XHR, {
+  new Uppy({ id: 'uppy1', autoProceed: true, debug: false }).use(XHR, {
     endpoint: TUS_ENDPOINT.value
   })
 )
