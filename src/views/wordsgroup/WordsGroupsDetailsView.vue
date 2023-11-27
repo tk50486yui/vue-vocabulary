@@ -10,7 +10,10 @@
       </span>
     </span>
     <div class="d-flex justify-content-end">
-      <EditOutlined class="button-edit" :class="$theme" @click="onEdit()" />
+      <EditOutlined
+        :class="{ 'text-secondary': editShow, 'button-edit': !editShow, [$theme]: true }"
+        @click="onEdit()"
+      />
     </div>
     <p></p>
     <div class="list-theme" :class="$theme">

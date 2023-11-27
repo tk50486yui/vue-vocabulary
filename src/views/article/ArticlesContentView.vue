@@ -1,7 +1,7 @@
 <template>
   <template v-if="Ready && article">
     <span class="back-link-theme" :class="$theme">
-      <router-link :to="{ name: 'articles' }" @click="setListState()"> 返回 </router-link>
+      <router-link :to="{ name: 'articles' }"> 返回 </router-link>
       <span class="link-separator h5">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
@@ -11,7 +11,10 @@
     </span>
     <div class="descriptions-theme" :class="$theme">
       <div class="d-flex justify-content-end">
-        <EditOutlined class="button-edit" :class="$theme" @click="onEdit()" />
+        <EditOutlined
+          :class="{ 'text-secondary': editShow, 'button-edit': !editShow, [$theme]: true }"
+          @click="onEdit()"
+        />
       </div>
       <p></p>
       <div class="article-theme">
@@ -128,9 +131,18 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, computed, onBeforeMount, nextTick } from 'vue'
+import {
+  ref,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+  onBeforeMount,
+  onActivated,
+  nextTick
+} from 'vue'
 import { useStore } from 'vuex'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -202,7 +214,7 @@ const onEditCancel = () => {
   }
 }
 
-const setListState = () => {
+const setListState = async (): Promise<void> => {
   store.dispatch('Views/updateArticlesView', {
     variable: 'jumpPage',
     data: true
@@ -223,6 +235,20 @@ onMounted(async () => {
     window.scrollTo({ top: 120, behavior: 'instant' })
     await store.dispatch('ArticlesStore/fetch')
     Ready.value = true
+  } catch (e) {
+    //
+  }
+})
+
+onBeforeRouteLeave(async (to, from, next) => {
+  await setListState()
+  next()
+})
+
+onActivated(async () => {
+  try {
+    window.scrollTo({ top: 120, behavior: 'instant' })
+    await store.dispatch('ArticlesStore/fetch')
   } catch (e) {
     //
   }

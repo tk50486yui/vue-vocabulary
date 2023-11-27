@@ -300,7 +300,7 @@ const columns = [
     width: '28%'
   },
   {
-    title: '假名 / 發音',
+    title: '仮名 / 發音',
     dataIndex: 'ws_pronunciation',
     width: '20%'
   },

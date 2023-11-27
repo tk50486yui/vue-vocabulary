@@ -1,7 +1,7 @@
 <template>
   <template v-if="Ready && word">
     <span class="back-link-theme" :class="$theme">
-      <router-link :to="{ name: 'wordsGrid' }" @click="setGridState()"> 返回 </router-link>
+      <router-link :to="{ name: 'wordsGrid' }"> 返回 </router-link>
       <span class="link-separator h5">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
@@ -11,7 +11,10 @@
     </span>
     <div class="descriptions-theme" :class="$theme">
       <div class="d-flex justify-content-end">
-        <EditOutlined class="button-edit" :class="$theme" @click="onEdit()" />
+        <EditOutlined
+          :class="{ 'text-secondary': editShow, 'button-edit': !editShow, [$theme]: true }"
+          @click="onEdit()"
+        />
       </div>
       <p></p>
       <a-descriptions
@@ -37,7 +40,7 @@
             </div>
           </template>
         </a-descriptions-item>
-        <a-descriptions-item label="假名 / 發音">
+        <a-descriptions-item label="仮名 / 發音">
           <template v-if="editShow">
             <div class="input-theme" :class="$theme">
               <a-input v-model:value="formState.word.ws_pronunciation" allow-clear />
@@ -97,7 +100,7 @@
             {{ word.ws_slogan }}
           </template>
         </a-descriptions-item>
-        <a-descriptions-item label="常用 / 重要性">
+        <a-descriptions-item label="常用 / 喜愛">
           <span class="icon-theme" :class="$theme">
             <template v-if="word.ws_is_common">
               <span class="icon-star">
@@ -214,14 +217,15 @@ import {
   ref,
   reactive,
   toRefs,
-  onMounted,
   computed,
   watchEffect,
+  onMounted,
   onBeforeMount,
+  onActivated,
   nextTick
 } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -318,7 +322,7 @@ const changeDescriptionsLayout = (isScreenSmall: boolean): void => {
     descriptionsLayout.value = 'horizontal'
   }
 }
-const setGridState = (): void => {
+const setGridState = async (): Promise<void> => {
   store.dispatch('Views/updateWordsGrid', {
     variable: 'jumpPage',
     data: true
@@ -338,6 +342,20 @@ onMounted(async () => {
     window.scrollTo({ top: 120, behavior: 'instant' })
     await store.dispatch('WordsStore/fetch')
     Ready.value = true
+  } catch (e) {
+    //
+  }
+})
+
+onBeforeRouteLeave(async (to, from, next) => {
+  await setGridState()
+  next()
+})
+
+onActivated(async () => {
+  try {
+    window.scrollTo({ top: 120, behavior: 'instant' })
+    await store.dispatch('WordsStore/fetch')
   } catch (e) {
     //
   }

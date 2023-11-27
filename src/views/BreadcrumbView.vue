@@ -24,7 +24,9 @@
                   <el-icon><el-Moon /></el-icon>
                 </template>
                 <template #unCheckedChildren>
-                  <el-icon><el-Sunny /></el-icon>
+                  <span class="text-info">
+                    <el-icon><el-Sunny /></el-icon>
+                  </span>
                 </template>
               </a-switch>
             </div>

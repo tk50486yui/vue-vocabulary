@@ -54,7 +54,7 @@
             <div class="header__right">
               <ul class="header__right__widget">
                 <li>
-                  <span @click="setSearchShow()">
+                  <span :class="{ 'text-secondary': $searchShow }" @click="setSearchShow()">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
                   </span>
                 </li>
@@ -62,7 +62,11 @@
             </div>
           </div>
           <div class="canvas__open">
-            <span style="margin-right: 16px" @click="setSearchShow()">
+            <span
+              :class="{ 'text-secondary': $searchShow }"
+              style="margin-right: 16px"
+              @click="setSearchShow()"
+            >
               <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
             </span>
             <span @click="drawerVisible = true">
@@ -154,7 +158,6 @@ watchEffect(() => {
 /*---------------------
     Header
 -----------------------*/
-
 .canvas__open {
   display: none;
 }

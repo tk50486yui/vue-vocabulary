@@ -146,7 +146,7 @@
                     <template v-if="editTableData[0][record.id]">
                       <TagsTreeSelect
                         size="small"
-                        placeholder="選擇父類別"
+                        placeholder="選擇父標籤"
                         :dropdownMatchSelectWidth="false"
                         style="width: 100%"
                         v-model:value="editTableData[0][record.id]['ts_parent_id']"
@@ -287,7 +287,7 @@
                     <template v-if="editTableData[1][record.id]">
                       <TagsTreeSelect
                         size="small"
-                        placeholder="選擇父類別"
+                        placeholder="選擇父標籤"
                         :dropdownMatchSelectWidth="false"
                         style="width: 100%"
                         v-model:value="editTableData[1][record.id]['ts_parent_id']"
@@ -434,28 +434,27 @@ onMounted(async () => {
 const columns = [
   {
     dataIndex: 'operation',
-    width: '7%',
-    colSpan: 0
+    width: '7%'
   },
   {
+    title: '標籤名',
     dataIndex: 'ts_name',
-    width: '28%',
-    colSpan: 0
+    width: '28%'
   },
   {
+    title: '預覽',
     dataIndex: 'tc_show',
-    width: '20%',
-    colSpan: 0
+    width: '20%'
   },
   {
+    title: '顏色',
     dataIndex: 'tc_color',
-    width: '20%',
-    colSpan: 0
+    width: '20%'
   },
   {
+    title: '層級',
     dataIndex: 'ts_parent_id',
-    width: '25%',
-    colSpan: 0
+    width: '25%'
   }
 ]
 </script>

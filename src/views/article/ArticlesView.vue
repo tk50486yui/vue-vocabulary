@@ -249,8 +249,9 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, watch, computed, onBeforeUnmount, nextTick } from 'vue'
+import { ref, reactive, toRefs, watch, computed, onMounted, onActivated, nextTick } from 'vue'
 import { useStore } from 'vuex'
+import { onBeforeRouteLeave } from 'vue-router'
 import { CloseBtn } from '@/components/button'
 import ArticlesAddView from '@/views/article/ArticlesAddView.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
@@ -319,7 +320,7 @@ const setCurrentPage = () => {
   pagination.current = Number(currentPage.value)
 }
 
-const setContentClick = () => {
+const setContentClick = async (): Promise<void> => {
   const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
   store.dispatch('Views/updateArticlesView', { variable: 'currentScrollY', data: scrollY })
   store.dispatch('Views/updateArticlesView', {
@@ -342,8 +343,15 @@ onMounted(async () => {
   }
 })
 
-onBeforeUnmount(() => {
-  setContentClick()
+onBeforeRouteLeave(async (to, from, next) => {
+  await setContentClick()
+  Ready.value = false
+  AfterReady.value = false
+  next()
+})
+
+onActivated(async () => {
+  Ready.value = true
 })
 
 watch(Ready, (val) => {

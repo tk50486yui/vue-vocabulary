@@ -272,18 +272,17 @@ onMounted(async () => {
 const columns = [
   {
     dataIndex: 'operation',
-    width: '7%',
-    colSpan: 0
+    width: '7%'
   },
   {
+    title: '類別名稱',
     dataIndex: 'cate_name',
-    width: '63%',
-    colSpan: 0
+    width: '63%'
   },
   {
+    title: '層級',
     dataIndex: 'cate_parent_id',
-    width: '30%',
-    colSpan: 0
+    width: '30%'
   }
 ]
 </script>

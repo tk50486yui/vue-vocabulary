@@ -2,7 +2,11 @@
   <template v-if="Ready">
     <div class="section-title">
       <h4>單字總覽</h4>
-      <a class="float-end text-warning" @click="filterShow = !filterShow">
+      <a
+        class="float-end"
+        @click="filterShow = !filterShow"
+        :class="{ 'text-warning': !filterShow, 'text-secondary': filterShow }"
+      >
         <font-awesome-icon :icon="['fas', 'filter']" />
       </a>
     </div>
@@ -216,19 +220,19 @@
                 <!-- cate_name -->
                 <template #title>
                   <template v-if="isCate">
-                    <a-row>
-                      <a-col :span="24" :offset="editTableData[item.id] ? 0 : 1">
-                        <template v-if="editTableData[item.id]">
-                          <CategoriesTreeSelect
-                            placeholder="詞語主題分類"
-                            size="small"
-                            :style="'width:100%'"
-                            v-model:value="editTableData[item.id]['cate_id']"
-                            :defaultValue="item.cate_id"
-                            :treeDefaultExpandedKeys="[item.cate_id]"
-                          />
-                        </template>
-                        <template v-else>
+                    <template v-if="editTableData[item.id]">
+                      <CategoriesTreeSelect
+                        placeholder="詞語主題分類"
+                        size="small"
+                        :style="'width:100%'"
+                        v-model:value="editTableData[item.id]['cate_id']"
+                        :defaultValue="item.cate_id"
+                        :treeDefaultExpandedKeys="[item.cate_id]"
+                      />
+                    </template>
+                    <template v-else>
+                      <a-row>
+                        <a-col :span="24" :offset="editTableData[item.id] ? 0 : 1">
                           <template v-if="item.cate_name == null || item.cate_name == ''">
                             --
                           </template>
@@ -258,9 +262,9 @@
                               </a>
                             </template>
                           </template>
-                        </template>
-                      </a-col>
-                    </a-row>
+                        </a-col>
+                      </a-row>
+                    </template>
                   </template>
                 </template>
                 <!-- checkbox -->
@@ -341,10 +345,7 @@
                           item.ws_name.includes($keyword)
                         "
                       >
-                        <router-link
-                          :to="{ name: 'wordDetails', params: { id: item.id } }"
-                          @click="setDetailsClick()"
-                        >
+                        <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
                           <template v-for="(char, index) in item.ws_name" :key="index">
                             <span :class="{ 'keyword-text': $keyword.includes(char) }">
                               {{ char }}
@@ -550,8 +551,9 @@
   <a-back-top />
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, computed, watch, onBeforeUnmount, nextTick } from 'vue'
+import { ref, reactive, toRefs, computed, watch, onMounted, onActivated, nextTick } from 'vue'
 import { useStore } from 'vuex'
+import { onBeforeRouteLeave } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { PlusBtn, DeleteBtn, CloseBtn } from '@/components/button'
 import { cloneDeep } from 'lodash-es'
@@ -744,7 +746,7 @@ const setPaginationCurrent = (): void => {
   pagination.current = Number(currentPage.value)
 }
 // ---- scroll setting ----
-const setDetailsClick = (): void => {
+const setDetailsClick = async (): Promise<void> => {
   const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
   store.dispatch('Views/updateWordsGrid', { variable: 'currentScrollY', data: scrollY })
   store.dispatch('Views/updateWordsGrid', {
@@ -812,10 +814,6 @@ const onDrawerShow = (): void => {
   wordsDrawerVisible.value = true
 }
 
-onBeforeUnmount(() => {
-  setDetailsClick()
-})
-
 onMounted(async () => {
   try {
     await store.dispatch('WordsStore/fetch')
@@ -824,6 +822,18 @@ onMounted(async () => {
   } catch (e) {
     //
   }
+})
+
+onBeforeRouteLeave(async (to, from, next) => {
+  await setDetailsClick()
+  Ready.value = false
+  AfterReady.value = false
+  next()
+})
+
+onActivated(async () => {
+  Ready.value = true
+  setDefaultFromState()
 })
 
 watch(Ready, (val) => {
