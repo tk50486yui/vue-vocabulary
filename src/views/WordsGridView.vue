@@ -11,7 +11,7 @@
       </a>
     </div>
     <!-- 過濾器 -->
-    <template v-if="filterShow">
+    <div v-show="filterShow">
       <!-- 第一層 tags select -->
       <a-input-group>
         <a-row :gutter="4">
@@ -27,7 +27,7 @@
             />
           </a-col>
           <a-col :span="2" class="d-flex align-items-center">
-            <template v-if="$filtersTags.length > 0">
+            <template v-if="tagsArray.length > 0">
               <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
             </template>
           </a-col>
@@ -89,7 +89,7 @@
         </span>
       </span>
       <p></p>
-    </template>
+    </div>
     <!-- groups add -->
     <a-button
       class="btn btn-dark btn-outline-light btn-sm rounded"
@@ -172,7 +172,7 @@
                     round
                   >
                     關鍵字：
-                    <template v-if="$keyword != '' && $filters.length > 0">
+                    <template v-if="$keyword !== '' && $filters.length > 0">
                       <template v-if="$filters.length === 1 && $filters.includes('cate_name')">
                         `
                         <span class="category-keyword-text">{{ $keyword }} </span>`
@@ -239,7 +239,7 @@
                           <template v-else>
                             <template
                               v-if="
-                                $keyword != '' &&
+                                $keyword !== '' &&
                                 $filters.includes('cate_name') &&
                                 item.cate_name.includes($keyword)
                               "
@@ -701,9 +701,7 @@ const handleCategoryFilter = async (cateName: string): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, 100))
   window.scrollTo({ top: 180, behavior: 'instant' })
 }
-/*const handleTagsFiltersChange = async (): Promise<void> => {
-  await store.dispatch('Search/updateFiltersTags', tagsArray.value)
-}*/
+
 const handleTagsLink = async (val: number): Promise<void> => {
   await onResetAll()
   tagsArray.value.push(val)
@@ -724,10 +722,10 @@ const setFilterItems = (): void => {
 const onResetSearch = async (): Promise<void> => {
   store.dispatch('Search/updateKeyword', '')
 }
+
 const onResetTags = async (): Promise<void> => {
   tagsArray.value = []
   filtersTagsTreeSelectRef.value.clearValue()
-  await store.dispatch('Search/updateFiltersTags', [])
 }
 const onResetAll = async (): Promise<void> => {
   onResetSearch()

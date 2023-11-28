@@ -7,6 +7,31 @@
         @click="visible = true"
       />
     </div>
+    <span class="d-flex align-items-center" :class="$theme" style="margin-bottom: 4px">
+      <el-tag effect="dark" type="danger" :color="labelColor" round>
+        <template v-if="$filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''">
+          已選擇類別：{{ $keyword }}
+        </template>
+        <template v-else> 尚無選擇 </template>
+      </el-tag>
+      <template v-if="$filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''">
+        <span style="margin-left: 4px">
+          <CloseBtn class="d-flex align-items-center" @click="onClearCateName" />
+        </span>
+      </template>
+    </span>
+    <span class="radio-theme d-flex align-items-center" :class="$theme" style="margin-bottom: 8px">
+      <el-tag effect="dark" type="danger" :color="labelColor" round>
+        <a-checkbox v-model:checked="$isAutoMove"></a-checkbox>
+        自動跳轉
+      </el-tag>
+      <span style="margin-left: 8px">
+        <a-radio-group v-model:value="$autoMove" @change="onMove">
+          <a-radio value="words">單字</a-radio>
+          <a-radio value="articles">文章</a-radio>
+        </a-radio-group>
+      </span>
+    </span>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
       <a-spin :spinning="spinning">
@@ -61,6 +86,7 @@ import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
+const { $filters, $keyword, $isAutoMove, $autoMove } = toRefs(store.state.Search)
 
 const $route = useRoute()
 const $router = useRouter()
@@ -71,6 +97,7 @@ const activeKey = ref<string[]>(['1'])
 const spinning = ref<boolean>(false)
 const SyncOutlinedSpin = ref<boolean>(false)
 const visible = ref<boolean>(false)
+const labelColor = ref<string>('rgb(48, 37, 2)')
 
 const refresh = async (): Promise<void> => {
   try {
@@ -89,8 +116,25 @@ const handleCategoryFilter = (cateName: string): void => {
   store.dispatch('Search/updateSearchClass', 'word')
   store.dispatch('Search/updateFilters', ['cate_name'])
   store.dispatch('Search/updateKeyword', cateName)
-  if (String($route.name) !== 'wordsGrid') {
-    $router.push({ name: 'wordsGrid' })
+  onMove()
+}
+
+const onClearCateName = (): void => {
+  store.dispatch('Search/updateSearchClass', 'word')
+  store.dispatch('Search/updateFilters', ['words'])
+  store.dispatch('Search/updateKeyword', '')
+}
+
+const onMove = (): void => {
+  if ($isAutoMove.value) {
+    const routeName = String($route.name)
+    if ($autoMove.value === 'words' && routeName !== 'wordsGrid') {
+      store.dispatch('Search/updateSearchClass', 'word')
+      $router.push({ name: 'wordsGrid' })
+    } else if ($autoMove.value === 'articles' && routeName !== 'articles') {
+      store.dispatch('Search/updateSearchClass', 'article')
+      $router.push({ name: 'articles' })
+    }
   }
 }
 
@@ -114,6 +158,7 @@ onMounted(() => {
   width: 70px;
   background: rgb(255, 191, 0);
   content: '';
+  // background: rgb(48, 37, 2);
 }
 
 .menu-scroll {

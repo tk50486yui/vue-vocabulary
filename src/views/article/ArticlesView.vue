@@ -24,10 +24,7 @@
               </a-col>
               <a-col :span="2" class="d-flex align-items-center">
                 <template v-if="tagsArray.length > 0">
-                  <CloseBtn
-                    class="d-flex align-items-center"
-                    @click="filtersTagsTreeSelectRef.clearValue()"
-                  />
+                  <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
                 </template>
               </a-col>
             </a-row>
@@ -124,9 +121,34 @@
                     </template>
                     <!-- 標題 -->
                     <template #title>
-                      <span class="span-text h5" style="white-space: pre"
-                        >#{{ item.id }}&nbsp;</span
-                      >
+                      <template v-if="item.cate_name !== '' && item.cate_name !== null">
+                        <span class="span-text h5">
+                          【
+                          <a @click="handleCategoryFilter(item.cate_name)">
+                            <template
+                              v-if="
+                                $keyword != '' &&
+                                $filters.includes('cate_name') &&
+                                item.cate_name.includes($keyword)
+                              "
+                            >
+                              <template v-for="(char, index) in item.cate_name" :key="index">
+                                <span
+                                  :class="{
+                                    'category-keyword-text': $keyword.includes(char)
+                                  }"
+                                >
+                                  {{ char }}
+                                </span>
+                              </template>
+                            </template>
+                            <template v-else>
+                              {{ item.cate_name }}
+                            </template>
+                          </a>
+                          】
+                        </span>
+                      </template>
                       <template
                         v-if="
                           $keyword != '' &&
@@ -260,14 +282,14 @@ import avatar from '@/assets/img/avatar.png'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $keyword, $filters } = toRefs(store.state.Search)
+const { $keyword, $filters, $filtersTags } = toRefs(store.state.Search)
 const { $ArticlesView } = toRefs(store.state.Views)
 
 const articles = computed(() => store.getters['ArticlesStore/articles'])
 const filterArticles = computed(() => store.getters['ArticlesStore/filterArticles'])
 
 const filterdResult = computed(() =>
-  filterArticles.value($keyword.value, $filters.value, tagsArray.value, tagsOperator.value)
+  filterArticles.value($keyword.value, $filters.value, $filtersTags.value, tagsOperator.value)
 )
 
 const Ready = ref<boolean>(false)
@@ -302,7 +324,20 @@ const onResetSearch = () => {
   store.dispatch('Search/updateKeyword', '')
 }
 
+const onResetTags = async (): Promise<void> => {
+  tagsArray.value = []
+  filtersTagsTreeSelectRef.value.clearValue()
+}
+// filters
+const handleCategoryFilter = async (cateName: string): Promise<void> => {
+  store.dispatch('Search/updateSearchClass', 'word')
+  store.dispatch('Search/updateFilters', ['cate_name'])
+  store.dispatch('Search/updateKeyword', cateName)
+  await new Promise((resolve) => setTimeout(resolve, 100))
+  window.scrollTo({ top: 180, behavior: 'instant' })
+}
 const setDefaultFromState = () => {
+  tagsArray.value = $filtersTags.value
   pagination.pageSize = Number($ArticlesView.value.currentPageSize)
   selectPageSize.value = $ArticlesView.value.currentPageSize
   pagination.current = Number($ArticlesView.value.currentPage)
@@ -352,6 +387,7 @@ onBeforeRouteLeave(async (to, from, next) => {
 
 onActivated(async () => {
   Ready.value = true
+  setDefaultFromState()
 })
 
 watch(Ready, (val) => {
@@ -378,6 +414,10 @@ watch(AfterReady, (val) => {
     })
   }
 })
+
+watch(tagsArray, () => {
+  store.dispatch('Search/updateFiltersTags', tagsArray.value)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -399,6 +439,10 @@ watch(AfterReady, (val) => {
 
 .keyword-text {
   color: $keyword-color;
+}
+
+.category-keyword-text {
+  color: $category-keyword-color;
 }
 
 .article-date {

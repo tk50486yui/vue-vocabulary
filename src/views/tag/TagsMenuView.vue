@@ -7,6 +7,28 @@
         @click="visible = true"
       />
     </div>
+    <span class="d-flex align-items-center" :class="$theme" style="margin-bottom: 4px">
+      <el-tag effect="dark" type="danger" :color="labelColor" round>
+        已選擇：{{ $filtersTags.length }}
+      </el-tag>
+      <template v-if="$filtersTags.length > 0">
+        <span style="margin-left: 4px">
+          <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
+        </span>
+      </template>
+    </span>
+    <span class="radio-theme d-flex align-items-center" :class="$theme" style="margin-bottom: 8px">
+      <el-tag effect="dark" type="danger" :color="labelColor" round>
+        <a-checkbox v-model:checked="$isAutoMove"></a-checkbox>
+        自動跳轉
+      </el-tag>
+      <span style="margin-left: 8px">
+        <a-radio-group v-model:value="$autoMove" @change="onMove">
+          <a-radio value="words">單字</a-radio>
+          <a-radio value="articles">文章</a-radio>
+        </a-radio-group>
+      </span>
+    </span>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
       <a-spin :spinning="spinning">
@@ -71,14 +93,14 @@
 import { ref, toRefs, onMounted, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { PlusBtn } from '@/components/button'
+import { PlusBtn, CloseBtn } from '@/components/button'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import TagsModalView from '@/views/tag/TagsModalView.vue'
 import { Tag } from '@/interfaces/Tags'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $filtersTags, $filtersTagsState } = toRefs(store.state.Search)
+const { $filtersTags, $filtersTagsState, $isAutoMove, $autoMove } = toRefs(store.state.Search)
 
 const $route = useRoute()
 const $router = useRouter()
@@ -99,13 +121,35 @@ const spinning = ref<boolean>(false)
 const selectedKeys = ref([])
 const openKeys = ref()
 const visible = ref<boolean>(false)
+const labelColor = ref<string>('#31122f')
 
 const handleTagsFilter = async (id: number): Promise<void> => {
   await store.dispatch('Search/pushFiltersTags', id)
-  store.dispatch('Search/updateSearchClass', 'word')
-  if (String($route.name) !== 'wordsGrid') {
-    $router.push({ name: 'wordsGrid' })
+  if ($isAutoMove.value) {
+    await moveBegin()
   }
+}
+
+const onMove = async (): Promise<void> => {
+  if ($isAutoMove.value) {
+    await moveBegin()
+  }
+}
+
+const moveBegin = async (): Promise<void> => {
+  const routeName = String($route.name)
+  if ($autoMove.value === 'words' && routeName !== 'wordsGrid') {
+    store.dispatch('Search/updateSearchClass', 'word')
+    $router.push({ name: 'wordsGrid' })
+  } else if ($autoMove.value === 'articles' && routeName !== 'articles') {
+    store.dispatch('Search/updateSearchClass', 'article')
+    $router.push({ name: 'articles' })
+  }
+}
+
+const onResetTags = async (): Promise<void> => {
+  await store.dispatch('Search/pushFiltersTags', 0)
+  selectedKeys.value = noChildrenArray.value
 }
 
 onMounted(async () => {

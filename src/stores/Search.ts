@@ -6,6 +6,9 @@ interface SearchState {
   $filters: string[]
   $filtersTags: number[]
   $filtersTagsState: boolean
+  $currentCateName: string
+  $autoMove: string
+  $isAutoMove: boolean
 }
 
 const state: SearchState = {
@@ -14,7 +17,10 @@ const state: SearchState = {
   $searchClass: '',
   $filters: ['ws_name'],
   $filtersTags: [],
-  $filtersTagsState: false
+  $filtersTagsState: false,
+  $currentCateName: '',
+  $autoMove: 'words',
+  $isAutoMove: true
 }
 
 const actions = {
@@ -51,20 +57,28 @@ const mutations = {
   setFilters(state: SearchState, filters: string[]) {
     state.$filters = filters
   },
+  // This method is called from both 'Words' and 'Articles'
   async setFiltersTags(state: SearchState, filtersTags: number[]) {
     state.$filtersTags = filtersTags
-    state.$filtersTagsState = false // 不是在 menu 設定的
+    state.$filtersTagsState = false
   },
+  // This method is only called from 'TagsMenu'
   async pushFiltersTags(state: SearchState, id: number) {
-    if (state.$filtersTags.includes(id)) {
-      const index = state.$filtersTags.indexOf(id)
-      if (index !== -1) {
-        state.$filtersTags.splice(index, 1)
-      }
+    // 0 => clear array
+    if (id === 0) {
+      state.$filtersTags.splice(0, state.$filtersTags.length)
     } else {
-      state.$filtersTags.push(id)
+      if (state.$filtersTags.includes(id)) {
+        const index = state.$filtersTags.indexOf(id)
+        if (index !== -1) {
+          state.$filtersTags.splice(index, 1)
+        }
+      } else {
+        state.$filtersTags.push(id)
+      }
     }
-    state.$filtersTagsState = true // 只在 menu 設定
+
+    state.$filtersTagsState = true // so that TagsMenu can watch it
   }
 }
 

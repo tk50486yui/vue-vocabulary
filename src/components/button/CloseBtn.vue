@@ -13,4 +13,7 @@ const { $theme } = toRefs(store.state.Theme)
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+a {
+  cursor: pointer;
+}
 </style>

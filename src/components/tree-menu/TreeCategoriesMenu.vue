@@ -22,14 +22,17 @@
   </div>
 </template>
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { PropType, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { Category } from '@/interfaces/Categories'
 
 const store = useStore()
 
+const { $isAutoMove, $autoMove } = toRefs(store.state.Search)
+
 const $router = useRouter()
+const $route = useRoute()
 
 defineProps({
   data: { type: Object as PropType<Category>, required: true }
@@ -39,6 +42,19 @@ const handleCategoryFilter = async (cateName: string): Promise<void> => {
   store.dispatch('Search/updateSearchClass', 'word')
   store.dispatch('Search/updateFilters', ['cate_name'])
   store.dispatch('Search/updateKeyword', cateName)
-  $router.push({ name: 'wordsGrid' })
+  onMove()
+}
+
+const onMove = (): void => {
+  if ($isAutoMove.value) {
+    const routeName = String($route.name)
+    if ($autoMove.value === 'words' && routeName !== 'wordsGrid') {
+      store.dispatch('Search/updateSearchClass', 'word')
+      $router.push({ name: 'wordsGrid' })
+    } else if ($autoMove.value === 'articles' && routeName !== 'articles') {
+      store.dispatch('Search/updateSearchClass', 'article')
+      $router.push({ name: 'articles' })
+    }
+  }
 }
 </script>

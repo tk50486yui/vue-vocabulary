@@ -78,13 +78,20 @@
         </a-popconfirm>
       </span>
     </template>
+    <template v-else-if="$route.name !== 'wordsGrid'">
+      <div style="margin-left: 30px; margin-bottom: 15px">
+        <a-button class="btn btn-dark btn-outline-light rounded" size="small" @click="onMove()">
+          進入單字總覽新增
+        </a-button>
+      </div>
+    </template>
   </template>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, toRefs, onMounted, computed, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { WordsGroupsForm, groupArray as WordsGroupArray } from '@/interfaces/WordsGroups'
 
@@ -92,6 +99,7 @@ const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
 const $router = useRouter()
+const $route = useRoute()
 
 const { $WordsGroupsView, $WordsGroupsDetailsView } = toRefs(store.state.Views)
 
@@ -159,6 +167,13 @@ const onRemove = (id: number, wsName: string): void => {
     variable: 'groupArray',
     data: { ws_id: id, ws_name: wsName, checked: false }
   })
+}
+
+const onMove = (): void => {
+  const routeName = $route.name
+  if (routeName !== 'wordsGrid') {
+    $router.push({ name: 'wordsGrid' })
+  }
 }
 
 onMounted(() => {

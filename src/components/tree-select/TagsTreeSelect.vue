@@ -11,6 +11,7 @@
         allow-clear
         :tree-line="treeLine && { showLeafIcon }"
         :tree-data="tags"
+        showCheckedStrategy="SHOW_ALL"
         treeNodeFilterProp="ts_name"
         :field-names="{
           children: 'children',
