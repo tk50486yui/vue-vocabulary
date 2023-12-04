@@ -237,6 +237,7 @@
                             --
                           </template>
                           <template v-else>
+                            【
                             <template
                               v-if="
                                 $keyword !== '' &&
@@ -261,6 +262,7 @@
                                 {{ item.cate_name }}
                               </a>
                             </template>
+                            】
                           </template>
                         </a-col>
                       </a-row>
@@ -281,37 +283,34 @@
                   <!-- Icon Star Heart -->
                   <a-col :span="24" :offset="1">
                     <span class="icon-theme" :class="$theme">
-                      <template v-if="item.ws_is_common">
-                        <span class="icon-star">
+                      <a-space size="small" align="start">
+                        <span
+                          :class="{
+                            'icon-star': item.ws_is_common,
+                            'icon-star-false': !item.ws_is_common
+                          }"
+                        >
                           <a @click="onUpdateCommon(item.id, item)">
                             <StarFilled />
                           </a>
                         </span>
-                      </template>
-                      <template v-else>
-                        <span class="icon-star-false">
-                          <a @click="onUpdateCommon(item.id, item)">
-                            <StarFilled />
-                          </a>
-                        </span>
-                      </template>
-                      <template v-if="item.ws_is_important">
-                        <span class="icon-heart">
+                        <span
+                          :class="{
+                            'icon-heart': item.ws_is_important,
+                            'icon-heart-false': !item.ws_is_important
+                          }"
+                        >
                           <a @click="onUpdateImportant(item.id, item)">
                             <HeartFilled />
                           </a>
                         </span>
-                      </template>
-                      <template v-else>
-                        <span class="icon-heart-false">
-                          <a @click="onUpdateImportant(item.id, item)">
-                            <HeartFilled />
-                          </a>
-                        </span>
-                      </template>
+                        <a-typography-paragraph
+                          :copyable="{ text: item.ws_name }"
+                        ></a-typography-paragraph>
+                      </a-space>
                       <template v-if="editTableData[item.id]">
                         <span class="float-end">
-                          <a-space size="large">
+                          <a-space size="large" align="start">
                             <DeleteBtn @confirm="onDelete(item.id)" />
                             <CheckOutlined class="text-success" @click="onEditFinish(item)" />
                             <CloseOutlined class="text-danger" @click="cancel(item)" />
@@ -908,14 +907,8 @@ watch(checkboxArray, (val) => {
   background-color: #00000008;
 }
 
-.icon-star {
-  padding-left: 2px;
-  padding-right: 8px;
-}
-
-.icon-star-false {
-  padding-left: 2px;
-  padding-right: 8px;
+.icon-copy {
+  padding-left: 4px;
 }
 
 .icon-delete {

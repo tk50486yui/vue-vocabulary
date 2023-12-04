@@ -449,4 +449,84 @@ watch(tagsArray, () => {
   padding-top: 18px;
   font-size: 12px;
 }
+
+/*---------------------
+    Article List
+-----------------------*/
+.article-list-theme {
+  &.dark :deep(.ant-list-item) {
+    background: var(--article-list-background);
+    color: var(--table-text);
+  }
+  &.dark :deep(.ant-list-item-meta-title a) {
+    color: var(--table-text);
+  }
+  &.dark :deep(.ant-list-item-meta-description) {
+    color: var(--table-text);
+  }
+
+  &.dark :deep(.ant-list-item-action li) {
+    color: var(--table-text);
+  }
+  /* 自定義類別 */
+  a {
+    text-decoration: none;
+  }
+  &.dark :deep(a.list-link) {
+    color: var(--link-text);
+  }
+
+  &.dark :deep(.title-link) {
+    color: var(--title-link-text);
+  }
+  &.dark :deep(.title-link:hover) {
+    color: var(--title-link-text-hover);
+  }
+
+  &.dark :deep(span.span-text) {
+    color: var(--table-text);
+  }
+
+  &.dark :deep(.article-date) {
+    color: var(--article-date-text);
+  }
+
+  // card pagination
+  &.dark :deep(.ant-pagination-item) {
+    color: var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item:hover) {
+    color: var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-link) {
+    color: var(--pagination-text);
+    background: var(--pagination-background);
+  }
+
+  &.dark :deep(.ant-pagination-item-link:disabled) {
+    color: var(--pagination-text);
+    background: var(--pagination-link-disabled);
+  }
+
+  &.dark :deep(.ant-pagination-item-active) {
+    color: var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-active:hover) {
+    color: var(--pagination-text-active);
+    background: var(--pagination-background-active);
+    border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-ellipsis) {
+    color: var(--pagination-text-active);
+  }
+}
 </style>

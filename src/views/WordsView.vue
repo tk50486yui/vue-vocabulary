@@ -118,34 +118,28 @@
           <template v-else-if="column.dataIndex === 'common'">
             <!-- Icon Star Heart -->
             <span class="icon-theme" :class="$theme">
-              <template v-if="record.ws_is_common">
-                <span class="icon-star">
+              <a-space size="small" align="start">
+                <span
+                  :class="{
+                    'icon-star': record.ws_is_common,
+                    'icon-star-false': !record.ws_is_common
+                  }"
+                >
                   <a @click="onUpdateCommon(record.id, record)">
                     <StarFilled />
                   </a>
                 </span>
-              </template>
-              <template v-else>
-                <span class="icon-star-false">
-                  <a @click="onUpdateCommon(record.id, record)">
-                    <StarFilled />
-                  </a>
-                </span>
-              </template>
-              <template v-if="record.ws_is_important">
-                <span class="icon-heart">
+                <span
+                  :class="{
+                    'icon-heart': record.ws_is_important,
+                    'icon-heart-false': !record.ws_is_important
+                  }"
+                >
                   <a @click="onUpdateImportant(record.id, record)">
                     <HeartFilled />
                   </a>
                 </span>
-              </template>
-              <template v-else>
-                <span class="icon-heart-false">
-                  <a @click="onUpdateImportant(record.id, record)">
-                    <HeartFilled />
-                  </a>
-                </span>
-              </template>
+              </a-space>
             </span>
           </template>
         </template>

@@ -102,34 +102,28 @@
         </a-descriptions-item>
         <a-descriptions-item label="常用 / 喜愛">
           <span class="icon-theme" :class="$theme">
-            <template v-if="word.ws_is_common">
-              <span class="icon-star">
+            <a-space size="small" align="start">
+              <span
+                :class="{
+                  'icon-star': word.ws_is_common,
+                  'icon-star-false': !word.ws_is_common
+                }"
+              >
                 <a @click="onUpdateCommon(word.id, word)">
                   <StarFilled />
                 </a>
               </span>
-            </template>
-            <template v-else>
-              <span class="icon-star-false">
-                <a @click="onUpdateCommon(word.id, word)">
-                  <StarFilled />
-                </a>
-              </span>
-            </template>
-            <template v-if="word.ws_is_important">
-              <span class="icon-heart">
+              <span
+                :class="{
+                  'icon-heart': word.ws_is_important,
+                  'icon-heart-false': !word.ws_is_important
+                }"
+              >
                 <a @click="onUpdateImportant(word.id, word)">
                   <HeartFilled />
                 </a>
               </span>
-            </template>
-            <template v-else>
-              <span class="icon-heart-false">
-                <a @click="onUpdateImportant(word.id, word)">
-                  <HeartFilled />
-                </a>
-              </span>
-            </template>
+            </a-space>
           </span>
         </a-descriptions-item>
         <a-descriptions-item label="忘記 / 重要程度">
