@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-xl-3 col-lg-2">
             <div class="header__logo">
-              <router-link :to="{ name: 'home' }">
+              <router-link :to="{ name: 'wordsGrid' }">
                 <img :src="logo" />
               </router-link>
             </div>
@@ -88,7 +88,7 @@
     >
       <template #title>
         <div class="drawer__logo">
-          <router-link :to="{ name: 'home' }">
+          <router-link :to="{ name: 'wordsGrid' }">
             <img :src="logo" />
           </router-link>
         </div>

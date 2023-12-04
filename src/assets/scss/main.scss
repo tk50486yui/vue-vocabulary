@@ -150,8 +150,9 @@ $edit-icon-color: #6A6AFF;
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);
   }
-  
-  
+  &.dark :deep(.ant-pagination-item-ellipsis){
+    color:var(--pagination-text-active);
+  }
 }
 /*---------------------
     Slider
@@ -426,50 +427,6 @@ $edit-icon-color: #6A6AFF;
   }
 }
 
-.toggle-theme{
-  // dark
-  &.dark :deep(.ant-radio-button-wrapper){   
-    background: var(--radio-button-toggle-background);    
-    color: var(--radio-button-toggle-text);    
-  }
-  &.dark :deep(.ant-radio-button-wrapper:hover){
-    background: var(--radio-button-toggle-background-active);    
-    color: var( --radio-button-toggle-text-active);   
-  }
-  &.dark :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
-    background: var(--radio-button-toggle-background-active); 
-    color: var( --radio-button-toggle-text);   
-  }
-  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
-    background: var(--radio-button-toggle-background-active);
-    color: var( --radio-button-toggle-text-active); 
-  }
-  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
-    border-color: var(--radio-button-toggle-border);    
-  }
-
-  // light
-  &.light :deep(.ant-radio-button-wrapper){   
-    background: var(--radio-button-toggle-background);    
-    color: var(--radio-button-toggle-text);    
-  }
-  &.light :deep(.ant-radio-button-wrapper:hover){
-    background: var(--radio-button-toggle-background-active);    
-    color: var( --radio-button-toggle-text-active);   
-  }
-  &.light :deep( .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)){
-    background: var(--radio-button-toggle-background-active); 
-    color: var( --radio-button-toggle-text);   
-  }
-  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover){  
-    background: var(--radio-button-toggle-background-active);
-    color: var( --radio-button-toggle-text-active); 
-  }
-  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child){
-    border-color: var(--radio-button-toggle-border);    
-  }
-}
-
 /*---------------------
     Checkbox
 -----------------------*/
@@ -529,7 +486,6 @@ $edit-icon-color: #6A6AFF;
 /*---------------------
     Modal
 -----------------------*/
-
 .menu-modal {
   // head
   &.dark :deep(.ant-modal-header){
@@ -563,7 +519,6 @@ $edit-icon-color: #6A6AFF;
   }
 
 }
-
 /*---------------------
     Spad
 -----------------------*/
@@ -597,21 +552,21 @@ $edit-icon-color: #6A6AFF;
   } 
   
   // card title 
-  &.dark :deep(.ant-card-head-title a){    
+  &.dark :deep(.ant-card-head-title a){
     color: var(--card-link-text);
     text-decoration: none;   
   }
-  &.dark :deep(.ant-card-head-title a:hover){   
+  &.dark :deep(.ant-card-head-title a:hover){
     color: var(--card-link-text-hover);
   }
 
   // card body 
-  &.dark :deep(.ant-card-body a){    
+  &.dark :deep(.ant-card-body a){
     color: var(--link-text);
-    text-decoration: none;   
+    text-decoration: none; 
   }
 
-  &.dark :deep(.ant-card-body a:hover){   
+  &.dark :deep(.ant-card-body a:hover){
     color: var(--link-text-hover);
   } 
 
@@ -649,7 +604,11 @@ $edit-icon-color: #6A6AFF;
     border-color: var(--pagination-border);
   }
 
-  :deep(.ant-pagination) {      
+  &.dark :deep(.ant-pagination-item-ellipsis){
+    color:var(--pagination-text-active);
+  }
+
+  :deep(.ant-pagination) {
     padding-bottom: 12px;
   } 
 }
@@ -664,8 +623,6 @@ $edit-icon-color: #6A6AFF;
     @include icon-colors(light);
   }
 }
-
-
 /*---------------------
     Article List
 -----------------------*/
@@ -741,13 +698,17 @@ $edit-icon-color: #6A6AFF;
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);
   }
+
+  &.dark :deep(.ant-pagination-item-ellipsis){
+    color:var(--pagination-text-active);
+  }
 }
 
 /*---------------------
    List 
 -----------------------*/
 .list-theme{
-  &.dark :deep(.ant-list-item){     
+  &.dark :deep(.ant-list-item){
     color: var(--table-text);
   }
  
@@ -764,12 +725,18 @@ $edit-icon-color: #6A6AFF;
     text-decoration: none;
   }
   &.dark :deep(.list-link a){  
-    color: var(--list-link-text);  
+    color: var(--list-link-text);
   }
-
-  &.dark :deep(.list-link a:hover){  
+  &.dark :deep(.list-link a:hover){
     color: var(--list-link-text-hover);
   }  
+
+  &.dark :deep(.list-item-link a){  
+    color: var(--link-text);
+  }
+  &.dark :deep(.list-item-link a:hover){
+    color: var(--link-text-hover);
+  } 
 
   // list pagination 
   &.dark :deep(.ant-pagination-item){
@@ -803,6 +770,10 @@ $edit-icon-color: #6A6AFF;
     color:var(--pagination-text-active);
     background: var(--pagination-background-active);
     border-color: var(--pagination-border);
+  }
+
+  &.dark :deep(.ant-pagination-item-ellipsis){
+    color:var(--pagination-text-active);
   }
 }
 

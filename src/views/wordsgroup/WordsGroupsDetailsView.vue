@@ -21,7 +21,14 @@
         <template #renderItem="{ item, index }">
           <a-list-item>
             <a-list-item-meta>
-              <template #description> {{ index + 1 }}. {{ item.ws_name }} </template>
+              <template #description>
+                {{ index + 1 }}.
+                <span class="list-item-link">
+                  <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
+                    {{ item.ws_name }}
+                  </router-link>
+                </span>
+              </template>
             </a-list-item-meta>
           </a-list-item>
         </template>

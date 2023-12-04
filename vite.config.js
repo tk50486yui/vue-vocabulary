@@ -7,6 +7,10 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: '/vue-vocabulary/',
+    build: {
+      emptyOutDir: true
+    },
     plugins: [
       Vue(),
       Components({

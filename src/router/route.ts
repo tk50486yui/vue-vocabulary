@@ -14,11 +14,6 @@ import WordsUpload from '@/views/shared/WordsUpload.vue'
 const routes = [
   {
     path: '',
-    name: 'home',
-    component: WordsGridView
-  },
-  {
-    path: '/wordsgrid',
     name: 'wordsGrid',
     component: WordsGridView
   },

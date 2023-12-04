@@ -1,7 +1,7 @@
 <template>
   <template v-if="Ready && word">
     <span class="back-link-theme" :class="$theme">
-      <router-link :to="{ name: 'wordsGrid' }"> 返回 </router-link>
+      <router-link :to="{ name: backName }"> 返回 </router-link>
       <span class="link-separator h5">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
@@ -239,6 +239,7 @@ const { $mobile, $tablet, $desktop } = toRefs(store.state.Screen)
 
 const $route = useRoute()
 const $router = useRouter()
+const backName = ref('wordsGrid')
 
 const wordById = computed(() => store.getters['WordsStore/wordById'])
 
@@ -322,6 +323,7 @@ const changeDescriptionsLayout = (isScreenSmall: boolean): void => {
     descriptionsLayout.value = 'horizontal'
   }
 }
+
 const setGridState = async (): Promise<void> => {
   store.dispatch('Views/updateWordsGrid', {
     variable: 'jumpPage',

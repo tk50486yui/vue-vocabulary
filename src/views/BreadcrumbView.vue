@@ -5,14 +5,9 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="breadcrumb-links" :class="$theme">
-            <span>
-              <router-link :to="{ name: 'home' }">
-                <font-awesome-icon :icon="['fas', 'house']" /> 首頁
-              </router-link>
-            </span>
             <template v-if="!activeHome && activeRoute != ''">
-              <span class="breadcrumb-separator">
-                <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
+              <span style="margin-right: 5px">
+                <font-awesome-icon :icon="['fas', 'house']" />
               </span>
               <span class="active">
                 {{ activeRoute }}
@@ -62,6 +57,9 @@ const getCurrentRoute = (): void => {
       break
     case 'words':
       activeRoute.value = '單字表'
+      break
+    case 'wordsUpload':
+      activeRoute.value = '圖片總覽'
       break
     case 'wordsGrid':
     case 'wordDetails':
@@ -119,6 +117,7 @@ watch($route, () => {
 
 .breadcrumb-links a i {
   margin-right: 5px;
+  margin-left: 5px;
 }
 
 .breadcrumb-separator {

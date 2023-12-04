@@ -3,9 +3,7 @@
     <a-radio-group v-model:value="sideGroup">
       <a-radio-button value="1">標籤</a-radio-button>
       <a-radio-button value="2">類別</a-radio-button>
-      <a-badge :count="$WordsGroupsView.groupArray.length" color="magenta">
-        <a-radio-button value="3">群組</a-radio-button>
-      </a-badge>
+      <a-radio-button value="3">群組</a-radio-button>
     </a-radio-group>
   </div>
   <p></p>
@@ -30,7 +28,7 @@ import WordsGroupsView from '@/views/wordsgroup/WordsGroupsView.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $WordsGroupsView, $WordsGroupsDetailsView } = toRefs(store.state.Views)
+const { $WordsGroupsDetailsView } = toRefs(store.state.Views)
 
 const updateNow = computed(() => $WordsGroupsDetailsView.value.updateNow)
 
@@ -53,4 +51,55 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.toggle-theme {
+  // dark
+  &.dark :deep(.ant-radio-button-wrapper) {
+    background: var(--radio-button-toggle-background);
+    color: var(--radio-button-toggle-text);
+  }
+  &.dark :deep(.ant-radio-button-wrapper:hover) {
+    background: var(--radio-button-toggle-background-active);
+    color: var(--radio-button-toggle-text-active);
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)) {
+    border-color: var(--radio-button-toggle-text);
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before) {
+    background: var(--radio-button-toggle-text);
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)) {
+    background: var(--radio-button-toggle-background-active);
+    color: var(--radio-button-toggle-text);
+  }
+  &.dark :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover) {
+    background: var(--radio-button-toggle-background-active);
+    color: var(--radio-button-toggle-text-active);
+  }
+  &.dark
+    :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child) {
+    border-color: var(--radio-button-toggle-border);
+  }
+
+  // light
+  &.light :deep(.ant-radio-button-wrapper) {
+    background: var(--radio-button-toggle-background);
+    color: var(--radio-button-toggle-text);
+  }
+  &.light :deep(.ant-radio-button-wrapper:hover) {
+    background: var(--radio-button-toggle-background-active);
+    color: var(--radio-button-toggle-text-active);
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)) {
+    background: var(--radio-button-toggle-background-active);
+    color: var(--radio-button-toggle-text);
+  }
+  &.light :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover) {
+    background: var(--radio-button-toggle-background-active);
+    color: var(--radio-button-toggle-text-active);
+  }
+  &.light
+    :deep(.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child) {
+    border-color: var(--radio-button-toggle-border);
+  }
+}
 </style>

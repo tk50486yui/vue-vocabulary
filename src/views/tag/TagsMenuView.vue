@@ -7,18 +7,8 @@
         @click="visible = true"
       />
     </div>
-    <span class="d-flex align-items-center" :class="$theme" style="margin-bottom: 4px">
-      <el-tag effect="dark" type="danger" :color="labelColor" round>
-        已選擇：{{ $filtersTags.length }}
-      </el-tag>
-      <template v-if="$filtersTags.length > 0">
-        <span style="margin-left: 4px">
-          <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
-        </span>
-      </template>
-    </span>
     <span class="radio-theme d-flex align-items-center" :class="$theme" style="margin-bottom: 8px">
-      <el-tag effect="dark" type="danger" :color="labelColor" round>
+      <el-tag effect="dark" type="danger" size="small" :color="labelColor" round>
         <a-checkbox v-model:checked="$isAutoMove"></a-checkbox>
         自動跳轉
       </el-tag>
@@ -37,6 +27,16 @@
           <!--  子摺疊區塊  -->
           <a-collapse-panel key="1">
             <div class="menu-scroll">
+              <span class="d-flex align-items-center" :class="$theme">
+                <el-tag effect="dark" type="danger" size="small" round>
+                  已選擇：{{ $filtersTags.length }}
+                </el-tag>
+                <template v-if="$filtersTags.length > 0">
+                  <span style="margin-left: 4px">
+                    <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
+                  </span>
+                </template>
+              </span>
               <!--  最頂層 -->
               <a-menu
                 mode="inline"

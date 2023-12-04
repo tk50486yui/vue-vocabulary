@@ -7,21 +7,8 @@
         @click="visible = true"
       />
     </div>
-    <span class="d-flex align-items-center" :class="$theme" style="margin-bottom: 4px">
-      <el-tag effect="dark" type="danger" :color="labelColor" round>
-        <template v-if="$filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''">
-          已選擇類別：{{ $keyword }}
-        </template>
-        <template v-else> 尚無選擇 </template>
-      </el-tag>
-      <template v-if="$filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''">
-        <span style="margin-left: 4px">
-          <CloseBtn class="d-flex align-items-center" @click="onClearCateName" />
-        </span>
-      </template>
-    </span>
     <span class="radio-theme d-flex align-items-center" :class="$theme" style="margin-bottom: 8px">
-      <el-tag effect="dark" type="danger" :color="labelColor" round>
+      <el-tag effect="dark" type="danger" size="small" :color="labelColor" round>
         <a-checkbox v-model:checked="$isAutoMove"></a-checkbox>
         自動跳轉
       </el-tag>
@@ -40,6 +27,25 @@
           <!--  子摺疊區塊  -->
           <a-collapse-panel key="1">
             <div class="menu-scroll">
+              <span class="d-flex align-items-center" :class="$theme">
+                <el-tag effect="dark" type="warning" size="small" round>
+                  <template
+                    v-if="
+                      $filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''
+                    "
+                  >
+                    已選擇類別：{{ $keyword }}
+                  </template>
+                  <template v-else> 尚無選擇 </template>
+                </el-tag>
+                <template
+                  v-if="$filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''"
+                >
+                  <span style="margin-left: 4px">
+                    <CloseBtn class="d-flex align-items-center" @click="onClearCateName" />
+                  </span>
+                </template>
+              </span>
               <!--  類別最頂層 -->
               <a-menu mode="inline">
                 <!--  第一層  for 顯示  -->

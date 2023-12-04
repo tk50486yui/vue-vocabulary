@@ -23,21 +23,23 @@
             <a-select-option :value="wordsGroups.length">全部</a-select-option>
           </a-select>
         </span>
-        <span>當前：</span>
-        <a-select
-          v-model:value="currentPage"
-          :getPopupContainer="() => $refs.selectMod"
-          size="small"
-          style="width: 80px"
-          @change="handleCurrentPage()"
-        >
-          <template
-            v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))"
-            :key="index"
+        <span
+          >當前：
+          <a-select
+            v-model:value="currentPage"
+            :getPopupContainer="() => $refs.selectMod"
+            size="small"
+            style="width: 80px"
+            @change="handleCurrentPage()"
           >
-            <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
-          </template>
-        </a-select>
+            <template
+              v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))"
+              :key="index"
+            >
+              <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
+            </template>
+          </a-select>
+        </span>
         <span> 共 {{ wordsGroups.length }} 筆 </span>
       </a-space>
     </div>
