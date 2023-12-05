@@ -5,6 +5,5 @@ window.io = io
 // @ts-expect-error:  necessary
 window.Echo = new Echo({
   broadcaster: 'socket.io',
-  host: window.location.hostname + ':6001',
-  withCredentials: true
+  host: window.location.hostname + ':6001'
 })
