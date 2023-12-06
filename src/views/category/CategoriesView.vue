@@ -56,18 +56,22 @@
                               'margin-right': '6px'
                             }"
                           >
-                            │</span
-                          >
+                            │
+                          </span>
                         </template>
-                        <EditOutlined
-                          class="button-edit"
-                          @click="edit(record, 0, recentCategoriesArray)"
-                        />
-                        {{ text }}
-                        <template v-if="record.children.length > 0">
-                          （{{ record.children.length }}）
-                        </template>
-                        <DeleteBtn @confirm="onDelete(record.id)" />
+                        <a-space size="small" align="center">
+                          <EditOutlined
+                            class="button-edit"
+                            @click="edit(record, 0, recentCategoriesArray)"
+                          />
+                          <span>
+                            {{ text }}
+                          </span>
+                          <template v-if="record.children.length > 0">
+                            <span> （{{ record.children.length }}） </span>
+                          </template>
+                          <DeleteBtn @confirm="onDelete(record.id)" />
+                        </a-space>
                       </template>
                     </div>
                   </template>
@@ -136,14 +140,16 @@
                     </div>
                   </template>
                   <template v-else>
-                    <div class="column-container">
+                    <a-space size="small" align="center">
                       <EditOutlined
                         class="button-edit2"
                         @click="edit(record, 1, recentCategoriesArray)"
                       />
-                      {{ text }}
+                      <span>
+                        {{ text }}
+                      </span>
                       <DeleteBtn @confirm="onDelete(record.id)" />
-                    </div>
+                    </a-space>
                   </template>
                 </template>
                 <!-- cate_parent_id -->
@@ -308,22 +314,16 @@ const columns = [
   align-items: center;
 }
 
-.button-edit {
-  color: rgb(252, 212, 94);
-  padding-right: 6px;
-}
-
 .button-edit-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
+.button-edit {
+  color: rgb(252, 212, 94);
+}
 .button-edit2 {
-  display: flex;
-  justify-content: center;
-  padding-right: 6px;
-  color: #6a6aff;
+  color: rgb(8, 131, 247);
 }
 
 .button-edit-check {
@@ -335,5 +335,14 @@ const columns = [
   margin-left: auto;
   color: #ea0000;
   padding-right: 6px;
+}
+
+/*---------------------
+    scss color
+-----------------------*/
+.dark {
+  --tab-background: rgb(56, 56, 48);
+  --tab-background-active: rgb(224, 124, 48);
+  --tab-background-active-hover: rgb(224, 124, 48);
 }
 </style>

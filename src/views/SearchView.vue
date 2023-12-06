@@ -110,7 +110,7 @@ const wordOptions = [
     value: 'ws_name'
   },
   {
-    label: '假名',
+    label: '仮名',
     value: 'ws_pronunciation'
   },
   {

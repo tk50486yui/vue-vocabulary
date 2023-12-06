@@ -6,6 +6,15 @@
     name="articlesform"
     @finish="onFinish"
   >
+    <a-form-item :name="['article', 'cate_id']">
+      <CategoriesTreeSelect
+        ref="categoriesTreeSelectRef"
+        placeholder="文章主題分類"
+        size="large"
+        v-model:value="formState.article.cate_id"
+      />
+    </a-form-item>
+    <p></p>
     <a-form-item
       class="input-theme"
       :class="$theme"
@@ -26,6 +35,16 @@
     </a-form-item>
     <p></p>
     <a-form-item>
+      <TagsTreeSelect
+        ref="tagsTreeSelectRef"
+        placeholder="添加標籤..."
+        size="large"
+        multiple
+        v-model:value="formState.article.articles_tags.array"
+      />
+    </a-form-item>
+    <p></p>
+    <a-form-item>
       <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit">儲存</a-button>
     </a-form-item>
   </a-form>
@@ -36,10 +55,14 @@ import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { ArticleForm } from '@/interfaces/Articles'
+import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
+import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
+const categoriesTreeSelectRef = ref()
+const tagsTreeSelectRef = ref()
 const formRef = ref()
 const formState = reactive({
   article: {} as ArticleForm
@@ -50,14 +73,20 @@ const onFinish = async (): Promise<void> => {
     message.loading({ content: 'Loading..', duration: 1 })
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await store.dispatch('ArticlesStore/add', formState.article)
-    formRef.value.resetFields()
+    resetForm()
   } catch (e) {
     //
   }
 }
 
+const resetForm = (): void => {
+  categoriesTreeSelectRef.value.clearValue()
+  tagsTreeSelectRef.value.clearValue('multiple')
+  formRef.value.resetFields()
+}
+
 onBeforeMount(() => {
-  formState.article = { ...formState.article }
+  formState.article = { ...formState.article, articles_tags: { array: [], values: [] } }
 })
 
 const articleEditor = reactive({

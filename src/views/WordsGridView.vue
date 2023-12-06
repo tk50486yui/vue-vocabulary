@@ -109,113 +109,110 @@
       @click="onDrawerShow()"
     />
     <!-- 主頁面 card -->
-    <a-spin :spinning="ReadySpinning">
-      <div class="list-card-theme" :class="$theme" ref="listCard">
-        <a-list
-          :data-source="filterWordsResult"
-          :pagination="pagination"
-          :grid="{
-            gutter: 0,
-            xs: 1,
-            sm: 1,
-            md: 2,
-            lg: 2,
-            xl: 3,
-            xxl: 3,
-            xxxl: 3
-          }"
-        >
-          <!-- card header -->
-          <template #header>
-            <div class="select-theme" :class="$theme" ref="selectMod">
-              <a-space size="small" wrap>
-                <span class="d-flex align-items-center">
-                  每頁：
-                  <a-select
-                    v-model:value="selectPageSize"
-                    :getPopupContainer="() => $refs.selectMod"
-                    size="small"
-                    style="width: 80px"
-                    @change="setPageSize()"
-                  >
-                    <a-select-option value="10">10 筆</a-select-option>
-                    <a-select-option value="20">20 筆</a-select-option>
-                    <a-select-option value="50">50 筆</a-select-option>
-                    <a-select-option value="100">100 筆</a-select-option>
-                    <a-select-option :value="words.length">全部</a-select-option>
-                  </a-select>
-                </span>
-                <span class="d-flex align-items-center"
-                  >當前：
-                  <a-select
-                    v-model:value="currentPage"
-                    :getPopupContainer="() => $refs.selectMod"
-                    size="small"
-                    style="width: 80px"
-                    @change="setPaginationCurrent()"
-                  >
-                    <template
-                      v-for="index in Math.ceil(words.length / Number(selectPageSize))"
-                      :key="index"
-                    >
-                      <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
-                    </template>
-                  </a-select>
-                </span>
-                <span class="d-flex align-items-center">
-                  <el-tag
-                    class="d-flex align-items-center"
-                    effect="dark"
-                    size="small"
-                    type="success"
-                    color="black"
-                    round
-                  >
-                    關鍵字：
-                    <template v-if="$keyword !== '' && $filters.length > 0">
-                      <template v-if="$filters.length === 1 && $filters.includes('cate_name')">
-                        `
-                        <span class="category-keyword-text">{{ $keyword }} </span>`
-                      </template>
-                      <template v-else>
-                        ` <span class="keyword-text">{{ $keyword }} </span>`
-                      </template>
-                    </template>
-                    <template v-else> 無 </template>
-                  </el-tag>
-                </span>
-                <span class="d-flex align-items-center">
-                  <el-tag
-                    class="d-flex align-items-center"
-                    effect="dark"
-                    size="small"
-                    color="black"
-                    round
-                  >
-                    共 {{ filterWordsResult.length }} 筆
-                  </el-tag>
-                </span>
-                <span class="d-flex align-items-center">
-                  <template v-if="$keyword != ''">
-                    <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
+    <div class="list-card-theme" :class="$theme" ref="listCard">
+      <a-list
+        :data-source="filterWordsResult"
+        :pagination="pagination"
+        :grid="{
+          gutter: 0,
+          xs: 1,
+          sm: 1,
+          md: 2,
+          lg: 2,
+          xl: 3,
+          xxl: 3,
+          xxxl: 3
+        }"
+      >
+        <!-- card header -->
+        <template #header>
+          <div class="select-theme" :class="$theme" ref="selectMod">
+            <a-space size="small" wrap>
+              <span class="d-flex align-items-center">
+                每頁：
+                <a-select
+                  v-model:value="selectPageSize"
+                  :getPopupContainer="() => $refs.selectMod"
+                  size="small"
+                  style="width: 80px"
+                  @change="setPageSize()"
+                >
+                  <a-select-option value="10">10 筆</a-select-option>
+                  <a-select-option value="20">20 筆</a-select-option>
+                  <a-select-option value="50">50 筆</a-select-option>
+                  <a-select-option value="100">100 筆</a-select-option>
+                  <a-select-option :value="words.length">全部</a-select-option>
+                </a-select>
+              </span>
+              <span class="d-flex align-items-center"
+                >當前：
+                <a-select
+                  v-model:value="currentPage"
+                  :getPopupContainer="() => $refs.selectMod"
+                  size="small"
+                  style="width: 80px"
+                  @change="setPaginationCurrent()"
+                >
+                  <template v-for="index in wordsCount" :key="index">
+                    <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                   </template>
-                </span>
-                <span class="d-flex align-items-center">
-                  <WordsSortSelect
-                    v-model:value="sortValue"
-                    placeholder="依條件排序..."
-                    size="small"
-                    style="width: 160px"
-                    @change="setFilterItems"
-                  />
-                </span>
-              </a-space>
-            </div>
-          </template>
-          <!-- card main -->
-          <p></p>
-          <template #renderItem="{ item }">
-            <a-list-item>
+                </a-select>
+              </span>
+              <span class="d-flex align-items-center">
+                <el-tag
+                  class="d-flex align-items-center"
+                  effect="dark"
+                  size="small"
+                  type="success"
+                  color="black"
+                  round
+                >
+                  關鍵字：
+                  <template v-if="$keyword !== '' && $filters.length > 0">
+                    <template v-if="$filters.length === 1 && $filters.includes('cate_name')">
+                      `
+                      <span class="category-keyword-text">{{ $keyword }} </span>`
+                    </template>
+                    <template v-else>
+                      ` <span class="keyword-text">{{ $keyword }} </span>`
+                    </template>
+                  </template>
+                  <template v-else> 無 </template>
+                </el-tag>
+              </span>
+              <span class="d-flex align-items-center">
+                <el-tag
+                  class="d-flex align-items-center"
+                  effect="dark"
+                  size="small"
+                  color="black"
+                  round
+                >
+                  共 {{ filterWordsResult.length }} 筆
+                </el-tag>
+              </span>
+              <span class="d-flex align-items-center">
+                <template v-if="$keyword != ''">
+                  <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
+                </template>
+              </span>
+              <span class="d-flex align-items-center">
+                <WordsSortSelect
+                  v-model:value="sortValue"
+                  placeholder="依條件排序..."
+                  size="small"
+                  style="width: 160px"
+                  @change="setFilterItems"
+                />
+              </span>
+            </a-space>
+          </div>
+        </template>
+        <!-- card main -->
+        <p></p>
+        <template #renderItem="{ item }">
+          <a-list-item>
+            <a-spin :spinning="ReadySpinning" size="large">
               <a-card>
                 <!-- cate_name -->
                 <template #title>
@@ -535,11 +532,11 @@
                   </template>
                 </a-row>
               </a-card>
-            </a-list-item>
-          </template>
-        </a-list>
-      </div>
-    </a-spin>
+            </a-spin>
+          </a-list-item>
+        </template>
+      </a-list>
+    </div>
   </template>
   <!-- drawer words add -->
   <WordsDrawerView
@@ -567,7 +564,9 @@ import { Word } from '@/interfaces/Words'
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 const { $keyword, $filters, $filtersTags } = toRefs(store.state.Search)
-const { $WordsGrid, $WordsGroupsView, $WordsGroupsDetailsView } = toRefs(store.state.Views)
+const { $WordsGrid, $WordsGroupsView, $WordsGroupsDetailsView, $SideMenuView } = toRefs(
+  store.state.Views
+)
 
 const words = computed(() => store.getters['WordsStore/words'])
 const wordsArray = computed(() => store.getters['WordsStore/wordsArray'])
@@ -593,6 +592,7 @@ const checkboxArray = computed(() => {
   return newArray
 })
 const btnDisibled = computed(() => $WordsGroupsDetailsView.value.updateNow || checkboxBtn.value)
+const wordsCount = computed(() => Math.ceil(words.value.length / Number(selectPageSize.value)) || 1)
 
 const Ready = ref<boolean>(false)
 const AfterReady = ref<boolean>(false)
@@ -782,6 +782,7 @@ const clickGroupAdd = (): void => {
   if (checkboxShow.value === true && $WordsGroupsView.value.groupArray.length === 0) {
     checkboxShow.value = false
   } else {
+    $SideMenuView.value.sideGroup = '3'
     checkboxShow.value = true
   }
 }
@@ -803,6 +804,7 @@ const setCheckbox = (): void => {
   if ($WordsGroupsView.value.groupArray.length > 0) {
     checkboxShow.value = true
     checkboxBtn.value = true
+    $SideMenuView.value.sideGroup = '3'
   }
 }
 // drawer
@@ -812,13 +814,11 @@ const onDrawerShow = (): void => {
 }
 
 onMounted(async () => {
-  try {
-    await store.dispatch('WordsStore/fetch')
-    Ready.value = true
-    setDefaultFromState()
-  } catch (e) {
-    //
-  }
+  ReadySpinning.value = true
+  await store.dispatch('WordsStore/fetch')
+  Ready.value = true
+  ReadySpinning.value = false
+  setDefaultFromState()
 })
 
 onBeforeRouteLeave(async (to, from, next) => {

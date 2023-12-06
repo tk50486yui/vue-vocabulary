@@ -35,7 +35,7 @@ const state: ViewsState = {
     jumpPage: false,
     currentScrollY: 100,
     jumpScroll: false,
-    currentPageSize: 20
+    currentPageSize: 3
   },
   $WordsGroupsView: {
     groupArray: [] as groupArray[],
@@ -46,6 +46,9 @@ const state: ViewsState = {
   },
   $WordsGroupsDetailsView: {
     updateNow: false
+  },
+  $SideMenuView: {
+    sideGroup: '1'
   }
 }
 

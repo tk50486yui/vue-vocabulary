@@ -1,4 +1,5 @@
 import Echo from 'laravel-echo'
+// @ts-expect-error:  necessary
 import io from 'socket.io-client'
 // @ts-expect-error:  necessary
 window.io = io

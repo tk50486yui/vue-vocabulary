@@ -66,10 +66,7 @@
                   style="width: 80px"
                   @change="setCurrentPage()"
                 >
-                  <template
-                    v-for="index in Math.ceil(articles.length / Number(selectPageSize))"
-                    :key="index"
-                  >
+                  <template v-for="index in articlesCount" :key="index">
                     <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
                   </template>
                 </a-select>
@@ -291,6 +288,9 @@ const filterArticles = computed(() => store.getters['ArticlesStore/filterArticle
 const filterdResult = computed(() =>
   filterArticles.value($keyword.value, $filters.value, $filtersTags.value, tagsOperator.value)
 )
+const articlesCount = computed(
+  () => Math.ceil(articles.value.length / Number(selectPageSize.value)) || 1
+)
 
 const Ready = ref<boolean>(false)
 const AfterReady = ref<boolean>(false)
@@ -336,12 +336,17 @@ const handleCategoryFilter = async (cateName: string): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, 100))
   window.scrollTo({ top: 180, behavior: 'instant' })
 }
-const setDefaultFromState = () => {
-  tagsArray.value = $filtersTags.value
+
+// set default
+const setPagination = () => {
   pagination.pageSize = Number($ArticlesView.value.currentPageSize)
   selectPageSize.value = $ArticlesView.value.currentPageSize
   pagination.current = Number($ArticlesView.value.currentPage)
   currentPage.value = pagination.current
+}
+
+const setDefaultFromState = () => {
+  tagsArray.value = $filtersTags.value
   AfterReady.value = true
 }
 
@@ -373,6 +378,7 @@ onMounted(async () => {
   try {
     await store.dispatch('ArticlesStore/fetch')
     Ready.value = true
+    setDefaultFromState()
   } catch (e) {
     //
   }
@@ -394,7 +400,7 @@ watch(Ready, (val) => {
   if (val) {
     nextTick(() => {
       if ($ArticlesView.value.jumpPage === true) {
-        setDefaultFromState()
+        setPagination()
       }
     })
   }
@@ -448,6 +454,15 @@ watch(tagsArray, () => {
 .article-date {
   padding-top: 18px;
   font-size: 12px;
+}
+
+/*---------------------
+    scss color
+-----------------------*/
+.dark {
+  --tab-background: rgb(50, 40, 47);
+  --tab-background-active: rgb(111, 37, 138);
+  --tab-background-active-hover: rgb(111, 37, 138);
 }
 
 /*---------------------

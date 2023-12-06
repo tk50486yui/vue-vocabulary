@@ -38,6 +38,9 @@ export interface ViewsState {
   $WordsGroupsDetailsView: {
     updateNow: boolean
   }
+  $SideMenuView: {
+    sideGroup: string
+  }
 }
 
 export interface WordsGridType {
@@ -74,5 +77,10 @@ export interface WordsGroupsViewType {
 
 export interface WordsGroupsDetailsViewType {
   variable: keyof ViewsState['$WordsGroupsDetailsView']
+  data: boolean
+}
+
+export interface SideMenuViewType {
+  variable: keyof ViewsState['$SideMenuView']
   data: boolean
 }

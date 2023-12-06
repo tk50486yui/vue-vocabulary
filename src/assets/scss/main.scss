@@ -738,18 +738,18 @@ $edit-icon-color: #6A6AFF;
 .tab-theme {  
 
   &.dark{
-    :deep(.tab-body-text){    
-      color: var(--head-text); 
+    :deep(.tab-body-text){
+      color: var(--head-text);
     }
 
-    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active){    
-      background: var(--tab-background-active);   
+    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active){
+      background: var(--tab-background-active);
     }
-    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active:hover){    
-      background: var(--tab-background-active-hover);   
+    :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active:hover){
+      background: var(--tab-background-active-hover);
     }
-    :deep(.ant-tabs-tab:hover){    
-      background: var(--tab-background-active-hover);   
+    :deep(.ant-tabs-tab:hover){
+      background: var(--tab-background-active-hover);
     }
   
     :deep(.ant-tabs-card .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn){

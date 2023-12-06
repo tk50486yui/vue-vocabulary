@@ -60,15 +60,19 @@
                             │
                           </span>
                         </template>
-                        <EditOutlined
-                          class="button-edit"
-                          @click="edit(record, 0, recentTagsArray)"
-                        />
-                        {{ text }}
-                        <template v-if="record.children.length > 0">
-                          （{{ record.children.length }}）
-                        </template>
-                        <DeleteBtn @confirm="onDelete(record.id)" />
+                        <a-space size="small" align="center">
+                          <EditOutlined
+                            class="button-edit"
+                            @click="edit(record, 0, recentTagsArray)"
+                          />
+                          <span>
+                            {{ text }}
+                          </span>
+                          <template v-if="record.children.length > 0">
+                            <span> （{{ record.children.length }}） </span>
+                          </template>
+                          <DeleteBtn @confirm="onDelete(record.id)" />
+                        </a-space>
                       </template>
                     </div>
                   </template>
@@ -203,14 +207,16 @@
                       </div>
                     </template>
                     <template v-else>
-                      <div class="column-container">
+                      <a-space size="small" align="center">
                         <EditOutlined
                           class="button-edit2"
                           @click="edit(record, 1, recentTagsArray)"
                         />
-                        {{ text }}
+                        <span>
+                          {{ text }}
+                        </span>
                         <DeleteBtn @confirm="onDelete(record.id)" />
-                      </div>
+                      </a-space>
                     </template>
                   </div>
                 </template>
@@ -479,23 +485,18 @@ const columns = [
   display: flex;
   align-items: center;
 }
-
-.button-edit {
-  color: #ec5ef4;
-  padding-right: 6px;
-}
-
 .button-edit-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.button-edit {
+  color: #ec5ef4;
+}
+
 .button-edit2 {
-  display: flex;
-  justify-content: center;
-  padding-right: 6px;
-  color: #6a6aff;
+  color: rgb(8, 131, 247);
 }
 
 .button-edit-check {
@@ -507,5 +508,14 @@ const columns = [
   margin-left: auto;
   color: #ea0000;
   padding-right: 6px;
+}
+
+/*---------------------
+    scss color
+-----------------------*/
+.dark {
+  --tab-background: rgb(52, 37, 46);
+  --tab-background-active: rgb(224, 48, 130);
+  --tab-background-active-hover: rgb(224, 48, 115);
 }
 </style>
