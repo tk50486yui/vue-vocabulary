@@ -185,7 +185,7 @@ watchEffect(() => {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #f6aaf1;
+  background: #{$tags-main-color};
   content: '';
 }
 

@@ -23,7 +23,6 @@ const { $theme } = toRefs(store.state.Theme)
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
 .section-title {
   margin-bottom: 8px;
 }
@@ -34,7 +33,7 @@ const { $theme } = toRefs(store.state.Theme)
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #f6aaf1;
+  background: #{$tags-main-color};
   content: '';
 }
 </style>

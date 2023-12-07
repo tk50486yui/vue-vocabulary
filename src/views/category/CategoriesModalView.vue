@@ -34,7 +34,7 @@ const { $theme } = toRefs(store.state.Theme)
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #efffb4;
+  background: #{$categories-main-color};
   content: '';
 }
 </style>

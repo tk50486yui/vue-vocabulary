@@ -296,7 +296,7 @@ const columns = [
 @import '@/assets/scss/main.scss';
 
 .section-title {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .section-title h4:after {
@@ -305,7 +305,7 @@ const columns = [
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: rgb(255, 191, 0);
+  background: #{$categories-main-color};
   content: '';
 }
 
@@ -342,7 +342,7 @@ const columns = [
 -----------------------*/
 .dark {
   --tab-background: rgb(56, 56, 48);
-  --tab-background-active: rgb(224, 124, 48);
-  --tab-background-active-hover: rgb(224, 124, 48);
+  --tab-background-active: #{$categories-main-color};
+  --tab-background-active-hover: #{$categories-main-color};
 }
 </style>

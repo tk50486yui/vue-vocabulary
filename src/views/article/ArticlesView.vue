@@ -439,7 +439,7 @@ watch(tagsArray, () => {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: rgb(116, 111, 255);
+  background: #{$articles-main-color};
   content: '';
 }
 
@@ -461,8 +461,8 @@ watch(tagsArray, () => {
 -----------------------*/
 .dark {
   --tab-background: rgb(50, 40, 47);
-  --tab-background-active: rgb(111, 37, 138);
-  --tab-background-active-hover: rgb(111, 37, 138);
+  --tab-background-active: #{$articles-main-color};
+  --tab-background-active-hover: #{$articles-main-color};
 }
 
 /*---------------------

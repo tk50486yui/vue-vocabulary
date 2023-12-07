@@ -6,6 +6,12 @@ $keyword-color:#ff7866; // 關鍵字顏色
 $category-keyword-color:rgb(92, 247, 102); // 類別關鍵字顏色
 $edit-icon-color: #6A6AFF;
 
+$words-main-color: rgba(23, 176, 247, 0.915);
+$articles-main-color: rgb(116, 111, 255);
+$tags-main-color: rgb(224, 48, 130);
+$categories-main-color: rgb(224, 124, 48);
+$wordsgroups-main-color: rgba(27, 99, 245, 0.984);
+
 .main-body {  
   &.dark {
     background: var(--body-background);
@@ -637,6 +643,10 @@ $edit-icon-color: #6A6AFF;
 
   &.dark :deep(span.span-text){  
     color: var(--table-text);
+  }
+
+  &.dark :deep(.ant-list .ant-list-empty-text){  
+    color: var(--list-empty-text); 
   }
   
   // a 

@@ -151,7 +151,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
 .section-title {
   margin-bottom: 8px;
 }
@@ -162,9 +161,8 @@ onMounted(() => {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: rgb(255, 191, 0);
+  background: #{$categories-main-color};
   content: '';
-  // background: rgb(48, 37, 2);
 }
 
 .menu-scroll {

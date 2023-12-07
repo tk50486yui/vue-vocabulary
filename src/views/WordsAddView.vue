@@ -146,9 +146,8 @@ const layout = {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
 .section-title {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .section-title h4:after {
@@ -157,7 +156,7 @@ const layout = {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #17b0f7;
+  background: #{$words-main-color};
   content: '';
 }
 </style>

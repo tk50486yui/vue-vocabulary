@@ -466,9 +466,8 @@ const columns = [
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
 .section-title {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .section-title h4:after {
@@ -477,7 +476,7 @@ const columns = [
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #f6aaf1;
+  background: #{$tags-main-color};
   content: '';
 }
 
@@ -515,7 +514,7 @@ const columns = [
 -----------------------*/
 .dark {
   --tab-background: rgb(52, 37, 46);
-  --tab-background-active: rgb(224, 48, 130);
-  --tab-background-active-hover: rgb(224, 48, 115);
+  --tab-background-active: #{$tags-main-color};
+  --tab-background-active-hover: #{$tags-main-color};
 }
 </style>

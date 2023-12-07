@@ -222,7 +222,6 @@ watch(
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
 .section-title {
   margin-bottom: 8px;
 }
@@ -233,7 +232,7 @@ watch(
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #4acaed;
+  background: #{$wordsgroups-main-color};
   content: '';
 }
 

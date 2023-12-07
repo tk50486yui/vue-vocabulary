@@ -5,7 +5,7 @@
     </div>
     <!-- 上層 -->
     <div class="select-theme" :class="$theme" ref="selectMod">
-      <a-space size="middle" wrap>
+      <a-space size="small" wrap>
         <span>
           每頁：
           <a-select
@@ -46,12 +46,11 @@
     <p></p>
     <div class="list-theme" :class="$theme">
       <a-list item-layout="horizontal" :data-source="wordsGroups" :pagination="pagination">
-        <template #renderItem="{ item, index }">
+        <template #renderItem="{ item }">
           <a-list-item>
             <a-list-item-meta>
               <template #description>
                 <span class="list-link">
-                  {{ index + 1 }}.
                   <router-link
                     :to="{
                       name: 'wordsGroupsDetails',
@@ -129,7 +128,7 @@ onMounted(async () => {
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #17b0f7;
+  background: #{$wordsgroups-main-color};
   content: '';
 }
 

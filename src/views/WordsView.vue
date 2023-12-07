@@ -311,7 +311,6 @@ const columns = [
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
-
 .section-title {
   margin-bottom: 12px;
 }
@@ -322,7 +321,7 @@ const columns = [
   bottom: -4px;
   height: 2px;
   width: 70px;
-  background: #17b0f7;
+  background: #{$words-main-color};
   content: '';
 }
 
