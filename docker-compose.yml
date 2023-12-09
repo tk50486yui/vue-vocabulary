@@ -1,0 +1,10 @@
+version: '1.0'
+
+services:
+  vue-nginx:
+    build:
+      context: .
+    ports:
+      - "8088:80"
+    environment:
+      - API_URL=host.docker.internal #local

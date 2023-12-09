@@ -1,0 +1,11 @@
+node_modules
+
+Dockerfile*
+docker-compose*
+.dockerignore
+
+.gitignore
+.vscode
+.prettierrc.js
+
+README.md
