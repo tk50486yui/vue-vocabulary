@@ -101,7 +101,7 @@
 import { ref, watchEffect, toRefs, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import NavDrawerView from '@/views/NavDrawerView.vue'
+import NavDrawerView from '@/views/shared/NavDrawerView.vue'
 import logo from '@/assets/img/logo.png'
 
 const store = useStore()

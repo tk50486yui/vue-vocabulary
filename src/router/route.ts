@@ -9,7 +9,7 @@ import WordsGroupsListView from '@/views/wordsgroup/WordsGroupsListView.vue'
 import WordsGroupsDetailsView from '@/views/wordsgroup/WordsGroupsDetailsView.vue'
 import TagsView from '@/views/tag/TagsView.vue'
 import CategoriesView from '@/views/category/CategoriesView.vue'
-import WordsUpload from '@/views/shared/WordsUpload.vue'
+import WordsUpload from '@/views/WordsUpload.vue'
 
 const routes = [
   {

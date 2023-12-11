@@ -40,11 +40,11 @@
 <script lang="ts" setup>
 import { ref, onMounted, watchEffect, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import HeaderView from '@/views/HeaderView.vue'
-import SearchView from '@/views/SearchView.vue'
-import BreadcrumbView from '@/views/BreadcrumbView.vue'
-import SideMenuView from '@/views/SideMenuView.vue'
-import FooterView from '@/views/FooterView.vue'
+import HeaderView from '@/views/shared/HeaderView.vue'
+import SearchView from '@/views/shared/SearchView.vue'
+import BreadcrumbView from '@/views/shared/BreadcrumbView.vue'
+import SideMenuView from '@/views/shared/SideMenuView.vue'
+import FooterView from '@/views/shared/FooterView.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
