@@ -8,7 +8,8 @@ import { sortedWords } from '@/libs/sortHelper'
 const state = {
   words: [] as Word[],
   word: {} as Word,
-  wordForm: {} as WordForm
+  wordForm: {} as WordForm,
+  files: [] as string[]
 }
 
 const getters: GetterTree<WordsState, RootState> = {
@@ -24,6 +25,7 @@ const getters: GetterTree<WordsState, RootState> = {
       ...value
     }))
   },
+  files: (state) => state.files,
   filterWords:
     (state) =>
     (
@@ -95,15 +97,26 @@ const actions = {
     await dispatch('fetch')
   },
 
+  async fetchFiles({ commit }: { commit: Commit }) {
+    const data = await WordsRepo.getFiles()
+    commit('setFiles', data)
+  },
+
   async upload({ dispatch }: { dispatch: Dispatch }, data: WordForm) {
     await WordsRepo.upload(data)
-    await dispatch('fetch')
+    await dispatch('fetchFiles')
+  },
+
+  async deleteFile({ dispatch }: { dispatch: Dispatch }, id: string) {
+    await WordsRepo.deleteFile(id)
+    await dispatch('fetchFiles')
   }
 }
 type State = typeof state
 const mutations = {
   set: (state: State, data: Word[]) => (state.words = data),
-  setByID: (state: State, data: Word) => (state.word = data)
+  setByID: (state: State, data: Word) => (state.word = data),
+  setFiles: (state: State, data: string[]) => (state.files = data)
 }
 
 export default {

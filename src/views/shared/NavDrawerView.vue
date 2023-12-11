@@ -14,6 +14,9 @@
         <a-menu-item :key="13">
           <router-link :to="{ name: 'wordsAdd' }">單字新增</router-link>
         </a-menu-item>
+        <a-menu-item :key="14">
+          <router-link :to="{ name: 'wordsUpload' }">圖片總覽</router-link>
+        </a-menu-item>
       </a-sub-menu>
       <a-menu-item :key="1">
         <router-link :to="{ name: 'articles' }">文章</router-link>

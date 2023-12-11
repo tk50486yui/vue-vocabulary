@@ -2,6 +2,7 @@ export interface WordsState {
   words: Word[]
   word: Word
   wordForm: WordForm
+  files: string[]
 }
 export interface Word {
   id: number

@@ -38,12 +38,22 @@ export default {
     return response.data
   },
 
+  async getFiles() {
+    const response = await api.get('/words/uploads')
+    return response.data
+  },
+
   async upload(data: WordForm) {
     const response = await api.post('/words/upload', data, {
       headers: {
         'Content-Type': 'multipart/form-data' // axios maybe auto setting
       }
     })
+    return response.data
+  },
+
+  async deleteFile(id: string) {
+    const response = await api.delete(`/words/upload/${id}`)
     return response.data
   }
 }

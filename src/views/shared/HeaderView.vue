@@ -31,7 +31,7 @@
                       <router-link :to="{ name: 'wordsAdd' }">單字新增</router-link>
                     </li>
                     <li>
-                      <router-link :to="{ name: 'wordsUpload' }">上傳</router-link>
+                      <router-link :to="{ name: 'wordsUpload' }">圖片總覽</router-link>
                     </li>
                   </ul>
                 </li>
