@@ -525,6 +525,24 @@ $wordsgroups-main-color: rgba(27, 99, 245, 0.984);
   }
 
 }
+
+/*---------------------
+    popover
+-----------------------*/
+.popover-theme {   
+    &.dark :deep(.ant-popover .ant-popover-inner){
+      background: var(--popover-background);
+    }
+    &.dark :deep(.ant-popover .ant-popover-title){
+      background: var(--popover-background);
+      color: var(--table-text);
+    }
+    &.dark :deep(.ant-popover .ant-popover-inner-content){
+      color: var(--table-text);
+    } 
+
+} 
+
 /*---------------------
     Spad
 -----------------------*/

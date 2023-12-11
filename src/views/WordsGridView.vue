@@ -336,26 +336,46 @@
                     </span>
                   </template>
                   <template v-else>
-                    <template
-                      v-if="
-                        $keyword != '' &&
-                        $filters.includes('ws_name') &&
-                        item.ws_name.includes($keyword)
-                      "
-                    >
-                      <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
-                        <template v-for="(char, index) in item.ws_name" :key="index">
-                          <span :class="{ 'keyword-text': $keyword.includes(char) }">
-                            {{ char }}
-                          </span>
+                    <div class="popover-theme" :class="$theme" ref="popoverMod">
+                      <a-popover
+                        :title="item.ws_name"
+                        trigger="hover"
+                        :getPopupContainer="() => $refs.popoverMod"
+                      >
+                        <template #content>
+                          <p></p>
+                          {{ item.ws_pronunciation }}
+                          <p></p>
+                          {{ item.ws_definition }}
+                          <p></p>
+                          {{ item.ws_slogan }}
+                          <p></p>
+                          <div v-html="item.ws_description"></div>
+                          <p></p>
+                          {{ item.created_at }}
                         </template>
-                      </router-link>
-                    </template>
-                    <template v-else>
-                      <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
-                        {{ item.ws_name }}
-                      </router-link>
-                    </template>
+                        <template
+                          v-if="
+                            $keyword != '' &&
+                            $filters.includes('ws_name') &&
+                            item.ws_name.includes($keyword)
+                          "
+                        >
+                          <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
+                            <template v-for="(char, index) in item.ws_name" :key="index">
+                              <span :class="{ 'keyword-text': $keyword.includes(char) }">
+                                {{ char }}
+                              </span>
+                            </template>
+                          </router-link>
+                        </template>
+                        <template v-else>
+                          <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
+                            {{ item.ws_name }}
+                          </router-link>
+                        </template>
+                      </a-popover>
+                    </div>
                   </template>
                 </a-col>
                 <!-- ws_pronunciation -->
@@ -397,7 +417,6 @@
                     </template>
                   </a-col>
                 </template>
-
                 <!-- ws_definition -->
                 <template v-if="isDefinition">
                   <a-col :span="24" :offset="editTableData[item.id] ? 0 : 1">

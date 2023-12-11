@@ -102,7 +102,29 @@
                   style="margin: -5px 0"
                 />
               </template>
-              <template v-else>{{ text }}</template>
+              <template v-else>
+                <div class="popover-theme" :class="$theme" ref="popoverMod">
+                  <a-popover
+                    :title="record.ws_name"
+                    trigger="hover"
+                    :getPopupContainer="() => $refs.popoverMod"
+                  >
+                    <template #content>
+                      <p></p>
+                      {{ record.ws_pronunciation }}
+                      <p></p>
+                      {{ record.ws_definition }}
+                      <p></p>
+                      {{ record.ws_slogan }}
+                      <p></p>
+                      <div v-html="record.ws_description"></div>
+                      <p></p>
+                      {{ record.created_at }}
+                    </template>
+                    {{ text }}
+                  </a-popover>
+                </div>
+              </template>
             </div>
           </template>
           <!-- Table operation -->
