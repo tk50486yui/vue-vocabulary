@@ -814,11 +814,9 @@ const onDrawerShow = (): void => {
 
 onMounted(async () => {
   ReadySpinning.value = true
-  console.log(ReadySpinning.value)
   await store.dispatch('WordsStore/fetch')
   Ready.value = true
   ReadySpinning.value = false
-  console.log(ReadySpinning.value)
   setDefaultFromState()
 })
 

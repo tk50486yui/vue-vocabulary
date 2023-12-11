@@ -104,6 +104,9 @@
           <p></p>
           <!-- 文章列表 -->
           <div class="article-list-theme" :class="$theme">
+            <span v-if="ReadySpinning" class="ready-spinning">
+              <a-spin :spinning="ReadySpinning" size="middle" />
+            </span>
             <a-list
               :data-source="filterdResult"
               :pagination="pagination"
