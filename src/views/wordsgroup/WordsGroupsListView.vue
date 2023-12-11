@@ -1,4 +1,7 @@
 <template>
+  <div v-if="!Ready" class="ready-spinning">
+    <a-spin :spinning="ReadySpinning" size="large" />
+  </div>
   <template v-if="Ready">
     <div class="section-title">
       <h4>單字群組列表</h4>
@@ -29,13 +32,10 @@
             v-model:value="currentPage"
             :getPopupContainer="() => $refs.selectMod"
             size="small"
-            style="width: 80px"
+            style="width: 85px"
             @change="handleCurrentPage()"
           >
-            <template
-              v-for="index in Math.ceil(wordsGroups.length / Number(selectPageSize))"
-              :key="index"
-            >
+            <template v-for="index in wordsGroupsCount" :key="index">
               <a-select-option :value="index">第 {{ index }} 頁</a-select-option>
             </template>
           </a-select>
@@ -65,9 +65,6 @@
             </a-list-item-meta>
           </a-list-item>
         </template>
-        <template #footer>
-          <span class="span-text"> 共 {{ wordsGroups.length }} 筆 </span>
-        </template>
       </a-list>
     </div>
     <a-back-top />
@@ -81,8 +78,12 @@ const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
 const wordsGroups = computed(() => store.getters['WordsGroupsStore/wordsGroups'])
+const wordsGroupsCount = computed(
+  () => Math.ceil(wordsGroups.value.length / Number(selectPageSize)) || 1
+)
 
 const Ready = ref<boolean>(false)
+const ReadySpinning = ref<boolean>(false)
 const selectPageSize = ref<string>('20')
 const currentPage = ref<number>(1)
 const pagination = reactive({
@@ -107,8 +108,10 @@ const handleCurrentPage = (): void => {
 
 onMounted(async () => {
   try {
+    ReadySpinning.value = true
     await store.dispatch('WordsGroupsStore/fetch')
     Ready.value = true
+    ReadySpinning.value = false
   } catch (error) {
     //
   }
@@ -117,6 +120,17 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
+.ready-spinning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+.ready-spinning :deep(.ant-spin-dot-item) {
+  background: #{$wordsgroups-main-color};
+}
 
 .section-title {
   margin-bottom: 12px;

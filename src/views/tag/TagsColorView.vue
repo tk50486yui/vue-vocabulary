@@ -1,145 +1,143 @@
 <template>
-  <template v-if="Ready">
-    <!-- 上層 顏色新增 -->
-    <div class="demo-color-block">
-      <span class="demonstration">
-        <a-tag
-          :style="
-            'background:' +
-            selectedBackground +
-            ';color:' +
-            selectedColor +
-            ';border-color:' +
-            selectedBorder
-          "
+  <!-- 上層 顏色新增 -->
+  <div class="demo-color-block">
+    <span class="demonstration">
+      <a-tag
+        :style="
+          'background:' +
+          selectedBackground +
+          ';color:' +
+          selectedColor +
+          ';border-color:' +
+          selectedBorder
+        "
+      >
+        With default value
+      </a-tag>
+    </span>
+    <span class="main-body" :class="$theme">
+      背景：
+      <el-color-picker
+        @active-change="activeBackground"
+        size="large"
+        v-model="selectedBackground"
+        show-alpha
+      />
+      文字：
+      <el-color-picker
+        @active-change="activeColor"
+        size="large"
+        v-model="selectedColor"
+        show-alpha
+      />
+      邊框：
+      <el-color-picker
+        @active-change="activeBorder"
+        size="large"
+        v-model="selectedBorder"
+        show-alpha
+      />
+    </span>
+    <a-button
+      class="btn btn-primary btn-outline-light btn-sm button-add"
+      @click="onFinish"
+      :loading="confirmLoading"
+    >
+      儲存顏色
+    </a-button>
+  </div>
+  <p></p>
+  <!-- 主表格 顏色 -->
+  <div class="table-theme" :class="$theme">
+    <a-table
+      :dataSource="tagsColorArray"
+      :columns="columns"
+      :scroll="{ y: 600 }"
+      :showHeader="false"
+    >
+      <template #bodyCell="{ column, record }">
+        <template
+          v-if="['id', 'tc_color', 'tc_background', 'tc_border'].includes(column.dataIndex)"
         >
-          With default value
-        </a-tag>
-      </span>
-      <span class="main-body" :class="$theme">
-        背景：
-        <el-color-picker
-          @active-change="activeBackground"
-          size="large"
-          v-model="selectedBackground"
-          show-alpha
-        />
-        文字：
-        <el-color-picker
-          @active-change="activeColor"
-          size="large"
-          v-model="selectedColor"
-          show-alpha
-        />
-        邊框：
-        <el-color-picker
-          @active-change="activeBorder"
-          size="large"
-          v-model="selectedBorder"
-          show-alpha
-        />
-      </span>
-      <a-button
-        class="btn btn-primary btn-outline-light btn-sm button-add"
-        @click="onFinish"
-        :loading="confirmLoading"
-      >
-        儲存顏色
-      </a-button>
-    </div>
-    <p></p>
-    <!-- 主表格 顏色 -->
-    <div class="table-theme" :class="$theme">
-      <a-table
-        :dataSource="tagsColorArray"
-        :columns="columns"
-        :scroll="{ y: 600 }"
-        :showHeader="false"
-      >
-        <template #bodyCell="{ column, record }">
-          <template
-            v-if="['id', 'tc_color', 'tc_background', 'tc_border'].includes(column.dataIndex)"
-          >
-            <!-- id -->
-            <template v-if="column.dataIndex === 'id'">
-              <template v-if="editTableData[record.id]"> #{{ record.id }} </template>
-              <template v-else>
-                <div class="column-container">#{{ record.id }}</div>
-              </template>
-            </template>
-            <!-- tc_color -->
-            <template v-else-if="column.dataIndex === 'tc_color'">
-              <template v-if="editTableData[record.id]">
-                <div>
-                  <a-tag
-                    :style="
-                      'background:' +
-                      editTableData[record.id]['tc_background'] +
-                      ';color:' +
-                      editTableData[record.id]['tc_color'] +
-                      ';border-color:' +
-                      editTableData[record.id]['tc_border']
-                    "
-                  >
-                    With default value
-                  </a-tag>
-                  背景：
-                  <el-color-picker
-                    @active-change="(value: string) => activeBackground(value, record.id)"
-                    size="large"
-                    v-model="editTableData[record.id]['tc_background']"
-                    show-alpha
-                  />
-                  文字：
-                  <el-color-picker
-                    @active-change="(value: string) => activeColor(value, record.id)"
-                    size="large"
-                    v-model="editTableData[record.id]['tc_color']"
-                    show-alpha
-                  />
-                  邊框：
-                  <el-color-picker
-                    @active-change="(value: string) => activeBorder(value, record.id)"
-                    size="large"
-                    v-model="editTableData[record.id]['tc_border']"
-                    show-alpha
-                  />
-                </div>
-              </template>
-              <template v-else>
-                <div class="column-container">
-                  <a-tag
-                    :style="
-                      'background:' +
-                      record.tc_background +
-                      ';color:' +
-                      record.tc_color +
-                      ';border-color:' +
-                      record.tc_border
-                    "
-                  >
-                    With default value
-                  </a-tag>
-                  <DeleteBtn @confirm="onDelete(record.id)" />
-                </div>
-              </template>
+          <!-- id -->
+          <template v-if="column.dataIndex === 'id'">
+            <template v-if="editTableData[record.id]"> #{{ record.id }} </template>
+            <template v-else>
+              <div class="column-container">#{{ record.id }}</div>
             </template>
           </template>
-          <template v-if="column.dataIndex === 'operation'">
+          <!-- tc_color -->
+          <template v-else-if="column.dataIndex === 'tc_color'">
             <template v-if="editTableData[record.id]">
-              <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
-              <CloseOutlined class="button-edit-close" @click="cancel(record)" />
+              <div>
+                <a-tag
+                  :style="
+                    'background:' +
+                    editTableData[record.id]['tc_background'] +
+                    ';color:' +
+                    editTableData[record.id]['tc_color'] +
+                    ';border-color:' +
+                    editTableData[record.id]['tc_border']
+                  "
+                >
+                  With default value
+                </a-tag>
+                背景：
+                <el-color-picker
+                  @active-change="(value: string) => activeBackground(value, record.id)"
+                  size="large"
+                  v-model="editTableData[record.id]['tc_background']"
+                  show-alpha
+                />
+                文字：
+                <el-color-picker
+                  @active-change="(value: string) => activeColor(value, record.id)"
+                  size="large"
+                  v-model="editTableData[record.id]['tc_color']"
+                  show-alpha
+                />
+                邊框：
+                <el-color-picker
+                  @active-change="(value: string) => activeBorder(value, record.id)"
+                  size="large"
+                  v-model="editTableData[record.id]['tc_border']"
+                  show-alpha
+                />
+              </div>
             </template>
             <template v-else>
               <div class="column-container">
-                <EditOutlined class="button-edit" @click="edit(record, tagsColorArray)" />
+                <a-tag
+                  :style="
+                    'background:' +
+                    record.tc_background +
+                    ';color:' +
+                    record.tc_color +
+                    ';border-color:' +
+                    record.tc_border
+                  "
+                >
+                  With default value
+                </a-tag>
+                <DeleteBtn @confirm="onDelete(record.id)" />
               </div>
             </template>
           </template>
         </template>
-      </a-table>
-    </div>
-  </template>
+        <template v-if="column.dataIndex === 'operation'">
+          <template v-if="editTableData[record.id]">
+            <CheckOutlined class="button-edit-check" @click="onEditFinish(record)" />
+            <CloseOutlined class="button-edit-close" @click="cancel(record)" />
+          </template>
+          <template v-else>
+            <div class="column-container">
+              <EditOutlined class="button-edit" @click="edit(record, tagsColorArray)" />
+            </div>
+          </template>
+        </template>
+      </template>
+    </a-table>
+  </div>
 </template>
 <script lang="ts" setup>
 import { ref, reactive, toRefs, onMounted, computed } from 'vue'
@@ -155,7 +153,6 @@ const { $theme } = toRefs(store.state.Theme)
 
 const tagsColorArray = computed(() => store.getters['TagsColorStore/tagsColorArray'])
 
-const Ready = ref<boolean>(false)
 const editTableData: UnwrapRef<Record<number, TagsColor>> = reactive({})
 const confirmLoading = ref<boolean>(false)
 const selectedBackground = ref<string>('rgba(0, 0, 0, 1)')
@@ -238,7 +235,6 @@ const activeBorder = (value: string, id: number): void => {
 onMounted(async () => {
   try {
     await store.dispatch('TagsColorStore/fetch')
-    Ready.value = true
   } catch (e) {
     //
   }

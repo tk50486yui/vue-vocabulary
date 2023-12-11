@@ -21,60 +21,64 @@
     </span>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
-      <a-spin :spinning="spinning">
-        <!--  主摺疊  -->
-        <a-collapse v-model:activeKey="activeKey">
-          <!--  子摺疊區塊  -->
-          <a-collapse-panel key="1">
-            <div class="menu-scroll">
-              <span class="d-flex align-items-center" :class="$theme">
-                <el-tag effect="dark" type="warning" size="small" round>
+      <span class="spinning-style">
+        <a-spin :spinning="spinning">
+          <!--  主摺疊  -->
+          <a-collapse v-model:activeKey="activeKey">
+            <!--  子摺疊區塊  -->
+            <a-collapse-panel key="1">
+              <div class="menu-scroll">
+                <span class="d-flex align-items-center" :class="$theme">
+                  <el-tag effect="dark" type="warning" size="small" round>
+                    <template
+                      v-if="
+                        $filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''
+                      "
+                    >
+                      已選擇類別：{{ $keyword }}
+                    </template>
+                    <template v-else> 尚無選擇 </template>
+                  </el-tag>
                   <template
                     v-if="
                       $filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''
                     "
                   >
-                    已選擇類別：{{ $keyword }}
+                    <span style="margin-left: 4px">
+                      <CloseBtn class="d-flex align-items-center" @click="onClearCateName" />
+                    </span>
                   </template>
-                  <template v-else> 尚無選擇 </template>
-                </el-tag>
-                <template
-                  v-if="$filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''"
-                >
-                  <span style="margin-left: 4px">
-                    <CloseBtn class="d-flex align-items-center" @click="onClearCateName" />
-                  </span>
-                </template>
-              </span>
-              <!--  類別最頂層 -->
-              <a-menu mode="inline">
-                <!--  第一層  for 顯示  -->
-                <template v-for="data in categories" :key="data.id">
-                  <template v-if="data.children && data.children.length">
-                    <a-sub-menu :key="data.id">
-                      <template #title>
+                </span>
+                <!--  類別最頂層 -->
+                <a-menu mode="inline">
+                  <!--  第一層  for 顯示  -->
+                  <template v-for="data in categories" :key="data.id">
+                    <template v-if="data.children && data.children.length">
+                      <a-sub-menu :key="data.id">
+                        <template #title>
+                          <a @click="handleCategoryFilter(data.cate_name)">
+                            {{ data.cate_name }}（{{ data.children.length }}）
+                          </a>
+                        </template>
+                        <TreeCategoriesMenu :data="data" />
+                      </a-sub-menu>
+                    </template>
+                    <template v-else>
+                      <a-menu-item :key="data.id">
                         <a @click="handleCategoryFilter(data.cate_name)">
-                          {{ data.cate_name }}（{{ data.children.length }}）
+                          {{ data.cate_name }}
                         </a>
-                      </template>
-                      <TreeCategoriesMenu :data="data" />
-                    </a-sub-menu>
+                      </a-menu-item>
+                    </template>
                   </template>
-                  <template v-else>
-                    <a-menu-item :key="data.id">
-                      <a @click="handleCategoryFilter(data.cate_name)">
-                        {{ data.cate_name }}
-                      </a>
-                    </a-menu-item>
-                  </template>
-                </template>
-                <!--  第一層  for 結束  -->
-              </a-menu>
-              <!-- 類別最頂層  end  -->
-            </div>
-          </a-collapse-panel>
-        </a-collapse>
-      </a-spin>
+                  <!--  第一層  for 結束  -->
+                </a-menu>
+                <!-- 類別最頂層  end  -->
+              </div>
+            </a-collapse-panel>
+          </a-collapse>
+        </a-spin>
+      </span>
     </div>
   </div>
   <p></p>
@@ -151,6 +155,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.spinning-style :deep(.ant-spin-dot-item) {
+  background: #{$categories-main-color};
+}
 .section-title {
   margin-bottom: 8px;
 }

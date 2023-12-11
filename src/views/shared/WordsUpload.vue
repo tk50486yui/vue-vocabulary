@@ -48,7 +48,7 @@ import '@uppy/dashboard/dist/style.css'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const TUS_ENDPOINT = ref(import.meta.env.VITE_APP_API_UPLOAD_UPPY_URL)
+const TUS_ENDPOINT = ref(import.meta.env.VITE_API_BASE_URL + '/words/upload/uppy')
 
 const uppy = computed(() =>
   new Uppy({ id: 'uppy1', autoProceed: true, debug: false }).use(XHR, {

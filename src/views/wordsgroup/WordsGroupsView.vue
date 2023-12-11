@@ -5,11 +5,7 @@
     </div>
     <div class="list-theme" :class="$theme">
       <!-- list -->
-      <a-list
-        item-layout="horizontal"
-        :locale="{ emptyText: '暫無資料' }"
-        :data-source="$WordsGroupsView.groupArray"
-      >
+      <a-list item-layout="horizontal" :data-source="$WordsGroupsView.groupArray">
         <template #renderItem="{ item, index }">
           <a-list-item>
             <template #actions>

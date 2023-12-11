@@ -1,4 +1,7 @@
 <template>
+  <div v-if="!Ready" class="ready-spinning">
+    <a-spin :spinning="ReadySpinning" size="large" />
+  </div>
   <template v-if="Ready">
     <div class="section-title">
       <h4>單字表</h4>
@@ -40,6 +43,7 @@
         </span>
       </a-space>
     </div>
+    <p></p>
     <div class="table-theme" :class="$theme">
       <a-table
         :dataSource="wordsArray"
@@ -171,6 +175,7 @@ const { $theme } = toRefs(store.state.Theme)
 const wordsArray = computed(() => store.getters['WordsStore/wordsArray'])
 
 const Ready = ref(false)
+const ReadySpinning = ref<boolean>(false)
 const TableLoading = ref<boolean>(false)
 const SyncOutlinedSpin = ref<boolean>(false)
 const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
@@ -259,8 +264,10 @@ const onDrawerShow = (): void => {
 
 onMounted(async () => {
   try {
+    ReadySpinning.value = true
     await store.dispatch('WordsStore/fetch')
     Ready.value = true
+    ReadySpinning.value = false
   } catch (e) {
     //
   }
@@ -311,6 +318,15 @@ const columns = [
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.ready-spinning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+.ready-spinning :deep(.ant-spin-dot-item) {
+  background: #{$words-main-color};
+}
 .section-title {
   margin-bottom: 12px;
 }
@@ -323,6 +339,9 @@ const columns = [
   width: 70px;
   background: #{$words-main-color};
   content: '';
+}
+.table-theme :deep(.ant-spin-dot-item) {
+  background: #{$words-main-color};
 }
 
 .highlight {

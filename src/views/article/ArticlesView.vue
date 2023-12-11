@@ -1,4 +1,7 @@
 <template>
+  <div v-if="!Ready" class="ready-spinning">
+    <a-spin :spinning="ReadySpinning" size="large" />
+  </div>
   <template v-if="Ready">
     <div class="section-title">
       <h4>文章總覽</h4>
@@ -63,7 +66,7 @@
                   v-model:value="currentPage"
                   :getPopupContainer="() => $refs.selectMod"
                   size="small"
-                  style="width: 80px"
+                  style="width: 85px"
                   @change="setCurrentPage()"
                 >
                   <template v-for="index in articlesCount" :key="index">
@@ -294,6 +297,7 @@ const articlesCount = computed(
 
 const Ready = ref<boolean>(false)
 const AfterReady = ref<boolean>(false)
+const ReadySpinning = ref<boolean>(false)
 const activeTab = ref<string>('1')
 const tabPosition = ref<string>('top')
 const filtersTagsTreeSelectRef = ref()
@@ -376,8 +380,10 @@ const setContentClick = async (): Promise<void> => {
 
 onMounted(async () => {
   try {
+    ReadySpinning.value = true
     await store.dispatch('ArticlesStore/fetch')
     Ready.value = true
+    ReadySpinning.value = false
     setDefaultFromState()
   } catch (e) {
     //
@@ -428,11 +434,19 @@ watch(tagsArray, () => {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.ready-spinning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
 
+.ready-spinning :deep(.ant-spin-dot-item) {
+  background: #{$articles-main-color};
+}
 .section-title {
   margin-bottom: 12px;
 }
-
 .section-title h4:after {
   position: absolute;
   left: 0;

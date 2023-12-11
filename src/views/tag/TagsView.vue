@@ -1,4 +1,7 @@
 <template>
+  <div v-if="!Ready" class="ready-spinning">
+    <a-spin :spinning="ReadySpinning" size="large" />
+  </div>
   <template v-if="Ready">
     <div class="section-title">
       <h4>標籤列表</h4>
@@ -185,7 +188,7 @@
                       @click="visible = true"
                     />
                     <RefreshBtn
-                      class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
+                      class="btn btn-secondary btn-outline-light btn-sm"
                       :spin="SyncOutlinedSpin[1]"
                       @click="refreshTable(1)"
                     />
@@ -356,6 +359,7 @@ const recentTagsArray = computed(() => store.getters['TagsStore/recentTagsArray'
 const tagsColor = computed(() => store.getters['TagsColorStore/tagsColor'])
 
 const Ready = ref(false)
+const ReadySpinning = ref<boolean>(false)
 const TableLoading = ref([false, false])
 const SyncOutlinedSpin = ref([false, false])
 const visible = ref(false)
@@ -429,8 +433,10 @@ const handleColorSelectChange = (value: number, record: Tag): void => {
 
 onMounted(async () => {
   try {
+    ReadySpinning.value = true
     await store.dispatch('TagsStore/fetch')
     await store.dispatch('TagsStore/fetchRecent')
+    ReadySpinning.value = false
     Ready.value = true
   } catch (e) {
     //
@@ -466,10 +472,19 @@ const columns = [
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+.ready-spinning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+.ready-spinning :deep(.ant-spin-dot-item) {
+  background: #{$tags-main-color};
+}
 .section-title {
   margin-bottom: 12px;
 }
-
 .section-title h4:after {
   position: absolute;
   left: 0;
@@ -480,6 +495,9 @@ const columns = [
   content: '';
 }
 
+.table-theme :deep(.ant-spin-dot-item) {
+  background: #{$tags-main-color};
+}
 .column-container {
   display: flex;
   align-items: center;

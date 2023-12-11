@@ -1,20 +1,22 @@
 <template>
   <template v-if="Ready">
-    <a-spin :spinning="spinning">
-      <div class="draggable-tree-theme" :class="$theme">
-        <a-tree
-          draggable
-          block-node
-          :tree-data="dropData"
-          @drop="onDrop"
-          :field-names="{
-            children: 'children',
-            title: 'ts_name',
-            key: 'id'
-          }"
-        />
-      </div>
-    </a-spin>
+    <span class="spinning-style">
+      <a-spin :spinning="spinning">
+        <div class="draggable-tree-theme" :class="$theme">
+          <a-tree
+            draggable
+            block-node
+            :tree-data="dropData"
+            @drop="onDrop"
+            :field-names="{
+              children: 'children',
+              title: 'ts_name',
+              key: 'id'
+            }"
+          />
+        </div>
+      </a-spin>
+    </span>
     <p></p>
     <div>
       <a-button
@@ -163,4 +165,8 @@ onMounted(async () => {
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
+.spinning-style :deep(.ant-spin-dot-item) {
+  background: #{$tags-main-color};
+}
 </style>

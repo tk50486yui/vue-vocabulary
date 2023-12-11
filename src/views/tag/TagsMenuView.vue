@@ -21,68 +21,70 @@
     </span>
     <div class="collapse-theme" :class="$theme">
       <!--  重整區塊  -->
-      <a-spin :spinning="spinning">
-        <!--  主摺疊  -->
-        <a-collapse v-model:activeKey="activeKey">
-          <!--  子摺疊區塊  -->
-          <a-collapse-panel key="1">
-            <div class="menu-scroll">
-              <span class="d-flex align-items-center" :class="$theme">
-                <el-tag effect="dark" type="danger" size="small" round>
-                  已選擇：{{ $filtersTags.length }}
-                </el-tag>
-                <template v-if="$filtersTags.length > 0">
-                  <span style="margin-left: 4px">
-                    <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
-                  </span>
-                </template>
-              </span>
-              <!--  最頂層 -->
-              <a-menu
-                mode="inline"
-                v-model:selectedKeys="selectedKeys"
-                v-model:openKeys="openKeys"
-                multiple
-              >
-                <!--  第一層  for 顯示  -->
-                <template v-for="data in tags" :key="data.id">
-                  <template v-if="data.children && data.children.length">
-                    <a-sub-menu :key="data.id">
-                      <template #title>
+      <span class="spinning-style">
+        <a-spin :spinning="spinning">
+          <!--  主摺疊  -->
+          <a-collapse v-model:activeKey="activeKey">
+            <!--  子摺疊區塊  -->
+            <a-collapse-panel key="1">
+              <div class="menu-scroll">
+                <span class="d-flex align-items-center" :class="$theme">
+                  <el-tag effect="dark" type="danger" size="small" round>
+                    已選擇：{{ $filtersTags.length }}
+                  </el-tag>
+                  <template v-if="$filtersTags.length > 0">
+                    <span style="margin-left: 4px">
+                      <CloseBtn class="d-flex align-items-center" @click="onResetTags()" />
+                    </span>
+                  </template>
+                </span>
+                <!--  最頂層 -->
+                <a-menu
+                  mode="inline"
+                  v-model:selectedKeys="selectedKeys"
+                  v-model:openKeys="openKeys"
+                  multiple
+                >
+                  <!--  第一層  for 顯示  -->
+                  <template v-for="data in tags" :key="data.id">
+                    <template v-if="data.children && data.children.length">
+                      <a-sub-menu :key="data.id">
+                        <template #title>
+                          <a @click="handleTagsFilter(data.id)" style="display: inline-block">
+                            <span class="dropdown-container">
+                              {{ data.ts_name }}（{{ data.children.length }}）
+                              <template v-if="$filtersTags.includes(data.id)">
+                                <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
+                              </template>
+                            </span>
+                          </a>
+                        </template>
+                        <TreeTagsMenu :data="data" />
+                      </a-sub-menu>
+                    </template>
+                    <template v-else>
+                      <a-menu-item :key="data.id">
                         <a @click="handleTagsFilter(data.id)" style="display: inline-block">
                           <span class="dropdown-container">
-                            {{ data.ts_name }}（{{ data.children.length }}）
+                            # {{ data.ts_name }}
                             <template v-if="$filtersTags.includes(data.id)">
-                              <CheckOutlined :style="{ 'font-size': '10px' }" :rotate="10" />
+                              <span style="margin-left: 6px">
+                                <CheckOutlined :style="{ 'font-size': '10px' }" />
+                              </span>
                             </template>
                           </span>
                         </a>
-                      </template>
-                      <TreeTagsMenu :data="data" />
-                    </a-sub-menu>
+                      </a-menu-item>
+                    </template>
                   </template>
-                  <template v-else>
-                    <a-menu-item :key="data.id">
-                      <a @click="handleTagsFilter(data.id)" style="display: inline-block">
-                        <span class="dropdown-container">
-                          # {{ data.ts_name }}
-                          <template v-if="$filtersTags.includes(data.id)">
-                            <span style="margin-left: 6px">
-                              <CheckOutlined :style="{ 'font-size': '10px' }" />
-                            </span>
-                          </template>
-                        </span>
-                      </a>
-                    </a-menu-item>
-                  </template>
-                </template>
-                <!--  第一層  for 結束  -->
-              </a-menu>
-              <!--  最頂層 結束  -->
-            </div>
-          </a-collapse-panel>
-        </a-collapse>
-      </a-spin>
+                  <!--  第一層  for 結束  -->
+                </a-menu>
+                <!--  最頂層 結束  -->
+              </div>
+            </a-collapse-panel>
+          </a-collapse>
+        </a-spin>
+      </span>
     </div>
   </div>
   <p></p>
@@ -169,6 +171,10 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
+
+.spinning-style :deep(.ant-spin-dot-item) {
+  background: #{$tags-main-color};
+}
 
 .dropdown-container {
   display: flex;

@@ -1,4 +1,7 @@
 <template>
+  <div v-if="!Ready" class="ready-spinning">
+    <a-spin :spinning="ReadySpinning" size="large" />
+  </div>
   <template v-if="Ready">
     <div class="section-title">
       <h4>類別列表</h4>
@@ -208,6 +211,7 @@ const categoriesArray = computed(() => store.getters['CategoriesStore/categories
 const recentCategoriesArray = computed(() => store.getters['CategoriesStore/recentCategoriesArray'])
 
 const Ready = ref(false)
+const ReadySpinning = ref<boolean>(false)
 const TableLoading = ref([false, false])
 const SyncOutlinedSpin = ref([false, false])
 const visible = ref<boolean>(false)
@@ -268,9 +272,11 @@ const onDelete = async (id: number): Promise<void> => {
 
 onMounted(async () => {
   try {
+    ReadySpinning.value = true
     await store.dispatch('CategoriesStore/fetch')
     await store.dispatch('CategoriesStore/fetchRecent')
     Ready.value = true
+    ReadySpinning.value = false
   } catch (e) {
     //
   }
@@ -295,6 +301,17 @@ const columns = [
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 
+.ready-spinning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+.ready-spinning :deep(.ant-spin-dot-item) {
+  background: #{$categories-main-color};
+}
+
 .section-title {
   margin-bottom: 12px;
 }
@@ -307,6 +324,10 @@ const columns = [
   width: 70px;
   background: #{$categories-main-color};
   content: '';
+}
+
+.table-theme :deep(.ant-spin-dot-item) {
+  background: #{$categories-main-color};
 }
 
 .column-container {
