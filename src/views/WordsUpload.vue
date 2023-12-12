@@ -123,8 +123,11 @@ const formState = reactive({
 
 const refresh = async (): Promise<void> => {
   try {
+    SyncOutlinedSpin.value = true
     ReadySpinning.value = true
+    await new Promise((resolve) => setTimeout(resolve, 100))
     await store.dispatch('WordsStore/fetchFiles')
+    SyncOutlinedSpin.value = false
     ReadySpinning.value = false
   } catch (error) {
     //
