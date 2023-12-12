@@ -9,7 +9,7 @@
 [Slim 版本（舊）](https://github.com/tk50486yui/slim-vocabulary.git)
 
 ----
-## 使用工具
+## 開發工具
 
 ``` 
     vue3
@@ -20,15 +20,22 @@
     axios
 ``` 
 ----
+## Docker
+
+``` 
+docker-compose up -d
+``` 
+----
 ## 目錄架構
 ```    
-+ vue-vocabulary  
++ vue-vocabulary
+    ├─ nginx              //  nginx.conf
     └─ src                //  主程式目錄
         ├─ api            //  宣告 API 與攔截器
         ├─ assets
         ├─ components     //  Vue Component
         ├─ interfaces     //  Interface
-        ├─ libs           //  函式庫
+        ├─ libs           //  Library
         ├─ plugins
         ├─ repositories   //  API 接口
         ├─ router
@@ -42,7 +49,9 @@
 ----
 ### 版面元件
 
-使用非常多的 [ant-design-vue](https://www.antdv.com/docs/vue/introduce) （v4.x）元件。
+[Ant Design Vue](https://www.antdv.com/docs/vue/introduce) （v4.x）
+
+[Element Plus](https://element-plus.org/en-US/)
 
 ----
 ### 版面樣式
