@@ -6,5 +6,5 @@ window.io = io
 // @ts-expect-error:  necessary
 window.Echo = new Echo({
   broadcaster: 'socket.io',
-  host: window.location.hostname + ':6001'
+  host: import.meta.env.VITE_ECHO_HOST_AND_PORT
 })
