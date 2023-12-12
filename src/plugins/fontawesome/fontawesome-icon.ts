@@ -10,7 +10,8 @@ import {
   faPlus,
   faFilter,
   faChevronLeft,
-  faSort
+  faSort,
+  faGear
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -24,6 +25,7 @@ library.add(faChevronLeft)
 library.add(faSort)
 library.add(faXmark)
 library.add(faPalette)
+library.add(faGear)
 
 export default function installFontAwesomeIcon(app: App) {
   app.component('font-awesome-icon', FontAwesomeIcon)

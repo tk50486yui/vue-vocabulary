@@ -70,23 +70,6 @@ onMounted(() => {
   mediaQuerySmall.addEventListener('change', handleMediaQueryChange)
   mediaQueryMedium.addEventListener('change', handleMediaQueryChange)
   mediaQueryLarge.addEventListener('change', handleMediaQueryChange)
-  // @ts-expect-error:  necessary
-  if (window.Echo) {
-    console.log('Echo OK')
-    // @ts-expect-error:  necessary
-    window.Echo.channel('shouldUpdate').listen('.BroadcastUpdate', async (event) => {
-      if (event.data.message === 'should be update') {
-        try {
-          await store.dispatch('WordsStore/fetch')
-          console.log('update words')
-        } catch (e) {
-          //
-        }
-      }
-    })
-  } else {
-    console.error('Echo is not defined. Make sure Laravel Echo is properly configured.')
-  }
 })
 
 watchEffect(() => {

@@ -13,7 +13,6 @@ import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
 import installFontAwesomeIcon from '@/plugins/fontawesome/fontawesome-icon'
 import installAntIcon from '@/plugins/ant-design/ant-icon'
 import installElIcon from '@/plugins/element-plus/el-icon'
-import '@/plugins/laravel-echo-setup'
 
 const app = createApp(App)
 

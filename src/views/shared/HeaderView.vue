@@ -58,16 +58,24 @@
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
                   </span>
                 </li>
+                <li>
+                  <span @click="settingVisible = true">
+                    <font-awesome-icon :icon="['fas', 'gear']" />
+                  </span>
+                </li>
               </ul>
             </div>
           </div>
           <div class="canvas__open">
             <span
               :class="{ 'text-secondary': $searchShow }"
-              style="margin-right: 16px"
+              style="margin-right: 12px"
               @click="setSearchShow()"
             >
               <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+            </span>
+            <span style="margin-right: 12px" @click="settingVisible = true">
+              <font-awesome-icon :icon="['fas', 'gear']" />
             </span>
             <span @click="drawerVisible = true">
               <font-awesome-icon :icon="['fas', 'bars']" />
@@ -96,6 +104,23 @@
       <NavDrawerView />
     </a-drawer>
   </div>
+  <div class="drawer-theme" ref="settingDrawer" :class="$theme">
+    <a-drawer
+      :getContainer="() => $refs.settingDrawer"
+      :height="230"
+      placement="bottom"
+      :closable="false"
+      :visible="settingVisible"
+      @close="settingVisible = false"
+    >
+      <el-switch
+        v-model="shouldConnect"
+        size="large"
+        active-text="Socket 開啟中"
+        inactive-text="Socket 關閉中"
+      />
+    </a-drawer>
+  </div>
 </template>
 <script lang="ts" setup>
 import { ref, watchEffect, toRefs, onMounted } from 'vue'
@@ -103,6 +128,7 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import NavDrawerView from '@/views/shared/NavDrawerView.vue'
 import logo from '@/assets/img/logo.png'
+import '@/plugins/laravel-echo-setup'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
@@ -112,6 +138,8 @@ const $route = useRoute()
 
 const activeIndex = ref<number>(2)
 const drawerVisible = ref<boolean>(false)
+const settingVisible = ref<boolean>(false)
+const shouldConnect = ref<boolean>(false)
 
 const setSearchShow = (): void => {
   store.dispatch('Search/updateSearchShow', !$searchShow.value)
@@ -143,12 +171,44 @@ const setActive = (): void => {
   }
 }
 
+const joinChannel = () => {
+  // @ts-expect-error:  necessary
+  window.Echo.channel('shouldUpdate').listen('.BroadcastUpdate', async (event) => {
+    if (event.data.message === 'should be update') {
+      try {
+        await store.dispatch('WordsStore/fetch')
+        console.log('update words')
+      } catch (e) {
+        //
+      }
+    }
+  })
+}
+const switchEchoConnection = () => {
+  // @ts-expect-error:  necessary
+  if (window.Echo) {
+    if (shouldConnect.value) {
+      // @ts-expect-error:  necessary
+      window.Echo.connect()
+      joinChannel()
+    } else {
+      // @ts-expect-error:  necessary
+      window.Echo.disconnect()
+    }
+  } else {
+    console.log('echo server error')
+  }
+}
+
 onMounted(() => {
   setActive()
 })
 
 watchEffect(() => {
   setActive()
+})
+watchEffect(async () => {
+  switchEchoConnection()
 })
 </script>
 
@@ -365,11 +425,9 @@ watchEffect(() => {
     font-size: 22px;
     color: #222;
     height: 35px;
-    width: 90px;
+    width: 120px;
     line-height: 35px;
     text-align: center;
-    border: 1px solid #323232;
-    border-radius: 2px;
     cursor: pointer;
     position: absolute;
     right: 15px;
@@ -392,11 +450,9 @@ watchEffect(() => {
     font-size: 22px;
     color: #222;
     height: 35px;
-    width: 90px;
+    width: 120px;
     line-height: 35px;
     text-align: center;
-    border: 1px solid #323232;
-    border-radius: 2px;
     cursor: pointer;
     position: absolute;
     right: 15px;

@@ -55,17 +55,17 @@
             <template #label="{ value }">
               <span class="icon-theme" :class="$theme">
                 <div class="choice-container">
-                  <template v-if="value === 'ws_is_important'">
-                    <span class="icon-heart">
-                      <a class="choice-heart">
-                        <HeartFilled />
-                      </a>
-                    </span>
-                  </template>
                   <template v-if="value === 'ws_is_common'">
                     <span class="icon-star">
                       <a class="choice-star">
                         <StarFilled />
+                      </a>
+                    </span>
+                  </template>
+                  <template v-if="value === 'ws_is_important'">
+                    <span class="icon-heart">
+                      <a class="choice-heart">
+                        <HeartFilled />
                       </a>
                     </span>
                   </template>
@@ -656,10 +656,10 @@ const isItemsState = reactive({
 const { isPronunciation, isDefinition, isSlogan, isCate, isTag, isForget } = toRefs(isItemsState)
 const choiceArrayOptions = [
   {
-    value: 'ws_is_important'
+    value: 'ws_is_common'
   },
   {
-    value: 'ws_is_common'
+    value: 'ws_is_important'
   }
 ]
 
