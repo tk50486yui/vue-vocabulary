@@ -3,7 +3,6 @@ node_modules
 /dist
 package-lock.json
 components.d.ts
-src/assets/img
 
 # local env files
 .env.local
