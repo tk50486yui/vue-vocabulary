@@ -1,7 +1,4 @@
 <template>
-  <div v-if="!Ready" class="ready-spinning">
-    <a-spin :spinning="ReadySpinning" size="large" />
-  </div>
   <template v-if="Ready">
     <div class="section-title">
       <h4>文章總覽</h4>
@@ -107,158 +104,160 @@
             <span v-if="ReadySpinning" class="ready-spinning">
               <a-spin :spinning="ReadySpinning" size="middle" />
             </span>
-            <a-list
-              :data-source="filterdResult"
-              :pagination="pagination"
-              item-layout="vertical"
-              size="large"
-              bordered
-            >
-              <template #renderItem="{ item }">
-                <a-list-item key="item.arti_title">
-                  <!-- 上方 -->
-                  <a-list-item-meta>
-                    <!-- 頭像 -->
-                    <template #avatar>
-                      <a-avatar :src="avatar" />
-                    </template>
-                    <!-- 標題 -->
-                    <template #title>
-                      <template v-if="item.cate_name !== '' && item.cate_name !== null">
-                        <span class="span-text h5">
-                          【
-                          <a @click="handleCategoryFilter(item.cate_name)">
-                            <template
-                              v-if="
-                                $keyword != '' &&
-                                $filters.includes('cate_name') &&
-                                item.cate_name.includes($keyword)
-                              "
-                            >
-                              <template v-for="(char, index) in item.cate_name" :key="index">
-                                <span
-                                  :class="{
-                                    'category-keyword-text': $keyword.includes(char)
-                                  }"
-                                >
+            <template v-if="!ReadySpinning">
+              <a-list
+                :data-source="filterdResult"
+                :pagination="pagination"
+                item-layout="vertical"
+                size="large"
+                bordered
+              >
+                <template #renderItem="{ item }">
+                  <a-list-item key="item.arti_title">
+                    <!-- 上方 -->
+                    <a-list-item-meta>
+                      <!-- 頭像 -->
+                      <template #avatar>
+                        <a-avatar :src="avatar" />
+                      </template>
+                      <!-- 標題 -->
+                      <template #title>
+                        <template v-if="item.cate_name !== '' && item.cate_name !== null">
+                          <span class="span-text h5">
+                            【
+                            <a @click="handleCategoryFilter(item.cate_name)">
+                              <template
+                                v-if="
+                                  $keyword != '' &&
+                                  $filters.includes('cate_name') &&
+                                  item.cate_name.includes($keyword)
+                                "
+                              >
+                                <template v-for="(char, index) in item.cate_name" :key="index">
+                                  <span
+                                    :class="{
+                                      'category-keyword-text': $keyword.includes(char)
+                                    }"
+                                  >
+                                    {{ char }}
+                                  </span>
+                                </template>
+                              </template>
+                              <template v-else>
+                                {{ item.cate_name }}
+                              </template>
+                            </a>
+                            】
+                          </span>
+                        </template>
+                        <template
+                          v-if="
+                            $keyword != '' &&
+                            $filters.includes('arti_title') &&
+                            item.arti_title.includes($keyword)
+                          "
+                        >
+                          <router-link
+                            :to="{
+                              name: 'articlesContent',
+                              params: { id: item.id }
+                            }"
+                          >
+                            <span class="title-link h5">
+                              <template
+                                v-for="(char, index) in splitTitle(item.arti_title, $keyword)"
+                                :key="index + char"
+                              >
+                                <span v-if="char === $keyword" class="keyword-text">
+                                  {{ char }}
+                                </span>
+                                <span v-else>
                                   {{ char }}
                                 </span>
                               </template>
-                            </template>
-                            <template v-else>
-                              {{ item.cate_name }}
-                            </template>
-                          </a>
-                          】
-                        </span>
-                      </template>
-                      <template
-                        v-if="
-                          $keyword != '' &&
-                          $filters.includes('arti_title') &&
-                          item.arti_title.includes($keyword)
-                        "
-                      >
-                        <router-link
-                          :to="{
-                            name: 'articlesContent',
-                            params: { id: item.id }
-                          }"
-                        >
-                          <span class="title-link h5">
-                            <template
-                              v-for="(char, index) in splitTitle(item.arti_title, $keyword)"
-                              :key="index + char"
-                            >
-                              <span v-if="char === $keyword" class="keyword-text">
-                                {{ char }}
-                              </span>
-                              <span v-else>
-                                {{ char }}
-                              </span>
-                            </template>
-                          </span>
-                        </router-link>
-                      </template>
-                      <template v-else>
-                        <router-link
-                          :to="{
-                            name: 'articlesContent',
-                            params: { id: item.id }
-                          }"
-                        >
-                          <span class="title-link h5">{{ item.arti_title }}</span>
-                        </router-link>
-                      </template>
-                    </template>
-                  </a-list-item-meta>
-                  <!-- 內容-->
-                  <template v-if="showContent">
-                    <div v-html="item.arti_content"></div>
-                  </template>
-                  <template v-else>
-                    <a class="list-link"></a>
-                  </template>
-                  <template v-if="showContent">
-                    <br />
-                    <span class="article-date">
-                      <template
-                        v-if="
-                          $keyword != '' &&
-                          $filters.includes('created_at') &&
-                          item.created_at.includes($keyword)
-                        "
-                      >
-                        <template
-                          v-for="(char, index) in splitTitle(item.created_at, $keyword)"
-                          :key="index + char"
-                        >
-                          <span v-if="char === $keyword" class="keyword-text">
-                            {{ char }}
-                          </span>
-                          <span v-else>
-                            {{ char }}
-                          </span>
+                            </span>
+                          </router-link>
+                        </template>
+                        <template v-else>
+                          <router-link
+                            :to="{
+                              name: 'articlesContent',
+                              params: { id: item.id }
+                            }"
+                          >
+                            <span class="title-link h5">{{ item.arti_title }}</span>
+                          </router-link>
                         </template>
                       </template>
-                      <template v-else>
-                        <span class="article-date">{{ item.created_at }}</span>
-                      </template>
-                    </span>
-                  </template>
-                  <!-- 下方 -->
-                  <template #actions>
-                    <template
-                      v-if="
-                        item.articles_tags.values != null && item.articles_tags.values.length > 0
-                      "
-                    >
-                      <span
-                        v-for="(tag, index) in item.articles_tags.values"
-                        :key="tag.ts_id + index"
-                      >
-                        <a-tag
-                          :style="
-                            'background:' +
-                            tag.tc_background +
-                            ';color:' +
-                            tag.tc_color +
-                            ';border-color:' +
-                            tag.tc_border
+                    </a-list-item-meta>
+                    <!-- 內容-->
+                    <template v-if="showContent">
+                      <div v-html="item.arti_content"></div>
+                    </template>
+                    <template v-else>
+                      <a class="list-link"></a>
+                    </template>
+                    <template v-if="showContent">
+                      <br />
+                      <span class="article-date">
+                        <template
+                          v-if="
+                            $keyword != '' &&
+                            $filters.includes('created_at') &&
+                            item.created_at.includes($keyword)
                           "
                         >
-                          {{ tag.ts_name }}
-                        </a-tag>
+                          <template
+                            v-for="(char, index) in splitTitle(item.created_at, $keyword)"
+                            :key="index + char"
+                          >
+                            <span v-if="char === $keyword" class="keyword-text">
+                              {{ char }}
+                            </span>
+                            <span v-else>
+                              {{ char }}
+                            </span>
+                          </template>
+                        </template>
+                        <template v-else>
+                          <span class="article-date">{{ item.created_at }}</span>
+                        </template>
                       </span>
                     </template>
-                  </template>
-                </a-list-item>
-              </template>
-              <!-- 最底部 -->
-              <template #footer>
-                <span class="span-text"> 共 {{ filterdResult.length }} 筆 </span>
-              </template>
-            </a-list>
+                    <!-- 下方 -->
+                    <template #actions>
+                      <template
+                        v-if="
+                          item.articles_tags.values != null && item.articles_tags.values.length > 0
+                        "
+                      >
+                        <span
+                          v-for="(tag, index) in item.articles_tags.values"
+                          :key="tag.ts_id + index"
+                        >
+                          <a-tag
+                            :style="
+                              'background:' +
+                              tag.tc_background +
+                              ';color:' +
+                              tag.tc_color +
+                              ';border-color:' +
+                              tag.tc_border
+                            "
+                          >
+                            {{ tag.ts_name }}
+                          </a-tag>
+                        </span>
+                      </template>
+                    </template>
+                  </a-list-item>
+                </template>
+                <!-- 最底部 -->
+                <template #footer>
+                  <span class="span-text"> 共 {{ filterdResult.length }} 筆 </span>
+                </template>
+              </a-list>
+            </template>
           </div>
         </a-tab-pane>
         <!-- tab 2 -->
