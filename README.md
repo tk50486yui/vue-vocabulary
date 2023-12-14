@@ -1,17 +1,19 @@
 # vue-vocabulary
 
-透過 Typescript 撰寫 Vue 3，並使用 Vite 及 Vuex 進行前端開發，最後部署於 Docker 環境。
+使用 Typescript 撰寫 Vue 3，並透過 Vite 和 Vuex 進行前端開發，最後在 Docker 環境中進行部署。
 
 搭配後端 API：
 
 [Laravel 版本（新）](https://github.com/tk50486yui/laravel-vocabulary.git)
+
+舊版：
 
 [Slim 版本（舊）](https://github.com/tk50486yui/slim-vocabulary.git)
 
 ----
 ## 系統簡介
 
-日文單字顯示介面，配合後端及資料庫存放資料，並透過標籤、類別、文章及群組管理已儲存的生字，實現彈性備忘的功能。
+系統主要目的是製作一套日文單字顯示介面，並與後端及資料庫協同工作，同時，透過標籤、類別、文章及群組的管理，實現已儲存生字的彈性備忘功能。
 
 [簡易 Demo](https://vue.yuex.site/vue-vocabulary/)
 
