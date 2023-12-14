@@ -1,6 +1,6 @@
 # vue-vocabulary
 
-使用 Typescript 撰寫 Vue 3，搭配 Vite 及 Vuex 進行前端開發。
+透過 Typescript 撰寫 Vue 3，並使用 Vite 及 Vuex 進行前端開發，最後部署於 Docker 環境。
 
 搭配後端 API：
 
@@ -9,7 +9,14 @@
 [Slim 版本（舊）](https://github.com/tk50486yui/slim-vocabulary.git)
 
 ----
-## 開發工具
+## 系統簡介
+
+日文單字顯示介面，配合後端及資料庫存放資料，並透過標籤、類別、文章及群組管理已儲存的生字，實現彈性備忘的功能。
+
+[簡易 Demo](https://vue.yuex.site/vue-vocabulary/)
+
+----
+## 開發環境
 
 ``` 
     vue3
@@ -21,6 +28,10 @@
 ``` 
 ----
 ## Docker
+
+``` 
+docker-compose build
+``` 
 
 ``` 
 docker-compose up -d
