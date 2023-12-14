@@ -6,19 +6,19 @@
 
 [Laravel 版本（新）](https://github.com/tk50486yui/laravel-vocabulary.git)
 
-舊版：
+舊版 API：
 
 [Slim 版本（舊）](https://github.com/tk50486yui/slim-vocabulary.git)
 
 ----
-## 系統簡介
+### 系統簡介
 
 系統主要目的是製作一套日文單字顯示介面，並與後端及資料庫協同工作，同時，透過標籤、類別、文章及群組的管理，實現已儲存生字的彈性備忘功能。
 
 [簡易 Demo](https://vue.yuex.site/vue-vocabulary/)
 
 ----
-## 開發環境
+### 開發工具
 
 ``` 
     vue3
@@ -29,7 +29,7 @@
     axios
 ``` 
 ----
-## Docker
+### Docker
 
 ``` 
 docker-compose build
@@ -39,7 +39,7 @@ docker-compose build
 docker-compose up -d
 ``` 
 ----
-## 目錄架構
+### 目錄架構
 ```    
 + vue-vocabulary
     ├─ nginx              //  nginx.conf
