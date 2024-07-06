@@ -27,12 +27,21 @@
 ----
 ### Docker
 
-``` 
+``` bash
 docker-compose build
 ``` 
 
-``` 
+``` bash
 docker-compose up -d
+``` 
+
+``` bash
+docker-compose exec vue-nginx sh
+``` 
+
+``` bash
+npm install
+npm run build
 ``` 
 ----
 ### 目錄架構
