@@ -41,8 +41,16 @@ docker-compose exec vue-nginx sh
 
 ``` bash
 npm install
+``` 
+
+``` bash
 npm run build
 ``` 
+
+``` bash
+exit
+``` 
+
 ----
 ### 目錄架構
 ```    
