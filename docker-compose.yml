@@ -1,4 +1,4 @@
-version: '1.0'
+version: '3.8'
 
 services:
   vue-nginx:
@@ -6,3 +6,9 @@ services:
       context: .
     ports:
       - "8088:80"
+    volumes:
+      - .:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /usr/share/nginx/html
+    stdin_open: true
+    tty: true
