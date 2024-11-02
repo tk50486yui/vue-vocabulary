@@ -73,6 +73,15 @@
       </a-form-item>
       <p></p>
       <a-form-item>
+        <div class="article-editor" :class="$theme">
+          <ckeditor
+            v-model="formState.word.ws_description"
+            :editor="ClassicEditor"
+            :config="wordEditor.Config"
+          />
+        </div>
+      </a-form-item>
+      <a-form-item>
         <a-button class="btn btn-primary btn-outline-light btn-sm" html-type="submit"
           >儲存</a-button
         >
@@ -87,6 +96,7 @@
 import { ref, reactive, toRefs, onMounted, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CategoriesTreeSelect from '@/components/tree-select/CategoriesTreeSelect.vue'
 import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import { WordForm } from '@/interfaces/Words'
@@ -128,6 +138,13 @@ onBeforeMount(() => {
 
 onMounted(() => {
   Ready.value = true
+})
+
+const wordEditor = reactive({
+  Config: {
+    autoGrow: true,
+    placeholder: '請為單字添加註釋或說明...'
+  }
 })
 
 const validateMsg = {
