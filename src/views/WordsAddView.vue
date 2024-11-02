@@ -75,7 +75,7 @@
       <a-form-item>
         <div class="article-editor" :class="$theme">
           <ckeditor
-            v-model="formState.word.ws_description"
+            v-model:model-value="ws_description"
             :editor="ClassicEditor"
             :config="wordEditor.Config"
           />
@@ -93,7 +93,7 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, onBeforeMount } from 'vue'
+import { ref, reactive, toRefs, computed, onMounted, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -112,6 +112,13 @@ const formState = reactive({
   word: {} as WordForm
 })
 
+const ws_description = computed({
+  get: () => formState.word.ws_description || '',
+  set: (value: string) => {
+    formState.word.ws_description = value
+  }
+})
+
 const onFinish = async (): Promise<void> => {
   try {
     message.loading({ content: 'Loading..', duration: 1 })
@@ -127,6 +134,7 @@ const resetForm = (): void => {
   categoriesTreeSelectRef.value.clearValue()
   tagsTreeSelectRef.value.clearValue('multiple')
   formRef.value.resetFields()
+  ws_description.value = ''
 }
 
 onBeforeMount(() => {
