@@ -12,8 +12,8 @@ export function sortedWords(words: Word[], sortBy: string[]) {
         return forgetB - forgetA
       }
     } else if (sortBy[0] === 'created_at' && sortBy.length === 2) {
-      const dateA = new Date(a.created_at)
-      const dateB = new Date(b.created_at)
+      const dateA = new Date(a.updated_at) // 調整成更新時間
+      const dateB = new Date(b.updated_at)
       if (sortBy[1] === 'asc') {
         return dateA.getTime() - dateB.getTime()
       } else {
