@@ -25,7 +25,7 @@ const state: ViewsState = {
       isPronunciation: true,
       isDefinition: true,
       isSlogan: false,
-      isCate: false,
+      isCate: true,
       isTag: true,
       isForget: true
     }

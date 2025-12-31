@@ -5,7 +5,7 @@
       <a
         class="float-end"
         @click="filterShow = !filterShow"
-        :class="{ 'text-warning': !filterShow, 'text-secondary': filterShow }"
+        :class="{ 'text-warning': filterShow, 'text-secondary': !filterShow }"
       >
         <font-awesome-icon :icon="['fas', 'filter']" />
       </a>
@@ -244,7 +244,6 @@
                             --
                           </template>
                           <template v-else>
-                            【
                             <template
                               v-if="
                                 $keyword !== '' &&
@@ -269,7 +268,6 @@
                                 {{ item.cate_name }}
                               </a>
                             </template>
-                            】
                           </template>
                         </a-col>
                       </a-row>
@@ -628,7 +626,7 @@ const AfterReady = ref<boolean>(false)
 const ReadySpinning = ref<boolean>(false)
 const editTableData: UnwrapRef<Record<number, Word>> = reactive({})
 const filtersTagsTreeSelectRef = ref()
-const filterShow = ref<boolean>(true)
+const filterShow = ref<boolean>(false)
 const tagsArray = ref<number[]>([])
 const selectPageSize = ref<string>('20')
 const currentPage = ref<number>(1)
@@ -661,7 +659,7 @@ const isItemsState = reactive({
   isPronunciation: true,
   isDefinition: true,
   isSlogan: false,
-  isCate: false,
+  isCate: true,
   isTag: true,
   isForget: true
 })

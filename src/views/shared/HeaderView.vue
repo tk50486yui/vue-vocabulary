@@ -54,7 +54,7 @@
             <div class="header__right">
               <ul class="header__right__widget">
                 <li>
-                  <span :class="{ 'text-secondary': $searchShow }" @click="setSearchShow()">
+                  <span :class="{ 'text-secondary': !$searchShow }" @click="setSearchShow()">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
                   </span>
                 </li>
@@ -68,7 +68,7 @@
           </div>
           <div class="canvas__open">
             <span
-              :class="{ 'text-secondary': $searchShow }"
+              :class="{ 'text-secondary': !$searchShow }"
               style="margin-right: 12px"
               @click="setSearchShow()"
             >

@@ -12,7 +12,7 @@ interface SearchState {
 }
 
 const state: SearchState = {
-  $searchShow: false,
+  $searchShow: true,
   $keyword: '',
   $searchClass: '',
   $filters: ['ws_name'],
