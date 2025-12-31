@@ -8,7 +8,7 @@
             class="col-lg-4 col-md-12 d-flex justify-content-lg-end justify-content-md-start align-items-center"
           >
             <div class="radio-button-theme" :class="$theme">
-              <a-radio-group v-model:value="searchRadio" @change="onSearchRadio()">
+              <a-radio-group v-model:value="searchRadio">
                 <a-radio-button value="word">單字</a-radio-button>
                 <a-radio-button value="article">文章</a-radio-button>
               </a-radio-group>
@@ -62,7 +62,7 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 const store = useStore()
@@ -76,20 +76,36 @@ const searchRadio = ref<string>('word')
 const wordCheckbox = ref<string[]>(['ws_name', 'ws_pronunciation'])
 const articleCheckbox = ref<string[]>(['arti_title'])
 
+watch(searchValue, (val) => {
+  if (val) {
+    onSearch()
+  }
+})
+
+watch(searchRadio, (val) => {
+  if (val) {
+    store.dispatch('Search/updateSearchClass', searchRadio.value)
+    onSearch()
+  }
+})
+
+watch(wordCheckbox, () => {
+  onSearch()
+})
+
+watch(articleCheckbox, () => {
+  onSearch()
+})
+
 const onSearch = () => {
   onWordChecked()
   onArticleChecked()
-  onSearchRadio()
   store.dispatch('Search/updateKeyword', searchValue.value)
   if (searchRadio.value === 'word') {
     $router.push({ name: 'wordsGrid' })
   } else {
     $router.push({ name: 'articles' })
   }
-}
-
-const onSearchRadio = () => {
-  store.dispatch('Search/updateSearchClass', searchRadio.value)
 }
 
 const onWordChecked = () => {
