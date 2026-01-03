@@ -852,6 +852,7 @@ const setCheckbox = (): void => {
 const onDrawerShow = (): void => {
   wordsDrawerRef.value.setDrawerStyle()
   wordsDrawerVisible.value = true
+  wordsDrawerRef.value.scrollToTop()
 }
 
 onMounted(async () => {

@@ -119,12 +119,17 @@ const ws_description = computed({
   }
 })
 
+const emit = defineEmits<{
+  (e: 'reset-scroll'): void
+}>()
+
 const onFinish = async (): Promise<void> => {
   try {
     message.loading({ content: 'Loading..', duration: 1 })
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await store.dispatch('WordsStore/add', formState.word)
     resetForm()
+    emit('reset-scroll')
   } catch (error) {
     //
   }
