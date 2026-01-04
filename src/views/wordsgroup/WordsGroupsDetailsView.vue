@@ -24,7 +24,7 @@
               <template #description>
                 {{ index + 1 }}.
                 <span class="list-item-link">
-                  <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
+                  <router-link :to="{ name: 'wordDetails', params: { id: item.ws_id } }">
                     {{ item.ws_name }}
                   </router-link>
                 </span>
