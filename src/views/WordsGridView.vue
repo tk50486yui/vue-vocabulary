@@ -130,9 +130,9 @@
             sm: 1,
             md: 2,
             lg: 2,
-            xl: 3,
-            xxl: 3,
-            xxxl: 3
+            xl: 4,
+            xxl: 4,
+            xxxl: 4
           }"
         >
           <!-- card header -->

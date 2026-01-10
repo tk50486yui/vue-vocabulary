@@ -104,7 +104,7 @@ const getPopupContainer = (el, dialogContext) => {
 
 @media only screen and (min-width: 1200px) {
   .container {
-    max-width: 1170px;
+    max-width: 1560px;
   }
 }
 </style>

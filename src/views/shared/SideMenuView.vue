@@ -4,6 +4,7 @@
       <a-radio-button value="1">標籤</a-radio-button>
       <a-radio-button value="2">類別</a-radio-button>
       <a-radio-button value="3">群組</a-radio-button>
+      <a-radio-button value="4">相關詞組</a-radio-button>
     </a-radio-group>
   </div>
   <p></p>

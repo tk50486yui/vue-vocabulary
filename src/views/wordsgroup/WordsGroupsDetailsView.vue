@@ -22,10 +22,29 @@
           <a-list-item>
             <a-list-item-meta>
               <template #description>
-                {{ index + 1 }}.
                 <span class="list-item-link">
                   <router-link :to="{ name: 'wordDetails', params: { id: item.ws_id } }">
-                    {{ item.ws_name }}
+                    <div class="popover-theme" :class="$theme" ref="popoverMod">
+                      <a-popover
+                        :title="item.ws_name"
+                        trigger="hover"
+                        :getPopupContainer="() => $refs.popoverMod"
+                      >
+                        <template #content>
+                          <p></p>
+                          {{ item.ws_pronunciation }}
+                          <p></p>
+                          {{ item.ws_definition }}
+                          <p></p>
+                          {{ item.ws_slogan }}
+                          <p></p>
+                          <div v-html="item.ws_description"></div>
+                          <p></p>
+                          {{ item.created_at }}
+                        </template>
+                        {{ index + 1 }}. {{ item.ws_name }}
+                      </a-popover>
+                    </div>
                   </router-link>
                 </span>
               </template>
