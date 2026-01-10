@@ -63,6 +63,20 @@
                     <font-awesome-icon :icon="['fas', 'gear']" />
                   </span>
                 </li>
+                <li>
+                  <div class="breadcrumb-switch switch-theme" :class="$theme">
+                    <a-switch :checked="$theme === 'dark'" @change="changeTheme">
+                      <template #checkedChildren>
+                        <el-icon><el-Moon /></el-icon>
+                      </template>
+                      <template #unCheckedChildren>
+                        <span class="text-info">
+                          <el-icon><el-Sunny /></el-icon>
+                        </span>
+                      </template>
+                    </a-switch>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -113,6 +127,18 @@
       :visible="settingVisible"
       @close="settingVisible = false"
     >
+      <div class="breadcrumb-switch switch-theme" :class="$theme">
+        <a-switch :checked="$theme === 'dark'" @change="changeTheme">
+          <template #checkedChildren>
+            <el-icon><el-Moon /></el-icon>
+          </template>
+          <template #unCheckedChildren>
+            <span class="text-info">
+              <el-icon><el-Sunny /></el-icon>
+            </span>
+          </template>
+        </a-switch>
+      </div>
       <el-switch
         v-model="shouldConnect"
         size="large"
@@ -140,6 +166,11 @@ const activeIndex = ref<number>(2)
 const drawerVisible = ref<boolean>(false)
 const settingVisible = ref<boolean>(false)
 const shouldConnect = ref<boolean>(false)
+
+const changeTheme = (checked: boolean): void => {
+  const theme = checked ? 'dark' : 'light'
+  store.dispatch('Theme/updateTheme', theme)
+}
 
 const setSearchShow = (): void => {
   store.dispatch('Search/updateSearchShow', !$searchShow.value)

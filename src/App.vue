@@ -4,9 +4,6 @@
       <!-- 頂端 導覽列 -->
       <HeaderView />
 
-      <!-- Breadcrumb -->
-      <BreadcrumbView />
-
       <!-- 主頁面 -->
       <div class="spad" :class="$theme">
         <div class="container">
@@ -42,7 +39,7 @@ import { ref, onMounted, watchEffect, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import HeaderView from '@/views/shared/HeaderView.vue'
 import SearchView from '@/views/shared/SearchView.vue'
-import BreadcrumbView from '@/views/shared/BreadcrumbView.vue'
+// import BreadcrumbView from '@/views/shared/BreadcrumbView.vue'
 import SideMenuView from '@/views/shared/SideMenuView.vue'
 import FooterView from '@/views/shared/FooterView.vue'
 
