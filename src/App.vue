@@ -7,14 +7,18 @@
       <!-- 主頁面 -->
       <div class="spad" :class="$theme">
         <div class="container">
-          <!-- 上方搜尋列 -->
-          <SearchView />
+          <div class="search-sticky" :class="$theme">
+            <!-- 上方搜尋列 -->
+            <SearchView />
+          </div>
 
           <!-- 下方顯示頁面 -->
           <div class="row">
             <!-- 左側 -->
             <div class="col-lg-3">
-              <SideMenuView />
+              <div class="side-menu-sticky">
+                <SideMenuView />
+              </div>
             </div>
 
             <!-- 右側 -->
@@ -102,6 +106,23 @@ const getPopupContainer = (el, dialogContext) => {
 @media only screen and (min-width: 1200px) {
   .container {
     max-width: 1560px;
+  }
+}
+
+.side-menu-sticky {
+  position: sticky;
+  top: 120px;
+}
+
+.search-sticky {
+  position: sticky;
+  top: 0px;
+  z-index: 1000;
+  &.dark {
+    background: var(--body-background);
+  }
+  &.light {
+    background: var(--body-background);
   }
 }
 </style>

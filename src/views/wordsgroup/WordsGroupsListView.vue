@@ -4,7 +4,7 @@
   </div>
   <template v-if="Ready">
     <div class="section-title">
-      <h4>單字群組列表</h4>
+      <h4>群組列表</h4>
     </div>
     <!-- 上層 -->
     <div class="select-theme" :class="$theme" ref="selectMod">
@@ -40,7 +40,6 @@
             </template>
           </a-select>
         </span>
-        <span> 共 {{ wordsGroups.length }} 筆 </span>
       </a-space>
     </div>
     <p></p>
@@ -50,16 +49,8 @@
           <a-list-item>
             <a-list-item-meta>
               <template #description>
-                <span class="list-link">
-                  <router-link
-                    :to="{
-                      name: 'wordsGroupsDetails',
-                      params: { id: item.id }
-                    }"
-                  >
-                    {{ item.wg_name }}
-                  </router-link>
-                  ( {{ item.details.length }} )
+                <span class="list-link" @click="emit('open-details', item.id)">
+                  <a>{{ item.wg_name }}</a> ( {{ item.details.length }} )
                 </span>
               </template>
             </a-list-item-meta>
@@ -73,6 +64,10 @@
 <script setup lang="ts">
 import { ref, reactive, toRefs, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
+
+const emit = defineEmits<{
+  (e: 'open-details', id: number): void
+}>()
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
@@ -92,7 +87,7 @@ const pagination = reactive({
     pagination.current = currentPage.value
   },
   pageSize: Number(selectPageSize.value),
-  position: 'top',
+  position: 'bottom',
   current: currentPage.value
 })
 

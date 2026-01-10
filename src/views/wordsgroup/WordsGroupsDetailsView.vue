@@ -1,11 +1,13 @@
 <template>
   <template v-if="Ready && wordsGroup">
     <span class="back-link-theme" :class="$theme">
-      <router-link :to="{ name: 'wordsGroups' }"> 返回 </router-link>
-      <span class="link-separator h5">
+      <span class="list-link" style="cursor: pointer" @click="emit('back')">
+        <a style="font-size: 18px">返回</a>
+      </span>
+      <span class="link-separator h6">
         <font-awesome-icon :icon="['fas', 'chevron-right']" size="xs" />
       </span>
-      <span class="h4">
+      <span class="h5">
         {{ wordsGroup.wg_name }}
       </span>
     </span>
@@ -73,21 +75,28 @@
 
 <script setup lang="ts">
 import { ref, toRefs, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { message } from 'ant-design-vue'
 import { DeleteBtn } from '@/components/button'
 import { WordsGroupsDetails } from '@/interfaces/WordsGroups'
 
+const props = defineProps<{
+  id: number | null
+}>()
+
+const emit = defineEmits<{
+  (e: 'back'): void
+}>()
+
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 
-const route = useRoute()
 const router = useRouter()
 
 const Ready = ref<boolean>(false)
 
-const wgId = computed(() => Number(route.params.id))
+const wgId = computed(() => Number(props.id))
 const wordsGroup = computed(
   () => store.getters['WordsGroupsStore/wordsGroupsById'](wgId.value) || null
 )
@@ -161,7 +170,7 @@ const injectEditData = (): void => {
 
 onMounted(async () => {
   try {
-    window.scrollTo({ top: 120, behavior: 'instant' })
+    // window.scrollTo({ top: 120, behavior: 'instant' })
     await store.dispatch('WordsGroupsStore/fetch')
     Ready.value = true
   } catch (error) {

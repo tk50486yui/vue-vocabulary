@@ -4,28 +4,37 @@
       <a-radio-button value="1">標籤</a-radio-button>
       <a-radio-button value="2">類別</a-radio-button>
       <a-radio-button value="3">群組</a-radio-button>
-      <a-radio-button value="4">相關詞組</a-radio-button>
+      <a-radio-button value="4">群組列表</a-radio-button>
     </a-radio-group>
   </div>
   <p></p>
-  <keep-alive>
-    <template v-if="$SideMenuView.sideGroup === '1'">
-      <TagsMenuView />
-    </template>
-    <template v-else-if="$SideMenuView.sideGroup === '2'">
-      <CategoriesMenuView />
-    </template>
-    <template v-else-if="$SideMenuView.sideGroup === '3'">
-      <WordsGroupsView />
-    </template>
-  </keep-alive>
+
+  <template v-if="$SideMenuView.sideGroup === '1'">
+    <TagsMenuView />
+  </template>
+  <template v-else-if="$SideMenuView.sideGroup === '2'">
+    <CategoriesMenuView />
+  </template>
+  <template v-else-if="$SideMenuView.sideGroup === '3'">
+    <WordsGroupsView />
+  </template>
+  <template v-else-if="$SideMenuView.sideGroup === '4'">
+    <component
+      :is="currentGroupsView === 'list' ? WordsGroupsListView : WordsGroupsDetailsView"
+      :id="currentGroupsId"
+      @open-details="openDetails"
+      @back="backToList"
+    />
+  </template>
 </template>
 <script lang="ts" setup>
-import { watchEffect, onMounted, toRefs, computed } from 'vue'
+import { ref, watchEffect, onMounted, toRefs, computed } from 'vue'
 import { useStore } from 'vuex'
 import CategoriesMenuView from '@/views/category/CategoriesMenuView.vue'
 import TagsMenuView from '@/views/tag/TagsMenuView.vue'
 import WordsGroupsView from '@/views/wordsgroup/WordsGroupsView.vue'
+import WordsGroupsListView from '@/views/wordsgroup/WordsGroupsListView.vue'
+import WordsGroupsDetailsView from '@/views/wordsgroup/WordsGroupsDetailsView.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
@@ -37,6 +46,19 @@ const setUpdateNow = (val: boolean) => {
   if (val) {
     $SideMenuView.value.sideGroup = '3'
   }
+}
+
+const currentGroupsView = ref<'list' | 'details'>('list')
+const currentGroupsId = ref<number | null>(null)
+
+const openDetails = (id: number) => {
+  currentGroupsId.value = id
+  currentGroupsView.value = 'details'
+}
+
+const backToList = () => {
+  currentGroupsView.value = 'list'
+  currentGroupsId.value = null
 }
 
 onMounted(() => {
