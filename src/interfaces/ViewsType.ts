@@ -11,6 +11,8 @@ export interface ViewsState {
       choiceOperator: string
       tagsOperator: string
       sortValue: string | null
+      sortValue2: string | null
+      sortValue3: string | null
     }
     isItemsState: {
       isPronunciation: boolean
@@ -56,6 +58,8 @@ export interface WordsGridType {
         choiceOperator: string
         tagsOperator: string
         sortValue: string | null
+        sortValue2: string | null
+        sortValue3: string | null
       }
     | {
         isPronunciation: boolean

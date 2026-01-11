@@ -35,9 +35,11 @@ const getters: GetterTree<WordsState, RootState> = {
       tagsOperator: string,
       choiceArray: string[],
       choiceOperator: string,
-      sortValue: string
+      sortValue: string,
+      sortValue2: string,
+      sortValue3: string
     ) => {
-      const filteredWords = generalFilter(
+      let result = generalFilter(
         state.words,
         keyword,
         options,
@@ -46,12 +48,21 @@ const getters: GetterTree<WordsState, RootState> = {
         choiceArray,
         choiceOperator
       )
-      if (sortValue && sortValue !== null) {
-        const splitSortValue = sortValue.split(',')
-        return sortedWords(filteredWords, splitSortValue)
+      if (sortValue) {
+        const split = sortValue.split(',')
+        result = sortedWords(result, split)
       }
 
-      return filteredWords
+      if (sortValue2) {
+        const split = sortValue2.split(',')
+        result = sortedWords(result, split)
+      }
+
+      if (sortValue3) {
+        const split = sortValue3.split(',')
+        result = sortedWords(result, split)
+      }
+      return result
     }
 }
 

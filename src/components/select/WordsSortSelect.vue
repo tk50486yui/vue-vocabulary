@@ -9,17 +9,17 @@
     >
       <a-select-opt-group>
         <template #label>
+          <span> 依更新日期 </span>
+        </template>
+        <a-select-option value="created_at,desc">日期（新－舊）</a-select-option>
+        <a-select-option value="created_at,asc">日期（舊－新）</a-select-option>
+      </a-select-opt-group>
+      <a-select-opt-group>
+        <template #label>
           <span> 依程度條 </span>
         </template>
         <a-select-option value="ws_forget_count,desc">程度條（高－低）</a-select-option>
         <a-select-option value="ws_forget_count,asc">程度條（低－高）</a-select-option>
-      </a-select-opt-group>
-      <a-select-opt-group>
-        <template #label>
-          <span> 依日期 </span>
-        </template>
-        <a-select-option value="created_at,desc">日期（新－舊）</a-select-option>
-        <a-select-option value="created_at,asc">日期（舊－新）</a-select-option>
       </a-select-opt-group>
       <a-select-opt-group>
         <template #label>

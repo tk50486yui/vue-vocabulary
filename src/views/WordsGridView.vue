@@ -210,7 +210,25 @@
                 <span class="d-flex align-items-center">
                   <WordsSortSelect
                     v-model:value="sortValue"
-                    placeholder="依條件排序..."
+                    placeholder="依條件排序1.."
+                    size="small"
+                    style="width: 160px"
+                    @change="setFilterItems"
+                  />
+                </span>
+                <span class="d-flex align-items-center">
+                  <WordsSortSelect
+                    v-model:value="sortValue2"
+                    placeholder="依條件排序2.."
+                    size="small"
+                    style="width: 160px"
+                    @change="setFilterItems"
+                  />
+                </span>
+                <span class="d-flex align-items-center">
+                  <WordsSortSelect
+                    v-model:value="sortValue3"
+                    placeholder="依條件排序3.."
                     size="small"
                     style="width: 160px"
                     @change="setFilterItems"
@@ -607,7 +625,9 @@ const filterWordsResult = computed(() =>
     filterItemsState.tagsOperator,
     filterItemsState.choiceArray,
     filterItemsState.choiceOperator,
-    sortValue.value
+    sortValue.value,
+    sortValue2.value,
+    sortValue3.value
   )
 )
 
@@ -652,9 +672,12 @@ const filterItemsState = reactive({
   tagsOperator: 'or',
   choiceArray: [],
   choiceOperator: 'or',
-  sortValue: ''
+  sortValue: '',
+  sortValue2: '',
+  sortValue3: ''
 })
-const { tagsOperator, choiceArray, choiceOperator, sortValue } = toRefs(filterItemsState)
+const { tagsOperator, choiceArray, choiceOperator, sortValue, sortValue2, sortValue3 } =
+  toRefs(filterItemsState)
 const isItemsState = reactive({
   isPronunciation: true,
   isDefinition: true,

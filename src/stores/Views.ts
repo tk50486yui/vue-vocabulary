@@ -19,7 +19,9 @@ const state: ViewsState = {
       choiceArray: [],
       choiceOperator: 'or',
       tagsOperator: 'or',
-      sortValue: 'created_at,desc'
+      sortValue: 'created_at,desc',
+      sortValue2: null,
+      sortValue3: null
     },
     isItemsState: {
       isPronunciation: true,
