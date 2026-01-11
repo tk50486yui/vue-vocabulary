@@ -48,7 +48,9 @@ const state: ViewsState = {
     updateNow: false
   },
   $SideMenuView: {
-    sideGroup: '1'
+    sideGroup: '1',
+    openCategoriesModal: false,
+    openTagsModal: false
   }
 }
 

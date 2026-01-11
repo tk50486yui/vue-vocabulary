@@ -4,7 +4,7 @@
       <h4>詞組類別</h4>
       <PlusBtn
         class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-        @click="visible = true"
+        @click="openModal"
       />
     </div>
     <span class="radio-theme d-flex align-items-center" :class="$theme" style="margin-bottom: 8px">
@@ -82,8 +82,6 @@
     </div>
   </div>
   <p></p>
-  <!-- Modal  -->
-  <CategoriesModalView v-model:open="visible" />
 </template>
 
 <script lang="ts" setup>
@@ -92,11 +90,11 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { PlusBtn } from '@/components/button'
 import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
-import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 const { $filters, $keyword, $isAutoMove, $autoMove } = toRefs(store.state.Search)
+const { $SideMenuView } = toRefs(store.state.Views)
 
 const $route = useRoute()
 const $router = useRouter()
@@ -106,7 +104,6 @@ const categories = computed(() => store.getters['CategoriesStore/categories'])
 const activeKey = ref<string[]>(['1'])
 const spinning = ref<boolean>(false)
 const SyncOutlinedSpin = ref<boolean>(false)
-const visible = ref<boolean>(false)
 const labelColor = ref<string>('rgb(48, 37, 2)')
 
 const refresh = async (): Promise<void> => {
@@ -120,6 +117,10 @@ const refresh = async (): Promise<void> => {
   } catch (error) {
     //
   }
+}
+
+const openModal = (): void => {
+  $SideMenuView.value.openCategoriesModal = true
 }
 
 const handleCategoryFilter = (cateName: string): void => {

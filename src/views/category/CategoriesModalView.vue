@@ -1,6 +1,6 @@
 <template>
   <div class="menu-modal" ref="cateMod" :class="$theme">
-    <a-modal :getContainer="() => $refs.cateMod" v-bind="$attrs" :footer="null">
+    <a-modal :getContainer="() => $refs.cateMod" v-bind="$attrs" :footer="null" :zIndex="1000">
       <template #title>
         <span class="section-title" :class="$theme">
           <h4>新增分類</h4>

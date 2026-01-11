@@ -492,7 +492,7 @@ $wordsgroups-main-color: rgba(27, 99, 245, 0.984);
 /*---------------------
     Modal
 -----------------------*/
-.menu-modal {
+.menu-modal {  
   // head
   &.dark :deep(.ant-modal-header){
     background:var(--head-background);

@@ -40,6 +40,8 @@ export interface ViewsState {
   }
   $SideMenuView: {
     sideGroup: string
+    openCategoriesModal: boolean
+    openTagsModal: boolean
   }
 }
 

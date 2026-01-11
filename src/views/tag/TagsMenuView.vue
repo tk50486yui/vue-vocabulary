@@ -4,7 +4,7 @@
       <h4>詞組標籤</h4>
       <PlusBtn
         class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
-        @click="visible = true"
+        @click="openModal"
       />
     </div>
     <span class="radio-theme d-flex align-items-center" :class="$theme" style="margin-bottom: 8px">
@@ -88,8 +88,6 @@
     </div>
   </div>
   <p></p>
-  <!-- Modal  -->
-  <TagsModalView v-model:open="visible" />
 </template>
 <script lang="ts" setup>
 import { ref, toRefs, onMounted, computed, watchEffect } from 'vue'
@@ -97,12 +95,12 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { PlusBtn, CloseBtn } from '@/components/button'
 import TreeTagsMenu from '@/components/tree-menu/TreeTagsMenu.vue'
-import TagsModalView from '@/views/tag/TagsModalView.vue'
 import { Tag } from '@/interfaces/Tags'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
 const { $filtersTags, $filtersTagsState, $isAutoMove, $autoMove } = toRefs(store.state.Search)
+const { $SideMenuView } = toRefs(store.state.Views)
 
 const $route = useRoute()
 const $router = useRouter()
@@ -122,8 +120,11 @@ const activeKey = ref<string[]>(['1'])
 const spinning = ref<boolean>(false)
 const selectedKeys = ref([])
 const openKeys = ref()
-const visible = ref<boolean>(false)
 const labelColor = ref<string>('#31122f')
+
+const openModal = (): void => {
+  $SideMenuView.value.openTagsModal = true
+}
 
 const handleTagsFilter = async (id: number): Promise<void> => {
   await store.dispatch('Search/pushFiltersTags', id)

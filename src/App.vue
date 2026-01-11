@@ -36,6 +36,10 @@
       <!-- 底部 Footer -->
       <FooterView />
     </div>
+    <!-- Modal  -->
+    <CategoriesModalView v-model:open="$SideMenuView.openCategoriesModal" />
+    <!-- Modal  -->
+    <TagsModalView v-model:open="$SideMenuView.openTagsModal" />
   </a-config-provider>
 </template>
 <script lang="ts" setup>
@@ -46,9 +50,12 @@ import SearchView from '@/views/shared/SearchView.vue'
 // import BreadcrumbView from '@/views/shared/BreadcrumbView.vue'
 import SideMenuView from '@/views/shared/SideMenuView.vue'
 import FooterView from '@/views/shared/FooterView.vue'
+import CategoriesModalView from '@/views/category/CategoriesModalView.vue'
+import TagsModalView from '@/views/tag/TagsModalView.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
+const { $SideMenuView } = toRefs(store.state.Views)
 
 const isScreenSmall = ref<boolean>(false)
 const isScreenMedium = ref<boolean>(false)
@@ -117,7 +124,7 @@ const getPopupContainer = (el, dialogContext) => {
 .search-sticky {
   position: sticky;
   top: 0px;
-  z-index: 1000;
+  z-index: 100;
   &.dark {
     background: var(--body-background);
   }
