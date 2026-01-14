@@ -17,7 +17,7 @@
           <div class="col-lg-8 col-md-12">
             <div class="input-theme input-search" :class="$theme">
               <a-input-search
-                v-model:value="searchValue"
+                v-model:value="$keyword"
                 placeholder="搜尋"
                 @search="onSearch"
                 size="large"
@@ -67,19 +67,16 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $searchShow } = toRefs(store.state.Search)
+const { $searchShow, $keyword } = toRefs(store.state.Search)
 
 const $router = useRouter()
 
-const searchValue = ref<string>('')
 const searchRadio = ref<string>('word')
-const wordCheckbox = ref<string[]>(['ws_name', 'ws_pronunciation'])
+const wordCheckbox = ref<string[]>(['ws_name', 'ws_pronunciation', 'ws_definition'])
 const articleCheckbox = ref<string[]>(['arti_title'])
 
-watch(searchValue, (val) => {
-  if (val) {
-    onSearch()
-  }
+watch($keyword, () => {
+  onSearch()
 })
 
 watch(searchRadio, (val) => {
@@ -100,7 +97,6 @@ watch(articleCheckbox, () => {
 const onSearch = () => {
   onWordChecked()
   onArticleChecked()
-  store.dispatch('Search/updateKeyword', searchValue.value)
   if (searchRadio.value === 'word') {
     $router.push({ name: 'wordsGrid' })
   } else {
