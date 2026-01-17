@@ -128,10 +128,6 @@ const wordOptions = [
   {
     label: '中譯',
     value: 'ws_definition'
-  },
-  {
-    label: '類別',
-    value: 'cate_name'
   }
 ]
 const articleOptions = [

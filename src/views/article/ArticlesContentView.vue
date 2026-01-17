@@ -101,7 +101,9 @@
               >
                 {{ item.ts_name }}
               </a-tag>
-              <template v-if="index != article.articles_tags.values.length && index / 5 == 1">
+              <template
+                v-if="index != article.articles_tags.values.length && Number(index) / 5 == 1"
+              >
                 <br />
               </template>
             </template>

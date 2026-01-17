@@ -18,8 +18,15 @@ const getters: GetterTree<ArticlesState, RootState> = {
   },
   articleForm: (state) => state.articleForm,
   filterArticles:
-    (state) => (keyword: string, options: string[], tagsArray: number[], tagsOperator: string) => {
-      return generalFilter(state.articles, keyword, options, tagsArray, tagsOperator)
+    (state) =>
+    (
+      keyword: string,
+      options: string[],
+      cateId: number,
+      tagsArray: number[],
+      tagsOperator: string
+    ) => {
+      return generalFilter(state.articles, keyword, options, cateId, tagsArray, tagsOperator)
     }
 }
 

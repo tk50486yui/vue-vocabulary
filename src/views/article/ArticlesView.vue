@@ -49,7 +49,7 @@
                   style="width: 80px"
                   @change="setPageSize()"
                 >
-                  <a-select-option value="3">3 筆</a-select-option>
+                  <a-select-option value="5">5 筆</a-select-option>
                   <a-select-option value="10">10 筆</a-select-option>
                   <a-select-option value="20">20 筆</a-select-option>
                   <a-select-option value="50">50 筆</a-select-option>
@@ -86,13 +86,28 @@
                   <template v-else> 無 </template>
                 </el-tag>
               </span>
+              <template v-if="$filtersCategoryId !== 0">
+                <span class="d-flex align-items-center">
+                  <el-tag
+                    class="d-flex align-items-center"
+                    effect="dark"
+                    size="small"
+                    type="warning"
+                    color="black"
+                    round
+                  >
+                    主題分類：
+                    <span class="category-keyword-text">{{ $filtersCategoryName }}</span>
+                  </el-tag>
+                </span>
+              </template>
               <span class="d-flex align-items-center">
                 <el-tag effect="dark" size="small" color="black" round>
                   共 {{ filterdResult.length }} 筆
                 </el-tag>
               </span>
               <span class="d-flex align-items-center">
-                <template v-if="$keyword != ''">
+                <template v-if="$keyword != '' || $filtersCategoryName != ''">
                   <CloseBtn @click="onResetSearch()" />
                 </template>
               </span>
@@ -125,23 +140,11 @@
                         <template v-if="item.cate_name !== '' && item.cate_name !== null">
                           <span class="span-text h5">
                             【
-                            <a @click="handleCategoryFilter(item.cate_name)">
-                              <template
-                                v-if="
-                                  $keyword != '' &&
-                                  $filters.includes('cate_name') &&
-                                  item.cate_name.includes($keyword)
-                                "
-                              >
-                                <template v-for="(char, index) in item.cate_name" :key="index">
-                                  <span
-                                    :class="{
-                                      'category-keyword-text': $keyword.includes(char)
-                                    }"
-                                  >
-                                    {{ char }}
-                                  </span>
-                                </template>
+                            <a @click="handleCategoryFilter(item.cate_id, item.cate_name)">
+                              <template v-if="$filtersCategoryName != ''">
+                                <span class="category-keyword-text">
+                                  {{ $filtersCategoryName }}
+                                </span>
                               </template>
                               <template v-else>
                                 {{ item.cate_name }}
@@ -284,14 +287,22 @@ import avatar from '@/assets/img/avatar.png'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $keyword, $filters, $filtersTags } = toRefs(store.state.Search)
+const { $keyword, $filters, $filtersCategoryId, $filtersCategoryName, $filtersTags } = toRefs(
+  store.state.Search
+)
 const { $ArticlesView } = toRefs(store.state.Views)
 
 const articles = computed(() => store.getters['ArticlesStore/articles'])
 const filterArticles = computed(() => store.getters['ArticlesStore/filterArticles'])
 
 const filterdResult = computed(() =>
-  filterArticles.value($keyword.value, $filters.value, $filtersTags.value, tagsOperator.value)
+  filterArticles.value(
+    $keyword.value,
+    $filters.value,
+    $filtersCategoryId.value,
+    $filtersTags.value,
+    tagsOperator.value
+  )
 )
 const articlesCount = computed(
   () => Math.ceil(articles.value.length / Number(selectPageSize.value)) || 1
@@ -303,7 +314,7 @@ const ReadySpinning = ref<boolean>(false)
 const activeTab = ref<string>('1')
 const tabPosition = ref<string>('top')
 const filtersTagsTreeSelectRef = ref()
-const selectPageSize = ref<string>('3')
+const selectPageSize = ref<string>('5')
 const currentPage = ref<number>(1)
 const showContent = ref<boolean>(true)
 const tagsArray = ref<number[]>([])
@@ -328,6 +339,10 @@ const splitTitle = (title: string, keyword: string): string[] => {
 
 const onResetSearch = () => {
   store.dispatch('Search/updateKeyword', '')
+  store.dispatch('Search/updateFiltersCategory', {
+    id: 0,
+    name: ''
+  })
 }
 
 const onResetTags = async (): Promise<void> => {
@@ -335,10 +350,11 @@ const onResetTags = async (): Promise<void> => {
   filtersTagsTreeSelectRef.value.clearValue()
 }
 // filters
-const handleCategoryFilter = async (cateName: string): Promise<void> => {
-  store.dispatch('Search/updateSearchClass', 'word')
-  store.dispatch('Search/updateFilters', ['cate_name'])
-  store.dispatch('Search/updateKeyword', cateName)
+const handleCategoryFilter = async (id: number, name: string): Promise<void> => {
+  store.dispatch('Search/updateFiltersCategory', {
+    id: id,
+    name: name
+  })
   await new Promise((resolve) => setTimeout(resolve, 100))
   window.scrollTo({ top: 180, behavior: 'instant' })
 }

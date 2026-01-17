@@ -4,15 +4,15 @@ import { Article } from '@/interfaces/Articles'
 export function generalFilterWords(
   words: Word[],
   keyword: string,
-  cateId: number,
   options: string[],
+  cateId: number,
   tagsArray: number[],
   tagsOperator: string,
   choiceArray: string[],
   choiceOperator: string
 ) {
   let currentFilteredWords = [] as Word[]
-  // 第一次搜尋篩選 (關鍵字及類別共用)
+  // 1. 搜尋篩選 - 關鍵字
   if (keyword && options && options.length > 0) {
     currentFilteredWords = Object.entries(words)
       .filter(([, word]) => {
@@ -35,13 +35,14 @@ export function generalFilterWords(
     }))
   }
 
+  // 2. Category ID 篩選，接續上一個篩選結果
   if (cateId !== 0) {
     currentFilteredWords = currentFilteredWords.filter((word) => {
       return word.cate_id === cateId
     })
   }
 
-  // 第二次用 tags 篩選 接續第一個篩選結果
+  // 3. Tags 篩選，接續上一個篩選結果
   if (tagsOperator === 'none') {
     // NONE
     currentFilteredWords = currentFilteredWords.filter((word) => {
@@ -79,7 +80,7 @@ export function generalFilterWords(
       })
     }
   }
-  // 第三次用 ws_is_important ws_is_common 篩選 接續第二個篩選結果 OR AND NONE
+  // 4. ws_is_important ws_is_common 篩選，接續上一個篩選結果
   if (choiceOperator === 'none') {
     // NONE
     return currentFilteredWords.filter((word) => {
@@ -122,11 +123,12 @@ export function generalFilterArticles(
   articles: Article[],
   keyword: string,
   options: string[],
+  cateId: number,
   tagsArray: number[],
   tagsOperator: string
 ) {
   let currentFiltered = []
-  // 第一次 關鍵字
+  // 1. 關鍵字
   if (keyword && options && options.length > 0) {
     currentFiltered = Object.entries(articles)
       .filter(([, article]) => {
@@ -148,7 +150,15 @@ export function generalFilterArticles(
       ...value
     }))
   }
-  // 第二次用 tags 篩選 接續第一個篩選結果
+
+  // 2. Category ID 篩選，接續上一個篩選結果
+  if (cateId !== 0) {
+    currentFiltered = currentFiltered.filter((article) => {
+      return article.cate_id === cateId
+    })
+  }
+
+  // 3. Tags 篩選，接續上一個篩選結果
   if (tagsOperator === 'none') {
     // NONE
     currentFiltered = currentFiltered.filter((article) => {

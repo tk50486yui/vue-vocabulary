@@ -212,7 +212,7 @@
                   </el-tag>
                 </span>
                 <span class="d-flex align-items-center">
-                  <template v-if="$keyword != ''">
+                  <template v-if="$keyword != '' || $filtersCategoryId !== 0">
                     <CloseBtn class="d-flex align-items-center" @click="onResetSearch()" />
                   </template>
                 </span>
@@ -791,6 +791,10 @@ const setFilterItems = (): void => {
 // ---- clear button ----
 const onResetSearch = async (): Promise<void> => {
   store.dispatch('Search/updateKeyword', '')
+  store.dispatch('Search/updateFiltersCategory', {
+    id: 0,
+    name: ''
+  })
 }
 
 const onResetTags = async (): Promise<void> => {
