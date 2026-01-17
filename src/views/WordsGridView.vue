@@ -358,11 +358,10 @@
                     </template>
                     <template v-else>
                       <div class="popover-theme" :class="$theme" ref="popoverMod">
-                        <a-popover
-                          :title="item.ws_name"
-                          trigger="hover"
-                          :getPopupContainer="() => $refs.popoverMod"
-                        >
+                        <a-popover trigger="hover" :getPopupContainer="() => $refs.popoverMod">
+                          <template #title>
+                            {{ item.ws_name }}
+                          </template>
                           <template #content>
                             <p></p>
                             {{ item.ws_pronunciation }}
@@ -373,7 +372,8 @@
                             <p></p>
                             <div v-html="item.ws_description"></div>
                             <p></p>
-                            {{ item.created_at }}
+                            {{ item.updated_at }}
+                            （{{ item.id }}）
                           </template>
                           <template
                             v-if="
