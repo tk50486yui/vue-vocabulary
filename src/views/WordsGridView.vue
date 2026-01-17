@@ -180,17 +180,26 @@
                   >
                     關鍵字：
                     <template v-if="$keyword !== '' && $filters.length > 0">
-                      <template v-if="$filters.length === 1 && $filters.includes('cate_name')">
-                        `
-                        <span class="category-keyword-text">{{ $keyword }} </span>`
-                      </template>
-                      <template v-else>
-                        ` <span class="keyword-text">{{ $keyword }} </span>`
-                      </template>
+                      ` <span class="keyword-text">{{ $keyword }} </span>`
                     </template>
                     <template v-else> 無 </template>
                   </el-tag>
                 </span>
+                <template v-if="$filtersCategoryId !== 0">
+                  <span class="d-flex align-items-center">
+                    <el-tag
+                      class="d-flex align-items-center"
+                      effect="dark"
+                      size="small"
+                      type="warning"
+                      color="black"
+                      round
+                    >
+                      主題分類：
+                      <span class="category-keyword-text">{{ $filtersCategoryName }}</span>
+                    </el-tag>
+                  </span>
+                </template>
                 <span class="d-flex align-items-center">
                   <el-tag
                     class="d-flex align-items-center"
@@ -262,14 +271,8 @@
                             --
                           </template>
                           <template v-else>
-                            <template
-                              v-if="
-                                $keyword !== '' &&
-                                $filters.includes('cate_name') &&
-                                item.cate_name.includes($keyword)
-                              "
-                            >
-                              <a @click="handleCategoryFilter(item.cate_name)">
+                            <template v-if="$filtersCategoryName !== ''">
+                              <a @click="handleCategoryFilter(item.cate_id, item.cate_name)">
                                 <template v-for="(char, index) in item.cate_name" :key="index">
                                   <span
                                     :class="{
@@ -282,7 +285,7 @@
                               </a>
                             </template>
                             <template v-else>
-                              <a @click="handleCategoryFilter(item.cate_name)">
+                              <a @click="handleCategoryFilter(item.cate_id, item.cate_name)">
                                 {{ item.cate_name }}
                               </a>
                             </template>
@@ -608,7 +611,9 @@ import { Word } from '@/interfaces/Words'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $keyword, $filters, $filtersTags } = toRefs(store.state.Search)
+const { $keyword, $filters, $filtersCategoryId, $filtersCategoryName, $filtersTags } = toRefs(
+  store.state.Search
+)
 const { $WordsGrid, $WordsGroupsView, $WordsGroupsDetailsView, $SideMenuView } = toRefs(
   store.state.Views
 )
@@ -621,6 +626,7 @@ const filterWordsResult = computed(() =>
   filterWords.value(
     $keyword.value,
     $filters.value,
+    $filtersCategoryId.value,
     $filtersTags.value,
     filterItemsState.tagsOperator,
     filterItemsState.choiceArray,
@@ -757,10 +763,11 @@ const onDelete = async (id: number): Promise<void> => {
 }
 
 // ---- filter ----
-const handleCategoryFilter = async (cateName: string): Promise<void> => {
-  store.dispatch('Search/updateSearchClass', 'word')
-  store.dispatch('Search/updateFilters', ['cate_name'])
-  store.dispatch('Search/updateKeyword', cateName)
+const handleCategoryFilter = async (id: number, name: string): Promise<void> => {
+  store.dispatch('Search/updateFiltersCategory', {
+    id: id,
+    name: name
+  })
   await new Promise((resolve) => setTimeout(resolve, 100))
   window.scrollTo({ top: 180, behavior: 'instant' })
 }

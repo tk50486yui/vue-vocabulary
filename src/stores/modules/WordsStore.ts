@@ -31,6 +31,7 @@ const getters: GetterTree<WordsState, RootState> = {
     (
       keyword: string,
       options: string[],
+      cateId: number,
       tagsArray: number[],
       tagsOperator: string,
       choiceArray: string[],
@@ -42,6 +43,7 @@ const getters: GetterTree<WordsState, RootState> = {
       let result = generalFilter(
         state.words,
         keyword,
+        cateId,
         options,
         tagsArray,
         tagsOperator,

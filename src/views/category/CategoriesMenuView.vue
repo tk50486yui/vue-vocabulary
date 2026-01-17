@@ -30,22 +30,14 @@
               <div class="menu-scroll">
                 <span class="d-flex align-items-center" :class="$theme">
                   <el-tag effect="dark" type="warning" size="small" round>
-                    <template
-                      v-if="
-                        $filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''
-                      "
-                    >
-                      已選擇類別：{{ $keyword }}
+                    <template v-if="$filtersCategoryName !== ''">
+                      已選擇類別：{{ $filtersCategoryName }}
                     </template>
                     <template v-else> 尚無選擇 </template>
                   </el-tag>
-                  <template
-                    v-if="
-                      $filters.includes('cate_name') && $filters.length === 1 && $keyword !== ''
-                    "
-                  >
+                  <template v-if="$filtersCategoryName !== ''">
                     <span style="margin-left: 4px">
-                      <CloseBtn class="d-flex align-items-center" @click="onClearCateName" />
+                      <CloseBtn class="d-flex align-items-center" @click="onClearCateId" />
                     </span>
                   </template>
                 </span>
@@ -56,7 +48,7 @@
                     <template v-if="data.children && data.children.length">
                       <a-sub-menu :key="data.id">
                         <template #title>
-                          <a @click="handleCategoryFilter(data.cate_name)">
+                          <a @click="handleCategoryFilter(data.id, data.cate_name)">
                             {{ data.cate_name }}（{{ data.children.length }}）
                           </a>
                         </template>
@@ -65,7 +57,7 @@
                     </template>
                     <template v-else>
                       <a-menu-item :key="data.id">
-                        <a @click="handleCategoryFilter(data.cate_name)">
+                        <a @click="handleCategoryFilter(data.id, data.cate_name)">
                           {{ data.cate_name }}
                         </a>
                       </a-menu-item>
@@ -93,7 +85,9 @@ import TreeCategoriesMenu from '@/components/tree-menu/TreeCategoriesMenu.vue'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)
-const { $filters, $keyword, $isAutoMove, $autoMove } = toRefs(store.state.Search)
+const { $filtersCategoryId, $filtersCategoryName, $isAutoMove, $autoMove } = toRefs(
+  store.state.Search
+)
 const { $SideMenuView } = toRefs(store.state.Views)
 
 const $route = useRoute()
@@ -123,17 +117,23 @@ const openModal = (): void => {
   $SideMenuView.value.openCategoriesModal = true
 }
 
-const handleCategoryFilter = (cateName: string): void => {
-  store.dispatch('Search/updateSearchClass', 'word')
-  store.dispatch('Search/updateFilters', ['cate_name'])
-  store.dispatch('Search/updateKeyword', cateName)
+const handleCategoryFilter = (id: number, name: string): void => {
+  if (id === $filtersCategoryId.value) {
+    onClearCateId()
+  } else {
+    store.dispatch('Search/updateFiltersCategory', {
+      id: id,
+      name: name
+    })
+  }
   onMove()
 }
 
-const onClearCateName = (): void => {
-  store.dispatch('Search/updateSearchClass', 'word')
-  store.dispatch('Search/updateFilters', ['words'])
-  store.dispatch('Search/updateKeyword', '')
+const onClearCateId = (): void => {
+  store.dispatch('Search/updateFiltersCategory', {
+    id: 0,
+    name: ''
+  })
 }
 
 const onMove = (): void => {

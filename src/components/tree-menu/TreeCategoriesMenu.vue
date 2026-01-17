@@ -4,7 +4,7 @@
       <template v-if="item.children && item.children.length">
         <a-sub-menu :key="item.id" :title="item.cate_name">
           <template #title>
-            <a @click="handleCategoryFilter(item.cate_name)">
+            <a @click="handleCategoryFilter(item.id, item.cate_name)">
               {{ item.cate_name }}（{{ item.children.length }}）
             </a>
           </template>
@@ -13,7 +13,7 @@
       </template>
       <template v-else>
         <a-menu-item :key="item.id">
-          <a @click="handleCategoryFilter(item.cate_name)">
+          <a @click="handleCategoryFilter(item.id, item.cate_name)">
             {{ item.cate_name }}
           </a>
         </a-menu-item>
@@ -29,7 +29,7 @@ import { Category } from '@/interfaces/Categories'
 
 const store = useStore()
 
-const { $isAutoMove, $autoMove } = toRefs(store.state.Search)
+const { $isAutoMove, $autoMove, $filtersCategoryId } = toRefs(store.state.Search)
 
 const $router = useRouter()
 const $route = useRoute()
@@ -38,11 +38,24 @@ defineProps({
   data: { type: Object as PropType<Category>, required: true }
 })
 
-const handleCategoryFilter = async (cateName: string): Promise<void> => {
-  store.dispatch('Search/updateSearchClass', 'word')
-  store.dispatch('Search/updateFilters', ['cate_name'])
-  store.dispatch('Search/updateKeyword', cateName)
+const handleCategoryFilter = async (id: number, name: string): Promise<void> => {
+  if (id === $filtersCategoryId.value) {
+    onClearCateId()
+  } else {
+    store.dispatch('Search/updateFiltersCategory', {
+      id: id,
+      name: name
+    })
+  }
+
   onMove()
+}
+
+const onClearCateId = (): void => {
+  store.dispatch('Search/updateFiltersCategory', {
+    id: 0,
+    name: ''
+  })
 }
 
 const onMove = (): void => {

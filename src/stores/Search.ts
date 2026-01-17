@@ -4,6 +4,8 @@ interface SearchState {
   $keyword: string
   $searchClass: string
   $filters: string[]
+  $filtersCategoryId: number
+  $filtersCategoryName: string
   $filtersTags: number[]
   $filtersTagsState: boolean
   $currentCateName: string
@@ -16,6 +18,8 @@ const state: SearchState = {
   $keyword: '',
   $searchClass: '',
   $filters: ['ws_name'],
+  $filtersCategoryId: 0,
+  $filtersCategoryName: '',
   $filtersTags: [],
   $filtersTagsState: false,
   $currentCateName: '',
@@ -35,6 +39,9 @@ const actions = {
   },
   updateFilters({ commit }: { commit: Commit }, filters: string[]) {
     commit('setFilters', filters)
+  },
+  updateFiltersCategory({ commit }: { commit: Commit }, payload: { id: number; name: string }) {
+    commit('setFiltersCategory', payload)
   },
   updateFiltersTags({ commit }: { commit: Commit }, filtersTags: number[]) {
     commit('setFiltersTags', filtersTags)
@@ -56,6 +63,10 @@ const mutations = {
   },
   setFilters(state: SearchState, filters: string[]) {
     state.$filters = filters
+  },
+  setFiltersCategory(state: SearchState, payload: { id: number; name: string }) {
+    state.$filtersCategoryId = payload.id
+    state.$filtersCategoryName = payload.name
   },
   // This method is called from both 'Words' and 'Articles'
   async setFiltersTags(state: SearchState, filtersTags: number[]) {

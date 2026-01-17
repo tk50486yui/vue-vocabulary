@@ -4,6 +4,7 @@ import { Article } from '@/interfaces/Articles'
 export function generalFilterWords(
   words: Word[],
   keyword: string,
+  cateId: number,
   options: string[],
   tagsArray: number[],
   tagsOperator: string,
@@ -32,6 +33,12 @@ export function generalFilterWords(
       key,
       ...value
     }))
+  }
+
+  if (cateId !== 0) {
+    currentFilteredWords = currentFilteredWords.filter((word) => {
+      return word.cate_id === cateId
+    })
   }
 
   // 第二次用 tags 篩選 接續第一個篩選結果
