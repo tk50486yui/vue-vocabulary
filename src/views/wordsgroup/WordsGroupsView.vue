@@ -26,7 +26,7 @@
     <!-- save button -->
     <template v-if="wordsCount > 0 && updateNow === false">
       <div class="input-theme" :class="$theme" style="padding-bottom: 12px">
-        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="組別名稱" allow-clear />
+        <a-input v-model:value="formState.wordsGroup.wg_name" placeholder="群組名稱" allow-clear />
       </div>
       <a-button
         class="btn btn-primary btn-outline-light btn-sm"
@@ -172,10 +172,18 @@ const onMove = (): void => {
   }
 }
 
+const watchupdateNow = (): void => {
+  if (updateNow.value === true) {
+    formState.wordsGroup.wg_name = $WordsGroupsView.value.wg_name
+  } else {
+    formState.wordsGroup.wg_name = ''
+  }
+}
 onMounted(() => {
   formState.wordsGroup = { ...formState.wordsGroup }
   formState.wordsGroup.words_groups_details = []
   Ready.value = true
+  watchupdateNow()
 })
 
 watchEffect(() => {
@@ -196,24 +204,9 @@ watch(wordsCount, (val) => {
   }
 })
 
-watch(updateNow, (val) => {
-  if (val === true) {
-    formState.wordsGroup.wg_name = $WordsGroupsView.value.wg_name
-  } else {
-    formState.wordsGroup.wg_name = ''
-  }
+watch(updateNow, () => {
+  watchupdateNow()
 })
-
-watch(
-  () => $WordsGroupsView.value.wg_name,
-  (val) => {
-    if (updateNow.value === true) {
-      formState.wordsGroup.wg_name = val
-    } else {
-      formState.wordsGroup.wg_name = ''
-    }
-  }
-)
 </script>
 
 <style lang="scss" scoped>
