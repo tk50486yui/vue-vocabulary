@@ -336,7 +336,7 @@ onBeforeMount(() => {
 onMounted(async () => {
   try {
     window.scrollTo({ top: 120, behavior: 'instant' })
-    await store.dispatch('WordsStore/fetch')
+    //await store.dispatch('WordsStore/fetch')
     Ready.value = true
   } catch (e) {
     //
@@ -351,7 +351,7 @@ onBeforeRouteLeave(async (to, from, next) => {
 onActivated(async () => {
   try {
     window.scrollTo({ top: 120, behavior: 'instant' })
-    await store.dispatch('WordsStore/fetch')
+    //await store.dispatch('WordsStore/fetch')
   } catch (e) {
     //
   }
