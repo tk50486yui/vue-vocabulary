@@ -29,6 +29,7 @@
                     <div class="popover-theme" :class="$theme" ref="popoverMod">
                       <a-popover
                         :title="item.ws_name"
+                        placement="bottom"
                         trigger="hover"
                         :getPopupContainer="() => $refs.popoverMod"
                       >
@@ -161,6 +162,11 @@ const injectEditData = (): void => {
     data: wordsGroup.value.id
   })
   wordsGroup.value.details.forEach((item: WordsGroupsDetails) => {
+    store.dispatch('WordsStore/updateWordChecked', {
+      id: item.ws_id,
+      name: item.ws_name,
+      checked: true
+    })
     store.dispatch('Views/updateWordsGroupsView', {
       variable: 'groupArray',
       data: { ws_id: item.ws_id, ws_name: item.ws_name, checked: true }

@@ -23,6 +23,7 @@ export interface Word {
   }
   created_at: Date
   updated_at: Date
+  checked?: boolean
 }
 
 export interface WordForm {

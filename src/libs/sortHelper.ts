@@ -1,6 +1,10 @@
 import { Word } from '@/interfaces/Words'
 export function sortedWords(words: Word[], sortBy: string[]) {
   return words.slice().sort((a: Word, b: Word) => {
+    if ((a.checked ? 1 : 0) !== (b.checked ? 1 : 0)) {
+      return (b.checked ? 1 : 0) - (a.checked ? 1 : 0)
+    }
+
     if (sortBy[0] === 'ws_forget_count' && sortBy.length === 2) {
       if (sortBy[1] === 'asc') {
         const forgetA = a.ws_forget_count !== undefined ? a.ws_forget_count : 0

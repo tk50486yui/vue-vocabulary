@@ -273,15 +273,9 @@
                           <template v-else>
                             <template v-if="$filtersCategoryName !== ''">
                               <a @click="handleCategoryFilter(item.cate_id, item.cate_name)">
-                                <template v-for="(char, index) in item.cate_name" :key="index">
-                                  <span
-                                    :class="{
-                                      'category-keyword-text': $keyword.includes(char)
-                                    }"
-                                  >
-                                    {{ char }}
-                                  </span>
-                                </template>
+                                <span class="category-keyword-text">
+                                  {{ $filtersCategoryName }}
+                                </span>
                               </a>
                             </template>
                             <template v-else>
@@ -633,7 +627,8 @@ const filterWordsResult = computed(() =>
     filterItemsState.choiceOperator,
     sortValue.value,
     sortValue2.value,
-    sortValue3.value
+    sortValue3.value,
+    $WordsGroupsDetailsView.value.updateNow
   )
 )
 
@@ -862,17 +857,15 @@ const clickGroupAdd = (): void => {
   }
 }
 const changeCheckbox = (id: number, wsName: string): void => {
-  if (checkboxArray.value[id]) {
-    store.dispatch('Views/updateWordsGroupsView', {
-      variable: 'groupArray',
-      data: { ws_id: id, ws_name: wsName, checked: true }
-    })
-  } else {
-    store.dispatch('Views/updateWordsGroupsView', {
-      variable: 'groupArray',
-      data: { ws_id: id, ws_name: wsName, checked: false }
-    })
-  }
+  store.dispatch('WordsStore/updateWordChecked', {
+    id,
+    wsName,
+    checked: checkboxArray.value[id]
+  })
+  store.dispatch('Views/updateWordsGroupsView', {
+    variable: 'groupArray',
+    data: { ws_id: id, ws_name: wsName, checked: checkboxArray.value[id] }
+  })
   setCheckbox()
 }
 const setCheckbox = (): void => {

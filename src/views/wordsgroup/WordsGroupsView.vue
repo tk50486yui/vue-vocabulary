@@ -146,6 +146,7 @@ const onEditSave = async (): Promise<void> => {
 }
 
 const clearCheckbox = (): void => {
+  store.dispatch('WordsStore/clearWordsChecked')
   store.dispatch('Views/updateWordsGroupsView', {
     variable: 'clear',
     data: true
@@ -159,6 +160,11 @@ const clearCheckbox = (): void => {
 }
 
 const onRemove = (id: number, wsName: string): void => {
+  store.dispatch('WordsStore/updateWordChecked', {
+    id,
+    wsName,
+    checked: false
+  })
   store.dispatch('Views/updateWordsGroupsView', {
     variable: 'groupArray',
     data: { ws_id: id, ws_name: wsName, checked: false }

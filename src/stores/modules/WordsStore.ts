@@ -123,13 +123,43 @@ const actions = {
   async deleteFile({ dispatch }: { dispatch: Dispatch }, id: string) {
     await WordsRepo.deleteFile(id)
     await dispatch('fetchFiles')
+  },
+
+  updateWordChecked(
+    { commit }: { commit: Commit },
+    payload: { id: number; name: string; checked: boolean }
+  ) {
+    commit('updateWordChecked', {
+      id: payload.id,
+      checked: payload.checked
+    })
+  },
+
+  clearWordsChecked({ commit }: { commit: Commit }) {
+    commit('clearWordsChecked')
   }
 }
 type State = typeof state
 const mutations = {
-  set: (state: State, data: Word[]) => (state.words = data),
+  set: (state: State, data: Word[]) => {
+    state.words = data.map((word) => ({
+      ...word,
+      checked: false
+    }))
+  },
   setByID: (state: State, data: Word) => (state.word = data),
-  setFiles: (state: State, data: string[]) => (state.files = data)
+  setFiles: (state: State, data: string[]) => (state.files = data),
+  updateWordChecked(state: State, payload: { id: number; checked: boolean }) {
+    const word = state.words.find((word) => word.id === payload.id)
+    if (word) {
+      word.checked = payload.checked
+    }
+  },
+  clearWordsChecked(state: State) {
+    state.words.forEach((word) => {
+      word.checked = false
+    })
+  }
 }
 
 export default {

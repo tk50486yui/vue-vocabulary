@@ -12,9 +12,12 @@ export function generalFilterWords(
   choiceOperator: string
 ) {
   let currentFilteredWords = [] as Word[]
+
+  currentFilteredWords = [...words]
+
   // 1. 搜尋篩選 - 關鍵字
   if (keyword && options && options.length > 0) {
-    currentFilteredWords = Object.entries(words)
+    currentFilteredWords = Object.entries(currentFilteredWords)
       .filter(([, word]) => {
         return options.some((option) => {
           const optionValue = word[option as keyof Word]
@@ -29,7 +32,7 @@ export function generalFilterWords(
         ...value
       }))
   } else {
-    currentFilteredWords = Object.entries(words).map(([key, value]) => ({
+    currentFilteredWords = Object.entries(currentFilteredWords).map(([key, value]) => ({
       key,
       ...value
     }))
