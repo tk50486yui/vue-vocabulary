@@ -379,12 +379,18 @@
                             v-if="
                               $keyword != '' &&
                               $filters.includes('ws_name') &&
-                              item.ws_name.includes($keyword)
+                              normalizeJa(item.ws_name).includes(normalizeJa($keyword))
                             "
                           >
                             <router-link :to="{ name: 'wordDetails', params: { id: item.id } }">
                               <template v-for="(char, index) in item.ws_name" :key="index">
-                                <span :class="{ 'keyword-text': $keyword.includes(char) }">
+                                <span
+                                  :class="{
+                                    'keyword-text': normalizeJa($keyword).includes(
+                                      normalizeJa(char)
+                                    )
+                                  }"
+                                >
                                   {{ char }}
                                 </span>
                               </template>
@@ -424,11 +430,15 @@
                             v-if="
                               $keyword != '' &&
                               $filters.includes('ws_pronunciation') &&
-                              item.ws_pronunciation.includes($keyword)
+                              normalizeJa(item.ws_pronunciation).includes(normalizeJa($keyword))
                             "
                           >
                             <template v-for="(char, index) in item.ws_pronunciation" :key="index">
-                              <span :class="{ 'keyword-text': $keyword.includes(char) }">
+                              <span
+                                :class="{
+                                  'keyword-text': normalizeJa($keyword).includes(normalizeJa(char))
+                                }"
+                              >
                                 {{ char }}
                               </span>
                             </template>
@@ -602,6 +612,7 @@ import TagsTreeSelect from '@/components/tree-select/TagsTreeSelect.vue'
 import WordsSortSelect from '@/components/select/WordsSortSelect.vue'
 import type { UnwrapRef } from 'vue'
 import { Word } from '@/interfaces/Words'
+import { normalizeJa } from '@/libs/dataHelper'
 
 const store = useStore()
 const { $theme } = toRefs(store.state.Theme)

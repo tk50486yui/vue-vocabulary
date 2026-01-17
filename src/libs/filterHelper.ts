@@ -1,5 +1,6 @@
 import { Word } from '@/interfaces/Words'
 import { Article } from '@/interfaces/Articles'
+import { normalizeJa } from '@/libs/dataHelper'
 
 export function generalFilterWords(
   words: Word[],
@@ -15,6 +16,8 @@ export function generalFilterWords(
 
   currentFilteredWords = [...words]
 
+  const normalizedKeyword = normalizeJa(keyword)
+
   // 1. 搜尋篩選 - 關鍵字
   if (keyword && options && options.length > 0) {
     currentFilteredWords = Object.entries(currentFilteredWords)
@@ -22,7 +25,7 @@ export function generalFilterWords(
         return options.some((option) => {
           const optionValue = word[option as keyof Word]
           if (typeof optionValue === 'string' || optionValue === null) {
-            return optionValue && optionValue.includes(keyword)
+            return optionValue && normalizeJa(optionValue).includes(normalizedKeyword)
           }
           return false
         })
