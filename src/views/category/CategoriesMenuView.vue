@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="section-title d-flex justify-content-between align-items-center" :class="$theme">
-      <h4>詞組類別</h4>
+      <h4>主題分類</h4>
       <PlusBtn
         class="btn btn-secondary btn-outline-light btn-sm float-end me-md-2"
         @click="openModal"
@@ -31,7 +31,7 @@
                 <span class="d-flex align-items-center" :class="$theme">
                   <el-tag effect="dark" type="warning" size="small" round>
                     <template v-if="$filtersCategoryName !== ''">
-                      已選擇類別：{{ $filtersCategoryName }}
+                      主題分類：{{ $filtersCategoryName }}
                     </template>
                     <template v-else> 尚無選擇 </template>
                   </el-tag>

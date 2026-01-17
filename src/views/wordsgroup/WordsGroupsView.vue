@@ -1,7 +1,7 @@
 <template>
   <template v-if="Ready">
     <div class="section-title" :class="$theme">
-      <h4>單字群組管理</h4>
+      <h4>群組操作管理</h4>
     </div>
     <div class="list-theme" :class="$theme">
       <!-- list -->
