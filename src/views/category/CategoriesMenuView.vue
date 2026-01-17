@@ -42,7 +42,7 @@
                   </template>
                 </span>
                 <!--  類別最頂層 -->
-                <a-menu mode="inline">
+                <a-menu mode="inline" v-model:selectedKeys="selectedKeys">
                   <!--  第一層  for 顯示  -->
                   <template v-for="data in categories" :key="data.id">
                     <template v-if="data.children && data.children.length">
@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, toRefs, onMounted, computed } from 'vue'
+import { ref, toRefs, onMounted, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { PlusBtn } from '@/components/button'
@@ -94,6 +94,7 @@ const $route = useRoute()
 const $router = useRouter()
 
 const categories = computed(() => store.getters['CategoriesStore/categories'])
+const selectedKeys = ref<string[]>([])
 
 const activeKey = ref<string[]>(['1'])
 const spinning = ref<boolean>(false)
@@ -117,10 +118,11 @@ const openModal = (): void => {
   $SideMenuView.value.openCategoriesModal = true
 }
 
-const handleCategoryFilter = (id: number, name: string): void => {
+const handleCategoryFilter = async (id: number, name: string): Promise<void> => {
   if (id === $filtersCategoryId.value) {
     onClearCateId()
   } else {
+    selectedKeys.value = [String(id)]
     store.dispatch('Search/updateFiltersCategory', {
       id: id,
       name: name
@@ -148,6 +150,13 @@ const onMove = (): void => {
     }
   }
 }
+
+watch($filtersCategoryId, async (val) => {
+  if (val === 0) {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    selectedKeys.value = []
+  }
+})
 
 onMounted(() => {
   refresh()
